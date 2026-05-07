@@ -1,0 +1,64 @@
+.order-container {
+  padding: 20px;
+  margin-left: 220px; /* sidebar fix */
+  width: calc(100% - 220px);
+  box-sizing: border-box;
+  overflow-x: auto; /* 🔥 main fix */
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  min-width: 800px; /* 🔥 right side cut fix */
+  border-collapse: collapse;
+  background: #fff;
+}
+
+/* Table cells */
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Header */
+th {
+  background: #2c3e50;
+  color: white;
+}
+
+/* 🔥 Action column fix */
+td:last-child {
+  display: flex;
+  justify-content: center;
+  gap: 8px; /* spacing between buttons */
+}
+
+/* Buttons */
+button {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Approve */
+button:first-child {
+  background: green;
+  color: white;
+}
+
+/* Reject */
+button:last-child {
+  background: red;
+  color: white;
+}
+
+/* Hover */
+button:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,201 @@
+/* ===============================
+   🏪 MAIN DASHBOARD CONTAINER
+================================= */
+.dashboard {
+  max-width: 1200px;       /* center layout */
+  margin: 0 auto;          /* 🔥 center fix */
+  padding: 20px;
+  background: #f5f7fb;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;        /* 🔥 scroll fix */
+}
+
+
+/* ===============================
+   🔝 HEADER SECTION
+================================= */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Dashboard Title */
+.h2 {
+  margin: 0;
+  color: #222;
+}
+
+/* Shop address */
+.p {
+  margin: 5px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Right side badge */
+.badge {
+  background: #007bff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+
+/* ===============================
+   🔍 SEARCH BAR
+================================= */
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.search-box input {
+  width: 60%;
+  max-width: 500px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-box input:focus {
+  border-color: #007bff;
+}
+
+
+/* ===============================
+   📊 STATS CARDS GRID
+================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* Each card */
+.stat-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.stat-card h3 {
+  margin-top: 8px;
+  font-size: 22px;
+  color: #000;
+}
+
+/* Card colors */
+.stat-card.blue { border-left: 5px solid #007bff; }
+.stat-card.green { border-left: 5px solid #28a745; }
+.stat-card.orange { border-left: 5px solid #fd7e14; }
+.stat-card.purple { border-left: 5px solid #6f42c1; }
+
+
+/* ===============================
+   📦 SECTION (LIST / TABLE)
+================================= */
+.section {
+  margin-top: 25px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Section header */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.section-header h3 {
+  margin: 0;
+}
+
+
+/* ===============================
+   💊 MEDICINE LIST (BUY)
+================================= */
+.medicine-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+
+/* ===============================
+   📋 TABLE STYLE
+================================= */
+.table-box {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 10px;
+  background: #f1f1f1;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Low stock badge */
+.low-badge {
+  background: red;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+
+/* ===============================
+   🔘 BUTTON
+================================= */
+button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #218838;
+}
+
+
+/* ===============================
+   🌐 GLOBAL SCROLL FIX
+================================= */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow-y: auto;
+}

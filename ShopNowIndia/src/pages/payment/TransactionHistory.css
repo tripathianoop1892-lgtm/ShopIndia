@@ -1,0 +1,40 @@
+.history-container {
+  padding: 20px;
+}
+
+.history-container h2 {
+  margin-bottom: 20px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.history-table th,
+.history-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.history-table th {
+  background: #007bff;
+  color: white;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+}
+
+.failed {
+  color: red;
+  font-weight: bold;
+}
+
+.pending {
+  color: orange;
+  font-weight: bold;
+}

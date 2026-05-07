@@ -1,0 +1,66 @@
+/* Container */
+.stock-container {
+  padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  box-sizing: border-box;
+  overflow-x: auto; /* 🔥 IMPORTANT */
+}
+
+/* Table wrapper (NEW) */
+.stock-container table {
+  width: 100%;
+  min-width: 800px; /* 🔥 fix cut issue */
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.stock-container thead {
+  background: #0d2b4e;
+  color: white;
+}
+
+.stock-container th {
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Body */
+.stock-container td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+/* Input */
+.stock-container input {
+  padding: 6px;
+  width: 80px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Button */
+.stock-container button {
+  margin-left: 8px;
+  padding: 6px 14px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.stock-container button:hover {
+  background: darkred;
+}
+
+/* Row hover */
+.stock-container tr:hover {
+  background: #f1f5f9;
+}
