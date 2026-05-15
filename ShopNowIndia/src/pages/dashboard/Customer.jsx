@@ -3,12 +3,21 @@ import { useNavigate } from "react-router-dom";
 import "./Customer.css";
 import { MedicinesList } from "../../services/api";
 
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../features/cartSlice";
+
 const Customer = () => {
   const navigate = useNavigate();
 
   const [medicines, setMedicines] = useState([]);
   const [search, setSearch] = useState("");
-  const [cartItems] = useState(2);
+
+  // ✅ Redux
+  const dispatch = useDispatch();
+
+  const cartItems = useSelector(
+    (state) => state.cart.items
+  );
 
   useEffect(() => {
     fetchData();
@@ -55,10 +64,6 @@ const Customer = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
-        {/* <button className="logout-btn" onClick={handleLogout}>
-          Logout
-        </button> */}
       </div>
 
       {/* 🎯 Banner */}
@@ -79,7 +84,9 @@ const Customer = () => {
           onClick={() => navigate("/customer/cart")}
         >
           <p>🛒 Cart Items</p>
-          <h3>{cartItems}</h3>
+
+          {/* ✅ Redux Count */}
+          <h3>{cartItems.length}</h3>
         </div>
 
         <div className="card">
@@ -97,10 +104,12 @@ const Customer = () => {
             filtered.slice(0, 6).map((med) => (
               <div key={med._id} className="med-card">
                 <p>{med.name}</p>
+
+                {/* ✅ Add To Cart */}
                 <button
-                  onClick={() => navigate("/customer/medicines")}
+                  onClick={() => dispatch(addToCart(med))}
                 >
-                  View
+                  Add To Cart
                 </button>
               </div>
             ))

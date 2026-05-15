@@ -1,5 +1,5 @@
 import React from "react";
-import "./distributor.css";
+import "./Distributor.css";
 
 const DistributorDashboard = () => {
   return (

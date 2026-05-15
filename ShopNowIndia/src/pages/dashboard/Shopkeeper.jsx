@@ -3,6 +3,7 @@ import "./Shopkeeper.css";
 import { MedicinesList, getOrders } from "../../services/api";
 
 const Shopkeeper = () => {
+
   const [medicines, setMedicines] = useState([]);
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
@@ -13,11 +14,13 @@ const Shopkeeper = () => {
 
   const fetchData = async () => {
     try {
+
       const medData = await MedicinesList();
       const orderData = await getOrders();
 
       setMedicines(Array.isArray(medData) ? medData : []);
       setOrders(Array.isArray(orderData) ? orderData : []);
+
     } catch (err) {
       console.log(err);
     }
@@ -25,70 +28,88 @@ const Shopkeeper = () => {
 
   // 🔍 SEARCH
   const filteredMedicines = medicines.filter((m) =>
-    m.name.toLowerCase().includes(search.toLowerCase())
+    m.name?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // 💊 BUY
+  // 🛒 BUY
   const buyMedicine = async (med) => {
     try {
+
       await fetch("http://localhost:5000/api/medicines", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+
         body: JSON.stringify({
           name: med.name,
-          price: med.price,
+          company: med.company,
+          type: med.type,
+          price: med.offerPrice || med.price,
           stock: 1,
+          image: med.image,
+          strength: med.strength,
+          packSize: med.packSize,
         }),
       });
 
-      alert("Added to your stock ✅");
+      alert("Medicine Added To Stock ✅");
+
     } catch (err) {
       console.log(err);
     }
   };
 
-  // 📊 CARDS
+  // 📊 DASHBOARD CARDS
   const totalMedicines = medicines.length;
-  const lowStock = medicines.filter((m) => m.stock <= 20).length;
 
-  const totalExpiry = medicines.filter((m) => {
-    if (!m.expiryDate) return false;
-    const today = new Date();
-    const exp = new Date(m.expiryDate);
-    return exp < today;
-  }).length;
+  const lowStock =
+    medicines.filter((m) => m.stock <= 20).length;
 
-  const earnings = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+  const earnings =
+    orders.reduce(
+      (sum, o) => sum + (o.total || 0),
+      0
+    );
 
   return (
     <div className="dashboard">
 
       {/* HEADER */}
       <div className="dashboard-header">
+
         <div>
-          <h2 className="h2">🏪 Shopkeeper Dashboard</h2>
-          <p className="p">📍 Anoop Medical Store • Shiamgir, India</p>
+          <h2 className="dashboard-title">
+            💊 Shopkeeper Dashboard
+          </h2>
+
+          <p className="dashboard-subtitle">
+            Manage medicines & orders easily
+          </p>
         </div>
 
-        <div className="header-actions">
-          <span className="badge">📦 {orders.length} Orders</span>
+        <div className="dashboard-badge">
+          📦 {orders.length} Orders
         </div>
+
       </div>
 
-      {/* 🔥 SEARCH (FIXED CENTER) */}
+      {/* SEARCH */}
       <div className="search-box">
+
         <input
           type="text"
-          placeholder="🔍 Search medicine..."
+          placeholder="🔍 Search medicines..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
         />
+
       </div>
 
-      {/* CARDS */}
+      {/* STATS */}
       <div className="stats-grid">
 
         <div className="stat-card blue">
@@ -102,8 +123,8 @@ const Shopkeeper = () => {
         </div>
 
         <div className="stat-card orange">
-          <p>Total Expiry</p>
-          <h3>{totalExpiry}</h3>
+          <p>Orders</p>
+          <h3>{orders.length}</h3>
         </div>
 
         <div className="stat-card purple">
@@ -113,68 +134,112 @@ const Shopkeeper = () => {
 
       </div>
 
-      {/* 💊 MEDICINES */}
-      <div className="section">
-        <h3>💊 Available Medicines</h3>
-
-        {filteredMedicines.length === 0 ? (
-          <p>No medicines found</p>
-        ) : (
-          filteredMedicines.map((m) => (
-            <div key={m._id} className="medicine-row">
-              <div>
-                <strong>{m.name}</strong> <br />
-                ₹{m.price}
-              </div>
-
-              <button onClick={() => buyMedicine(m)}>
-                Buy
-              </button>
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* LOW STOCK */}
+      {/* MEDICINES */}
       <div className="section">
 
         <div className="section-header">
-          <h3>⚠️ Low Stock Medicines</h3>
-          <span>{lowStock} items</span>
+          <h3>💊 Available Medicines</h3>
         </div>
 
-        <div className="table-box">
-          <table>
-            <thead>
-              <tr>
-                <th>Medicine</th>
-                <th>Stock</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+        {filteredMedicines.length === 0 ? (
 
-            <tbody>
-              {medicines.filter(m => m.stock <= 20).length === 0 ? (
-                <tr>
-                  <td colSpan="3">No low stock</td>
-                </tr>
-              ) : (
-                medicines
-                  .filter(m => m.stock <= 20)
-                  .map((m) => (
-                    <tr key={m._id}>
-                      <td>{m.name}</td>
-                      <td>{m.stock}</td>
-                      <td>
-                        <span className="low-badge">Low</span>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
-        </div>
+          <p className="empty-text">
+            No medicines found
+          </p>
 
+        ) : (
+
+          <div className="medicine-grid">
+
+            {filteredMedicines.map((m) => (
+
+              <div
+                key={m._id}
+                className="medicine-card"
+              >
+
+                {/* IMAGE */}
+                <div className="medicine-image-box">
+
+                  <img
+                    src={
+                      m.image ||
+                      "https://cdn-icons-png.flaticon.com/512/822/822143.png"
+                    }
+                    alt={m.name}
+                    className="medicine-image"
+                  />
+
+                </div>
+
+                {/* INFO */}
+                <div className="medicine-info">
+
+                  <h4>
+                    {m.name}
+                  </h4>
+
+                  <p className="company">
+                    {m.company}
+                  </p>
+
+                  <div className="medicine-tags">
+
+                    <span>
+                      {m.strength || "500mg"}
+                    </span>
+
+                    <span>
+                      {m.packSize || 10} Tablets
+                    </span>
+
+                  </div>
+
+                  <div className="price-box">
+
+                    <h3>
+                      ₹{m.offerPrice || m.price}
+                    </h3>
+
+                    {m.mrp && (
+                      <del>
+                        ₹{m.mrp}
+                      </del>
+                    )}
+
+                  </div>
+
+                  <div className="stock-row">
+
+                    <span>
+                      Stock:
+                      {m.stock}
+                    </span>
+
+                    {m.discount && (
+                      <span className="discount">
+                        {m.discount}% OFF
+                      </span>
+                    )}
+
+                  </div>
+
+                  <button
+                    className="buy-btn"
+                    onClick={() =>
+                      buyMedicine(m)
+                    }
+                  >
+                    Add To Stock
+                  </button>
+
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+        )}
       </div>
 
     </div>

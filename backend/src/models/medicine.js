@@ -43,7 +43,16 @@ const medicineSchema = new mongoose.Schema(
       required: true,
     },
 
-    // 🔥 MOST IMPORTANT
+    // 🔥 OWNER INFO
+    ownerId: {
+      type: String,
+    },
+
+    ownerRole: {
+      type: String,
+    },
+
+    // 🔥 SHOP ID
     shopId: {
       type: String,
       required: false,

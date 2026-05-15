@@ -1,41 +1,171 @@
-.sidebar {
-  width: 220px;
-  height: 100vh;
-  background: #1e1b4b;
-  color: white;
-  padding: 20px;
-}
+/* ===== SIDEBAR ===== */
 
-.logo {
-  margin-bottom: 10px;
-}
-
-.role {
-  margin: 15px 0;
-  font-weight: bold;
-}
-
-.menu {
-  list-style: none;
-  padding: 0;
-}
-
-.menu li {
-  margin: 12px 0;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.menu li:hover {
-  color: #a78bfa;
-}
-/* Sidebar always clickable */
 .sidebar {
   position: fixed;
-  left: 0;
   top: 0;
+  left: 0;
+
   width: 240px;
   height: 100vh;
 
-  z-index: 1000;   /* 🔥 सबसे ऊपर */
+  background: #1e1b4b;
+
+  color: white;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  z-index: 1000;
+
+  overflow-y: auto;
+
+  transition: 0.3s;
+}
+
+/* ===== LOGO ===== */
+
+.sidebar h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: white;
+}
+
+/* ===== MENU ===== */
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 12px;
+}
+
+/* ===== LINKS ===== */
+
+.sidebar ul li a {
+  display: block;
+
+  text-decoration: none;
+
+  color: #ddd;
+
+  padding: 14px 16px;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+}
+
+/* ===== HOVER ===== */
+
+.sidebar ul li a:hover {
+  background: #312e81;
+  color: white;
+}
+
+/* ===== ACTIVE ===== */
+
+.sidebar ul li a.active {
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  color: white;
+
+  font-weight: bold;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* ===== LOGOUT ===== */
+
+.logout-btn {
+  width: 100%;
+
+  margin-top: 30px;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #ef4444;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* ===== MOBILE MENU BUTTON ===== */
+
+.menu-toggle {
+  display: none;
+
+  position: fixed;
+
+  top: 15px;
+  left: 15px;
+
+  background: #1e1b4b;
+
+  color: white;
+
+  border: none;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+
+  font-size: 22px;
+
+  z-index: 1200;
+
+  cursor: pointer;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    left: -260px;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+.sidebar-logo{
+  width: 140px;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+  object-fit: contain;
+}
+.sidebar{
+  background: #24364a;
 }

@@ -11,7 +11,7 @@ export const addMedicine = async (req, res) => {
       ...req.body,
 
       // 🔥 FINAL FIX
-      ownerId: user._id,
+      ownerId: user._id.toString(),
       ownerRole: user.role,
     });
 
@@ -43,7 +43,7 @@ export const getMedicines = async (req, res) => {
     // 🔥 Distributor
     if (user.role === "distributor") {
       meds = await Medicine.find({
-        ownerId: user._id,
+        ownerId: user._id.toString(),
       });
     }
 

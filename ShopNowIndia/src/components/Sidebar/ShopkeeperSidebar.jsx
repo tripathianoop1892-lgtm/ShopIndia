@@ -11,7 +11,11 @@ const ShopkeeperSidebar = () => {
 
   return (
     <div className="sidebar">
-      <h2 className="logo">ShopNowIndia</h2>
+      <img
+  src="/omsanjeevani.png"
+  alt="OmSanjeevani"
+  className="sidebar-logo"
+/>
 
       <ul>
         <li><NavLink to="/shopkeeper">Dashboard</NavLink></li>

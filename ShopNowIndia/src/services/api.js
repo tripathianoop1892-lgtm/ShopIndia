@@ -26,7 +26,6 @@ export const MedicinesList = async () => {
   });
   return res.json();
 };
-
 // 👉 ADD medicine
 export const addMedicine = async (data) => {
   const res = await fetch(`${BASE_URL}/medicines`, {

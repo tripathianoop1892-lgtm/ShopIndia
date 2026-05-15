@@ -3,155 +3,362 @@ import "./Distributor.css";
 import { addMedicine } from "../../services/api";
 
 const AddMedicine = () => {
+
   const [form, setForm] = useState({
     name: "",
     company: "",
     type: "",
-    price: "",
+    strength: "",
+    packSize: "",
+    packType: "",
+    mrp: "",
+    offerPrice: "",
+    discount: "",
     stock: "",
     batch: "",
+    image: "",
     mfgDate: "",
     expDate: ""
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     try {
+
       const dataToSend = {
+
         name: form.name,
         company: form.company,
         type: form.type,
-        price: Number(form.price) || 0,
+        strength: form.strength,
+
+        packSize: Number(form.packSize),
+
+        packType: form.packType,
+
+        mrp: Number(form.mrp),
+
+        offerPrice: Number(form.offerPrice),
+
+        // IMPORTANT
+        price: Number(form.offerPrice),
+
+        discount: Number(form.discount),
+
         stock: Number(form.stock),
+
         batch: form.batch,
+
+        image: form.image,
+
         mfd: form.mfgDate,
+
         expiry: form.expDate,
       };
 
       const res = await addMedicine(dataToSend);
 
-      if (res.success) {
-        alert("Medicine Added ✅");
+      // FINAL FIX
+      const responseData = res?.data || res;
+
+      if (responseData.success) {
+
+        alert("Medicine Added Successfully ✅");
+
+        setForm({
+          name: "",
+          company: "",
+          type: "",
+          strength: "",
+          packSize: "",
+          packType: "",
+          mrp: "",
+          offerPrice: "",
+          discount: "",
+          stock: "",
+          batch: "",
+          image: "",
+          mfgDate: "",
+          expDate: ""
+        });
+
       } else {
-        alert(res.message || "Error ❌");
+
+        alert(responseData.message || "Error ❌");
+
       }
 
-      setForm({
-        name: "",
-        company: "",
-        type: "",
-        price: "",
-        stock: "",
-        batch: "",
-        mfgDate: "",
-        expDate: ""
-      });
-
     } catch (error) {
-      console.error(error);
+
+      console.log(error);
+
       alert("Error adding medicine ❌");
+
     }
   };
 
   return (
+
     <div className="main-content">
-      <div className="form-container">
-        <h2>Add Medicine</h2>
 
-        <form onSubmit={handleSubmit} className="form-grid">
+      <div className="modern-form-container">
 
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Medicine Name"
-            required
-          />
+        {/* HEADER */}
+        <div className="form-header">
+          <div>
+            <h1>💊 Add Medicine</h1>
+            <p>Fill all details carefully</p>
+          </div>
+        </div>
 
-          <input
-            type="text"
-            name="company"
-            value={form.company}
-            onChange={handleChange}
-            placeholder="Company Name"
-          />
+        {/* FORM */}
+        <form
+          onSubmit={handleSubmit}
+          className="modern-form-grid"
+        >
 
-          <select name="type" value={form.type} onChange={handleChange}>
-            <option value="">Select Type</option>
-            <option value="Tablet">Tablet</option>
-            <option value="Capsule">Capsule</option>
-            <option value="Syrup">Syrup</option>
-            <option value="Injection">Injection</option>
-            <option value="Drops">Drops</option>
-            <option value="Cream">Cream</option>
-            <option value="Ointment">Ointment</option>
-            <option value="Gel">Gel</option>
-            <option value="Powder">Powder</option>
-            <option value="Inhaler">Inhaler</option>
-            <option value="Spray">Spray</option>
-          </select>
+          {/* NAME */}
+          <div className="form-group">
+            <label>Medicine Name</label>
 
-          <input
-            type="number"
-            name="price"
-            value={form.price}
-            onChange={handleChange}
-            placeholder="Price"
-          />
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Enter medicine name"
+              required
+            />
+          </div>
 
-          <input
-            type="number"
-            name="stock"
-            value={form.stock}
-            onChange={handleChange}
-            placeholder="Stock"
-            required
-          />
+          {/* COMPANY */}
+          <div className="form-group">
+            <label>Company</label>
 
-          <input
-            type="text"
-            name="batch"
-            value={form.batch}
-            onChange={handleChange}
-            placeholder="Batch"
-          />
+            <input
+              type="text"
+              name="company"
+              value={form.company}
+              onChange={handleChange}
+              placeholder="Enter company name"
+            />
+          </div>
 
-          {/* 🔥 DATE FIELDS WITH LABEL */}
-          <div className="date-group">
+          {/* TYPE */}
+          <div className="form-group">
 
-            <div className="date-field">
-              <label>MFG Date</label>
-              <input
-                type="date"
-                name="mfgDate"
-                value={form.mfgDate}
-                onChange={handleChange}
-              />
-            </div>
+            <label>Category / Type</label>
 
-            <div className="date-field">
-              <label>Expiry Date</label>
-              <input
-                type="date"
-                name="expDate"
-                value={form.expDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <select
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+            >
+              <option value="">Select Type</option>
+              <option value="Tablet">Tablet</option>
+              <option value="Capsule">Capsule</option>
+              <option value="Syrup">Syrup</option>
+              <option value="Injection">Injection</option>
+              <option value="Drops">Drops</option>
+              <option value="Cream">Cream</option>
+              <option value="Gel">Gel</option>
+              <option value="Lotion">Lotion</option>
+              <option value="Suspension">Suspension</option>
+              <option value="Eye Drop">Eye Drop</option>
+              <option value="Ear Drop">Ear Drop</option>
+              <option value="Nasal Spray">Nasal Spray</option>
+              <option value="Suppository">Suppository</option>
+              <option value="Patch">Patch</option>
+              <option value="Soap">Soap</option>
+              <option value="Shampoo">Shampoo</option>
+              <option value="Mouthwash">Mouthwash</option>
+              <option value="Solution">Solution</option>
+              <option value="Vaccine">Vaccine</option>
+              <option value="Oil">Oil</option>
+              <option value="Granules">Granules</option>
+              <option value="Face Wash">Face Wash</option>
+            </select>
+          </div>
+
+          {/* IMAGE */}
+          <div className="form-group">
+
+            <label>Medicine Image URL</label>
+
+            <input
+              type="text"
+              name="image"
+              value={form.image}
+              onChange={handleChange}
+              placeholder="Paste image url"
+            />
+          </div>
+
+          {/* STRENGTH */}
+          <div className="form-group">
+
+            <label>Strength (e.g. 650mg)</label>
+
+            <input
+              type="text"
+              name="strength"
+              value={form.strength}
+              onChange={handleChange}
+              placeholder="650mg"
+            />
+          </div>
+
+          {/* PACK SIZE */}
+          <div className="form-group">
+
+            <label>Tablets Per Strip</label>
+
+            <input
+              type="number"
+              name="packSize"
+              value={form.packSize}
+              onChange={handleChange}
+              placeholder="10 / 15 / 20"
+            />
+          </div>
+
+          {/* PACK TYPE */}
+          <div className="form-group">
+
+            <label>Pack Type</label>
+
+            <select
+              name="packType"
+              value={form.packType}
+              onChange={handleChange}
+            >
+              <option value="">Select Pack Type</option>
+              <option value="Strip">Strip</option>
+              <option value="Bottle">Bottle</option>
+              <option value="Box">Box</option>
+            </select>
+          </div>
+
+          {/* MRP */}
+          <div className="form-group">
+
+            <label>MRP ₹</label>
+
+            <input
+              type="number"
+              name="mrp"
+              value={form.mrp}
+              onChange={handleChange}
+              placeholder="Enter MRP"
+            />
+          </div>
+
+          {/* OFFER PRICE */}
+          <div className="form-group">
+
+            <label>Offer Price ₹</label>
+
+            <input
+              type="number"
+              name="offerPrice"
+              value={form.offerPrice}
+              onChange={handleChange}
+              placeholder="Offer Price"
+            />
+          </div>
+
+          {/* DISCOUNT */}
+          <div className="form-group">
+
+            <label>Discount %</label>
+
+            <input
+              type="number"
+              name="discount"
+              value={form.discount}
+              onChange={handleChange}
+              placeholder="Discount"
+            />
+          </div>
+
+          {/* STOCK */}
+          <div className="form-group">
+
+            <label>Stock Quantity</label>
+
+            <input
+              type="number"
+              name="stock"
+              value={form.stock}
+              onChange={handleChange}
+              placeholder="Stock"
+              required
+            />
+          </div>
+
+          {/* BATCH */}
+          <div className="form-group">
+
+            <label>Batch Number</label>
+
+            <input
+              type="text"
+              name="batch"
+              value={form.batch}
+              onChange={handleChange}
+              placeholder="Batch Number"
+            />
+          </div>
+
+          {/* MFG */}
+          <div className="form-group">
+
+            <label>Manufacturing Date</label>
+
+            <input
+              type="date"
+              name="mfgDate"
+              value={form.mfgDate}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* EXPIRY */}
+          <div className="form-group">
+
+            <label>Expiry Date</label>
+
+            <input
+              type="date"
+              name="expDate"
+              value={form.expDate}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* BUTTON */}
+          <div className="form-button">
+
+            <button type="submit">
+              Add Medicine
+            </button>
 
           </div>
 
-          <button type="submit">Add Medicine</button>
-
         </form>
+
       </div>
+
     </div>
   );
 };

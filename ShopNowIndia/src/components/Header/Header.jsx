@@ -33,52 +33,65 @@ const Header = () => {
     navigate("/");
   };
 
+  // 🔥 SHOP ID
+  const shopId = localStorage.getItem("shopId");
+
   // 🔗 QR LINK
-  const shopLink = user?.shopId
-    ? `${window.location.origin}/?shopId=${user.shopId}`
+  const shopLink = shopId
+    ? `${window.location.origin}/?shopId=${shopId}`
     : "";
 
-return (
-  <div className="header">
+  return (
+    <div className="header">
 
-    {/* LEFT */}
-    <h3 className="logo">ShopNowIndia</h3>
+      {/* RIGHT */}
+      <div className="header-right">
 
-    {/* RIGHT */}
-    <div className="header-right">
+        <span>{user?.email}</span>
 
-      <span>{user?.email}</span>
-      <span className="role">{user?.role}</span>
+        <span className="role">
+          {user?.role}
+        </span>
 
-      {/* 🔥 QR BUTTON */}
-      <button onClick={() => setShowQR(true)}>
-        QR
-      </button>
+        {/* 🔥 QR BUTTON */}
+        <button onClick={() => setShowQR(true)}>
+          QR
+        </button>
 
-    </div>
+      </div>
 
-    {/* 🔥 YAHI ADD KARNA HAI */}
-    {showQR && (
-      <div className="qr-modal">
-        <div className="qr-box">
+      {/* 🔥 QR MODAL */}
+      {showQR && (
+        <div className="qr-modal">
 
-          <h3>Scan to Join Shop</h3>
+          <div className="qr-box">
 
-          {/* 🔥 YEH LINE */}
-          <QRCodeCanvas value={shopLink} size={200} />
+            <h3>Scan to Join Shop</h3>
 
-          <p>{shopLink}</p>
+            <QRCodeCanvas
+              value={shopLink}
+              size={200}
+            />
 
-          <button onClick={() => setShowQR(false)}>
-            Close
-          </button>
+            {/* 🔥 SHOP ID */}
+            <p>
+              <b>Shop ID:</b> {shopId}
+            </p>
+
+            {/* 🔥 SHOP LINK */}
+            <p>{shopLink}</p>
+
+            <button onClick={() => setShowQR(false)}>
+              Close
+            </button>
+
+          </div>
 
         </div>
-      </div>
-    )}
+      )}
 
-  </div>
-);
+    </div>
+  );
 };
 
 export default Header;
