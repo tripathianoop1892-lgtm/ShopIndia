@@ -33,11 +33,13 @@
 }
 
 .dashboard-header h1 {
-  font-size: 38px;
+  font-size: 30px;
 
   margin: 0;
 
   color: #222;
+
+  margin-left: 200px;
 }
 
 .dashboard-header p {
@@ -46,6 +48,8 @@
   color: #666;
 
   font-size: 15px;
+
+  margin-left: 200px;
 }
 
 /* ===== TOP ACTIONS ===== */
@@ -56,6 +60,8 @@
   align-items: center;
 
   gap: 15px;
+
+  margin-left: 600px;
 }
 
 /* ===== NOTIFICATION ===== */
@@ -260,7 +266,7 @@
 
   border: 1px solid black;
 
-  margin-left: 200px;
+  margin-left: 400px;
 }
 
 #table1{
@@ -383,18 +389,22 @@ tbody tr:hover {
   .dashboard-header h1 {
     font-size: 28px;
   }
+}
 
 .cards {
-  display: grid;
+  /* display: grid;
 
   grid-template-columns: repeat(
-    auto-fit,
+    3,
     minmax(220px, 1fr)
-  );
+  ); */
 
-  gap: 20px;
+  gap: 30px;
 
-  width: 100%;
+  width: 80%;
 
   align-items: stretch;
+
+  margin-left: 400px;
+
 }

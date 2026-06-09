@@ -2,11 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import cartRoutes from "./src/routes/cart.routes.js";
 // ROUTES
 import authRoutes from "./src/routes/auth.routes.js";
 import medicineRoutes from "./src/routes/medicine.routes.js";
 import orderRoutes from "./src/routes/order.routes.js";
+
 
 // CONFIG
 import connectDB from "./src/config/db.js";
@@ -38,6 +39,9 @@ app.use("/api/medicines", medicineRoutes);
 
 // 📦 ORDERS
 app.use("/api/orders", orderRoutes);
+
+// 🛒 CART
+app.use("/cart", cartRoutes);
 
 // =======================
 // SERVER

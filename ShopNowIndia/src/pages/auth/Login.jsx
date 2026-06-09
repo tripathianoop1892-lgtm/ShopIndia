@@ -36,13 +36,21 @@ const Login = () => {
       }
 
       const res = await loginUser(payload);
+      console.log(res)
 
       if (!res.success) {
         alert(res.message || "Invalid credentials ❌");
         return;
       }
 
+       // ✅ SAVE TOKEN
       localStorage.setItem("token", res.token);
+
+      // ✅ SAVE USER (optional)
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.user)
+      );
 
       // 🔥 FIXED
       login(res.user, res.token);

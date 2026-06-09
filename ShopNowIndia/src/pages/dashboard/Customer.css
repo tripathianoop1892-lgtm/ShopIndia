@@ -1,114 +1,87 @@
-body {
-  background: #f1f5f9;
-  margin: 0;
-  font-family: sans-serif;
+/* ===== FINAL FIX ===== */
+
+.cards{
+  margin-left: 180px !important;
 }
 
-.dashboard {
+.card{
+  margin-left: 40px !important;
+}
+
+.newdiv{
+  width: 100%;
+  margin-left: 180px !important;
+}
+
+.section{
+  margin-left: 180px !important;
+}
+
+.recommend{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-left: 180px!important;
+}
+
+.med-card{
+  background: #ecb6b6;
+  border-radius: 20px;
   padding: 20px;
-}
-
-/* 🔝 Navbar */
-.navbar {
+  min-height: 0px;
+ 
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background: #0f172a;
-  padding: 15px;
-  border-radius: 10px;
-  color: white;
-}
 
-.navbar input {
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-}
-
-.logout-btn {
-  background: red;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* 🎯 Banner */
-.banner {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
-}
-
-/* 📊 Cards */
-.cards {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.card {
-  flex: 1;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  transition: 0.3s;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-5px);
+.med-card:hover{
+  transform: translateY(-6px);
 }
 
-.clickable {
+.med-card p:first-child{
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+
+}
+
+.med-card p:nth-child(2){
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-left: 180px;
+}
+
+.med-card button{
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed
+  );
+
+  color: white;
+  font-weight: 600;
   cursor: pointer;
 }
 
-/* 📦 Section */
-.section {
-  margin-top: 30px;
+.nav-h2{
+  margin-left: 200px !important;
 }
 
-/* 💊 Medicines */
-.recommend {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.med-card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  width: 150px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.med-card button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  border: none;
-  background: #0ea5e9;
-  color: white;
-  border-radius: 5px;
-}
-
-/* ⚡ Actions */
-.actions {
-  display: flex;
-  gap: 15px;
-}
-
-.actions button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+.input1{
+  margin-left: 200px !important;
 }

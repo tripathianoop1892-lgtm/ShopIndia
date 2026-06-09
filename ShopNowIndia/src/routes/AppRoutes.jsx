@@ -19,8 +19,8 @@ import ShopkeeperMedicineList from "../pages/medicine-list/Shopkeeper.jsx";
 import CustomerMedicineList from "../pages/medicine-list/Customer.jsx";
 
 // Add Medicine
-import AddMedicine from "../pages/add-medicine/Distributor";
-import AddMedicineShopkeeper from "../pages/add-medicine/Shopkeeper.jsx";
+import AddMedicineDistributor from "../features/add-medicine/Distributor";
+import AddMedicineShopkeeper from "../features/add-medicine/Shopkeeper";
 
 // Orders
 import DistributorOrder from "../pages/order/Distributor.jsx";
@@ -88,7 +88,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Distributor /> },
       { path: "medicines", element: <DistributorMedicineList /> },
-      { path: "add-medicine", element: <AddMedicine /> },
+      { path: "add-medicine", element: <AddMedicineDistributor /> },
       { path: "orders", element: <DistributorOrder /> },
       { path: "stock", element: <DistributorStock /> },
       { path: "low-stock", element: <LowStock /> },

@@ -39,8 +39,9 @@ const medicineSchema = new mongoose.Schema(
     },
 
     expiry: {
-      type: String,
-      required: true,
+      type: Date,
+      required: false,
+       default: new Date("2027-12-31"),
     },
 
     // 🔥 OWNER INFO

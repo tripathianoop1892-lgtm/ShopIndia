@@ -56,9 +56,10 @@ const Customer = () => {
 
       {/* 🔝 NAVBAR */}
       <div className="navbar">
-        <h2>ShopNowIndia</h2>
+        <h2 className="nav-h2">ShopNowIndia</h2>
 
         <input
+        className="input1"
           type="text"
           placeholder="Search medicines..."
           value={search}
@@ -96,47 +97,35 @@ const Customer = () => {
       </div>
 
       {/* 📦 Recommended */}
-      <div className="section">
-        <h3>Recommended Medicines</h3>
+      <div className="newdiv">
+        <div className="section">
+          <h3>Recommended Medicines</h3>
 
-        <div className="recommend">
-          {filtered.length > 0 ? (
-            filtered.slice(0, 6).map((med) => (
-              <div key={med._id} className="med-card">
-                <p>{med.name}</p>
-
-                {/* ✅ Add To Cart */}
-                <button
-                  onClick={() => dispatch(addToCart(med))}
-                >
-                  Add To Cart
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>No medicines found</p>
-          )}
+          <div className="recommend">
+            {filtered.length > 0 ? (
+              filtered.slice(0, 6).map((med) => (
+                <div key={med._id} className="med-card">
+                  <p>{med.name}</p>
+                  <p>{med.company}</p>
+                  {/* ✅ Add To Cart */}
+                  <button
+                    onClick={() => dispatch(addToCart(med))}
+                  >
+                    Add To Cart
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>No medicines found</p>
+            )}
+          </div>
         </div>
       </div>
+      
 
       {/* ⚡ Quick Actions */}
-      <div className="section">
-        <h3>Quick Actions</h3>
-
-        <div className="actions">
-          <button onClick={() => navigate("/customer/medicines")}>
-            💊 Browse Medicines
-          </button>
-
-          <button onClick={() => navigate("/customer/cart")}>
-            🛒 Go to Cart
-          </button>
-
-          <button onClick={() => navigate("/customer/orders")}>
-            📦 View Orders
-          </button>
-        </div>
-      </div>
+      
+      
     </div>
   );
 };

@@ -1,24 +1,61 @@
+body{
+  background: #eef2f7;
+  font-family: Arial, sans-serif;
+}
+
 .register-container {
-  width: 320px;
+  width: 380px;
   margin: 80px auto;
-  padding: 30px;
-  background: #fff3e0;
-  border-radius: 10px;
+  padding: 35px;
+  background: white;
+  border-radius: 18px;
   text-align: center;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.register-container h2{
+  margin-bottom: 25px;
+  font-size: 32px;
+  color: #222;
 }
 
 .register-container input,
 .register-container select {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 14px;
+  margin: 12px 0;
+
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
+  font-size: 15px;
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+.register-container input:focus,
+.register-container select:focus{
+  border-color: #6c63ff;
 }
 
 .register-btn {
-  background: orange;
+  background: #6c63ff;
   color: white;
-  padding: 12px;
+
+  padding: 14px;
   width: 100%;
+
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
+
+  font-size: 16px;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.register-btn:hover{
+  background: #574bdb;
 }

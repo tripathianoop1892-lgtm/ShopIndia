@@ -28,8 +28,11 @@ const ShopkeeperOrder = () => {
   };
 
   return (
-    <div className="main-content">
-      <h2>Orders</h2>
+    <div className="bigdiv">
+      <div id="h2">
+        <h2>Orders</h2>
+      </div>
+      
 
       <div className="table-container">
         <table>

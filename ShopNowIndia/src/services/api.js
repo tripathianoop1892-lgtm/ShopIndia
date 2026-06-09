@@ -136,23 +136,62 @@ export const updateOrder = async (id, status) => {
   return res.json();
 };
 
+// 👉 PLACE ORDER
+export const placeOrder = async (data) => {
+
+  const res = await fetch(
+    `${BASE_URL}/orders`,
+    {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    }
+  );
+
+  return res.json();
+};
 // =======================
-// 🛒 CART
+// 🛒 CART APIs
+// =======================
+// =======================
+// 🛒 CART APIs
 // =======================
 
+// 👉 GET CART
 export const getCart = async () => {
-  const res = await fetch(`${BASE_URL}/cart`, {
-    headers: getHeaders(),
-  });
+
+  const res = await fetch(
+    "http://localhost:5000/cart"
+  );
+
   return res.json();
 };
 
+// 👉 ADD TO CART
 export const addToCart = async (data) => {
-  const res = await fetch(`${BASE_URL}/cart`, {
-    method: "POST",
-    headers: getHeaders(),
-    body: JSON.stringify(data),
-  });
+
+  const res = await fetch(
+    "http://localhost:5000/cart/add",
+    {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    }
+  );
+
+  return res.json();
+};
+
+// 👉 REMOVE CART ITEM
+export const removeCartItem = async (name) => {
+
+  const res = await fetch(
+    `http://localhost:5000/cart/${name}`,
+    {
+      method: "DELETE",
+      headers: getHeaders(),
+    }
+  );
 
   return res.json();
 };

@@ -6,6 +6,7 @@ import Medicine from "../models/medicine.js";
 export const addMedicine = async (req, res) => {
   try {
     const user = req.user;
+    console.log(req.body);
 
     const med = await Medicine.create({
       ...req.body,
@@ -49,10 +50,14 @@ export const getMedicines = async (req, res) => {
 
     // 🔥 Shopkeeper
     else if (user.role === "shopkeeper") {
-      meds = await Medicine.find({
-        ownerRole: "distributor",
-      });
-    }
+
+  meds = await Medicine.find({
+    $or: [
+      { ownerRole: "distributor" },
+      { ownerRole: "shopkeeper" },
+    ],
+  });
+}
 
     // 🔥 Customer
     else if (user.role === "customer") {

@@ -35,7 +35,7 @@ const Shopkeeper = () => {
   const buyMedicine = async (med) => {
     try {
 
-      await fetch("http://localhost:5000/api/medicines", {
+      await fetch("http://localhost:5000/cart/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,6 +51,7 @@ const Shopkeeper = () => {
           image: med.image,
           strength: med.strength,
           packSize: med.packSize,
+          expiry:med.expiry || "2027-12-31"
         }),
       });
 
@@ -79,7 +80,7 @@ const Shopkeeper = () => {
       {/* HEADER */}
       <div className="dashboard-header">
 
-        <div>
+        <div id="div1">
           <h2 className="dashboard-title">
             💊 Shopkeeper Dashboard
           </h2>
@@ -230,7 +231,7 @@ const Shopkeeper = () => {
                       buyMedicine(m)
                     }
                   >
-                    Add To Stock
+                    Add To Cart
                   </button>
 
                 </div>
