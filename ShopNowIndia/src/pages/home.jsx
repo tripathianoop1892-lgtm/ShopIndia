@@ -12,7 +12,9 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import ReduceCapacityIcon from '@mui/icons-material/ReduceCapacity';
 import RecyclingIcon from '@mui/icons-material/Recycling';
-
+import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
 // Image use karni ho to uncomment kar lena
 // import heroImg from "../assets/dashboard.png";
 // import founderImg from "../assets/founder.jpg";
@@ -104,12 +106,12 @@ function Home() {
         <div className="card">320+ Distributors</div>
         <div className="card">1250+ Shopkeepers</div>
       </section>
-      /* Why Choose OmSanjeevni*/
+      {/* Why Choose OmSanjeevni */}
       <section className="home-section">
         <h2>Why Choose OmSanjeevni</h2>
         <div className="home-section-main">
           <div className="workflow">
-         <div className="box">
+         <div className="why-box">
          <RecyclingIcon fontSize="large" style={{color: "#07542a"}}/>
          <div className="box-content">
           <p>Reduce</p>
@@ -118,38 +120,38 @@ function Home() {
          </div>
         </div>
          <div className="workflow">
-         <div className="box">
-         <RecyclingIcon fontSize="large" style={{color: "#07542a"}}/>
+         <div className="why-box">
+         <EventRepeatIcon fontSize="large" style={{color: "orange"}}/>
          <div className="box-content">
-          <p>Reduce</p>
-          <p>Medicine Waste</p>
+          <p>Expiry</p>
+          <p>Tracking</p>
          </div>
          </div>
         </div>
         <div className="workflow">
-         <div className="box">
-         <RecyclingIcon fontSize="large" style={{color: "#07542a"}}/>
+         <div className="why-box">
+         <ElectricBoltIcon fontSize="large" style={{color: "#07542a"}}/>
          <div className="box-content">
-          <p>Reduce</p>
-          <p>Medicine Waste</p>
+          <p>Faster</p>
+          <p>Ordering</p>
          </div>
          </div>
         </div>
         <div className="workflow">
-         <div className="box">
-         <RecyclingIcon fontSize="large" style={{color: "#07542a"}}/>
+         <div className="why-box">
+         <DomainVerificationIcon fontSize="large" style={{color: "#07542a"}}/>
          <div className="box-content">
-          <p>Reduce</p>
-          <p>Medicine Waste</p>
+          <p>Better Inventory</p>
+          <p>Control</p>
          </div>
          </div>
         </div>
         <div className="workflow">
-         <div className="box">
-         <RecyclingIcon fontSize="large" style={{color: "#07542a"}}/>
+         <div className="why-box">
+         <img src="monitoring.png" alt="" style={{width: "40px"}} />
          <div className="box-content">
-          <p>Reduce</p>
-          <p>Medicine Waste</p>
+          <p>Sales</p>
+          <p>Monitoring</p>
          </div>
          </div>
         </div>
@@ -352,8 +354,8 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer>
-
+      <footer className="footer">
+<section className="logo-section">
         <img
   src="/omsanjeevani.png"
   alt="OmSanjeevani"
@@ -368,7 +370,32 @@ function Home() {
         <p>
           © 2026 ShopNowIndia. All Rights Reserved.
         </p>
+       </section>
+       <section className="quick-section">
+        <div className="quick-links">
+          <h3>Quick Links</h3>
+          <p>Home</p>
+          <p>Features</p>
+          <p>About Us</p>
+          <p>Contact us</p>
+        
+        </div>
 
+       </section>
+       <section className="support-section">
+        <div className="support">
+          <h3>Support</h3>
+         <p>Help & FAQ</p>
+         <p>Privacy Policy</p>
+         <p>Terms & Conditions</p>
+        </div>
+       </section>
+       <section className="contact-section">
+        <div className="contact-us">
+          <h3>Contact Us</h3>
+        </div>
+
+       </section>
       </footer>
 
     </div>

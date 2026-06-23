@@ -183,7 +183,19 @@ body{
   display: flex;
   gap: 30px;
 }
-
+/*Why Box*/
+.why-box{
+  background:#fff;
+  width: 15vw;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  font-weight:600;
+  display: flex;
+  box-shadow: 3px 2px 5px 5px #4e4a4a;
+  align-items: center;
+  justify-content: space-evenly;
+}
 .workflow{
   display:flex;
   justify-content:left;
@@ -353,8 +365,15 @@ footer{
   background:#072654;
   color:white;
   padding:40px;
-  text-align:center;
   margin-top:40px;
+  display: flex;
+  justify-content: left;
+  gap: 60px;
+}
+
+.footer-logo{
+  width: 200px;
+  height: auto;
 }
 
 footer h2{
