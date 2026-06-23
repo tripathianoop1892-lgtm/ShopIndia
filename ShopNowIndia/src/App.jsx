@@ -6,7 +6,8 @@ import MedicineList from "./pages/medicine-list/MedicineList.jsx";
 import Cart from "./pages/cart/Cart.jsx";
 import Shopkeeper from "./pages/dashboard/Shopkeeper.jsx";
 import Distributor from "./pages/dashboard/Distributor.jsx";
-
+//home
+import Home from "./pages/home.jsx";
 // 🔐 AUTH
 import Login from "./pages/auth/Login.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
@@ -46,7 +47,7 @@ const App = () => {
       <Routes>
 
         {/* 🔐 AUTH */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<ForgotPassword />} />
 
@@ -66,6 +67,7 @@ const App = () => {
 
           {/* Dashboard */}
           <Route index element={<Distributor />} />
+
 
           {/* Sidebar links */}
           <Route path="add-medicine" element={<AddMedicine />} />

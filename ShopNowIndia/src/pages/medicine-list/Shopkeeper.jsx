@@ -23,7 +23,7 @@ const ShopkeeperMedicineList = () => {
       const res = await MedicinesList();
 
       // DATA
-      const data = res?.data || [];
+      const data = res || [];
 
       console.log("MEDICINES =", data);
 
