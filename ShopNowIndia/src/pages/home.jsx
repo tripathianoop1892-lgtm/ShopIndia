@@ -355,23 +355,18 @@ function Home() {
 
       {/* Footer */}
       <footer className="footer">
+        <div className="footer-section">
 <section className="logo-section">
         <img
   src="/omsanjeevani.png"
   alt="OmSanjeevani"
   className="footer-logo"
 />
-
-        <p>
-          Smart Medicine Distribution Platform for Distributors,
-          Shopkeepers and Customers.
-        </p>
-
-        <p>
-          © 2026 ShopNowIndia. All Rights Reserved.
-        </p>
+        <p>Smart Medicine Distribution</p>
+        <p> Platform for Distributors,</p>
+        <p>Shopkeepers and Customers.</p>
        </section>
-       <section className="quick-section">
+      <section className="quick-section">
         <div className="quick-links">
           <h3>Quick Links</h3>
           <p>Home</p>
@@ -393,9 +388,20 @@ function Home() {
        <section className="contact-section">
         <div className="contact-us">
           <h3>Contact Us</h3>
+          <p>Mob-6204872422</p>
+          <p>admin@omsanjeevani.com</p>
+          <p>Delhi India</p>
         </div>
 
        </section>
+       <section>
+        <img src="medicine.png" alt="" className="" style={{width:'400px', marginLeft:"90px", marginTop: "-50px"}}/>
+       </section>
+      </div>
+      
+        <p>
+          © 2026 ShopNowIndia. All Rights Reserved.
+        </p>
       </footer>
 
     </div>

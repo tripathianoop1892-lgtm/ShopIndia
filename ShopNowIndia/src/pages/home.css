@@ -364,11 +364,18 @@ body{
 footer{
   background:#072654;
   color:white;
-  padding:40px;
-  margin-top:40px;
   display: flex;
-  justify-content: left;
-  gap: 60px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-section{
+  background:#072654;
+  color:white;
+  padding:20px;
+  display: flex;
+  justify-content: space-around;
+  gap: 80px;
 }
 
 .footer-logo{
@@ -380,8 +387,22 @@ footer h2{
   margin-bottom:10px;
 }
 
-footer p{
+.quick-section p{
   margin:8px 0;
+}
+
+.contact-section p{
+  margin:8px 0;
+}
+
+.support-section p{
+  margin:8px 0;
+}
+
+.logo-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Responsive */
