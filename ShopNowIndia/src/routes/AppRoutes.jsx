@@ -46,11 +46,18 @@ import ShopkeeperEarnings from "../pages/earnings/Shopkeeper.jsx";
 import CustomerLayout from "../components/Layout/CustomerLayout";
 import DistributorLayout from "../components/Layout/DistributorLayout";
 import ShopkeeperLayout from "../components/Layout/ShopkeeperLayout";
-import Home from "../pages/home.jsx";
+import Home from "../pages/home/home.jsx"
+// Contact
+import Contact from "../pages/contact/contact.jsx";
+import About from "../pages/about/about.jsx";
+import Features from "../pages/features/features.jsx";
 
 const router = createBrowserRouter([
   // 🔐 Auth
-  { path: "/", element: <Home /> },
+  { path: "/", element: <Home/> },
+  {path:"/contact", element:<Contact/>},
+  {path:"/about", element:<About/>},
+  {path:"/features", element:<Features/>},
   { path: "/login", element: <Login/> },
   { path: "/register", element: <Register /> },
   { path: "/forgot", element: <ForgotPassword /> },

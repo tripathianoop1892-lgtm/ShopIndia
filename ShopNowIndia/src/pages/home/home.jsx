@@ -15,6 +15,8 @@ import RecyclingIcon from '@mui/icons-material/Recycling';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
+import Footer from "../../components/footer/footer";
+import Navbar from "../../components/navbar/navbar";
 // Image use karni ho to uncomment kar lena
 // import heroImg from "../assets/dashboard.png";
 // import founderImg from "../assets/founder.jpg";
@@ -30,27 +32,7 @@ function Home() {
     <div className="home">
 
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo">
-          <img
-  src="/omsanjeevani.png"
-  alt="OmSanjeevani"
-  className="home-logo"
-/>
-        </div>
-
-        <ul>
-          <li>Home</li>
-          <li>Features</li>
-          <li>About Us</li>
-          <li>Contact</li>
-        </ul>
-
-        <div className="nav-btns">
-          <button className="outline-btn" onClick={handleLogin}>Login</button>
-          <button className="primary-btn">Get Started</button>
-        </div>
-      </nav>
+      <Navbar/>
 
       {/* Hero Section */}
       <section className="hero">
@@ -354,55 +336,7 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
-        <div className="footer-section">
-<section className="logo-section">
-        <img
-  src="/omsanjeevani.png"
-  alt="OmSanjeevani"
-  className="footer-logo"
-/>
-        <p>Smart Medicine Distribution</p>
-        <p> Platform for Distributors,</p>
-        <p>Shopkeepers and Customers.</p>
-       </section>
-      <section className="quick-section">
-        <div className="quick-links">
-          <h3>Quick Links</h3>
-          <p>Home</p>
-          <p>Features</p>
-          <p>About Us</p>
-          <p>Contact us</p>
-        
-        </div>
-
-       </section>
-       <section className="support-section">
-        <div className="support">
-          <h3>Support</h3>
-         <p>Help & FAQ</p>
-         <p>Privacy Policy</p>
-         <p>Terms & Conditions</p>
-        </div>
-       </section>
-       <section className="contact-section">
-        <div className="contact-us">
-          <h3>Contact Us</h3>
-          <p>Mob-6204872422</p>
-          <p>admin@omsanjeevani.com</p>
-          <p>Delhi India</p>
-        </div>
-
-       </section>
-       <section>
-        <img src="medicine.png" alt="" className="" style={{width:'400px', marginLeft:"90px", marginTop: "-50px"}}/>
-       </section>
-      </div>
-      
-        <p>
-          © 2026 ShopNowIndia. All Rights Reserved.
-        </p>
-      </footer>
+      <Footer/>
 
     </div>
   );

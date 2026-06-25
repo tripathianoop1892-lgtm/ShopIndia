@@ -7,7 +7,7 @@ import Cart from "./pages/cart/Cart.jsx";
 import Shopkeeper from "./pages/dashboard/Shopkeeper.jsx";
 import Distributor from "./pages/dashboard/Distributor.jsx";
 //home
-import Home from "./pages/home.jsx";
+import Home from "./pages/home/home.jsx";
 // 🔐 AUTH
 import Login from "./pages/auth/Login.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
@@ -17,6 +17,11 @@ import CustomerLayout from "./layouts/CustomerLayout.jsx";
 import Customer from "./pages/customer/Customer.jsx";
 import CustomerMedicineList from "./pages/customer/CustomerMedicineList.jsx";
 import CustomerOrders from "./pages/customer/CustomerOrders.jsx";
+// About
+import About from "./pages/about/about.jsx";
+
+//features
+import Features from "./pages/features/features.jsx";
 
 // 🔥 DISTRIBUTOR LAYOUT + PAGES
 import DistributorLayout from "./layouts/DistributorLayout.jsx";
@@ -48,6 +53,9 @@ const App = () => {
 
         {/* 🔐 AUTH */}
         <Route path="/" element={<Home/>} />
+        <Route path="/about" element={<About/>} />
+        <Route path="/features" element={<Features/>} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<ForgotPassword />} />
 
