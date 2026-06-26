@@ -23,6 +23,12 @@ import About from "./pages/about/about.jsx";
 //features
 import Features from "./pages/features/features.jsx";
 
+// policy 
+import Policy from "./pages/policy/policy.jsx"
+
+// terms
+import Terms from "./pages/terms/terms.jsx"
+
 // 🔥 DISTRIBUTOR LAYOUT + PAGES
 import DistributorLayout from "./layouts/DistributorLayout.jsx";
 import AddMedicine from "./pages/distributor/AddMedicine.jsx";
@@ -53,6 +59,8 @@ const App = () => {
 
         {/* 🔐 AUTH */}
         <Route path="/" element={<Home/>} />
+        <Route path="/terms" element={<Terms/>} />
+        <Route path="/policy" element={<Policy/>} />
         <Route path="/about" element={<About/>} />
         <Route path="/features" element={<Features/>} />
 

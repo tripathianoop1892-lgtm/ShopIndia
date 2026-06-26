@@ -51,11 +51,16 @@ import Home from "../pages/home/home.jsx"
 import Contact from "../pages/contact/contact.jsx";
 import About from "../pages/about/about.jsx";
 import Features from "../pages/features/features.jsx";
+// terms & policy
+import Terms from "../pages/terms/terms.jsx";
+import Policy from "../pages/policy/policy.jsx";
 
 const router = createBrowserRouter([
   // 🔐 Auth
   { path: "/", element: <Home/> },
   {path:"/contact", element:<Contact/>},
+  {path:"/terms", element:<Terms/>},
+  {path:"/policy", element:<Policy/>},
   {path:"/about", element:<About/>},
   {path:"/features", element:<Features/>},
   { path: "/login", element: <Login/> },

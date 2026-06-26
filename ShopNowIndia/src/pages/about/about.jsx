@@ -3,7 +3,7 @@ import "./About.css";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import GroupsIcon from '@mui/icons-material/Groups';
-
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 const About = () => {
   return (
     <>
@@ -65,6 +65,7 @@ const About = () => {
         <div className="service-cards">
 
           <div className="service-card">
+            <div>
             <h3>🏪 For Shopkeepers</h3>
             <ul>
               <li>Medicine Ordering</li>
@@ -72,9 +73,12 @@ const About = () => {
               <li>Low Stock Alerts</li>
               <li>Expiry Tracking</li>
             </ul>
+            </div>
+            <img src="forShopkeeper.png" alt=""  style={{width:"200px", height: "auto"}}/>
           </div>
 
           <div className="service-card">
+            <div>
             <h3>🚚 For Distributors</h3>
             <ul>
               <li>Order Management</li>
@@ -82,9 +86,13 @@ const About = () => {
               <li>Inventory Control</li>
               <li>Business Growth</li>
             </ul>
+            </div>
+            <img src="forDistributor.png" alt="" style={{width:"200px", height: "auto"}} />
+            
           </div>
 
           <div className="service-card">
+            <div>
             <h3>👨‍⚕️ For Customers</h3>
             <ul>
               <li>Easy Medicine Search</li>
@@ -92,6 +100,9 @@ const About = () => {
               <li>Quick Availability Check</li>
               <li>Better Service</li>
             </ul>
+            </div>
+            <img src="forcustomer.png" alt="" style={{width: "200px", height: "auto"}}/>
+            
           </div>
 
         </div>
@@ -102,7 +113,8 @@ const About = () => {
         <h2>Why Choose Us</h2>
 
         <div className="features-grid">
-          <div>✅ Real-Time Inventory</div>
+          <div style={{display:"flex", alignItems:"center"}}><InsertInvitationIcon fontSize= "large" style={{color:"blue"}}/> <p>Real-Time Inventory</p></div>
+          
           <div>✅ Expiry Alerts</div>
           <div>✅ Order Management</div>
           <div>✅ Distributor Dashboard</div>
