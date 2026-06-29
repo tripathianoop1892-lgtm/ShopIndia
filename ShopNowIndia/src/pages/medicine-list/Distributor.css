@@ -1,19 +1,10 @@
 /* CONTAINER */
 .medicine-container {
-<<<<<<< HEAD
   padding: 18px 12px;
   background: transparent;
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
-=======
-  padding: 20px;
-  background: #f5f7fa;
-  min-height: 100vh;
-  margin-left: 220px;
-  width: calc(100% - 220px);
-  overflow-x: auto;
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   box-sizing: border-box;
 }
 

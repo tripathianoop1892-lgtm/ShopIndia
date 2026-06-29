@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-<<<<<<< HEAD
 const orderSchema = new mongoose.Schema(
   {
     orderType: {
@@ -56,31 +55,5 @@ const orderSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-=======
-const orderSchema = new mongoose.Schema({
-  medicineId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Medicine",
-  },
-
-  name: String, // medicine name
-
-  quantity: Number,
-
-  price: Number,
-
-  shopkeeperName: String, // 🔥 ye important hai (frontend me use ho raha hai)
-
-  status: {
-    type: String,
-    default: "Pending",
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
 export default mongoose.model("Order", orderSchema);

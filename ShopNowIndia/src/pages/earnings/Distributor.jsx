@@ -3,12 +3,8 @@ import "./Distributor.css";
 
 const Earnings = () => {
   const [total, setTotal] = useState(0);
-<<<<<<< HEAD
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-=======
-  const [orders, setOrders] = useState([]); // 🔥 history state
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
   useEffect(() => {
     fetchEarnings();
@@ -16,7 +12,6 @@ const Earnings = () => {
 
   const fetchEarnings = async () => {
     try {
-<<<<<<< HEAD
       setLoading(true);
       const token = localStorage.getItem("token");
       const headers = {
@@ -24,15 +19,11 @@ const Earnings = () => {
         "Authorization": `Bearer ${token}`
       };
       const res = await fetch("http://localhost:5000/api/earnings", { headers });
-=======
-      const res = await fetch("http://localhost:5000/api/earnings");
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
       const data = await res.json();
 
       console.log("Earnings Data:", data);
 
       setTotal(data.total || 0);
-<<<<<<< HEAD
       setOrders(data.orders || []);
     } catch (err) {
       console.log("Error:", err);
@@ -155,35 +146,6 @@ const Earnings = () => {
             )}
           </div>
         </>
-=======
-      setOrders(data.orders || []); // 🔥 history
-    } catch (err) {
-      console.log("Error:", err);
-    }
-  };
-
-  return (
-    <div className="container">
-      <h2>Total Earnings</h2>
-
-      {/* 🔥 TOTAL CARD */}
-      <div className="card">
-        ₹ {total}
-      </div>
-
-      {/* 🔥 HISTORY */}
-      <h3 style={{ marginTop: "25px" }}>Earnings History</h3>
-
-      {orders.length === 0 ? (
-        <p>No history</p>
-      ) : (
-        orders.map((o) => (
-          <div key={o._id} className="history-item">
-            <span>₹ {o.total}</span>
-            <span>{new Date(o.createdAt).toLocaleDateString()}</span>
-          </div>
-        ))
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
       )}
     </div>
   );

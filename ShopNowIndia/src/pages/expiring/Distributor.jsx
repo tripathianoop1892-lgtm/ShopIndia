@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
-<<<<<<< HEAD
 import { MedicinesList } from "../../services/api"; // ✅ API
-=======
-// import { getMedicines } from "../../services/api"; // ✅ API
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
 const DistributorExpiring = () => {
   const [medicines, setMedicines] = useState([]);
 
-<<<<<<< HEAD
   // 📅 Format date helper
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -19,19 +14,13 @@ const DistributorExpiring = () => {
     return `${day}/${month}/${year}`;
   };
 
-=======
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
-<<<<<<< HEAD
       const res = await MedicinesList();
-=======
-      const res = await getMedicines();
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
       const today = new Date();
 
@@ -39,11 +28,7 @@ const DistributorExpiring = () => {
       const expiringSoon = res.filter((med) => {
         const expDate = new Date(med.expiry);
         const diff = (expDate - today) / (1000 * 60 * 60 * 24);
-<<<<<<< HEAD
         return diff < 90;
-=======
-        return diff < 30;
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
       });
 
       setMedicines(expiringSoon);
@@ -69,11 +54,7 @@ const DistributorExpiring = () => {
             medicines.map((med) => (
               <tr key={med._id}>
                 <td>{med.name}</td>
-<<<<<<< HEAD
                 <td className="danger">{formatDate(med.expiry)}</td>
-=======
-                <td className="danger">{med.expiry}</td>
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
               </tr>
             ))
           ) : (

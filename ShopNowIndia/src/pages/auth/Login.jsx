@@ -17,7 +17,6 @@ const Login = () => {
   const { login } = useAuth();
 
   const handleLogin = async () => {
-<<<<<<< HEAD
   if (!form.email || !form.password) {
     alert("All fields required ❌");
     return;
@@ -64,74 +63,6 @@ const Login = () => {
     alert("Server connection error ❌");
   }
 };
-=======
-    if (!form.email || !form.password) {
-      alert("All fields required ❌");
-      return;
-    }
-
-    try {
-
-      // 🔥 FINAL FIX
-      const payload = {
-        email: form.email,
-        password: form.password,
-      };
-
-      // 🔥 ONLY CUSTOMER
-      if (form.shopId.trim()) {
-        payload.shopId = form.shopId;
-      }
-
-      const res = await loginUser(payload);
-      console.log(res)
-
-      if (!res.success) {
-        alert(res.message || "Invalid credentials ❌");
-        return;
-      }
-
-       // ✅ SAVE TOKEN
-      localStorage.setItem("token", res.token);
-
-      // ✅ SAVE USER (optional)
-      localStorage.setItem(
-        "user",
-        JSON.stringify(res.user)
-      );
-
-      // 🔥 FIXED
-      login(res.user, res.token);
-
-      alert("Login Successful ✅");
-
-      switch (res.user.role) {
-        case "customer":
-          navigate("/customer");
-          break;
-
-        case "shopkeeper":
-          navigate("/shopkeeper");
-          break;
-
-        case "distributor":
-          navigate("/distributor");
-          break;
-
-        case "admin":
-          navigate("/admin");
-          break;
-
-        default:
-          navigate("/");
-      }
-
-    } catch (error) {
-      console.error(error);
-      alert("Server error ❌");
-    }
-  };
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
   return (
     <div className="login-container">

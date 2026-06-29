@@ -1,5 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
 import { Outlet, Navigate } from "react-router-dom";
 import CustomerSidebar from "../Sidebar/CustomerSidebar";
 import useAuth from "../../hooks/useAuth";
@@ -29,33 +28,6 @@ const CustomerLayout = () => {
       >
         <Outlet />
       </div>
-=======
-import { Outlet } from "react-router-dom";
-import CustomerSidebar from "../Sidebar/CustomerSidebar";
-import Header from "../Header/Header";
-import "./CustomerLayout.css";
-
-const CustomerLayout = () => {
-  return (
-    <div className="layout">
-
-      {/* Sidebar */}
-      <CustomerSidebar />
-
-      {/* Right Section */}
-      <div className="main-section">
-
-        {/* Header */}
-        <Header />
-
-        {/* Page Content */}
-        <div className="main-content">
-          <Outlet />
-        </div>
-
-      </div>
-
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
     </div>
   );
 };

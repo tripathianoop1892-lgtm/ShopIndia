@@ -6,7 +6,6 @@ import Medicine from "../models/medicine.js";
 export const addMedicine = async (req, res) => {
   try {
     const user = req.user;
-<<<<<<< HEAD
 
     const {
       name,
@@ -78,39 +77,15 @@ export const addMedicine = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Medicine added successfully",
-=======
-    console.log(req.body);
-
-    const med = await Medicine.create({
-      ...req.body,
-
-      // 🔥 FINAL FIX
-      ownerId: user._id.toString(),
-      ownerRole: user.role,
-    });
-
-    res.json({
-      success: true,
-      message: "Medicine added ✅",
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
       data: med,
     });
 
   } catch (err) {
-<<<<<<< HEAD
     if (err.code === 11000) {
       return res.status(409).json({ success: false, message: "Medicine with same name and batch already exists" });
     }
     console.error(err);
     return res.status(500).json({ success: false, message: "Server error" });
-=======
-    console.log(err);
-
-    res.status(500).json({
-      success: false,
-      message: "Error ❌",
-    });
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   }
 };
 
@@ -120,7 +95,6 @@ export const addMedicine = async (req, res) => {
 export const getMedicines = async (req, res) => {
   try {
     const user = req.user;
-<<<<<<< HEAD
     const { distributorId } = req.query;
     
     let query = {};
@@ -153,47 +127,10 @@ export const getMedicines = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Error fetching stock ❌" });
-=======
-
-    let meds = [];
-
-    // 🔥 Distributor
-    if (user.role === "distributor") {
-      meds = await Medicine.find({
-        ownerId: user._id.toString(),
-      });
-    }
-
-    // 🔥 Shopkeeper
-    else if (user.role === "shopkeeper") {
-
-  meds = await Medicine.find({
-    $or: [
-      { ownerRole: "distributor" },
-      { ownerRole: "shopkeeper" },
-    ],
-  });
-}
-
-    // 🔥 Customer
-    else if (user.role === "customer") {
-      meds = await Medicine.find({
-        ownerRole: "shopkeeper",
-      });
-    }
-
-    res.json(meds);
-
-  } catch (err) {
-    res.status(500).json({
-      message: "Error ❌",
-    });
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   }
 };
 
 // =======================
-<<<<<<< HEAD
 // ❌ DELETE & UPDATE
 // =======================
 export const deleteMedicine = async (req, res) => {
@@ -263,44 +200,6 @@ export const updateMedicine = async (
     return res.status(500).json({
       success: false,
       message: "Error updating item",
-=======
-// ❌ DELETE
-// =======================
-export const deleteMedicine = async (req, res) => {
-  try {
-    await Medicine.findByIdAndDelete(req.params.id);
-
-    res.json({
-      message: "Deleted ✅",
-    });
-
-  } catch (err) {
-    res.status(500).json({
-      message: "Error ❌",
-    });
-  }
-};
-
-// =======================
-// ✏️ UPDATE
-// =======================
-export const updateMedicine = async (req, res) => {
-  try {
-    const med = await Medicine.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
-    res.json({
-      message: "Updated ✅",
-      data: med,
-    });
-
-  } catch (err) {
-    res.status(500).json({
-      message: "Error ❌",
->>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
     });
   }
 };
