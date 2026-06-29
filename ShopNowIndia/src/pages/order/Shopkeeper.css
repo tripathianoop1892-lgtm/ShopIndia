@@ -1,0 +1,51 @@
+/* ===== ORDER MANAGEMENT LEDGER PANEL CONTROLS ===== */
+.bigdiv {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.table-container {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th {
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.table-container td {
+  font-size: 14px;
+  color: #4a5568;
+}
+
+/* Status specific coloring badges */
+.pending {
+  color: #d97706;
+  font-weight: bold;
+}
+
+.approved {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.rejected {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+/* Interactive execution tracking switch button adjustments */
+button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}

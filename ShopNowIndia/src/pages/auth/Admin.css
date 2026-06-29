@@ -1,0 +1,44 @@
+.admin-container {
+  padding: 30px;
+  text-align: center;
+}
+
+.admin-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.admin-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.admin-card p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.admin-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.admin-actions button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.admin-actions button:hover {
+  background: #0056b3;
+}

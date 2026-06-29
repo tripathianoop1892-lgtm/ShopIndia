@@ -1,0 +1,224 @@
+/* ==========================================================================
+   OMSANJEEVANI HEALTHCARE PRIVACY & POLICY SHEET STYLES
+   ========================================================================== */
+.privacy-page-wrapper {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ==========================================================================
+   HERO BANNER VIEW WITH COMPLEX GRADIENT GLOWS
+   ========================================================================== */
+.privacy-hero-panel {
+  position: relative;
+  padding: 100px 24px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e1e7ff 50%, #f0fdf4 100%);
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.privacy-hero-inner {
+  position: relative;
+  z-index: 5;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.privacy-badge-pill {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #bfdbfe;
+}
+
+.privacy-hero-inner h1 {
+  font-size: clamp(34px, 4.5vw, 54px);
+  font-weight: 900;
+  color: #0f2d63;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+}
+
+.privacy-hero-lead {
+  font-size: clamp(16px, 1.2vw, 20px);
+  color: #475569;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Ambient Lighting Elements */
+.privacy-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.65;
+}
+
+.privacy-orb-emerald {
+  width: 450px;
+  height: 450px;
+  background: #a7f3d0;
+  left: -5%;
+  top: -10%;
+}
+
+.privacy-orb-indigo {
+  width: 500px;
+  height: 500px;
+  background: #c7d2fe;
+  right: -5%;
+  bottom: -20%;
+}
+
+/* ==========================================================================
+   POLICY CONTAINER GRID MATRICES
+   ========================================================================== */
+.privacy-main-content {
+  padding: 60px max(4vw, 24px) 100px;
+  background: #f8fafc;
+}
+
+.privacy-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Clean Professional Multi-Device Cards */
+.privacy-card-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.01);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.privacy-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+}
+
+/* Icon Container Shields Formatting */
+.privacy-icon-shield {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.privacy-icon-shield.blue { background: #eff6ff; color: #1e40af; }
+.privacy-icon-shield.green { background: #f0fdf4; color: #047857; }
+.privacy-icon-shield.purple { background: #f5f3ff; color: #6d28d9; }
+.privacy-icon-shield.share-blue { background: #e0f2fe; color: #0369a1; }
+.privacy-icon-shield.gold { background: #fffbeb; color: #b45309; }
+.privacy-icon-shield.dark-blue { background: #f0f9ff; color: #0284c7; }
+.privacy-icon-shield.red { background: #fef2f2; color: #b91c1c; }
+.privacy-icon-shield.orange { background: #fff7ed; color: #c2410c; }
+.privacy-icon-shield.emerald { background: #e6fcf5; color: #065f46; }
+
+.mui-privacy-icon {
+  font-size: 24px !important;
+}
+
+.privacy-card-body {
+  flex: 1;
+}
+
+.privacy-card-body h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f2d63;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.privacy-card-body p {
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.privacy-strict-print {
+  margin-top: 14px;
+  border-left: 3px solid #b91c1c;
+  padding-left: 12px;
+  font-weight: 600 !important;
+  color: #b91c1c !important;
+}
+
+/* Internal Structured Bullet Lists */
+.privacy-card-body ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.privacy-card-body ul li {
+  font-size: 14.5px;
+  color: #475569;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Legal Callout Meta Adjustments */
+.contact-privacy-card {
+  border-left: 4px solid #065f46;
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.01) 0%, transparent 100%);
+}
+
+.policy-contact-lines {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+}
+
+.policy-contact-lines p {
+  font-size: 14px;
+  color: #334155;
+}
+
+.policy-contact-lines strong {
+  color: #0f2d63;
+  width: 150px;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   DYNAMIC MEDIA CONSTRAINTS RESPONSIVENESS OVERRIDES
+   ========================================================================== */
+@media (max-width: 768px) {
+  .privacy-hero-panel { padding: 70px 16px; }
+  .privacy-main-content { padding: 40px 16px 80px; }
+  .privacy-card-item { flex-direction: column; padding: 24px; gap: 16px; }
+  .policy-contact-lines p { display: flex; flex-direction: column; gap: 4px; }
+}

@@ -1,0 +1,58 @@
+.order-container {
+  padding: 18px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  min-width: 800px; /* 🔥 right side cut fix */
+  border-collapse: collapse;
+  background: #fff;
+}
+
+/* Table cells */
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Header */
+th {
+  background: #2c3e50;
+  color: white;
+}
+
+
+
+/* Buttons */
+button {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Approve */
+button:first-child {
+  background: green;
+  color: white;
+}
+
+/* Reject */
+button:last-child {
+  background: red;
+  color: white;
+}
+
+/* Hover */
+button:hover {
+  opacity: 0.8;
+}

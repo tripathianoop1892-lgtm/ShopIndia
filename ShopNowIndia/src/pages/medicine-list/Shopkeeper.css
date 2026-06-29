@@ -1,0 +1,37 @@
+/* ===== LOCAL RETAIL INVENTORY SHEET VIEW ===== */
+.shopkeeper-container {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.shopkeeper-container h2 {
+  font-size: 26px;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+/* Table containment setups */
+.shopkeeper-container table {
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.shopkeeper-container th {
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.shopkeeper-container td {
+  color: #334155;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.shopkeeper-container tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.shopkeeper-container tbody tr:hover {
+  background-color: #f8fafc;
+}
