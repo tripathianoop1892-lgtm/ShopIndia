@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 .shopkeeper-layout {
   display: flex;
   overflow: hidden !important;
 }
 
 .shopkeeper-content {
+=======
+.layout {
+  display: flex;
+}
+
+.content {
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   flex: 1;
   padding: 20px;
   background: #f5f5f5;

@@ -89,6 +89,7 @@ const AddMedicineShopkeeper = () => {
         expiry: form.expDate,
       };
       console.log(dataToSend);
+<<<<<<< HEAD
       if (
   Number(form.offerPrice) >
   Number(form.mrp)
@@ -125,6 +126,8 @@ if (
     "Expiry date must be after manufacturing date"
   );
 }
+=======
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
       const res = await addMedicine(dataToSend);
 
       const responseData = res?.data || res;
@@ -300,7 +303,11 @@ if (
             </label>
 
             <input
+<<<<<<< HEAD
               type="url"
+=======
+              type="text"
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
               name="image"
               value={form.image}
               onChange={handleChange}

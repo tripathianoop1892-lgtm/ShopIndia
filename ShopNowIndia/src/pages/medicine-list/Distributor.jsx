@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import {
   updateMedicine,
+<<<<<<< HEAD
   MedicinesList,
   deleteMedicine
+=======
+  MedicinesList
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 } from "../../services/api";
 
 const Distributor = () => {
@@ -132,7 +136,20 @@ const Distributor = () => {
 
       if (!confirmDelete) return;
 
+<<<<<<< HEAD
       await deleteMedicine(id);
+=======
+      await fetch(
+        `http://localhost:5000/api/medicines/${id}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
       fetchData();
 
@@ -297,24 +314,39 @@ const Distributor = () => {
     <input
       type="date"
       value={
+<<<<<<< HEAD
         m.mfd
           ? m.mfd.slice(0, 10)
+=======
+        m.mfgDate
+          ? m.mfgDate.slice(0, 10)
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
           : ""
       }
       onChange={(e) =>
         handleChange(
           e,
           m._id,
+<<<<<<< HEAD
           "mfd"
+=======
+          "mfgDate"
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
         )
       }
     />
 
   ) : (
 
+<<<<<<< HEAD
     m.mfd
       ? new Date(
           m.mfd
+=======
+    m.mfgDate
+      ? new Date(
+          m.mfgDate
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
         ).toLocaleDateString()
       : "N/A"
 
@@ -329,15 +361,24 @@ const Distributor = () => {
                     <input
                       type="date"
                       value={
+<<<<<<< HEAD
                        m.expiry
   ? m.expiry.slice(0, 10)
+=======
+                       m.expDate
+  ? m.expDate.slice(0, 10)
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   : ""
                       }
                       onChange={(e) =>
                         handleChange(
                           e,
                           m._id,
+<<<<<<< HEAD
                           "expiry"
+=======
+                          "expDate"
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
                         )
                       }
                     />

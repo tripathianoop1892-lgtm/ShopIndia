@@ -1,11 +1,19 @@
 .main-content {
   padding: 30px;
+<<<<<<< HEAD
   background: transparent;
+=======
+  background: #f4f7fb;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   min-height: 100vh;
 }
 
 .modern-form-container {
+<<<<<<< HEAD
   background: transparent;
+=======
+  background: #fff;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   border-radius: 20px;
   padding: 35px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);

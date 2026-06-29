@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Container Shell Integration */
 .navbar-hub {
   width: 100%;
@@ -133,5 +134,114 @@
   .nav-btn-primary {
     width: 100%;
     padding: 12px;
+=======
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+.navbar{
+  width:100%;
+  height:100px;
+  background:#dbd9d9;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 80px;
+  border-bottom:10px solid #9d95ff;
+}
+
+/* Logo */
+
+.navbar-logo img{
+  height:70px;
+  width:auto;
+  object-fit:contain;
+}
+
+/* Menu */
+
+.navbar-links{
+  display:flex;
+  list-style:none;
+  gap:50px;
+}
+
+.navbar-links a{
+  text-decoration:none;
+  color:#000;
+  font-size:28px;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.navbar-links a:hover{
+  color:#00c853;
+}
+
+/* Buttons */
+
+.navbar-buttons{
+  display:flex;
+  gap:15px;
+}
+
+.login-btn{
+  background:green;
+  color:white;
+  border:none;
+  padding:12px 30px;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:500;
+  cursor:pointer;
+}
+
+.start-btn{
+  background:red;
+  color:white;
+  border:none;
+  padding:12px 30px;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:300;
+  cursor:pointer;
+}
+
+.login-btn:hover,
+.start-btn:hover{
+  transform:translateY(-2px);
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+  .navbar{
+    padding:20px;
+    flex-direction:column;
+    height:auto;
+    gap:20px;
+  }
+
+  .navbar-links{
+    gap:20px;
+  }
+}
+
+@media(max-width:768px){
+  .navbar-links{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .navbar-links a{
+    font-size:18px;
+  }
+
+  .login-btn,
+  .start-btn{
+    padding:10px 20px;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   }
 }

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
+<<<<<<< HEAD
 import { MedicinesList } from "../../services/api";
+=======
+// import { getMedicines } from "../../services/api";
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
 const ShopkeeperExpiry = () => {
   const [medicines, setMedicines] = useState([]);
 
+<<<<<<< HEAD
   // 📅 Format date helper
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -14,13 +19,19 @@ const ShopkeeperExpiry = () => {
     return `${day}/${month}/${year}`;
   };
 
+=======
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
+<<<<<<< HEAD
       const res = await MedicinesList();
+=======
+      const res = await getMedicines();
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
       const today = new Date();
 
@@ -66,7 +77,11 @@ const ShopkeeperExpiry = () => {
                 <tr key={item._id}>
                   <td>{item.name}</td>
                   <td className={className}>
+<<<<<<< HEAD
                     {formatDate(item.expiry)}
+=======
+                    {item.expiry}
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
                   </td>
                 </tr>
               );

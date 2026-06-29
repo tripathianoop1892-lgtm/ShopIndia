@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ==========================================================================
    OMSANJEEVANI HEALTHCARE PRIVACY & POLICY SHEET STYLES
    ========================================================================== */
@@ -221,4 +222,112 @@
   .privacy-main-content { padding: 40px 16px 80px; }
   .privacy-card-item { flex-direction: column; padding: 24px; gap: 16px; }
   .policy-contact-lines p { display: flex; flex-direction: column; gap: 4px; }
+=======
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+}
+
+.privacy-page{
+    width:100%;
+}
+
+/* Hero */
+
+.privacy-hero{
+    background:linear-gradient(135deg,#0f2d63,#1f4ea3);
+    color:#fff;
+    text-align:center;
+    padding:90px 20px;
+}
+
+.privacy-hero h1{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.privacy-hero p{
+    max-width:750px;
+    margin:auto;
+    font-size:18px;
+    line-height:1.8;
+}
+
+/* Container */
+
+.privacy-container{
+    max-width:1200px;
+    margin:50px auto;
+    padding:0 20px;
+}
+
+/* Cards */
+
+.privacy-card{
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.privacy-card:hover{
+    transform:translateY(-4px);
+}
+
+.privacy-card h2{
+    color:#0f2d63;
+    margin-bottom:18px;
+    font-size:26px;
+}
+
+.privacy-card p{
+    color:#555;
+    line-height:1.8;
+    font-size:16px;
+    margin-bottom:10px;
+}
+
+.privacy-card ul{
+    margin-left:20px;
+    margin-top:10px;
+}
+
+.privacy-card li{
+    margin-bottom:12px;
+    color:#555;
+    line-height:1.7;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .privacy-hero{
+        padding:70px 20px;
+    }
+
+    .privacy-hero h1{
+        font-size:34px;
+    }
+
+    .privacy-card{
+        padding:20px;
+    }
+
+    .privacy-card h2{
+        font-size:22px;
+    }
+
+    .privacy-hero p{
+        font-size:16px;
+    }
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }

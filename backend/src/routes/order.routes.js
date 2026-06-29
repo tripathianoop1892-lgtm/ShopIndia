@@ -28,7 +28,11 @@ router.get(
 router.put(
   "/:id",
   checkAuth,
+<<<<<<< HEAD
   checkRole("distributor", "shopkeeper"),
+=======
+  checkRole("distributor"),
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   updateOrderStatus
 );
 

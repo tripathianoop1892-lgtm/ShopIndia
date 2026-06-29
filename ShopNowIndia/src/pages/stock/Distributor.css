@@ -1,11 +1,21 @@
 /* Container */
 .stock-container {
+<<<<<<< HEAD
   padding: 18px 12px;
   background: #f5f7fa;
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+=======
+  padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  box-sizing: border-box;
+  overflow-x: auto; /* 🔥 IMPORTANT */
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 /* Table wrapper (NEW) */

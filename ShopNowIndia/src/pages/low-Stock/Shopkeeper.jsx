@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
+<<<<<<< HEAD
 import { MedicinesList } from "../../services/api"; // ✅ API
+=======
+// import { getMedicines } from "../../services/api"; // ✅ API
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
 const ShopkeeperLowStock = () => {
   const [medicines, setMedicines] = useState([]);
@@ -11,7 +15,11 @@ const ShopkeeperLowStock = () => {
 
   const fetchData = async () => {
     try {
+<<<<<<< HEAD
       const res = await MedicinesList();
+=======
+      const res = await getMedicines();
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
       // 🔥 LOW STOCK FILTER (< 10)
       const lowStockData = res.filter((med) => med.stock < 10);

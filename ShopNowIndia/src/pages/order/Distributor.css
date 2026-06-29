@@ -1,8 +1,16 @@
 .order-container {
+<<<<<<< HEAD
   padding: 18px 12px;
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+=======
+  padding: 20px;
+  margin-left: 220px; /* sidebar fix */
+  width: calc(100% - 220px);
+  box-sizing: border-box;
+  overflow-x: auto; /* 🔥 main fix */
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 h2 {
@@ -30,7 +38,16 @@ th {
   color: white;
 }
 
+<<<<<<< HEAD
 
+=======
+/* 🔥 Action column fix */
+td:last-child {
+  display: flex;
+  justify-content: center;
+  gap: 8px; /* spacing between buttons */
+}
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
 /* Buttons */
 button {

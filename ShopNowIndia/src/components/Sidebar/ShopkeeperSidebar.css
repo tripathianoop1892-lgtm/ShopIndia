@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ===== SIDEBAR ===== */
 
 .shopkeeper-sidebar {
@@ -259,4 +260,37 @@
       #1e293b
     );
   }
+=======
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #2c3e50;
+  color: white;
+  padding: 20px;
+  position: fixed;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover {
+  color: #00c6ff;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }

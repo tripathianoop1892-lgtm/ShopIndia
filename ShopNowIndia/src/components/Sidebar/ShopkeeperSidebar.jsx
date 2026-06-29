@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
@@ -16,11 +17,21 @@ const ShopkeeperSidebar = ({ isOpen, onClose }) => {
 
   const handleLogout = () => {
     logout();
+=======
+import { NavLink, useNavigate } from "react-router-dom";
+import "./ShopkeeperSidebar.css";
+
+const ShopkeeperSidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
     localStorage.clear();
     navigate("/");
   };
 
   return (
+<<<<<<< HEAD
     <div className={`shopkeeper-sidebar ${isOpen ? "open" : ""}`}>
       <div className="shopkeeper-sidebar-header">
         <div>
@@ -157,6 +168,30 @@ const ShopkeeperSidebar = ({ isOpen, onClose }) => {
           </div>
         </div>
       )}
+=======
+    <div className="sidebar">
+      <img
+  src="/omsanjeevani.png"
+  alt="OmSanjeevani"
+  className="sidebar-logo"
+/>
+
+      <ul>
+        <li><NavLink to="/shopkeeper">Dashboard</NavLink></li>
+        <li><NavLink to="/shopkeeper/medicines">Medicines</NavLink></li>
+        <li><NavLink to="/shopkeeper/add-medicine">Add Medicine</NavLink></li>
+        <li><NavLink to="/shopkeeper/orders">Orders</NavLink></li>
+        <li><NavLink to="/shopkeeper/cart">Cart</NavLink></li>
+        <li><NavLink to="/shopkeeper/low-stock">Low Stock</NavLink></li>
+        <li><NavLink to="/shopkeeper/earnings">Earnings</NavLink></li>
+        <li><NavLink to="/shopkeeper/expiry">Expiry Alert</NavLink></li>
+      </ul>
+
+      {/* 🔴 Logout */}
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
     </div>
   );
 };

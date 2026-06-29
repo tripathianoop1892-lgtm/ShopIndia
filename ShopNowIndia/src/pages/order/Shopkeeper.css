@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ===== ORDER MANAGEMENT LEDGER PANEL CONTROLS ===== */
 .bigdiv {
   width: 100%;
@@ -31,15 +32,24 @@
 /* Status specific coloring badges */
 .pending {
   color: #d97706;
+=======
+.pending {
+  color: orange;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   font-weight: bold;
 }
 
 .approved {
+<<<<<<< HEAD
   color: #16a34a;
+=======
+  color: green;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   font-weight: bold;
 }
 
 .rejected {
+<<<<<<< HEAD
   color: #dc2626;
   font-weight: bold;
 }
@@ -49,3 +59,22 @@ button:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
 }
+=======
+  color: red;
+  font-weight: bold;
+}
+
+.bigdiv{
+  width: 100%;
+  
+  
+
+}
+
+#h2{
+  width: 100%;
+  
+}
+
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec

@@ -1,5 +1,6 @@
 /* ===== SIDEBAR ===== */
 
+<<<<<<< HEAD
 .distributor-sidebar {
   position: fixed;
   top: 0;
@@ -49,32 +50,72 @@
   height: 200px;
   object-fit: cover;
   margin: 0px 18px;
+=======
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 240px;
+  height: 100vh;
+
+  background: #1e1b4b;
+
+  color: white;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  z-index: 1000;
+
+  overflow-y: auto;
+
+  transition: 0.3s;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 /* ===== LOGO ===== */
 
+<<<<<<< HEAD
 .distributor-sidebar h2 {
   font-size: 20px;
   margin-bottom: 18px;
   text-align: left;
   color: #fff;
   letter-spacing: 0.2px;
+=======
+.sidebar h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: white;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 /* ===== MENU ===== */
 
+<<<<<<< HEAD
 .distributor-sidebar ul {
+=======
+.sidebar ul {
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+<<<<<<< HEAD
 .distributor-sidebar ul li {
+=======
+.sidebar ul li {
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   margin-bottom: 12px;
 }
 
 /* ===== LINKS ===== */
 
+<<<<<<< HEAD
 .distributor-sidebar ul li a {
   display: block;
   text-decoration: none;
@@ -84,28 +125,68 @@
   font-size: 14px;
   font-weight: 600;
   transition: background 0.2s ease, color 0.2s ease;
+=======
+.sidebar ul li a {
+  display: block;
+
+  text-decoration: none;
+
+  color: #ddd;
+
+  padding: 14px 16px;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 /* ===== HOVER ===== */
 
+<<<<<<< HEAD
 .distributor-sidebar ul li a:hover {
   background: rgba(255,255,255,0.05);
   color: #fff;
+=======
+.sidebar ul li a:hover {
+  background: #312e81;
+  color: white;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 /* ===== ACTIVE ===== */
 
+<<<<<<< HEAD
 .distributor-sidebar ul li a.active {
   background: linear-gradient(90deg, rgba(99,102,241,0.95), rgba(139,92,246,0.95));
   color: #fff;
   font-weight: 700;
   box-shadow: 0 6px 16px rgba(13, 27, 60, 0.3);
+=======
+.sidebar ul li a.active {
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  color: white;
+
+  font-weight: bold;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 /* ===== LOGOUT ===== */
 
 .logout-btn {
   width: 100%;
+<<<<<<< HEAD
   margin-top: 18px;
   padding: 12px;
   border: none;
@@ -152,4 +233,83 @@
   .distributor-sidebar {
     background: linear-gradient(180deg,#24364a,#1e293b);
   }
+=======
+
+  margin-top: 30px;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #ef4444;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* ===== MOBILE MENU BUTTON ===== */
+
+.menu-toggle {
+  display: none;
+
+  position: fixed;
+
+  top: 15px;
+  left: 15px;
+
+  background: #1e1b4b;
+
+  color: white;
+
+  border: none;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+
+  font-size: 22px;
+
+  z-index: 1200;
+
+  cursor: pointer;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    left: -260px;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+.sidebar-logo{
+  width: 140px;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+  object-fit: contain;
+}
+.sidebar{
+  background: #24364a;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }

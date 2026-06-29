@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 .dashboard-container {
@@ -24,10 +25,63 @@
   color: #0f172a;
   font-weight: 700;
   margin: 0;
+=======
+/* ===== DASHBOARD ===== */
+
+.dashboard {
+
+  margin-left: -200px;
+
+  padding: 25px;
+
+  background: #f4f7fb;
+
+  min-height: 100vh;
+
+  font-family: "Poppins", sans-serif;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+/* ===================== */
+/* HEADER */
+/* ===================== */
+
+/* .dashboard-header {
+  display: flex; 
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+
+  flex-wrap: wrap;
+
+  gap: 15px; 
+} */
+
+#div1{
+  width: 100%;
+  /* border: 2px solid black; */
+}
+
+.dashboard-title {
+
+  font-size: 34px;
+
+  color: #1e293b;
+
+  font-weight: 700;
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 }
 
 .dashboard-subtitle {
   color: #64748b;
+<<<<<<< HEAD
   margin: 4px 0 0 0;
   font-size: 14px;
 }
@@ -450,3 +504,425 @@
     max-width: 100%; 
   }
 }
+=======
+
+  margin-top: 5px;
+}
+
+.dashboard-badge {
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+
+  color: white;
+
+  padding: 14px 20px;
+
+  border-radius: 14px;
+
+  font-weight: 600;
+
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+}
+
+/* ===================== */
+/* SEARCH */
+/* ===================== */
+
+.search-box {
+  margin-bottom: 30px;
+  margin-left: 200px;
+}
+
+.search-box input {
+  width: 100%;
+
+  height: 58px;
+
+  border: 2px solid black;
+
+  border-radius: 14px;
+
+  padding: 0 20px;
+
+  font-size: 16px;
+
+  background: white;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+/* ===================== */
+/* STATS */
+/* ===================== */
+
+.stats-grid {
+  margin-left: 200px;
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(220px,1fr)
+  );
+
+  gap: 15px;
+
+  margin-bottom: 35px;
+}
+
+.stat-card {
+  padding: 25px;
+
+  border-radius: 18px;
+
+  color: white;
+
+  min-height: 140px;
+
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+.stat-card p {
+  font-size: 15px;
+
+  opacity: 0.9;
+}
+
+.stat-card h3 {
+  font-size: 34px;
+
+  margin-top: 10px;
+}
+
+/* ===== COLORS ===== */
+
+.blue {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+}
+
+.green {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #16a34a,
+    #15803d
+  );
+}
+
+.orange {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #f59e0b,
+    #d97706
+  );
+}
+
+.purple {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #6d28d9
+  );
+}
+
+/* ===================== */
+/* SECTION */
+/* ===================== */
+
+.section {
+  overflow: hidden;
+
+  margin-top: 30px;
+
+  background: white;
+
+  padding: 25px;
+
+  border: none;
+
+  border-radius: 22px;
+
+  /* box-shadow: 0 4px 16px rgba(0,0,0,0.06); */
+}
+
+.section-header {
+  margin-bottom: 20px;
+}
+
+.section-header h3 {
+  font-size: 28px;
+
+  color: #1e293b;
+}
+
+/* ===================== */
+/* MEDICINE GRID */
+/* ===================== */
+
+.medicine-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px,1fr)
+  );
+
+  gap: 25px;
+
+  width: 100%;
+}
+
+/* ===================== */
+/* CARD */
+/* ===================== */
+
+.medicine-card {
+
+  border: 1px solid black;
+
+  background: white;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+/* 
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08); */
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+}
+
+/* ===================== */
+/* IMAGE */
+/* ===================== */
+
+.medicine-image-box {
+
+  height: 220px;
+
+  background: #f8fafc;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+.medicine-image {
+
+  width: 150px;
+
+  height: 150px;
+
+  object-fit: contain;
+}
+
+/* ===================== */
+/* INFO */
+/* ===================== */
+
+.medicine-info {
+  padding: 22px;
+}
+
+.medicine-info h4 {
+
+  font-size: 24px;
+
+  color: #0f172a;
+
+  margin-bottom: 8px;
+}
+
+.company {
+
+  color: #64748b;
+
+  margin-bottom: 15px;
+}
+
+/* ===================== */
+/* TAGS */
+/* ===================== */
+
+.medicine-tags {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+
+  flex-wrap: wrap;
+}
+
+.medicine-tags span {
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  padding: 8px 14px;
+
+  border-radius: 30px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+/* ===================== */
+/* PRICE */
+/* ===================== */
+
+.price-box {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.price-box h3 {
+
+  font-size: 30px;
+
+  color: #16a34a;
+}
+
+.price-box del {
+
+  color: #94a3b8;
+
+  font-size: 18px;
+}
+
+/* ===================== */
+/* STOCK */
+/* ===================== */
+
+.stock-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+
+  font-size: 15px;
+}
+
+.discount {
+
+  color: #dc2626;
+
+  font-weight: 700;
+}
+
+/* ===================== */
+/* BUTTON */
+/* ===================== */
+
+.buy-btn {
+
+  width: 100%;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #dc2626
+  );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* ===================== */
+/* EMPTY */
+/* ===================== */
+
+.empty-text {
+
+  color: #64748b;
+
+  font-size: 16px;
+
+  text-align: center;
+
+  padding: 30px 0;
+}
+
+/* ===================== */
+/* MOBILE */
+/* ===================== */
+
+@media (max-width: 768px) {
+
+  .dashboard {
+
+    margin-left: 0;
+
+    padding: 15px;
+
+    padding-top: 80px;
+  }
+
+  .dashboard-title {
+    font-size: 26px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .medicine-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .medicine-image-box {
+    height: 190px;
+  }
+
+  .medicine-image {
+    width: 130px;
+    height: 130px;
+  }
+
+  .section-header h3 {
+    font-size: 22px;
+  }
+}
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec

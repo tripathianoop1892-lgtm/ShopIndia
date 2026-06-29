@@ -21,6 +21,7 @@ const AddMedicine = () => {
     expDate: ""
   });
 
+<<<<<<< HEAD
   const calculateOfferPrice = (mrpValue, discountValue) => {
     const mrpNumber = Number(mrpValue);
     const discountNumber = Number(discountValue);
@@ -57,6 +58,13 @@ const AddMedicine = () => {
     }
 
     setForm(updatedForm);
+=======
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   };
 
   const handleSubmit = async (e) => {
@@ -78,6 +86,11 @@ const AddMedicine = () => {
 
         mrp: Number(form.mrp),
 
+<<<<<<< HEAD
+=======
+        offerPrice: Number(form.offerPrice),
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
         // IMPORTANT
         price: Number(form.offerPrice),
 
@@ -94,6 +107,7 @@ const AddMedicine = () => {
         expiry: form.expDate,
       };
 
+<<<<<<< HEAD
       if (
   Number(form.offerPrice) >
   Number(form.mrp)
@@ -131,6 +145,8 @@ if (
   );
 }
 
+=======
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
       const res = await addMedicine(dataToSend);
 
       // FINAL FIX
@@ -261,7 +277,11 @@ if (
             <label>Medicine Image URL</label>
 
             <input
+<<<<<<< HEAD
               type="url"
+=======
+              type="text"
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
               name="image"
               value={form.image}
               onChange={handleChange}
@@ -340,9 +360,12 @@ if (
               onChange={handleChange}
               placeholder="Offer Price"
             />
+<<<<<<< HEAD
             <small style={{ color: '#64748b', marginTop: '6px', display: 'block' }}>
               Auto-calculated from MRP + Discount when both are entered.
             </small>
+=======
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
           </div>
 
           {/* DISCOUNT */}

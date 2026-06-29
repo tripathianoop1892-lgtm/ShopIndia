@@ -7,7 +7,10 @@ const DistributorDashboard = () => {
 
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [showNotifications, setShowNotifications] = useState(false);
+=======
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
   useEffect(() => {
     fetchData();
@@ -64,6 +67,7 @@ const DistributorDashboard = () => {
 
   }).length;
 
+<<<<<<< HEAD
   // Get expiring medicines list
   const expiringMedicines = medicines.filter((m) => {
     if (!m.expiry) return false;
@@ -76,6 +80,8 @@ const DistributorDashboard = () => {
   // Get low stock medicines list
   const lowStockMedicines = medicines.filter((m) => Number(m.stock) <= 20);
 
+=======
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
   // 🔥 Total Inventory Value
   const totalValue = medicines.reduce((acc, item) => {
 
@@ -96,6 +102,10 @@ const DistributorDashboard = () => {
 
         <div>
           <h1>Distributor Dashboard</h1>
+<<<<<<< HEAD
+=======
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
           <p>
             Welcome back • Anoop Medical Store
           </p>
@@ -105,6 +115,7 @@ const DistributorDashboard = () => {
         <div className="top-actions">
 
           {/* 🔔 NOTIFICATION */}
+<<<<<<< HEAD
           <div 
             className="notification"
             onClick={() => setShowNotifications(!showNotifications)}
@@ -195,6 +206,18 @@ const DistributorDashboard = () => {
             ></div>
           )}
 
+=======
+          <div className="notification">
+
+            <FaBell className="bell-icon" />
+
+            <span className="badge">
+              {lowStock + expiring}
+            </span>
+
+          </div>
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
           {/* 🔄 REFRESH */}
           <button
             className="refresh-btn"
@@ -239,7 +262,11 @@ const DistributorDashboard = () => {
                 <h2>{lowStock}</h2>
                 <p>Low Stock</p>
               </div>
+<<<<<<< HEAD
             </div>
+=======
+            </div><br/>
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
 
             <div className="card red">
               <div>
@@ -271,7 +298,21 @@ const DistributorDashboard = () => {
               <h3>Low Stock Medicines</h3>
             </div>
 
+<<<<<<< HEAD
               <table id="table1">
+=======
+           {/* {lowStock === 0 ? (
+
+              <div className="empty">
+                No Low Stock Medicines
+              </div> 
+
+
+             : ( */}
+
+              <table id="table1">
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
                 <thead>
                   <tr>
                     <th>Medicine</th>
@@ -281,6 +322,7 @@ const DistributorDashboard = () => {
                     <th>Expiry</th>
                   </tr>
                 </thead>
+<<<<<<< HEAD
                 <tbody>
                   {medicines
                     .filter((m) => Number(m.stock) <= 20)
@@ -296,6 +338,31 @@ const DistributorDashboard = () => {
                         <td className="low">
                           {m.stock}
                         </td>
+=======
+
+                <tbody>
+
+                  {medicines
+                    .filter((m) => Number(m.stock) <= 20)
+                    .map((m) => (
+
+                      <tr key={m._id}>
+
+                        <td>{m.name}</td>
+
+                        <td>
+                          {m.company || "N/A"}
+                        </td>
+
+                        <td>
+                          ₹{m.offerPrice || m.mrp || 0}
+                        </td>
+
+                        <td className="low">
+                          {m.stock}
+                        </td>
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
                         <td>
                           {m.expiry
                             ? new Date(
@@ -303,10 +370,24 @@ const DistributorDashboard = () => {
                               ).toLocaleDateString()
                             : "N/A"}
                         </td>
+<<<<<<< HEAD
                       </tr>
                     ))}
                 </tbody>
               </table>
+=======
+
+                      </tr>
+
+                    ))}
+
+                </tbody>
+
+              </table>
+
+           
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
           </div>
 
           {/* RECENT MEDICINES */}
