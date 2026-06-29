@@ -1,0 +1,109 @@
+<<<<<<< HEAD
+/* ===== LOCAL RETAIL INVENTORY SHEET VIEW ===== */
+.shopkeeper-container {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.shopkeeper-container h2 {
+  font-size: 26px;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+/* Table containment setups */
+.shopkeeper-container table {
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.shopkeeper-container th {
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.shopkeeper-container td {
+  color: #334155;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.shopkeeper-container tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.shopkeeper-container tbody tr:hover {
+  background-color: #f8fafc;
+=======
+/* Layout */
+.dashboard-container {
+  display: flex;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: #f5f7fa;
+}
+
+/* Heading */
+.main-content h2 {
+  margin-bottom: 10px;
+}
+
+/* 🔍 Search Box */
+.search-box {
+  margin-bottom: 15px;
+}
+
+.search-box input {
+  width: 300px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #2c5364;
+}
+
+/* 📦 Table Container */
+.table-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header */
+thead {
+  background: #2c5364;
+  color: white;
+}
+
+th {
+  padding: 12px;
+  text-align: center;
+}
+
+/* Body */
+td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Hover */
+tr:hover {
+  background: #f1f1f1;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

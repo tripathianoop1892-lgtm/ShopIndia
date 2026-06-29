@@ -1,0 +1,226 @@
+<<<<<<< HEAD
+/* ==========================================================================
+   OMSANJEEVANI HEALTHCARE FEATURES LAYOUT SYSTEM
+   ========================================================================== */
+.features-page-wrapper {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   HERO PANEL WITH VECTOR LIGHTING OVERLAYS
+   ========================================================================== */
+.features-hero-panel {
+  position: relative;
+  text-align: center;
+  padding: 100px 24px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e1e7ff 50%, #f0fdf4 100%);
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.features-hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.features-badge-pill {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #bfdbfe;
+}
+
+.features-hero-panel h1 {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  color: #0f2d63;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.gradient-brand-text {
+  background: linear-gradient(90deg, #2563eb, #065f46);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.features-hero-lead {
+  font-size: clamp(16px, 1.2vw, 20px);
+  color: #475569;
+  line-height: 1.6;
+}
+
+/* Ambient Backlighting Glow Blurs */
+.features-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(130px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.features-orb-emerald {
+  width: 400px;
+  height: 400px;
+  background: #a7f3d0;
+  left: -5%;
+  top: -10%;
+}
+
+.features-orb-indigo {
+  width: 450px;
+  height: 450px;
+  background: #c7d2fe;
+  right: -5%;
+  bottom: -20%;
+}
+
+/* ==========================================================================
+   FEATURES GRID AND STRUCTURAL MATRIX CARDS
+   ========================================================================== */
+.features-grid-section {
+  padding: 80px max(4vw, 24px);
+  background: #f8fafc;
+}
+
+.features-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.feature-matrix-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 40px 32px;
+  border-radius: 16px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-matrix-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* Professional Styled Icon Containers */
+.feature-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.feature-icon-wrapper.green { background: #ecfdf5; color: #065f46; }
+.feature-icon-wrapper.red { background: #fef2f2; color: #991b1b; }
+.feature-icon-wrapper.purple { background: #f5f3ff; color: #6d28d9; }
+.feature-icon-wrapper.blue { background: #eff6ff; color: #1e40af; }
+.feature-icon-wrapper.gold { background: #fffbeb; color: #b45309; }
+.feature-icon-wrapper.emerald { background: #f0fdf4; color: #047857; }
+
+.matrix-icon {
+  font-size: 28px !important;
+}
+
+.feature-matrix-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f2d63;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.feature-matrix-card p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   DYNAMIC MEDIA CONSTRAINTS FOR MOBILE DEVICES
+   ========================================================================== */
+@media (max-width: 768px) {
+  .features-hero-panel {
+    padding: 60px 16px;
+  }
+  
+  .features-grid-section {
+    padding: 40px 16px;
+  }
+  
+  .feature-matrix-card {
+    padding: 32px 24px;
+  }
+=======
+.features-page{
+    min-height:100vh;
+}
+
+.features-hero{
+    background:#0f2d63;
+    color:white;
+    text-align:center;
+    padding:80px 20px;
+}
+
+.features-hero h1{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.features-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+    padding:60px 8%;
+    background:#f5f7fb;
+}
+
+.feature-card{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.feature-card:hover{
+    transform:translateY(-8px);
+}
+
+.feature-card h3{
+    color:#0f2d63;
+    margin-bottom:15px;
+}
+
+.feature-card p{
+    color:#666;
+    line-height:1.6;
+}
+
+@media(max-width:768px){
+    .features-hero h1{
+        font-size:2rem;
+    }
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

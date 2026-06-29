@@ -1,0 +1,318 @@
+<<<<<<< HEAD
+/* ==========================================================================
+   OMSANJEEVANI HEALTHCARE LEGAL TERMS SHEET WORKSPACE
+   ========================================================================== */
+.terms-page-wrapper {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ==========================================================================
+   HERO PANEL WITH AMBIENT GLOW FILTERS
+   ========================================================================== */
+.terms-hero-panel {
+  position: relative;
+  padding: 100px 24px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e1e7ff 50%, #f0fdf4 100%);
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.terms-hero-inner {
+  position: relative;
+  z-index: 5;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.terms-badge-pill {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #bfdbfe;
+}
+
+.terms-hero-inner h1 {
+  font-size: clamp(34px, 4.5vw, 54px);
+  font-weight: 900;
+  color: #0f2d63;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+}
+
+.terms-hero-lead {
+  font-size: clamp(16px, 1.2vw, 20px);
+  color: #475569;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Backlighting Aura Circles */
+.terms-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.65;
+}
+
+.terms-orb-emerald {
+  width: 450px;
+  height: 450px;
+  background: #a7f3d0;
+  left: -5%;
+  top: -10%;
+}
+
+.terms-orb-indigo {
+  width: 500px;
+  height: 500px;
+  background: #c7d2fe;
+  right: -5%;
+  bottom: -20%;
+}
+
+/* ==========================================================================
+   TERMS CONTENT CARD CONTAINERS
+   ========================================================================== */
+.terms-main-content {
+  padding: 60px max(4vw, 24px) 100px;
+  background: #f8fafc;
+}
+
+.terms-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Modern Left-Border Styled Cards */
+.terms-card-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.01);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.terms-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+}
+
+/* Icon Shields Container Matrix */
+.terms-icon-shield {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.terms-icon-shield.blue { background: #eff6ff; color: #1e40af; }
+.terms-icon-shield.green { background: #f0fdf4; color: #047857; }
+.terms-icon-shield.purple { background: #f5f3ff; color: #6d28d9; }
+.terms-icon-shield.gold { background: #fffbeb; color: #b45309; }
+.terms-icon-shield.red { background: #fef2f2; color: #b91c1c; }
+.terms-icon-shield.dark-blue { background: #e0f2fe; color: #0369a1; }
+.terms-icon-shield.orange { background: #fff7ed; color: #c2410c; }
+.terms-icon-shield.emerald { background: #e6fcf5; color: #065f46; }
+
+.mui-terms-icon {
+  font-size: 24px !important;
+}
+
+.terms-card-body {
+  flex: 1;
+}
+
+.terms-card-body h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f2d63;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.terms-card-body p {
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Internal Structured Bullet Lists Formatting */
+.terms-card-body ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.terms-card-body ul li {
+  font-size: 14.5px;
+  color: #475569;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Contact Meta Sizing Details */
+.contact-terms-card {
+  border-left: 4px solid #065f46;
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.01) 0%, transparent 100%);
+}
+
+.contact-meta-lines {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+}
+
+.contact-meta-lines p {
+  font-size: 14px;
+  color: #334155;
+}
+
+.contact-meta-lines strong {
+  color: #0f2d63;
+  width: 150px;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   DYNAMIC MEDIA CONSTRAINTS BREAKPOINTS OVERRIDES
+   ========================================================================== */
+@media (max-width: 768px) {
+  .terms-hero-panel { padding: 70px 16px; }
+  .terms-main-content { padding: 40px 16px 80px; }
+  .terms-card-item { flex-direction: column; padding: 24px; gap: 16px; }
+  .contact-meta-lines p { display: flex; flex-direction: column; gap: 4px; }
+=======
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+}
+
+.terms-page{
+    width:100%;
+}
+
+/* Hero */
+
+.terms-hero{
+    background:linear-gradient(135deg,#0f2d63,#1f4ea3);
+    color:#fff;
+    text-align:center;
+    padding:90px 20px;
+}
+
+.terms-hero h1{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.terms-hero p{
+    max-width:700px;
+    margin:auto;
+    font-size:18px;
+    line-height:1.8;
+}
+
+/* Container */
+
+.terms-container{
+    max-width:1200px;
+    margin:50px auto;
+    padding:0 20px;
+}
+
+/* Cards */
+
+.terms-card{
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.terms-card:hover{
+    transform:translateY(-4px);
+}
+
+.terms-card h2{
+    color:#0f2d63;
+    margin-bottom:18px;
+    font-size:26px;
+}
+
+.terms-card p{
+    color:#555;
+    line-height:1.8;
+    font-size:16px;
+}
+
+.terms-card ul{
+    margin-left:20px;
+}
+
+.terms-card li{
+    margin-bottom:12px;
+    color:#555;
+    line-height:1.7;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .terms-hero{
+        padding:70px 20px;
+    }
+
+    .terms-hero h1{
+        font-size:34px;
+    }
+
+    .terms-card{
+        padding:20px;
+    }
+
+    .terms-card h2{
+        font-size:22px;
+    }
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

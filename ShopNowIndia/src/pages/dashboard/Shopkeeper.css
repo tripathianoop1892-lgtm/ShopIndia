@@ -1,0 +1,928 @@
+<<<<<<< HEAD
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.dashboard-container {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: transparent;
+  padding: 24px;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+/* ===== HEADER ===== */
+.dashboard-header {
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px; 
+}
+
+.dashboard-title {
+  font-size: 26px;
+  color: #0f172a;
+  font-weight: 700;
+  margin: 0;
+=======
+/* ===== DASHBOARD ===== */
+
+.dashboard {
+
+  margin-left: -200px;
+
+  padding: 25px;
+
+  background: #f4f7fb;
+
+  min-height: 100vh;
+
+  font-family: "Poppins", sans-serif;
+
+  box-sizing: border-box;
+
+  overflow-x: hidden;
+}
+
+/* ===================== */
+/* HEADER */
+/* ===================== */
+
+/* .dashboard-header {
+  display: flex; 
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 30px;
+
+  flex-wrap: wrap;
+
+  gap: 15px; 
+} */
+
+#div1{
+  width: 100%;
+  /* border: 2px solid black; */
+}
+
+.dashboard-title {
+
+  font-size: 34px;
+
+  color: #1e293b;
+
+  font-weight: 700;
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}
+
+.dashboard-subtitle {
+  color: #64748b;
+<<<<<<< HEAD
+  margin: 4px 0 0 0;
+  font-size: 14px;
+}
+
+.dashboard-badge {
+  background: #0f172a;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ===== METRICS STATS FLEX CONTAINER ===== */
+.stats-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 220px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.stat-card p {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.card-icon {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.stat-card h3 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 6px 0 0 0;
+}
+
+.stat-card.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.stat-card.green { background: linear-gradient(135deg, #10b981, #047857); }
+.stat-card.orange { background: linear-gradient(135deg, #f59e0b, #b45309); }
+.stat-card.purple { background: linear-gradient(135deg, #8b5cf6, #5b21b6); }
+
+/* ===== FLEX WORKFLOW LAYOUT (GRID REMOVED) ===== */
+.procurement-flex-workflow {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar-section {
+  width: 360px;
+  min-width: 360px;
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  min-height: 500px;
+  box-sizing: border-box;
+}
+
+.content-section {
+  flex-grow: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  min-height: 500px;
+  box-sizing: border-box;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.section-header-row h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.highlight-text {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* SEARCH FIELD INSIDE SECTION HEADERS */
+.inline-search-box {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+}
+
+.inline-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.inline-search-box input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 34px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0 10px 0 32px;
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+
+.inline-search-box input:focus {
+  border-color: #3b82f6;
+}
+
+/* ===== DISTRIBUTOR LIST BAR ROW ===== */
+.distributor-list-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.distributor-list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.distributor-list-item:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.distributor-list-item.active-item {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.distributor-avatar {
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  margin-right: 12px;
+}
+
+.distributor-list-item.active-item .distributor-avatar {
+  background: #3b82f6;
+  color: white;
+}
+
+.distributor-meta-details {
+  flex-grow: 1;
+}
+
+.distributor-meta-details h4 {
+  margin: 0 0 2px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.distributor-meta-details p {
+  margin: 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.arrow-indicator {
+  font-size: 12px;
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+.distributor-list-item:hover .arrow-indicator {
+  transform: translateX(2px);
+  color: #475569;
+}
+
+/* ===== MEDICINE MATRIX GRAPHICS ===== */
+.medicine-cards-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.medicine-card {
+  width: calc(25% - 12px);
+  min-width: 200px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.medicine-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.medicine-image-box {
+  height: 130px;
+  background: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 8px;
+}
+
+.medicine-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.medicine-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.medicine-info h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.medicine-tags {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.medicine-tags span {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.price-box {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.price-box h3 {
+  font-size: 16px;
+  color: #10b981;
+  font-weight: 700;
+  margin: 0;
+}
+
+.price-box del {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.stock-row {
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+
+.stock-status-pill {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.stock-status-pill.alert-pill { background: #fee2e2; color: #b91c1c; }
+.stock-status-pill.normal-pill { background: #ecfdf5; color: #065f46; }
+
+.buy-btn {
+  width: 100%;
+  height: 34px;
+  border: none;
+  border-radius: 6px;
+  background: #3b82f6;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.buy-btn:hover { background: #2563eb; }
+
+/* ===== PROMPT FALLBACK STATES ===== */
+.fallback-selection-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.prompt-illustration {
+  font-size: 44px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.fallback-selection-state h4 {
+  margin: 0 0 6px 0;
+  color: #334155;
+  font-size: 16px;
+}
+
+.fallback-selection-state p {
+  margin: 0;
+  font-size: 13px;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+.empty-text {
+  color: #94a3b8;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ===== SCREEN ADAPTATION RESPONSIVENESS ===== */
+@media (max-width: 1024px) {
+  .procurement-flex-workflow {
+    flex-direction: column;
+  }
+  .sidebar-section {
+    width: 100%;
+    min-width: 100%;
+    min-height: auto;
+  }
+  .content-section {
+    width: 100%;
+    min-height: auto;
+  }
+  .medicine-card {
+    width: calc(33.33% - 11px);
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    flex: calc(50% - 8px);
+  }
+  .medicine-card {
+    width: calc(50% - 8px);
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    flex: 100%;
+  }
+  .medicine-card {
+    width: 100%;
+  }
+  .inline-search-box { 
+    max-width: 100%; 
+  }
+}
+=======
+
+  margin-top: 5px;
+}
+
+.dashboard-badge {
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+
+  color: white;
+
+  padding: 14px 20px;
+
+  border-radius: 14px;
+
+  font-weight: 600;
+
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+}
+
+/* ===================== */
+/* SEARCH */
+/* ===================== */
+
+.search-box {
+  margin-bottom: 30px;
+  margin-left: 200px;
+}
+
+.search-box input {
+  width: 100%;
+
+  height: 58px;
+
+  border: 2px solid black;
+
+  border-radius: 14px;
+
+  padding: 0 20px;
+
+  font-size: 16px;
+
+  background: white;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+
+  outline: none;
+
+  box-sizing: border-box;
+}
+
+/* ===================== */
+/* STATS */
+/* ===================== */
+
+.stats-grid {
+  margin-left: 200px;
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(220px,1fr)
+  );
+
+  gap: 15px;
+
+  margin-bottom: 35px;
+}
+
+.stat-card {
+  padding: 25px;
+
+  border-radius: 18px;
+
+  color: white;
+
+  min-height: 140px;
+
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+.stat-card p {
+  font-size: 15px;
+
+  opacity: 0.9;
+}
+
+.stat-card h3 {
+  font-size: 34px;
+
+  margin-top: 10px;
+}
+
+/* ===== COLORS ===== */
+
+.blue {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+}
+
+.green {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #16a34a,
+    #15803d
+  );
+}
+
+.orange {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #f59e0b,
+    #d97706
+  );
+}
+
+.purple {
+  width: 200px;
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #6d28d9
+  );
+}
+
+/* ===================== */
+/* SECTION */
+/* ===================== */
+
+.section {
+  overflow: hidden;
+
+  margin-top: 30px;
+
+  background: white;
+
+  padding: 25px;
+
+  border: none;
+
+  border-radius: 22px;
+
+  /* box-shadow: 0 4px 16px rgba(0,0,0,0.06); */
+}
+
+.section-header {
+  margin-bottom: 20px;
+}
+
+.section-header h3 {
+  font-size: 28px;
+
+  color: #1e293b;
+}
+
+/* ===================== */
+/* MEDICINE GRID */
+/* ===================== */
+
+.medicine-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px,1fr)
+  );
+
+  gap: 25px;
+
+  width: 100%;
+}
+
+/* ===================== */
+/* CARD */
+/* ===================== */
+
+.medicine-card {
+
+  border: 1px solid black;
+
+  background: white;
+
+  border-radius: 22px;
+
+  overflow: hidden;
+/* 
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08); */
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+}
+
+/* ===================== */
+/* IMAGE */
+/* ===================== */
+
+.medicine-image-box {
+
+  height: 220px;
+
+  background: #f8fafc;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+.medicine-image {
+
+  width: 150px;
+
+  height: 150px;
+
+  object-fit: contain;
+}
+
+/* ===================== */
+/* INFO */
+/* ===================== */
+
+.medicine-info {
+  padding: 22px;
+}
+
+.medicine-info h4 {
+
+  font-size: 24px;
+
+  color: #0f172a;
+
+  margin-bottom: 8px;
+}
+
+.company {
+
+  color: #64748b;
+
+  margin-bottom: 15px;
+}
+
+/* ===================== */
+/* TAGS */
+/* ===================== */
+
+.medicine-tags {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 18px;
+
+  flex-wrap: wrap;
+}
+
+.medicine-tags span {
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  padding: 8px 14px;
+
+  border-radius: 30px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+/* ===================== */
+/* PRICE */
+/* ===================== */
+
+.price-box {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.price-box h3 {
+
+  font-size: 30px;
+
+  color: #16a34a;
+}
+
+.price-box del {
+
+  color: #94a3b8;
+
+  font-size: 18px;
+}
+
+/* ===================== */
+/* STOCK */
+/* ===================== */
+
+.stock-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+
+  font-size: 15px;
+}
+
+.discount {
+
+  color: #dc2626;
+
+  font-weight: 700;
+}
+
+/* ===================== */
+/* BUTTON */
+/* ===================== */
+
+.buy-btn {
+
+  width: 100%;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #dc2626
+  );
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* ===================== */
+/* EMPTY */
+/* ===================== */
+
+.empty-text {
+
+  color: #64748b;
+
+  font-size: 16px;
+
+  text-align: center;
+
+  padding: 30px 0;
+}
+
+/* ===================== */
+/* MOBILE */
+/* ===================== */
+
+@media (max-width: 768px) {
+
+  .dashboard {
+
+    margin-left: 0;
+
+    padding: 15px;
+
+    padding-top: 80px;
+  }
+
+  .dashboard-title {
+    font-size: 26px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .medicine-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .medicine-image-box {
+    height: 190px;
+  }
+
+  .medicine-image {
+    width: 130px;
+    height: 130px;
+  }
+
+  .section-header h3 {
+    font-size: 22px;
+  }
+}
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec

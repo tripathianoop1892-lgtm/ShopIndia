@@ -1,0 +1,130 @@
+.main-content {
+  padding: 30px;
+<<<<<<< HEAD
+  background: transparent;
+=======
+  background: #f4f7fb;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+  min-height: 100vh;
+}
+
+.modern-form-container {
+<<<<<<< HEAD
+  background: transparent;
+=======
+  background: #fff;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-header {
+  margin-bottom: 30px;
+}
+
+.form-header h1 {
+  font-size: 38px;
+  color: #1e293b;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.form-header p {
+  color: #64748b;
+  font-size: 16px;
+}
+
+/* ===================== */
+/* FORM GRID */
+/* ===================== */
+
+.modern-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-group input,
+.form-group select {
+  height: 55px;
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 15px;
+  background: #fff;
+  outline: none;
+  transition: 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #94a3b8;
+}
+
+/* ===================== */
+/* BUTTON */
+/* ===================== */
+
+.form-button {
+  grid-column: 1 / -1;
+  margin-top: 15px;
+}
+
+.form-button button {
+  width: 100%;
+  height: 58px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form-button button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* ===================== */
+/* RESPONSIVE */
+/* ===================== */
+
+@media (max-width: 768px) {
+
+  .main-content {
+    padding: 15px;
+  }
+
+  .modern-form-container {
+    padding: 20px;
+  }
+
+  .form-header h1 {
+    font-size: 28px;
+  }
+
+  .modern-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

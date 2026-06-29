@@ -1,0 +1,14 @@
+.checkout-container {
+  text-align: center;
+  padding: 40px;
+}
+
+.pay-btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

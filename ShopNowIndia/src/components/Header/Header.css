@@ -1,0 +1,160 @@
+<<<<<<< HEAD
+/* ===== TOP HUB NAVIGATION BANNER LAYOUT ===== */
+.header {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header .role {
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.logout-btn {
+  transition: background 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #b91c1c !important;
+}
+
+/* ===== SCANNABLE QR CODE WINDOW LAYOUT MODAL MODIFIER ===== */
+.qr-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6) !important; /* Blur effect backdrop layer */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999 !important;
+}
+
+.qr-box {
+  background: #ffffff !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qr-box code {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   📱 RESPONSIVE VISIBILITY MEDIA CONSTRAINTS FOR THE HEADER 
+   ============================================================ */
+
+/* By default on Desktops/Tablets: Hide the header because sidebar handles navigation */
+@media (min-width: 769px) {
+  .responsive-hub-header {
+    display: none !important;
+  }
+}
+
+/* On Mobile Phones (Widths 768px and down): Show the header cleanly */
+@media (max-width: 768px) {
+  .responsive-hub-header {
+    display: flex !important;
+    margin-top: 10px;
+    border-radius: 0px; /* Flat alignment profile look for slim mobile containers */
+    padding: 12px 15px !important;
+  }
+  
+  /* Make typography more compact on tiny cell phones */
+  .header-left h3 {
+    font-size: 16px;
+  }
+  
+  .responsive-hub-header span, 
+  .responsive-hub-header button {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+=======
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  color: white;
+  padding: 10px 20px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.role {
+  background: #007bff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.logout-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.header{
+  width: 100%;
+  height: 70px;
+  background: #1f1f1f;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding: 0 20px;
+}
+
+.header-right{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.qr-modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.qr-box{
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

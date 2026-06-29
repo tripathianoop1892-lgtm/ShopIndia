@@ -1,0 +1,434 @@
+<<<<<<< HEAD
+:root {
+  --base-surface: #f8fafc;
+  --card-surface: #ffffff;
+  --main-text-color: #0f172a;
+  --muted-text-color: #64748b;
+  --divider-color: #e2e8f0;
+  
+  --pill-success-bg: #f0fdf4;
+  --pill-success-text: #166534;
+  --pill-success-border: #bbf7d0;
+  
+  --pill-pending-bg: #fffbeb;
+  --pill-pending-text: #92400e;
+  --pill-pending-border: #fde68a;
+  
+  --pill-error-bg: #fef2f2;
+  --pill-error-text: #991b1b;
+  --pill-error-border: #fca5a5;
+}
+
+.shopkeeper-earnings-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--base-surface);
+  color: var(--main-text-color);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* HEADER DESIGNS */
+.earnings-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  border-bottom: 1px solid var(--divider-color);
+  padding-bottom: 22px;
+}
+
+.earnings-dashboard-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px 0;
+}
+
+.earnings-dashboard-header p {
+  color: var(--muted-text-color);
+  margin: 0;
+  font-size: 15px;
+}
+
+.realtime-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid var(--divider-color);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  animation: pulseAnimation 1.5s infinite alternate;
+}
+
+/* STATS ANCHORS BLOCK */
+.financial-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.financial-stat-card {
+  background: var(--card-surface);
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.financial-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+}
+
+.cash-inflow-card { border-left: 4px solid #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.02) 0%, transparent 100%); }
+.cash-outflow-card { border-left: 4px solid #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.02) 0%, transparent 100%); }
+.net-balance-card { border-left: 4px solid #a855f7; background: linear-gradient(135deg, rgba(168, 85, 247, 0.02) 0%, transparent 100%); }
+
+.stat-card-inner-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.card-sub-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-text-color);
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.financial-stat-card h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.amount-positive { color: #16a34a; }
+.amount-negative { color: #dc2626; }
+
+.stat-icon-shield {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: #f8fafc;
+  border: 1px solid var(--divider-color);
+}
+
+.text-green { color: #16a34a; background: #f0fdf4; border-color: #bbf7d0; }
+.text-red { color: #dc2626; background: #fef2f2; border-color: #fca5a5; }
+.text-purple { color: #7c3aed; background: #f5f3ff; border-color: #ddd6fe; }
+
+.card-footer-metric {
+  font-size: 12px;
+  color: var(--muted-text-color);
+  border-top: 1px dashed var(--divider-color);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+/* DYNAMIC RATIO METERS */
+.cashflow-ratio-bar-wrapper {
+  background: var(--card-surface);
+  border: 1px solid var(--divider-color);
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin-bottom: 35px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+}
+
+.ratio-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--muted-text-color);
+  margin-bottom: 10px;
+}
+
+.ratio-bar-track {
+  height: 10px;
+  background: #ef4444; /* Outflow acts as base underlying color background drop */
+  border-radius: 9999px;
+  overflow: hidden;
+  display: flex;
+}
+
+.ratio-fill-inflow {
+  height: 100%;
+  background: #10b981;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* HISTORICAL BALANCES RECORD LAYER */
+.history-ledger-section-block {
+  background: var(--card-surface);
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  padding: 26px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+}
+
+.ledger-block-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--divider-color);
+  padding-bottom: 18px;
+}
+
+.title-row-flex {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-title-icon {
+  font-size: 20px;
+  color: #475569;
+}
+
+.title-row-flex h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.title-row-flex p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted-text-color);
+}
+
+/* AUDIT METRICS TABLES */
+.ledger-table-overflow-box {
+  overflow-x: auto;
+}
+
+.professional-ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.professional-ledger-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 14px 20px;
+  border-bottom: 2px solid var(--divider-color);
+}
+
+.professional-ledger-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--divider-color);
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.ledger-interactive-row {
+  transition: background-color 0.15s ease;
+}
+
+.ledger-interactive-row:hover {
+  background-color: #f8fafc;
+}
+
+.monospace-cell-id {
+  font-family: 'SFMono-Regular', Consolas, Menlo, monospace;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.customer-meta-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.customer-primary-name {
+  font-weight: 600;
+  color: var(--main-text-color);
+}
+
+.customer-secondary-subtext {
+  font-size: 11px;
+  color: var(--muted-text-color);
+  display: flex;
+  align-items: center;
+}
+
+.transaction-type-indicator-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.transaction-type-indicator-pill.inflow { background: #e0f2fe; color: #0369a1; }
+.transaction-type-indicator-pill.outflow { background: #ffedd5; color: #c2410c; }
+
+.date-time-cell {
+  color: #475569;
+}
+
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-status.settled { background-color: var(--pill-success-bg); border: 1px solid var(--pill-success-border); color: var(--pill-success-text); }
+.badge-status.pending { background-color: var(--pill-pending-bg); border: 1px solid var(--pill-pending-border); color: var(--pill-pending-text); }
+.badge-status.cancelled { background-color: var(--pill-error-bg); border: 1px solid var(--pill-error-border); color: var(--pill-error-text); }
+
+.table-bold-amount {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.table-bold-amount.credit-color { color: #16a34a; }
+.table-bold-amount.debit-color { color: #dc2626; }
+
+/* SYSTEM STATE ENGINES */
+.earnings-loading-wrapper, .empty-ledger-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 30px;
+  text-align: center;
+  background: var(--card-surface);
+  border-radius: 12px;
+  border: 1px solid var(--divider-color);
+}
+
+.spinner-icon {
+  font-size: 36px;
+  color: #3b82f6;
+  animation: loadingSpinKeyframe 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.empty-illustration {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #94a3b8;
+}
+
+.empty-ledger-state h4 { font-size: 16px; margin: 0 0 6px 0; color: #1e293b; }
+.empty-ledger-state p { margin: 0; font-size: 14px; color: var(--muted-text-color); max-width: 400px; }
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+@keyframes loadingSpinKeyframe {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseAnimation {
+  from { opacity: 0.5; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1.05); }
+=======
+/* Main Content */
+.main-content {
+  margin-left: 220px;
+  padding: 20px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* Heading */
+.main-content h2 {
+  margin-bottom: 20px;
+  color: #1e3c72;
+}
+
+/* Earnings Cards */
+.earnings-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Card */
+.earning-card {
+  flex: 1;
+  min-width: 220px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+/* Hover effect */
+.earning-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Title */
+.earning-card h3 {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* Amount */
+.earning-card p {
+  font-size: 22px;
+  font-weight: bold;
+  color: green;
+}
+
+/* Total Section */
+.total-earning {
+  margin-top: 30px;
+  background: #1e3c72;
+  color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

@@ -1,0 +1,587 @@
+<<<<<<< HEAD
+/* ==========================================================================
+   OMSANJEEVANI BRANDED CORPORATE ABOUT LAYER STYLE SHEET
+   ========================================================================== */
+.about-page-wrapper {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ==========================================================================
+   HERO CORE CONTAINER PANEL WITH RADIAL WASH LIGHTING EFFECTS
+   ========================================================================== */
+.about-hero-panel {
+  position: relative;
+  padding: 100px 24px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e1e7ff 50%, #f0fdf4 100%);
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.about-hero-inner {
+  position: relative;
+  z-index: 5;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-badge-pill {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #bfdbfe;
+}
+
+.about-hero-inner h1 {
+  font-size: clamp(34px, 4.5vw, 54px);
+  font-weight: 900;
+  color: #0f2d63;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+}
+
+.about-hero-lead {
+  font-size: clamp(16px, 1.2vw, 20px);
+  color: #475569;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Ambient Vector Lighting */
+.about-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.65;
+}
+
+.about-orb-emerald {
+  width: 450px;
+  height: 450px;
+  background: #a7f3d0;
+  left: -5%;
+  top: -10%;
+}
+
+.about-orb-indigo {
+  width: 500px;
+  height: 500px;
+  background: #c7d2fe;
+  right: -5%;
+  bottom: -20%;
+}
+
+/* ==========================================================================
+   REUSABLE SYSTEM SECTIONS FORMATTING
+   ========================================================================== */
+.about-informational-section {
+  padding: 80px max(5vw, 24px);
+  background: #f8fafc;
+}
+
+.about-informational-section.light-bg-panel {
+  background-color: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.section-title-block {
+  margin-bottom: 48px;
+  text-align: left;
+}
+
+.section-title-block.centered {
+  text-align: center;
+}
+
+.section-title-block h2 {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 800;
+  color: #0f2d63;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.section-title-block p {
+  font-size: clamp(14px, 1.1vw, 17px);
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   MISSION VISION MATRIX CARDS
+   ========================================================================== */
+.mission-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.corporate-value-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 40px 32px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.02);
+  transition: transform 0.2s ease;
+}
+
+.corporate-value-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+.value-card-icon {
+  font-size: 40px !important;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 8px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.value-card-icon.green { color: #059669; background: #f0fdf4; }
+.value-card-icon.purple { color: #7c3aed; background: #f5f3ff; }
+
+.corporate-value-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f2d63;
+  margin-bottom: 12px;
+}
+
+.corporate-value-card p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   VERTICAL SEGMENTS OFFERS LAYOUT LAYERS
+   ========================================================================== */
+.services-vertical-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.service-segment-row {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+}
+
+.segment-title-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+}
+
+.segment-icon {
+  font-size: 32px !important;
+}
+
+.segment-icon.blue { color: #2563eb; }
+.segment-icon.green { color: #059669; }
+.segment-icon.purple { color: #7c3aed; }
+
+.service-segment-row h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f2d63;
+}
+
+.service-txt-pane ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.service-txt-pane ul li {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   WHY CHOOSE US & NETWORK METRICS BLOCKS
+   ========================================================================== */
+.why-choose-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-pill-box {
+  background: #0f2d63;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.feature-pill-box span {
+  font-size: 20px;
+}
+
+/* Stats Layout */
+.network-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  text-align: center;
+}
+
+.network-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+}
+
+.stat-card-icon-mui {
+  font-size: 44px !important;
+  color: #3b82f6;
+  margin-bottom: 12px;
+}
+
+.stat-card-icon-mui.blue { color: #2563eb; }
+.stat-card-icon-mui.green { color: #059669; }
+.stat-card-icon-mui.purple { color: #7c3aed; }
+
+.network-stat-card h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f2d63;
+  margin-bottom: 4px;
+}
+
+.network-stat-card p {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   HIGH-ENGAGEMENT CTA ACTIONS BANNER BLOCK
+   ========================================================================== */
+.about-cta-banner {
+  background: linear-gradient(135deg, #0f2d63 0%, #1e3a8a 100%);
+  color: #ffffff;
+  text-align: center;
+  padding: 90px 24px;
+  position: relative;
+}
+
+.about-cta-banner h2 {
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.about-cta-banner p {
+  font-size: clamp(14px, 1.1vw, 18px);
+  color: #e2e8f0;
+  margin-bottom: 36px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.cta-action-btn {
+  background: #00c853;
+  color: #ffffff;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 200, 83, 0.3);
+  transition: background 0.15s, transform 0.15s;
+}
+
+.cta-action-btn:hover {
+  background: #00a844;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
+}
+
+/* ==========================================================================
+   DYNAMIC APP RESPONSIVENESS OVERRIDES
+   ========================================================================== */
+@media (max-width: 768px) {
+  .about-hero-panel { padding: 70px 16px; }
+  .about-informational-section { padding: 50px 16px; }
+  .service-segment-row { padding: 24px; }
+  .segment-title-icon-row { margin-bottom: 14px; padding-bottom: 10px; }
+=======
+.about{
+    width:100%;
+}
+
+/* Hero */
+
+.about-hero{
+    background:linear-gradient(135deg,#0f2d63,#1e4ea8);
+    color:white;
+    text-align:center;
+    padding:20px ;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.about-hero h1{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.about-hero p{
+    font-size:1.2rem;
+}
+
+
+
+/* Company */
+
+/* .about-company{
+    padding:80px 10%;
+    text-align:center;
+    display: flex;
+    align-items: center;
+} */
+
+/* .about-company h2{
+    margin-bottom:20px;
+    color:#0f2d63;
+}
+
+.about-company p{
+    max-width:900px;
+    margin:auto;
+    line-height:1.8;
+    color:#555;
+} */
+
+/* Mission Vision */
+
+.mission-vision{
+    display:flex;
+    gap:30px;
+    padding:50px 35px;
+}
+
+.card{
+    width: 33vw;
+    background:white;
+    padding:30px 10px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    text-align:left;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 30px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.card > :first-child {
+  align-self: center;
+}
+
+.card h5{
+    color:#0f2d63;
+    margin-bottom:15px;
+}
+
+.card p{
+    font-size: 12px;
+}
+
+/* Services */
+
+.services{
+    padding:80px 60px;
+    background:#f5f8ff;
+    text-align:center;
+}
+
+.services h2{
+    margin-bottom:40px;
+    text-align: left;
+}
+
+.service-cards{
+    display: flex;
+    justify-content: space-around;
+}
+
+.service-card{
+    width:30vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.service-content{
+    flex:1;
+}
+
+.service-image{
+    width:220px;
+    height:220px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.service-image img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.service-card h3{
+    margin-bottom:20px;
+    color:#0f2d63;
+}
+
+.service-card ul{
+    list-style:none;
+}
+
+.service-card ul li{
+    padding:8px 0;
+}
+
+/* Why Us */
+
+.why-us{
+    padding:10px 60px;
+    text-align:center;
+    
+}
+
+.features-grid{
+    margin-top:40px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.features-grid div{
+    background:#0f2d63;
+    color:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+/* Stats */
+
+.stats{
+    background:#f5f8ff;
+    padding:80px 10%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.stat-box{
+    background:white;
+    padding:30px;
+    text-align:center;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.stat-box h2{
+    color:#0f2d63;
+    font-size:2.5rem;
+}
+
+/* CTA */
+
+.cta{
+    background:#0f2d63;
+    color:white;
+    text-align:center;
+    padding:80px 20px;
+}
+
+.cta h2{
+    margin-bottom:15px;
+}
+
+.cta p{
+    margin-bottom:25px;
+}
+
+.cta button{
+    background:#00c853;
+    border:none;
+    color:white;
+    padding:14px 35px;
+    border-radius:8px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.cta button:hover{
+    background:#00a844;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .about-hero h1{
+        font-size:2rem;
+    }
+
+    .mission-vision{
+        padding:30px;
+    }
+
+    .services,
+    .why-us,
+    .stats{
+        padding:50px 20px;
+    }
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

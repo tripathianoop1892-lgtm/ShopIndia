@@ -1,0 +1,71 @@
+/* Main Content */
+.main-content {
+  margin-left: 220px;
+  padding: 20px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* Heading */
+.main-content h2 {
+  margin-bottom: 20px;
+  color: #1e3c72;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Table Head */
+.table thead {
+  background: #1e3c72;
+  color: #fff;
+}
+
+.table th {
+  padding: 12px;
+  text-align: left;
+}
+
+/* Table Body */
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Hover */
+.table tr:hover {
+  background: #f1f1f1;
+}
+
+/* Low Stock Highlight */
+.low {
+  color: red;
+  font-weight: bold;
+}
+
+/* Total Earnings */
+.total {
+  margin-top: 20px;
+  color: green;
+  font-size: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+
+  .table th,
+  .table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}

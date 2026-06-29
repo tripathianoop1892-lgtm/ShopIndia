@@ -1,0 +1,241 @@
+<<<<<<< HEAD
+/* ===== SIDEBAR ===== */
+
+.customer-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: linear-gradient(180deg,#24364a,#1e293b);
+  color: #fff;
+  padding: 18px 14px;
+  box-sizing: border-box;
+  z-index: 1100;
+  overflow-y: hidden;
+  transform: translateX(0);
+  transition: transform 0.25s ease;
+}
+
+.customer-sidebar.open {
+  transform: translateX(0);
+}
+
+.customer-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.customer-sidebar-header h2 {
+  font-size: 20px;
+  margin: 0;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+.customer-sidebar-close {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.customer-sidebar-logo {
+  display: block;
+  width: 140px;
+  height: 200px;
+  object-fit: cover;
+  margin: 30px 18px;
+}
+
+/* ===== LOGO ===== */
+
+.customer-sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 18px;
+  text-align: left;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+/* ===== MENU ===== */
+
+.customer-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.customer-sidebar ul li {
+  margin-bottom: 12px;
+}
+
+/* ===== LINKS ===== */
+
+.customer-sidebar ul li a {
+  display: block;
+  text-decoration: none;
+  color: #e6eef8;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* ===== HOVER ===== */
+
+.customer-sidebar ul li a:hover {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+/* ===== ACTIVE ===== */
+
+.customer-sidebar ul li a.active {
+  background: linear-gradient(90deg, rgba(99,102,241,0.95), rgba(139,92,246,0.95));
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(13, 27, 60, 0.3);
+}
+
+/* ===== LOGOUT ===== */
+
+.logout-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #ef4444;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-1px);
+  background: #dc2626;
+}
+
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 900px) {
+
+  .customer-sidebar {
+    transform: translateX(-100%);
+    width: 260px;
+  }
+
+  .customer-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .customer-sidebar-close {
+    display: inline-flex;
+  }
+
+  .customer-sidebar-logo {
+    width: 140px;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+    object-fit: contain;
+  }
+
+  .customer-sidebar {
+    background: linear-gradient(180deg,#24364a,#1e293b);
+  }
+=======
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 10px;
+}
+
+/* HEADER */
+.sidebar-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.sidebar-header p {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* MENU */
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  margin: 10px 0;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #e2e8f0;
+  transition: 0.3s;
+}
+
+.link:hover {
+  background: #334155;
+}
+
+.link.active {
+  background: #22c55e;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* FOOTER */
+.sidebar-footer {
+  text-align: center;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background: #ef4444;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 300px;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}

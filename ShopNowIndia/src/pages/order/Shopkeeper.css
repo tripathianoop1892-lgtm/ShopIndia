@@ -1,0 +1,80 @@
+<<<<<<< HEAD
+/* ===== ORDER MANAGEMENT LEDGER PANEL CONTROLS ===== */
+.bigdiv {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.table-container {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th {
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #edf2f7;
+}
+
+.table-container td {
+  font-size: 14px;
+  color: #4a5568;
+}
+
+/* Status specific coloring badges */
+.pending {
+  color: #d97706;
+=======
+.pending {
+  color: orange;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+  font-weight: bold;
+}
+
+.approved {
+<<<<<<< HEAD
+  color: #16a34a;
+=======
+  color: green;
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+  font-weight: bold;
+}
+
+.rejected {
+<<<<<<< HEAD
+  color: #dc2626;
+  font-weight: bold;
+}
+
+/* Interactive execution tracking switch button adjustments */
+button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+=======
+  color: red;
+  font-weight: bold;
+}
+
+.bigdiv{
+  width: 100%;
+  
+  
+
+}
+
+#h2{
+  width: 100%;
+  
+}
+
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec

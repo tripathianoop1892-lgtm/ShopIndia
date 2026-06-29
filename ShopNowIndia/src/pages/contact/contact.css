@@ -1,0 +1,547 @@
+<<<<<<< HEAD
+/* ==========================================================================
+   OMSANJEEVANI HEALTHCARE CONTACT SYSTEM STYLESHEET
+   ========================================================================== */
+.contact-page-wrapper {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ==========================================================================
+   HERO BACKDROP WITH ADVANCED BLUR MATRIX GLOWS
+   ========================================================================== */
+.contact-hero-panel {
+  position: relative;
+  padding: 100px 24px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e1e7ff 50%, #f0fdf4 100%);
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.contact-hero-inner {
+  position: relative;
+  z-index: 5;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.contact-badge-pill {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #bfdbfe;
+}
+
+.contact-hero-inner h1 {
+  font-size: clamp(34px, 4.5vw, 54px);
+  font-weight: 900;
+  color: #0f2d63;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+}
+
+.contact-hero-lead {
+  font-size: clamp(16px, 1.2vw, 20px);
+  color: #475569;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Ambient Radial Blurs */
+.contact-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.65;
+}
+
+.contact-orb-emerald {
+  width: 450px;
+  height: 450px;
+  background: #a7f3d0;
+  left: -5%;
+  top: -10%;
+}
+
+.contact-orb-indigo {
+  width: 500px;
+  height: 500px;
+  background: #c7d2fe;
+  right: -5%;
+  bottom: -20%;
+}
+
+/* ==========================================================================
+   MAIN CORE CONTENT PANELS GRID
+   ========================================================================== */
+.contact-main-grid-container {
+  padding: 80px max(5vw, 24px);
+  background: #f8fafc;
+}
+
+.contact-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.contact-info-cards-column,
+.contact-secure-form-column {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.02);
+}
+
+.contact-info-cards-column h2,
+.contact-secure-form-column h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f2d63;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+.column-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+/* Glassmorphism Information Details Cards */
+.info-glass-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+}
+
+.info-glass-card:last-child {
+  margin-bottom: 0;
+}
+
+.info-glass-card:hover {
+  transform: translateX(4px);
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.info-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.info-icon-wrapper.blue { background: #eff6ff; color: #1e40af; }
+.info-icon-wrapper.green { background: #f0fdf4; color: #047857; }
+.info-icon-wrapper.purple { background: #f5f3ff; color: #6d28d9; }
+.info-icon-wrapper.gold { background: #fffbeb; color: #b45309; }
+
+.mui-contact-icon {
+  font-size: 24px !important;
+}
+
+.info-txt-meta h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.info-txt-meta p {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.info-txt-meta .fine-time {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   SECURE COMMUNICATION INPUT CHANNELS (FORM)
+   ========================================================================== */
+.contact-secure-form-column form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-input-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.contact-secure-form-column input,
+.contact-secure-form-column textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  color: #0f172a;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.contact-secure-form-column input:focus,
+.contact-secure-form-column textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.form-submit-dispatch-btn {
+  background: #065f46;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(6, 95, 70, 0.2);
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 10px;
+}
+
+.form-submit-dispatch-btn:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(6, 95, 70, 0.3);
+}
+
+.submit-btn-icon {
+  font-size: 16px !important;
+}
+
+/* ==========================================================================
+   DYNAMIC INTERACTIVE FAQ SECTIONS (DETAILS TOGGLES)
+   ========================================================================== */
+.faq-interactive-section {
+  padding: 40px max(5vw, 24px) 100px;
+  background: #f8fafc;
+}
+
+.faq-section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.faq-section-header h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f2d63;
+  margin-bottom: 8px;
+}
+
+.faq-section-header p {
+  font-size: 15px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.faq-toggles-wrapper {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.faq-toggles-wrapper details {
+  background: #ffffff;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  padding: 20px 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.faq-toggles-wrapper details[open] {
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+  border-color: #cbd5e1;
+}
+
+.faq-toggles-wrapper summary {
+  list-style: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f2d63;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-toggles-wrapper summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-toggles-wrapper summary::after {
+  content: "+";
+  color: #065f46;
+  font-size: 24px;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.faq-toggles-wrapper details[open] summary::after {
+  content: "−";
+}
+
+.faq-toggles-wrapper p {
+  margin-top: 14px;
+  color: #475569;
+  font-size: 14.5px;
+  line-height: 1.6;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   DYNAMIC RESPONSIVENESS OVERRIDES CONTROLLER
+   ========================================================================== */
+@media (max-width: 992px) {
+  .contact-split-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero-panel { padding: 70px 16px; }
+  .contact-main-grid-container { padding: 40px 16px; }
+  .contact-info-cards-column, .contact-secure-form-column { padding: 28px 20px; }
+  .faq-interactive-section { padding: 20px 16px 80px; }
+=======
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+.contact-page{
+  min-height:100vh;
+  background:#f5f8ff;
+  padding:80px 8%;
+}
+
+/* Header */
+
+.contact-us{
+  text-align:center;
+  margin-bottom:60px;
+}
+
+.contact-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-bottom: 20px;
+}
+
+.contact-header h1{
+  font-size:3rem;
+  color:#0b3d91;
+  margin-bottom:15px;
+}
+
+.contact-header p{
+  color:#666;
+  font-size:1.1rem;
+}
+
+/* Contact Section */
+
+.contact-container{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:40px;
+}
+
+.contact-info,
+.contact-form{
+  background:#fff;
+  padding:35px;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.contact-info h2,
+.contact-form h2{
+  color:#0b3d91;
+  margin-bottom:25px;
+}
+
+.info-box{
+  margin-bottom:25px;
+}
+
+.info-box h3{
+  color:#16a34a;
+  margin-bottom:8px;
+}
+
+.info-box p{
+  color:#555;
+  line-height:1.6;
+}
+
+/* Form */
+
+.contact-form form{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.contact-form input,
+.contact-form textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  outline:none;
+  font-size:15px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus{
+  border-color:#16a34a;
+}
+
+.contact-form button{
+  background:#16a34a;
+  color:#fff;
+  border:none;
+  padding:14px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:600;
+  transition:.3s;
+}
+
+.contact-form button:hover{
+  background:#12853b;
+}
+
+/* FAQ */
+
+.faq-section{
+  margin-top:80px;
+}
+
+.faq-section h2{
+  text-align:center;
+  color:#0b3d91;
+  margin-bottom:35px;
+  font-size:2.2rem;
+}
+
+.faq-container{
+  max-width:900px;
+  margin:auto;
+}
+
+.faq-container details{
+  background:#fff;
+  margin-bottom:15px;
+  border-radius:12px;
+  padding:18px 22px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  cursor:pointer;
+}
+
+.faq-container summary{
+  list-style:none;
+  font-size:18px;
+  font-weight:600;
+  color:#0b3d91;
+}
+
+.faq-container summary::-webkit-details-marker{
+  display:none;
+}
+
+.faq-container summary::after{
+  content:"+";
+  float:right;
+  color:#16a34a;
+  font-size:24px;
+}
+
+.faq-container details[open] summary::after{
+  content:"−";
+}
+
+.faq-container p{
+  margin-top:15px;
+  color:#555;
+  line-height:1.7;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+  .contact-page{
+    padding:60px 5%;
+  }
+
+  .contact-container{
+    grid-template-columns:1fr;
+  }
+
+  .contact-header h1{
+    font-size:2.2rem;
+  }
+
+  .faq-section h2{
+    font-size:1.8rem;
+  }
+
+>>>>>>> b86c523e91986f3d0f5bd24f9a30cb204ae6c3ec
+}
