@@ -24,40 +24,49 @@ const About = () => {
           <div className="about-bg-orb about-orb-indigo"></div>
           
           <div className="about-hero-inner">
+            <div>
             <span className="about-badge-pill">Corporate Profile</span>
             <h1>About OmSanjeevani</h1>
             <p className="about-hero-lead">
               India's Smart Medicine Distribution Platform — Connecting healthcare channels through premium digital infrastructure.
             </p>
+            </div>
+            <img src="about.png" alt="" style={{width:"500px"}}/>
           </div>
         </section>
 
         {/* Core Values: Mission & Vision Cards */}
         <section className="about-informational-section">
           <div className="mission-vision-grid">
-            <div className="corporate-value-card">
+            <div className="corporate-value-card" >
               <GroupsIcon className="value-card-icon" />
+              <div>
               <h3>Who We Are</h3>
               <p>
                 OmSanjeevani is a comprehensive digital logistics ecosystem that unifies 
                 wholesale distributors, pharmacy shopkeepers, and retail clients into a single secure marketplace framework.
               </p>
+              </div>
             </div>
             <div className="corporate-value-card">
               <AssignmentTurnedInIcon className="value-card-icon green" />
+              <div>
               <h3>Our Mission</h3>
               <p>
                 To accelerate medical supply chain delivery paths, introduce transparent auditing parameters, 
                 and stabilize critical asset distribution for healthcare operators across India.
               </p>
+              </div>
             </div>
             <div className="corporate-value-card">
               <ShieldIcon className="value-card-icon purple" />
+              <div>
               <h3>Our Vision</h3>
               <p>
                 To stand as the nation's most trusted medical supply framework by engineering scalable, 
                 high-scannability web applications driven by compliance technology.
               </p>
+              </div>
             </div>
           </div>
         </section>
@@ -65,14 +74,15 @@ const About = () => {
         {/* Target Segments & Offerings */}
         <section className="about-informational-section light-bg-panel">
           <div className="section-title-block centered">
-            <h2>What We Offer</h2>
-            <p>Tailored user-space capabilities built specifically to empower every tier of the marketplace matrix.</p>
+            <h1 style={{fontSize:"70px"}}>What We Offer</h1 >
+            <h3>Tailored user-space capabilities built specifically to empower every tier of the marketplace matrix.</h3>
           </div>
           
           <div className="services-vertical-flex">
             {/* Shopkeepers offering block */}
             <div className="service-segment-row">
               <div className="service-txt-pane">
+                <div>
                 <div className="segment-title-icon-row">
                   <StorefrontIcon className="segment-icon blue" />
                   <h3>For Shopkeepers</h3>
@@ -83,12 +93,15 @@ const About = () => {
                   <li>✔ Automatic triggers indicating immediate short-stock safety thresholds.</li>
                   <li>✔ Cloud-synced real-time expiration warning badges.</li>
                 </ul>
+                </div>
+                <img src="forShopkeeper.png" alt="" style={{width:"400px"}}/>
               </div>
             </div>
 
             {/* Distributors offering block */}
             <div className="service-segment-row reverse">
               <div className="service-txt-pane">
+                 <div>
                 <div className="segment-title-icon-row">
                   <LocalShippingIcon className="segment-icon green" />
                   <h3>For Distributors</h3>
@@ -99,12 +112,15 @@ const About = () => {
                   <li>✔ Interactive chronological statement logs tracking sales performance.</li>
                   <li>✔ Automated ledger tools designed to monitor stable wholesale business growth.</li>
                 </ul>
+                </div>
+                <img src="forDistributor.png" alt="" style={{width:"400px"}} />
               </div>
             </div>
 
             {/* Customers offering block */}
             <div className="service-segment-row">
               <div className="service-txt-pane">
+                <div>
                 <div className="segment-title-icon-row">
                   <GroupsIcon className="segment-icon purple" />
                   <h3>For Customers</h3>
@@ -115,6 +131,8 @@ const About = () => {
                   <li>✔ Direct storefront order routing with zero manual connection gaps.</li>
                   <li>✔ Dependable delivery tracking logs ensuring safety parameters are met.</li>
                 </ul>
+                </div>
+                <img src="forcustomer.png" alt="" style={{width:"400px"}} />
               </div>
             </div>
           </div>

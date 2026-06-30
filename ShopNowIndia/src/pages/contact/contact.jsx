@@ -22,11 +22,14 @@ const Contact = () => {
           <div className="contact-bg-orb contact-orb-indigo"></div>
           
           <div className="contact-hero-inner">
+            <div>
             <span className="contact-badge-pill">Support Center</span>
             <h1>Contact Us</h1>
             <p className="contact-hero-lead">
               Connect with OmSanjeevani Healthcare and take your medicine business digital. Our teams are available to stabilize your distribution pipelines.
             </p>
+            </div>
+            <img src="contactpic.png" alt="" />
           </div>
         </section>
 

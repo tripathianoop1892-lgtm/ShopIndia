@@ -224,6 +224,12 @@ body {
   box-shadow: 0 4px 14px rgba(30, 58, 138, 0.3);
 }
 
+.gateway-btn.customer-yellow {
+  background: linear-gradient(135deg, #d5d81d, #8a7a1e);
+  box-shadow: 0 4px 14px rgba(30, 58, 138, 0.3);
+}
+
+
 /* ==========================================================================
    VISUALIZATION CANVAS: MOBILE CARD NODE MATRICES
    ========================================================================== */
@@ -627,19 +633,10 @@ body {
    ========================================================================== */
 .profile-corporate-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 32px;
   align-items: center;
 }
-
-.about-branding-card h2 {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--brand-primary-dark);
-  margin-bottom: 16px;
-}
-
-.about-branding-card p { font-size: 15px; line-height: 1.7; color: var(--ink-secondary); }
 
 .corporate-founder-card {
   background: var(--surface-panel);
@@ -648,6 +645,7 @@ body {
   padding: 32px;
   display: flex;
   gap: 24px;
+  height: 250px;
   align-items: flex-start;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }

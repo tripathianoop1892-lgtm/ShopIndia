@@ -14,7 +14,7 @@
    ========================================================================== */
 .terms-hero-panel {
   position: relative;
-  padding: 100px 24px;
+  padding: 40px 24px;
   background: linear-gradient(135deg, #f1f5f9 0%, #e1e7ff 50%, #f0fdf4 100%);
   text-align: center;
   overflow: hidden;
@@ -24,8 +24,10 @@
 .terms-hero-inner {
   position: relative;
   z-index: 5;
-  max-width: 850px;
-  margin: 0 auto;
+  max-width: 100vw;
+  margin: 0 2vw;
+  display: flex;
+  align-items: center;
 }
 
 .terms-badge-pill {

@@ -26,11 +26,14 @@ const Policy = () => {
           <div className="privacy-bg-orb privacy-orb-indigo"></div>
           
           <div className="privacy-hero-inner">
+            <div>
             <span className="privacy-badge-pill">Data Protection</span>
             <h1>Privacy Policy</h1>
             <p className="privacy-hero-lead">
               Your privacy is critical to us. This Privacy Policy explains how the OmSanjeevani platform collects, uses, and safely protects your personal information.
             </p>
+            </div>
+            <img src="policy.png" alt="" />
           </div>
         </section>
 

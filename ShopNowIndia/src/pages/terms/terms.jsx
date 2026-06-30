@@ -25,11 +25,14 @@ const Terms = () => {
           <div className="terms-bg-orb terms-orb-indigo"></div>
           
           <div className="terms-hero-inner">
+            <div>
             <span className="terms-badge-pill">Legal Framework</span>
             <h1>Terms & Conditions</h1>
             <p className="terms-hero-lead">
               Please review these Terms & Conditions carefully before interacting with the OmSanjeevani Healthcare Platform.
             </p>
+            </div>
+            <img src="terms.png" alt="" />
           </div>
         </section>
 

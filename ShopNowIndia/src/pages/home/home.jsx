@@ -64,6 +64,9 @@ function Home() {
             <button className="gateway-btn shopkeeper-blue" onClick={() => navigate('/register')}>
               <span className="btn-user-icon">🏪</span> Register as Shopkeeper
             </button>
+            <button className="gateway-btn customer-yellow" onClick={() => navigate('/register')}>
+              <span className="btn-user-icon">👤</span> Register as Customer
+            </button>
           </div>
         </div>
 
@@ -311,14 +314,18 @@ function Home() {
 
       {/* Corporate Summary Card and Developer Profile */}
       <section className="informational-home-section profile-corporate-grid">
-        <div className="about-branding-card">
+        <div className="corporate-founder-card">
+         <img src="./omsanjeevani.png" alt="logo" style={{width: "100px", height: "auto"}}/>
+         <div  className="founder-meta-details">
           <h2>About OmSanjeevani</h2>
+          
           <p>
             OmSanjeevani is a digital health logistics ecosystem connecting 
             authorized wholesale vendors, pharmacy owners, and consumer clients under a unified, transparent database framework. 
             Our architecture simplifies medical procurement tracking, stabilizes safety bounds around batch expiries, 
             and streamlines retail supply operations across India.
           </p>
+           </div>
         </div>
         <div className="corporate-founder-card">
           <div className="founder-avatar-badge">AKT</div>
