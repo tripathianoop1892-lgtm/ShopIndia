@@ -23,6 +23,7 @@ const Features = () => {
           <div className="features-bg-orb features-orb-indigo"></div>
           
           <div className="features-hero-content">
+            <div>
             <span className="features-badge-pill">Enterprise Capabilities</span>
             <h1>
               Our Core <span className="gradient-brand-text">Platform Features</span>
@@ -31,6 +32,8 @@ const Features = () => {
               A secure, high-scannability digital ecosystem for healthcare distributors, 
               local pharmacy owners, and consumer clients across India.
             </p>
+            </div>
+            <img src="feature.png" alt="" />
           </div>
         </div>
 

@@ -1,0 +1,102 @@
+.admin-header{
+    width:100%;
+    height:70px;
+    background:#ffffff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 25px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.header-left h2{
+    font-size:24px;
+    color:#1e293b;
+}
+
+.menu-btn{
+    width:45px;
+    height:45px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:20px;
+    transition:.3s;
+}
+
+.menu-btn:hover{
+    background:#1d4ed8;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+.notification{
+    position:relative;
+    font-size:22px;
+    cursor:pointer;
+    color:#1e293b;
+}
+
+.badge{
+    position:absolute;
+    top:-8px;
+    right:-10px;
+    width:18px;
+    height:18px;
+    background:red;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
+
+.profile svg{
+    font-size:34px;
+    color:#2563eb;
+}
+
+.profile span{
+    font-size:16px;
+    font-weight:600;
+    color:#1e293b;
+}
+
+@media(max-width:768px){
+
+.header-left h2{
+    font-size:18px;
+}
+
+.profile span{
+    display:none;
+}
+
+.header-right{
+    gap:18px;
+}
+
+}
