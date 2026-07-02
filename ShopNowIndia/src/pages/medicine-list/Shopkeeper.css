@@ -1,37 +1,246 @@
-/* ===== LOCAL RETAIL INVENTORY SHEET VIEW ===== */
-.shopkeeper-container {
+/* Generic Shell Architecture */
+.sk-container {
   width: 100%;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
 }
 
-.shopkeeper-container h2 {
-  font-size: 26px;
+.sk-header-block {
+  margin-bottom: 24px;
+}
+
+.sk-header-block h2 {
+  font-size: 24px;
+  font-weight: 700;
   color: #0f172a;
-  margin-bottom: 6px;
 }
 
-/* Table containment setups */
-.shopkeeper-container table {
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.shopkeeper-container th {
-  font-weight: 600;
-  border-bottom: 2px solid #e2e8f0;
-}
-
-.shopkeeper-container td {
-  color: #334155;
+.sk-header-block p {
   font-size: 14px;
-  vertical-align: middle;
+  color: #64748b;
+  margin-top: 4px;
 }
 
-.shopkeeper-container tbody tr {
-  transition: background-color 0.2s ease;
+/* Card/Container Wrapper */
+.sk-table-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
 }
 
-.shopkeeper-container tbody tr:hover {
+/* Base Clean Data Tables Layout */
+.sk-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.sk-table th {
+  background: #f8fafc;
+  padding: 14px 16px;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sk-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.sk-table tbody tr:hover {
   background-color: #f8fafc;
+}
+
+/* Dynamic Text Utilities */
+.sk-med-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.sk-price-text {
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.sk-stock-text {
+  font-weight: 500;
+}
+
+.text-danger {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.sk-empty-text {
+  padding: 32px !important;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.sk-loading {
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Lightweight Status/Category Tags */
+.sk-type-badge {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sk-status-pill {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sk-status-pill.valid {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.sk-status-pill.expired {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Action Control Buttons Elements */
+.sk-action-btn {
+  padding: 6px 12px;
+  background: #0f172a;
+  color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.sk-action-btn:hover {
+  background: #1e293b;
+}
+
+/* Simple/Clean Modal Framework Overlay */
+.sk-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.sk-modal {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.sk-modal-header {
+  margin-bottom: 20px;
+}
+
+.sk-modal-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.sk-modal-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.sk-field {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sk-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.sk-field input {
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+  color: #0f172a;
+}
+
+.sk-field input:focus {
+  border-color: #0f172a;
+}
+
+.sk-input-readonly {
+  background: #f8fafc;
+  color: #64748b !important;
+  cursor: not-allowed;
+  border-color: #e2e8f0 !important;
+}
+
+.sk-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.sk-btn-cancel {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sk-btn-cancel:hover {
+  background: #f8fafc;
+}
+
+.sk-btn-save {
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sk-btn-save:hover {
+  background: #15803d;
 }

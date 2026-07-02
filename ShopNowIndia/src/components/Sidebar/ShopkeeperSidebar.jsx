@@ -55,6 +55,13 @@ const ShopkeeperSidebar = ({ isOpen, onClose }) => {
             </NavLink>
           </li>
 
+          {/* 🚀 ADDED NAVIGATION LIST ENTRY */}
+          <li>
+            <NavLink to="/shopkeeper/add-medicine">
+              Add Medicine
+            </NavLink>
+          </li>
+
           <li>
             <NavLink to="/shopkeeper/cart">
               Cart
@@ -84,18 +91,6 @@ const ShopkeeperSidebar = ({ isOpen, onClose }) => {
               Settings
             </NavLink>
           </li>
-
-          {/* <li>
-            <NavLink to="/shopkeeper/low-stock">
-              Low Stock
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/expiring">
-              Expiry Alert
-            </NavLink>
-          </li> */}
         </ul>
       </div>
 
@@ -103,55 +98,27 @@ const ShopkeeperSidebar = ({ isOpen, onClose }) => {
         {shopId && (
           <div className="shop-id-section">
             <p className="shop-id-label">STORE FRONT ID</p>
-
-            <code className="shop-id-code">
-              {shopId}
-            </code>
-
-            <button
-              onClick={() => setShowQR(true)}
-              className="qr-btn"
-            >
+            <code className="shop-id-code">{shopId}</code>
+            <button onClick={() => setShowQR(true)} className="qr-btn">
               📷 Open Store QR
             </button>
           </div>
         )}
 
-        <button
-          onClick={handleLogout}
-          className="logout-btn"
-        >
+        <button onClick={handleLogout} className="logout-btn">
           Sign Out
         </button>
       </div>
 
       {showQR && (
-        <div
-          className="qr-modal-overlay"
-          onClick={() => setShowQR(false)}
-        >
-          <div
-            className="qr-modal-box"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="qr-modal-overlay" onClick={() => setShowQR(false)}>
+          <div className="qr-modal-box" onClick={(e) => e.stopPropagation()}>
             <h3>Store Front QR Code</h3>
-
-            <p>
-              Scan to register or look up medications linked
-              to your shop.
-            </p>
-
+            <p>Scan to register or look up medications linked to your shop.</p>
             <div className="qr-code-container">
-              <QRCodeCanvas
-                value={shopLink}
-                size={200}
-              />
+              <QRCodeCanvas value={shopLink} size={200} />
             </div>
-
-            <button
-              onClick={() => setShowQR(false)}
-              className="qr-close-btn"
-            >
+            <button onClick={() => setShowQR(false)} className="qr-close-btn">
               Minimize Window
             </button>
           </div>

@@ -22,6 +22,7 @@ import ShopkeeperDashboard from "../pages/dashboard/Shopkeeper";
 import ShopkeeperMedicineList from "../pages/medicine-list/Shopkeeper";
 import ShopkeeperOrder from "../pages/order/Shopkeeper";
 import ShopkeeperEarnings from "../pages/earnings/Shopkeeper";
+import AddMedicineShopkeeper from "../features/add-medicine/Shopkeeper";
 
 // Distributor Segment Pages
 import DistributorDashboard from "../pages/dashboard/Distributor";
@@ -44,7 +45,6 @@ const router = createBrowserRouter([
   // ==========================================
   // 🔐 OPEN / PUBLIC AUTHENTICATION ROUTES
   // ==========================================
-  
   { path: "/", element: <Home/> },
   {path:"/contact", element:<Contact/>},
   {path:"/terms", element:<Terms/>},
@@ -64,6 +64,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <ShopkeeperDashboard /> }, // Maps directly to: /shopkeeper
       { path: "medicine-list", element: <ShopkeeperMedicineList /> }, // Maps directly to: /shopkeeper/medicine-list
+      { path: "add-medicine", element: <AddMedicineShopkeeper /> }, // Maps directly to: /shopkeeper/add-medicine
       { path: "orders", element: <ShopkeeperOrder /> }, // Maps directly to: /shopkeeper/orders
       { path: "earnings", element: <ShopkeeperEarnings /> }, // Maps directly to: /shopkeeper/earnings
       { path: "cart", element: <Cart /> },
@@ -107,7 +108,6 @@ const router = createBrowserRouter([
     ],
   },
 
-  // Fallback Catch All redirection sequence rule
   { path: "*", element: <Navigate to="/" replace /> },
 ]);
 

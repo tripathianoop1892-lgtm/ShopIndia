@@ -3,7 +3,6 @@ import "./Distributor.css";
 import { addMedicine } from "../../services/api";
 
 const AddMedicine = () => {
-
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -25,12 +24,7 @@ const AddMedicine = () => {
     const mrpNumber = Number(mrpValue);
     const discountNumber = Number(discountValue);
 
-    if (
-      mrpValue === "" ||
-      discountValue === "" ||
-      Number.isNaN(mrpNumber) ||
-      Number.isNaN(discountNumber)
-    ) {
+    if (mrpValue === "" || discountValue === "" || Number.isNaN(mrpNumber) || Number.isNaN(discountNumber)) {
       return "";
     }
 
@@ -44,10 +38,7 @@ const AddMedicine = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedForm = {
-      ...form,
-      [name]: value
-    };
+    const updatedForm = { ...form, [name]: value };
 
     if (name === "mrp" || name === "discount") {
       updatedForm.offerPrice = calculateOfferPrice(
@@ -55,91 +46,48 @@ const AddMedicine = () => {
         name === "discount" ? value : form.discount
       );
     }
-
     setForm(updatedForm);
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
+    if (Number(form.offerPrice) > Number(form.mrp)) {
+      return alert("Offer price cannot exceed MRP");
+    }
+    if (Number(form.discount) < 0 || Number(form.discount) > 100) {
+      return alert("Discount must be between 0 and 100");
+    }
+    if (Number(form.stock) < 0) {
+      return alert("Stock cannot be negative");
+    }
+    if (form.mfgDate && form.expDate && new Date(form.expDate) <= new Date(form.mfgDate)) {
+      return alert("Expiry date must be after manufacturing date");
+    }
+
     try {
-
       const dataToSend = {
-
         name: form.name,
         company: form.company,
         type: form.type,
         strength: form.strength,
-
         packSize: Number(form.packSize),
-
         packType: form.packType,
-
         mrp: Number(form.mrp),
-
-        // IMPORTANT
         price: Number(form.offerPrice),
-
         discount: Number(form.discount),
-
         stock: Number(form.stock),
-
         batch: form.batch,
-
         image: form.image,
-
         mfd: form.mfgDate,
-
         expiry: form.expDate,
       };
 
-      if (
-  Number(form.offerPrice) >
-  Number(form.mrp)
-) {
-  return alert(
-    "Offer price cannot exceed MRP"
-  );
-}
-
-if (
-  Number(form.discount) < 0 ||
-  Number(form.discount) > 100
-) {
-  return alert(
-    "Discount must be between 0 and 100"
-  );
-}
-
-if (
-  Number(form.stock) < 0
-) {
-  return alert(
-    "Stock cannot be negative"
-  );
-}
-
-if (
-  form.mfgDate &&
-  form.expDate &&
-  new Date(form.expDate) <=
-    new Date(form.mfgDate)
-) {
-  return alert(
-    "Expiry date must be after manufacturing date"
-  );
-}
-
       const res = await addMedicine(dataToSend);
 
-      // FINAL FIX
-      const responseData = res?.data || res;
-
-      if (responseData.success) {
-
+      // 🎯 THE FIX: Read res.success directly from the fetch output response package
+      if (res && res.success) {
         alert("Medicine Added Successfully ✅");
-
         setForm({
           name: "",
           company: "",
@@ -156,157 +104,65 @@ if (
           mfgDate: "",
           expDate: ""
         });
-
       } else {
-
-        alert(responseData.message || "Error ❌");
-
+        alert(res?.message || "Error adding medicine ❌");
       }
-
     } catch (error) {
-
-      console.log(error);
-
+      console.error(error);
       alert("Error adding medicine ❌");
-
     }
   };
 
   return (
-
     <div className="main-content">
-
       <div className="modern-form-container">
-
-        {/* HEADER */}
         <div className="form-header">
           <div>
-            <h1>💊 Add Medicine</h1>
-            <p>Fill all details carefully</p>
+            <h1>💊 Add Medicine (Distributor)</h1>
+            <p>Fill all details carefully to seed wholesale stock</p>
           </div>
         </div>
 
-        {/* FORM */}
-        <form
-          onSubmit={handleSubmit}
-          className="modern-form-grid"
-        >
-
-          {/* NAME */}
+        <form onSubmit={handleSubmit} className="modern-form-grid">
           <div className="form-group">
             <label>Medicine Name</label>
-
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Enter medicine name"
-              required
-            />
+            <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Enter medicine name" required />
           </div>
 
-          {/* COMPANY */}
           <div className="form-group">
             <label>Company</label>
-
-            <input
-              type="text"
-              name="company"
-              value={form.company}
-              onChange={handleChange}
-              placeholder="Enter company name"
-            />
+            <input type="text" name="company" value={form.company} onChange={handleChange} placeholder="Enter company name" />
           </div>
 
-          {/* TYPE */}
           <div className="form-group">
-
             <label>Category / Type</label>
-
-            <select
-              name="type"
-              value={form.type}
-              onChange={handleChange}
-            >
+            <select name="type" value={form.type} onChange={handleChange}>
               <option value="">Select Type</option>
               <option value="Tablet">Tablet</option>
               <option value="Capsule">Capsule</option>
               <option value="Syrup">Syrup</option>
               <option value="Injection">Injection</option>
-              <option value="Drops">Drops</option>
-              <option value="Cream">Cream</option>
-              <option value="Gel">Gel</option>
-              <option value="Lotion">Lotion</option>
-              <option value="Suspension">Suspension</option>
-              <option value="Eye Drop">Eye Drop</option>
-              <option value="Ear Drop">Ear Drop</option>
-              <option value="Nasal Spray">Nasal Spray</option>
-              <option value="Suppository">Suppository</option>
-              <option value="Patch">Patch</option>
-              <option value="Soap">Soap</option>
-              <option value="Shampoo">Shampoo</option>
-              <option value="Mouthwash">Mouthwash</option>
-              <option value="Solution">Solution</option>
-              <option value="Vaccine">Vaccine</option>
-              <option value="Oil">Oil</option>
-              <option value="Granules">Granules</option>
-              <option value="Face Wash">Face Wash</option>
             </select>
           </div>
 
-          {/* IMAGE */}
           <div className="form-group">
-
             <label>Medicine Image URL</label>
-
-            <input
-              type="url"
-              name="image"
-              value={form.image}
-              onChange={handleChange}
-              placeholder="Paste image url"
-            />
+            <input type="url" name="image" value={form.image} onChange={handleChange} placeholder="Paste image url" />
           </div>
 
-          {/* STRENGTH */}
           <div className="form-group">
-
             <label>Strength (e.g. 650mg)</label>
-
-            <input
-              type="text"
-              name="strength"
-              value={form.strength}
-              onChange={handleChange}
-              placeholder="650mg"
-            />
+            <input type="text" name="strength" value={form.strength} onChange={handleChange} placeholder="650mg" />
           </div>
 
-          {/* PACK SIZE */}
           <div className="form-group">
-
             <label>Tablets Per Strip</label>
-
-            <input
-              type="number"
-              name="packSize"
-              value={form.packSize}
-              onChange={handleChange}
-              placeholder="10 / 15 / 20"
-            />
+            <input type="number" name="packSize" value={form.packSize} onChange={handleChange} placeholder="10" />
           </div>
 
-          {/* PACK TYPE */}
           <div className="form-group">
-
             <label>Pack Type</label>
-
-            <select
-              name="packType"
-              value={form.packType}
-              onChange={handleChange}
-            >
+            <select name="packType" value={form.packType} onChange={handleChange}>
               <option value="">Select Pack Type</option>
               <option value="Strip">Strip</option>
               <option value="Bottle">Bottle</option>
@@ -314,120 +170,47 @@ if (
             </select>
           </div>
 
-          {/* MRP */}
           <div className="form-group">
-
             <label>MRP ₹</label>
-
-            <input
-              type="number"
-              name="mrp"
-              value={form.mrp}
-              onChange={handleChange}
-              placeholder="Enter MRP"
-            />
+            <input type="number" name="mrp" value={form.mrp} onChange={handleChange} placeholder="Enter MRP" />
           </div>
 
-          {/* OFFER PRICE */}
           <div className="form-group">
-
-            <label>Offer Price ₹</label>
-
-            <input
-              type="number"
-              name="offerPrice"
-              value={form.offerPrice}
-              onChange={handleChange}
-              placeholder="Offer Price"
-            />
-            <small style={{ color: '#64748b', marginTop: '6px', display: 'block' }}>
-              Auto-calculated from MRP + Discount when both are entered.
-            </small>
-          </div>
-
-          {/* DISCOUNT */}
-          <div className="form-group">
-
             <label>Discount %</label>
-
-            <input
-              type="number"
-              name="discount"
-              value={form.discount}
-              onChange={handleChange}
-              placeholder="Discount"
-            />
+            <input type="number" name="discount" value={form.discount} onChange={handleChange} placeholder="Discount" />
           </div>
 
-          {/* STOCK */}
           <div className="form-group">
+            <label>Wholesale Offer Price ₹</label>
+            <input type="number" name="offerPrice" value={form.offerPrice} onChange={handleChange} placeholder="Offer Price" readOnly />
+            <small style={{ color: '#64748b', marginTop: '6px', display: 'block' }}>Auto-calculated wholesale listing cost.</small>
+          </div>
 
+          <div className="form-group">
             <label>Stock Quantity</label>
-
-            <input
-              type="number"
-              name="stock"
-              value={form.stock}
-              onChange={handleChange}
-              placeholder="Stock"
-              required
-            />
+            <input type="number" name="stock" value={form.stock} onChange={handleChange} placeholder="Stock" required />
           </div>
 
-          {/* BATCH */}
           <div className="form-group">
-
             <label>Batch Number</label>
-
-            <input
-              type="text"
-              name="batch"
-              value={form.batch}
-              onChange={handleChange}
-              placeholder="Batch Number"
-            />
+            <input type="text" name="batch" value={form.batch} onChange={handleChange} placeholder="Batch Number" />
           </div>
 
-          {/* MFG */}
           <div className="form-group">
-
             <label>Manufacturing Date</label>
-
-            <input
-              type="date"
-              name="mfgDate"
-              value={form.mfgDate}
-              onChange={handleChange}
-            />
+            <input type="date" name="mfgDate" value={form.mfgDate} onChange={handleChange} />
           </div>
 
-          {/* EXPIRY */}
           <div className="form-group">
-
             <label>Expiry Date</label>
-
-            <input
-              type="date"
-              name="expDate"
-              value={form.expDate}
-              onChange={handleChange}
-              required
-            />
+            <input type="date" name="expDate" value={form.expDate} onChange={handleChange} required />
           </div>
 
-          {/* BUTTON */}
           <div className="form-button">
-
-            <button type="submit">
-              Add Medicine
-            </button>
-
+            <button type="submit">Add Medicine</button>
           </div>
-
         </form>
-
       </div>
-
     </div>
   );
 };

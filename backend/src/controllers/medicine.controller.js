@@ -58,18 +58,20 @@ export const addMedicine = async (req, res) => {
       name: name.trim(),
       batch: batch.trim(),
       mfd: mfd ? new Date(mfd) : null,
-      expiry: new Date(expiry),
-      price: listingPrice, // Sync general fallback field for backwards compatibility
+      expiry: new Date(expiry)
     };
 
-    // 🚀 ROLE-SPECIFIC PRICING DISPATCH
+    // 🚀 STRICT PRICING DISPATCH TIERS
     if (user.role === "distributor") {
-      medicineData.wholesalePrice = listingPrice;
-      medicineData.retailPrice = Number(mrp || 0); // Default retail tier to MRP max boundary
+      medicineData.price = listingPrice;
+      medicineData.wholesalePrice = listingPrice; // Offer price for shopkeeper to buy
+      medicineData.retailPrice = 0;               // Isolated zero for distributor
     } else if (user.role === "shopkeeper") {
       medicineData.shopId = user.shopId;
-      medicineData.retailPrice = listingPrice;
-      // wholesalePrice would have been set when purchased from distributor
+      medicineData.mrp = Number(mrp || 0);
+      medicineData.retailPrice = listingPrice;    // Offer price to sell to customers
+      medicineData.price = 0;                     // Reset untracked categories
+      medicineData.wholesalePrice = 0; 
     }
 
     const med = await Medicine.create(medicineData);
@@ -145,15 +147,9 @@ export const deleteMedicine = async (req, res) => {
   }
 };
 
-export const updateMedicine = async (
-  req,
-  res
-) => {
+export const updateMedicine = async (req, res) => {
   try {
-
-    const medicine =
-      await Medicine.findById(req.params.id);
-
+    const medicine = await Medicine.findById(req.params.id);
     if (!medicine) {
       return res.status(404).json({
         success: false,

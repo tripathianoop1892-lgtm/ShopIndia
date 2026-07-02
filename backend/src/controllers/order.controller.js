@@ -2,9 +2,6 @@ import Order from "../models/Order.js";
 import Medicine from "../models/medicine.js";
 import User from "../models/user.js";
 
-// ========================================================
-// 📦 CREATE MULTI-ITEM ARRAY ORDER (Kept intact for context)
-// ========================================================
 export const createOrder = async (req, res) => {
   try {
     const user = req.user; 
@@ -24,7 +21,6 @@ export const createOrder = async (req, res) => {
       }
     }
 
-    // Deducts stock immediately to hold/reserve the items
     for (let item of items) {
       await Medicine.findByIdAndUpdate(item.medicineId, {
         $inc: { stock: -item.quantity }
@@ -68,19 +64,14 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// ========================================================
-// 📄 GET ALL ORDERS (Kept intact for context)
-// ========================================================
 export const getOrders = async (req, res) => {
   try {
     const user = req.user;
     let query = {};
 
     if (user.role === "distributor") {
-      // Wholesalers monitor B2B orders sent to them
       query = { sellerId: user._id, orderType: "B2B" };
     } else if (user.role === "shopkeeper") {
-      // Shopkeepers look up BOTH: B2B purchases or consumer retail orders matching their shopId
       const { view } = req.query;
       if (view === "b2b-purchases") {
         query = { buyerId: user._id, orderType: "B2B" };
@@ -91,7 +82,6 @@ export const getOrders = async (req, res) => {
       query = { buyerId: user._id, orderType: "B2C" };
     }
 
-    // 🚀 FIX: Automatically populate user references to capture name details across nodes
     const orders = await Order.find(query)
       .populate("sellerId", "name email")
       .populate("buyerId", "name email")
@@ -104,18 +94,14 @@ export const getOrders = async (req, res) => {
   }
 };
 
-// ========================================================
-// 🔄 UPDATE ORDER STATUS & AUTO INVENTORY POPULATION (FIXED!)
-// ========================================================
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const user = req.user; // Captured from checkAuth middleware token[cite: 2]
+    const user = req.user;
     
     const currentOrder = await Order.findById(req.params.id);
     if (!currentOrder) return res.status(404).json({ message: "Order records match failure" });
 
-    // 藴鈥 SECURITY GUARD: Prevent role-crossing parameter manipulation
     if (user.role === "shopkeeper" && currentOrder.orderType !== "B2C") {
       return res.status(403).json({ 
         success: false, 
@@ -129,16 +115,15 @@ export const updateOrderStatus = async (req, res) => {
       });
     }
 
-    // CRITICAL REVERSAL FIX: If a pending order is REJECTED, restore the stock to the seller[cite: 2]
     if (status === "Rejected" && currentOrder.status === "Pending") {
       for (let item of currentOrder.items) {
         await Medicine.findByIdAndUpdate(item.medicineId, {
-          $inc: { stock: item.quantity } // Increment quantities back[cite: 2]
+          $inc: { stock: item.quantity }
         });
       }
     }
 
-    // APPROVAL LOGIC: If a Distributor APPROVES a Shopkeeper's B2B order[cite: 2]
+    // APPROVAL LOGIC MODIFIED TO MATCH EXACT TIERS
     if (currentOrder.orderType === "B2B" && status === "Approved" && currentOrder.status !== "Approved") {
       const shopkeeperUser = await User.findById(currentOrder.buyerId);
       
@@ -148,6 +133,7 @@ export const updateOrderStatus = async (req, res) => {
           shopId: shopkeeperUser.shopId,
           ownerRole: "shopkeeper"
         });
+        
         if (existingRetailStock) {
           existingRetailStock.stock += item.quantity;
           await existingRetailStock.save();
@@ -163,9 +149,13 @@ export const updateOrderStatus = async (req, res) => {
             image: masterDistributorMed?.image || "",
             stock: item.quantity,
             expiry: masterDistributorMed?.expiry,
+            
+            // 🎯 FIXED PRICING CONFIGURATION FOR PROCUREMENT
             mrp: masterDistributorMed?.mrp || item.price,
-            wholesalePrice: item.price,
-            retailPrice: masterDistributorMed?.mrp || (item.price * 1.2), 
+            wholesalePrice: item.price, // Track baseline purchase cost snapshot
+            retailPrice: masterDistributorMed?.mrp || (item.price * 1.2), // Offer price to sell to customers
+            price: 0, 
+            
             ownerId: shopkeeperUser._id,
             ownerRole: "shopkeeper",
             shopId: shopkeeperUser.shopId
@@ -174,7 +164,6 @@ export const updateOrderStatus = async (req, res) => {
       }
     }
 
-    // Save state changes to the Order document[cite: 2]
     currentOrder.status = status;
     await currentOrder.save();
     return res.json({ success: true, message: `Order marked as ${status}`, data: currentOrder });

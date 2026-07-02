@@ -15,7 +15,7 @@ const Settings = () => {
   const [prefForm, setPrefForm] = useState({
     emailAlerts: true,
     orderUpdates: true,
-    lowStockWarning: isDistributor || isShopkeeper, // Enabled default for inventory handlers[cite: 2]
+    lowStockWarning: isDistributor || isShopkeeper, // Enabled default for inventory handlers
     autoRefreshCatalog: true
   });
 
