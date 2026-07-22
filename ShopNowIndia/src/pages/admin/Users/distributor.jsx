@@ -1,4 +1,4 @@
-import "./Distributors.css";
+import "./Distributor.css";
 
 const distributors = [
   {

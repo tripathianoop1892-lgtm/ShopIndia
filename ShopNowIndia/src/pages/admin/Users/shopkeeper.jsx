@@ -1,4 +1,4 @@
-import "./Shopkeeper.css";
+import "./shopkeeper.css";
 
 const shopkeepers = [
   {

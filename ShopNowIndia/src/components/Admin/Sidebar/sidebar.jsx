@@ -32,7 +32,7 @@ const Sidebar = ({ isOpen }) => {
       <ul>
 
         <li>
-          <NavLink to="/admin/dashboard">
+          <NavLink to="/admin">
             <FaTachometerAlt />
             <span>Dashboard</span>
           </NavLink>
