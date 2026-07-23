@@ -12,6 +12,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import medicineRoutes from "./src/routes/medicine.routes.js";
 import orderRoutes from "./src/routes/order.routes.js";
 import earningsRoutes from "./src/routes/earnings.routes.js";
+import adminRoutes from "./src/routes/admin.routes.js";
 
 
 // CONFIG
@@ -50,6 +51,9 @@ app.use("/api/cart", cartRoutes);
 
 // 💰 EARNINGS
 app.use("/api/earnings", earningsRoutes);
+
+// Admin//
+app.use("/api/admin", adminRoutes)
 
 // =======================
 // SERVER

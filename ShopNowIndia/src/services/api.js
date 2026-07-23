@@ -179,3 +179,12 @@ export const removeCartItem = async (nameString) => {
   });
   return res.json();
 };
+
+
+// Admin Api
+export const getCustomers = async () => {
+  const res = await fetch(`${BASE_URL}/admin/customers`, {
+    headers: getHeaders()
+  });
+  return res.json(); 
+}

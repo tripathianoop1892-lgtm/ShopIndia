@@ -1,0 +1,77 @@
+.address-container {
+  margin-top: 35px;
+}
+
+.address-container h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0a8f3d;
+  margin-bottom: 20px;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.address-grid .input-box {
+  position: relative;
+}
+
+.address-grid .input-box.full {
+  grid-column: 1 / 3;
+}
+
+.address-grid .icon {
+  position: absolute;
+  left: 15px;
+  top: 18px;
+  color: #777;
+  font-size: 16px;
+}
+
+.address-grid input,
+.address-grid textarea {
+  width: 100%;
+  padding: 15px 18px 15px 45px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.address-grid input:focus,
+.address-grid textarea:focus {
+  border-color: #0a8f3d;
+  box-shadow: 0 0 8px rgba(10, 143, 61, 0.2);
+}
+
+.address-grid textarea {
+  height: 120px;
+  resize: none;
+  padding-top: 15px;
+}
+
+.address-grid input::placeholder,
+.address-grid textarea::placeholder {
+  color: #999;
+}
+
+@media (max-width: 768px) {
+
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .address-grid .input-box.full {
+    grid-column: auto;
+  }
+
+  .address-container h3 {
+    font-size: 20px;
+  }
+
+}

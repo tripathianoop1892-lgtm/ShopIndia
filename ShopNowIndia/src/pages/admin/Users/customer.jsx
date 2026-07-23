@@ -1,33 +1,25 @@
+import { useState } from "react";
 import "./Customer.css";
+import { useEffect } from "react";
+import { getCustomers } from "../../../services/api";
 
-const customers = [
-  {
-    id: 1,
-    name: "Anoop Tripathi",
-    mobile: "9876543210",
-    email: "anoop@gmail.com",
-    city: "Delhi",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Rahul Sharma",
-    mobile: "9876543211",
-    email: "rahul@gmail.com",
-    city: "Lucknow",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    name: "Priya Singh",
-    mobile: "9876543212",
-    email: "priya@gmail.com",
-    city: "Kanpur",
-    status: "Active",
-  },
-];
 
 const Customer = () => {
+  const [customers, setCustomers] =useState([]);
+
+  useEffect(() => {
+    const fetchCustomers = async ()=>{
+    try{
+      const response = await getCustomers();
+      setCustomers(response)
+      console.log(response)
+    }catch(err){
+      console.error("Error featching customers", err)
+    }
+    }
+
+    fetchCustomers();
+  }, [])
   return (
     <div className="customer-page">
 
@@ -68,9 +60,9 @@ const Customer = () => {
 
             {customers.map((customer) => (
 
-              <tr key={customer.id}>
+              <tr key={customer._id}>
 
-                <td>{customer.id}</td>
+                <td>{customer._id}</td>
                 <td>{customer.name}</td>
                 <td>{customer.mobile}</td>
                 <td>{customer.email}</td>

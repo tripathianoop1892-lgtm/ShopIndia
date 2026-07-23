@@ -1,61 +1,138 @@
-body{
-  background: #eef2f7;
-  font-family: Arial, sans-serif;
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  background: #f5f7fb;
 }
 
-.register-container {
-  width: 380px;
-  margin: 80px auto;
-  padding: 35px;
-  background: white;
-  border-radius: 18px;
-  text-align: center;
+/* Left Panel */
 
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+.left-panel {
+  width: 40%;
+  background: linear-gradient(135deg,#0f9d58,#34a853);
+  color: white;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.register-container h2{
-  margin-bottom: 25px;
-  font-size: 32px;
-  color: #222;
+.left-panel h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 15px;
 }
 
-.register-container input,
-.register-container select {
-  width: 100%;
-  padding: 14px;
+.left-panel span {
+  color: #ffd54f;
+}
+
+.left-panel p {
+  font-size: 18px;
+  line-height: 28px;
+  margin-bottom: 30px;
+}
+
+.left-panel img {
+  width: 90%;
+  margin: 30px auto;
+  display: block;
+}
+
+.features {
+  margin-top: 30px;
+}
+
+.features p {
+  font-size: 17px;
   margin: 12px 0;
-
-  border: 1px solid #ccc;
-  border-radius: 10px;
-
-  font-size: 15px;
-  outline: none;
-
-  box-sizing: border-box;
 }
 
-.register-container input:focus,
-.register-container select:focus{
-  border-color: #6c63ff;
+/* Right Panel */
+
+.right-panel {
+  width: 60%;
+  background: white;
+  padding: 50px;
+  overflow-y: auto;
 }
 
 .register-btn {
-  background: #6c63ff;
-  color: white;
-
-  padding: 14px;
   width: 100%;
-
+  padding: 15px;
+  background: #0a8f3d;
+  color: white;
   border: none;
   border-radius: 10px;
-
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
-
-  transition: 0.3s;
+  margin-top: 35px;
+  transition: .3s;
 }
 
-.register-btn:hover{
-  background: #574bdb;
+.register-btn:hover {
+  background: #087733;
+}
+
+/* Login Link */
+
+.login-text {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+}
+
+.login-text a {
+  color: #0a8f3d;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+.register-page{
+flex-direction:column;
+}
+
+.left-panel{
+width:100%;
+padding:40px 25px;
+text-align:center;
+}
+
+.left-panel img{
+width:260px;
+}
+
+.right-panel{
+width:100%;
+padding:30px 20px;
+}
+
+}
+
+@media(max-width:768px){
+
+.left-panel h1{
+font-size:32px;
+}
+
+.left-panel p{
+font-size:15px;
+}
+
+.features p{
+font-size:15px;
+}
+
+.right-panel{
+padding:20px;
+}
+
 }

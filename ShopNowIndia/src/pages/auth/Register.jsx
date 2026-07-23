@@ -1,111 +1,138 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Register.css";
+
+import RegisterForm from "../../components/Register/RegisterForm";
+import AddressForm from "../../components/Register/AddressForm";
+import RoleSelector from "../../components/Register/RoleSelector";
+import ShopkeeperFields from "../../components/Register/ShopkeeperFields";
+import DistributorFields from "../../components/Register/DistributorFields";
+
 import { registerUser } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "customer",
-  });
 
-  // 🔥 NEW STATE
-  const [showPassword, setShowPassword] = useState(false);
+   const navigate = useNavigate();
 
-  const navigate = useNavigate();
+   const [form,setForm]=useState({
+      name:"",
+      mobile:"",
+      email:"",
+      password:"",
+      confirmPassword:"",
+      role:"customer",
 
-  const handleRegister = async () => {
-    if (!form.name || !form.email || !form.password) {
-      alert("All fields required ❌");
-      return;
-    }
+      state:"",
+      district:"",
+      city:"",
+      pincode:"",
+      address:"",
 
-    try {
-      const res = await registerUser(form);
+      shopName:"",
+      gstNumber:"",
+      drugLicense:"",
 
-      if (!res.success) {
-        alert(res.message || "User already exists ❌");
-        return;
+      companyName:"",
+      warehouseAddress:""
+   });
+
+   const handleChange=(e)=>{
+      setForm({...form,[e.target.name]:e.target.value});
+   }
+
+   const handleRegister=async()=>{
+
+      if(form.password!==form.confirmPassword){
+          alert("Password not match");
+          return;
       }
 
-      if (form.role === "shopkeeper") {
-        alert(`Registered ✅\nYour Shop ID: ${res.shopId}`);
-      } else {
-        alert("Registered Successfully ✅");
+      const res=await registerUser(form);
+
+      if(res.success){
+          alert("Registered Successfully");
+          navigate("/");
+      }else{
+          alert(res.message);
       }
 
-      navigate("/");
+   }
 
-    } catch (error) {
-      console.error(error);
-      alert("Server error ❌");
-    }
-  };
+   return(
 
-  return (
-    <div className="register-container">
-      <h2>Register</h2>
+      <div className="register-page">
 
-      <input
-        placeholder="Name"
-        value={form.name}
-        onChange={(e) =>
-          setForm({ ...form, name: e.target.value })
-        }
-      />
+          <div className="left-panel">
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={form.email}
-        onChange={(e) =>
-          setForm({ ...form, email: e.target.value })
-        }
-      />
+    <h1>
+        Welcome to
+        <br />
+        <span>OmSanjeevni</span>
+    </h1>
 
-      {/* 🔥 PASSWORD WITH TOGGLE */}
-      <div style={{ position: "relative" }}>
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
-          }
-        />
+    <p>
+        India's Smart Medicine Supply Platform
+    </p>
 
-        <span
-          onClick={() => setShowPassword(!showPassword)}
-          style={{
-            position: "absolute",
-            right: "10px",
-            top: "10px",
-            cursor: "pointer",
-          }}
-        >
-          {showPassword ? "🙈" : "👁️"}
-        </span>
+    <img
+        src="/images/register.png"
+        alt="Register"
+    />
+
+    <div className="features">
+        <p>✔ Easy Registration</p>
+        <p>✔ Verified Medicines</p>
+        <p>✔ Fast Delivery</p>
+        <p>✔ Trusted Shopkeepers</p>
+        <p>✔ Direct Distributor Network</p>
+    </div>
+
+</div>
+
+          <div className="right-panel">
+
+              <RegisterForm
+                   form={form}
+                   handleChange={handleChange}
+              />
+
+              <RoleSelector
+                   form={form}
+                   setForm={setForm}
+              />
+
+              <AddressForm
+                    form={form}
+                    handleChange={handleChange}
+              />
+
+              {form.role==="shopkeeper" &&
+                   <ShopkeeperFields
+                       form={form}
+                       handleChange={handleChange}
+                   />
+              }
+
+              {form.role==="distributor" &&
+                   <DistributorFields
+                       form={form}
+                       handleChange={handleChange}
+                   />
+              }
+
+              <button
+                className="register-btn"
+                onClick={handleRegister}
+              >
+                   Register
+              </button>
+
+          </div>
+
       </div>
 
-      <select
-        value={form.role}
-        onChange={(e) =>
-          setForm({ ...form, role: e.target.value })
-        }
-      >
-        <option value="customer">Customer</option>
-        <option value="shopkeeper">Shopkeeper</option>
-        <option value="distributor">Distributor</option>
-        <option value="admin">Admin</option>
-      </select>
+   )
 
-      <button className="register-btn" onClick={handleRegister}>
-        Register
-      </button>
-    </div>
-  );
-};
+}
 
 export default Register;
