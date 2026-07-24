@@ -1,36 +1,24 @@
+import { useState } from "react";
+import { getMedicine } from "../../../services/api";
 import "./Medicines.css";
+import { useEffect } from "react";
 
-const medicines = [
-  {
-    id: 1,
-    name: "Paracetamol 650",
-    category: "Tablet",
-    company: "Sun Pharma",
-    price: "₹45",
-    stock: 120,
-    status: "Available",
-  },
-  {
-    id: 2,
-    name: "Dolo 650",
-    category: "Tablet",
-    company: "Micro Labs",
-    price: "₹35",
-    stock: 80,
-    status: "Available",
-  },
-  {
-    id: 3,
-    name: "Vitamin C",
-    category: "Capsule",
-    company: "Cipla",
-    price: "₹120",
-    stock: 15,
-    status: "Low Stock",
-  },
-];
 
 const Medicines = () => {
+      const [medicines, setMedicines] =useState([]);
+    
+      useEffect(() => {
+        const fetchMedicines = async ()=>{
+        try{
+          const response = await getMedicine();
+          setMedicines(response)
+          console.log(response)
+        }catch(err){
+          console.error("Error featching medicines", err)
+        }
+        }
+         fetchMedicines();
+    }, [])
   return (
     <div className="medicine-page">
 
@@ -72,9 +60,9 @@ const Medicines = () => {
 
               <tr key={medicine.id}>
 
-                <td>{medicine.id}</td>
+                <td>{medicine._id}</td>
                 <td>{medicine.name}</td>
-                <td>{medicine.category}</td>
+                <td>{medicine.packType}</td>
                 <td>{medicine.company}</td>
                 <td>{medicine.price}</td>
                 <td>{medicine.stock}</td>

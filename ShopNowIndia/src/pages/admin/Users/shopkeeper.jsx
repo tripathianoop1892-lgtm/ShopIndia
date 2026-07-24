@@ -1,33 +1,24 @@
+import { useState } from "react";
+import { getShopkeeper } from "../../../services/api";
 import "./shopkeeper.css";
-
-const shopkeepers = [
-  {
-    id: 1,
-    shopName: "Anoop Medical Store",
-    owner: "Anoop Tripathi",
-    mobile: "9876543210",
-    city: "Delhi",
-    status: "Active",
-  },
-  {
-    id: 2,
-    shopName: "Shiv Medical",
-    owner: "Rahul Sharma",
-    mobile: "9876543211",
-    city: "Lucknow",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    shopName: "Life Care Pharmacy",
-    owner: "Amit Singh",
-    mobile: "9876543212",
-    city: "Kanpur",
-    status: "Active",
-  },
-];
+import { useEffect } from "react";
 
 const Shopkeeper = () => {
+  
+    const [shopkeeper, setShopkeeper] =useState([]);
+  
+    useEffect(() => {
+      const fetchShopkeeper = async ()=>{
+      try{
+        const response = await getShopkeeper();
+        setShopkeeper(response)
+        console.log(response)
+      }catch(err){
+        console.error("Error featching shopkeepers", err)
+      }
+      }
+       fetchShopkeeper();
+  }, [])
   return (
     <div className="shopkeeper-page">
 
@@ -66,13 +57,13 @@ const Shopkeeper = () => {
 
           <tbody>
 
-            {shopkeepers.map((shop) => (
+            {shopkeeper.map((shop) => (
 
               <tr key={shop.id}>
 
-                <td>{shop.id}</td>
+                <td>{shop._id}</td>
                 <td>{shop.shopName}</td>
-                <td>{shop.owner}</td>
+                <td>{shop.name}</td>
                 <td>{shop.mobile}</td>
                 <td>{shop.city}</td>
 

@@ -1,33 +1,24 @@
+import { useState } from "react";
+import { getDistributors } from "../../../services/api";
 import "./Distributor.css";
-
-const distributors = [
-  {
-    id: 1,
-    name: "ABC Pharma",
-    owner: "Rahul Sharma",
-    mobile: "9876543210",
-    city: "Delhi",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Health Care Distributors",
-    owner: "Amit Kumar",
-    mobile: "9123456789",
-    city: "Lucknow",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    name: "MediPlus",
-    owner: "Vikas Singh",
-    mobile: "9988776655",
-    city: "Kanpur",
-    status: "Active",
-  },
-];
+import { useEffect } from "react";
 
 const Distributors = () => {
+  
+    const [distributor, setDistributor] =useState([]);
+  
+    useEffect(() => {
+      const fetchDistributor = async ()=>{
+      try{
+        const response = await getDistributors();
+        setDistributor(response)
+        console.log(response)
+      }catch(err){
+        console.error("Error featching distributors", err)
+      }
+      }
+       fetchDistributor();
+  }, [])
   return (
     <div className="distributor-page">
 
@@ -64,11 +55,11 @@ const Distributors = () => {
 
           <tbody>
 
-            {distributors.map((item) => (
+            {distributor.map((item) => (
 
               <tr key={item.id}>
 
-                <td>{item.id}</td>
+                <td>{item._id}</td>
                 <td>{item.name}</td>
                 <td>{item.owner}</td>
                 <td>{item.mobile}</td>

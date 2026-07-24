@@ -188,3 +188,24 @@ export const getCustomers = async () => {
   });
   return res.json(); 
 }
+
+export const getShopkeeper = async () => {
+  const res = await fetch(`${BASE_URL}/admin/shopkeepers`, {
+    headers: getHeaders()
+  });
+  return res.json(); 
+}
+
+export const getDistributors = async () => {
+  const res = await fetch(`${BASE_URL}/admin/distributors`, {
+    headers: getHeaders()
+  });
+  return res.json(); 
+}
+
+export const getMedicine = async () => {
+  const res = await fetch(`${BASE_URL}/admin/medicines`, {
+    headers: getHeaders()
+  });
+  return res.json(); 
+}
