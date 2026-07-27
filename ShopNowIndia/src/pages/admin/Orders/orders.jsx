@@ -1,33 +1,25 @@
+import { useEffect } from "react";
+import { getAdminOrders,  } from "../../../services/api.js";
 import "./Orders.css";
+import { useState } from "react";
 
-const orders = [
-  {
-    id: "#1001",
-    customer: "Anoop Tripathi",
-    shopkeeper: "Anoop Medical Store",
-    amount: "₹1,250",
-    status: "Delivered",
-    date: "01-07-2026",
-  },
-  {
-    id: "#1002",
-    customer: "Rahul Sharma",
-    shopkeeper: "Shiv Medical",
-    amount: "₹860",
-    status: "Pending",
-    date: "01-07-2026",
-  },
-  {
-    id: "#1003",
-    customer: "Priya Singh",
-    shopkeeper: "Life Care Pharmacy",
-    amount: "₹2,450",
-    status: "Cancelled",
-    date: "30-06-2026",
-  },
-];
+
 
 const Orders = () => {
+        const [orders, setOrders] =useState([]);
+      
+        useEffect(() => {
+          const fetchOrders = async ()=>{
+          try{
+            const response = await getAdminOrders();
+            setOrders(response)
+            console.log(response)
+          }catch(err){
+            console.error("Error featching orders", err)
+          }
+          }
+           fetchOrders();
+      }, [])
   return (
     <div className="orders-page">
 
@@ -79,10 +71,10 @@ const Orders = () => {
 
               <tr key={order.id}>
 
-                <td>{order.id}</td>
-                <td>{order.customer}</td>
-                <td>{order.shopkeeper}</td>
-                <td>{order.amount}</td>
+                <td>{order._id}</td>
+                <td>{order.customerName}</td>
+                <td>{order.shopkeeperName}</td>
+                <td>{order.totalAmount}</td>
 
                 <td>
 

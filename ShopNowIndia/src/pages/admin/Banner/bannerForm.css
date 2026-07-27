@@ -1,0 +1,90 @@
+.banner-form-page{
+    padding:30px;
+}
+
+.banner-form-card{
+    width:700px;
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.banner-form-card h2{
+    margin-bottom:25px;
+    color:#1f2937;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#333;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+    font-size:15px;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#2563eb;
+}
+
+.image-preview{
+    margin-bottom:20px;
+}
+
+.image-preview img{
+    width:250px;
+    height:140px;
+    object-fit:cover;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+.btn-group{
+    display:flex;
+    gap:15px;
+    margin-top:20px;
+}
+
+.save-btn{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+}
+
+.save-btn:hover{
+    background:#1d4ed8;
+}
+
+.cancel-btn{
+    background:#ef4444;
+    color:#fff;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+}
+
+.cancel-btn:hover{
+    background:#dc2626;
+}

@@ -51,12 +51,15 @@ import Orders from "../pages/admin/Orders/orders";
 import Payments from "../pages/admin/Payments/payments";
 import Report from "../pages/admin/Report/report";
 import Coupons from "../pages/admin/Coupons/coupons";
+
 import Banner from "../pages/admin/Banner/banner";
 import Notification from "../pages/admin/Notifications/notifications";
 import Reviews from "../pages/admin/Reviews/reviews";
 import Support from "../pages/admin/Support/support";
 import Setting from "../pages/admin/Setting/settings";
 import Logout from "../pages/admin/Logout/logout";
+import CouponsForm from "../pages/admin/Coupons/couponsForm";
+import BannerForm from "../pages/admin/Banner/bannerForm";
 
 const router = createBrowserRouter([
   // ==========================================
@@ -76,27 +79,32 @@ const router = createBrowserRouter([
   // 🏪 SHOPKEEPER NESTED WORKSPACE PANEL 
   // ==========================================
   {
-    path: "/admin",
-    element: <Layout/>,
-    children: [
-      { index: true, element: <Dashboard/> }, // Maps directly to: /shopkeeper
-      { path: "users", element: <Customer/> },
-      { path: "shopkeepers", element: <Shopkeeper/> },
-      { path: "distributors", element: <Distributors/> },
-      { path: "medicines", element: <Medicines/>},
-      { path: "categories", element: <Categories/>},
-      { path: "orders", element: <Orders/> },
-      { path: "payments", element: <Payments/> },
-      { path: "reports", element: <Report/> },
-      { path: "coupons", element: <Coupons/> },
-      { path: "banner", element: <Banner/>},
-      { path: "notifications", element: <Notification/>},
-      { path: "reviews", element: <Reviews/>},
-      { path: "support", element: <Support/>},
-      { path: "settings", element: <Setting/>},
-      { path: "profile", element: <Profile/> },
-    ]
-  },
+  path: "/admin",
+  element: <Layout />,
+  children: [
+    { index: true, element: <Dashboard /> },
+    { path: "users", element: <Customer /> },
+    { path: "shopkeepers", element: <Shopkeeper /> },
+    { path: "distributors", element: <Distributors /> },
+    { path: "medicines", element: <Medicines /> },
+    { path: "categories", element: <Categories /> },
+    { path: "orders", element: <Orders /> },
+    { path: "payments", element: <Payments /> },
+    { path: "reports", element: <Report /> },
+
+    { path: "coupons", element: <Coupons /> },
+    { path: "coupons/add", element: <CouponsForm /> },
+
+    { path: "banner", element: <Banner /> },
+    { path: "banner/add", element: <BannerForm /> },
+
+    { path: "notifications", element: <Notification /> },
+    { path: "reviews", element: <Reviews /> },
+    { path: "support", element: <Support /> },
+    { path: "settings", element: <Setting /> },
+    { path: "profile", element: <Profile /> }
+  ]
+},
 
   // ==========================================
   // 🏪 SHOPKEEPER NESTED WORKSPACE PANEL 

@@ -209,3 +209,10 @@ export const getMedicine = async () => {
   });
   return res.json(); 
 }
+
+export const getAdminOrders = async () => {
+  const res = await fetch(`${BASE_URL}/admin/orders`, {
+    headers: getHeaders()
+  });
+  return res.json(); 
+}

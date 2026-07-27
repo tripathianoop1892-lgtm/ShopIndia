@@ -1,4 +1,5 @@
 import Medicine from "../models/medicine.js";
+import Order from "../models/Order.js";
 import user from "../models/user.js";
 
 export const getCustomers = async(req, res) =>{
@@ -36,4 +37,12 @@ export const getDistributors = async(req, res) =>{
         }
     }
 
+      export const getOrders = async(req, res) =>{
+        try{
+            const orders = await Order.find({});
+            return res.json(orders);
+        } catch(err){
+            return res.status(500).json({message: "error featching orders"})
+        }
+    }
     

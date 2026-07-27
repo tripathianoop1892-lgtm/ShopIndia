@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import "./Banner.css";
+
 
 const banners = [
   {
@@ -22,13 +24,17 @@ const banners = [
 ];
 
 const Banner = () => {
+  const nav = useNavigate();
+  const handleForm =() => {
+    nav("/admin/banner/add")
+  }
   return (
     <div className="banner-page">
 
       <div className="banner-header">
         <h2>Banner Management</h2>
 
-        <button className="add-btn">
+        <button className="add-btn" onClick={handleForm}>
           + Add Banner
         </button>
       </div>
