@@ -55,6 +55,9 @@ app.use("/api/earnings", earningsRoutes);
 // Admin//
 app.use("/api/admin", adminRoutes)
 
+app.use("/api/admin/coupons,adminRoutes")
+app.use("/api/admin/banner,adminRoutes")
+
 // =======================
 // SERVER
 // =======================
@@ -63,3 +66,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} 🚀`);
 });
+

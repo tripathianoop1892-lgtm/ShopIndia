@@ -142,8 +142,52 @@ const AddMedicineShopkeeper = () => {
               <option value="Capsule">Capsule</option>
               <option value="Syrup">Syrup</option>
               <option value="Injection">Injection</option>
-              <option value="Cream">Cream</option>
               <option value="Drops">Drops</option>
+              <option value="Ointment">Ointment</option>
+              <option value="Cream">Cream</option>
+              <option value="Gel">Gel</option>
+              <option value="Lotion">Lotion</option>
+              <option value="Powder">Powder</option>
+              <option value="Spray">Spray</option>
+              <option value="Inhaler">Inhaler</option>
+              <option value="Suspension">Suspension</option>
+              <option value="Solution">Solution</option>
+              <option value="Soap">Medicated Soap</option>
+              <option value="Shampoo">Medicated Shampoo</option>
+              <option value="Patch">Transdermal Patch</option>
+              <option value="Suppository">Suppository</option>
+              <option value="Eye Drops">Eye Drops</option>
+              <option value="Ear Drops">Ear Drops</option>
+              <option value="Nasal Drops">Nasal Drops</option>
+              <option value="Softgel">Softgel Capsule</option>
+              <option value="Chewable Tablet">Chewable Tablet</option>
+              <option value="Dispersible Tablet">Dispersible Tablet</option>
+              <option value="Effervescent Tablet">Effervescent Tablet</option>
+              <option value="Mouth Dissolving Tablet">Mouth Dissolving Tablet (MD)</option>
+              <option value="Lozenge">Lozenge</option>
+              <option value="Mouthwash">Mouthwash</option>
+              <option value="Oral Gel">Oral Gel</option>
+              <option value="Oral Paste">Oral Paste</option>
+              <option value="Nebulizer Solution">Nebulizer Solution</option>
+              <option value="Respules">Respules</option>
+              <option value="Infusion">Infusion</option>
+              <option value="IV Fluid">IV Fluid</option>
+              <option value="Vaccine">Vaccine</option>
+              <option value="Ampoule">Ampoule</option>
+              <option value="Vial">Vial</option>
+              <option value="Sachet">Sachet</option>
+              <option value="Granules">Granules</option>
+              <option value="Oral Powder">Oral Powder</option>
+              <option value="Dental Gel">Dental Gel</option>
+              <option value="Dental Cream">Dental Cream</option>
+              <option value="Liniment">Liniment</option>
+              <option value="Foam">Foam</option>
+              <option value="Medicated Wipes">Medicated Wipes</option>
+              <option value="Enema">Enema</option>
+              <option value="Pessary">Pessary</option>
+              <option value="Implant">Implant</option>
+              <option value="Kit">Kit</option>
+              <option value="Medical Device">Medical Device</option>
             </select>
           </div>
 
@@ -165,12 +209,78 @@ const AddMedicineShopkeeper = () => {
           <div className="form-group">
             <label>Pack Type</label>
             <select name="packType" value={form.packType} onChange={handleChange}>
-              <option value="">Select Pack Type</option>
-              <option value="Strip">Strip</option>
-              <option value="Bottle">Bottle</option>
-              <option value="Box">Box</option>
+                <option value="Strip">Strip</option>
+                <option value="Bottle">Bottle</option>
+                <option value="Box">Box</option>
+                <option value="Tube">Tube</option>
+                <option value="Jar">Jar</option>
+                <option value="Vial">Vial</option>
+                <option value="Ampoule">Ampoule</option>
+                <option value="Sachet">Sachet</option>
+                <option value="Pouch">Pouch</option>
+                <option value="Blister Pack">Blister Pack</option>
+                <option value="Carton">Carton</option>
+                <option value="Can">Can</option>
+                <option value="Tin">Tin</option>
+                <option value="Bag">Bag</option>
+                <option value="Bottle with Dropper">Bottle with Dropper</option>
+                <option value="Pump Bottle">Pump Bottle</option>
+                <option value="Roll-On">Roll-On</option>
+                <option value="Spray Bottle">Spray Bottle</option>
+                <option value="Kit">Kit</option>
+                <option value="Single Unit">Single Unit</option>
+                </select>
+                   </div>
+                {form.packType === "Bottle" && (
+                <div className="form-group">
+               <label>Bottle Size</label>
+               <select
+               name="bottleSize"
+               value={form.bottleSize}
+               onChange={handleChange}
+              >
+            <option value="">Select Bottle Size</option>
+            <option value="30 ml">30 ml</option>
+            <option value="60 ml">60 ml</option>
+            <option value="100 ml">100 ml</option>
+            <option value="200 ml">200 ml</option>
+           </select>
+                 </div>
+                         )}
+
+            {form.packType === "Tube" && (
+            <div className="form-group">
+            <label>Tube Size</label>
+            <select
+            name="tubeSize"
+            value={form.tubeSize}
+            onChange={handleChange}
+                 >
+           <option value="">Select Tube Size</option>
+           <option value="10 g">10 g</option>
+           <option value="15 g">15 g</option>
+           <option value="30 g">30 g</option>
+           <option value="50 g">50 g</option>
             </select>
+                 </div>
+                    )}
+
+           {(form.packType === "Vial" || form.packType === "Ampoule") && (
+           <div className="form-group">
+           <label>Volume</label>
+          <select
+          name="volume"
+          value={form.volume}
+          onChange={handleChange}
+          >
+          <option value="">Select Volume</option>
+          <option value="1 ml">1 ml</option>
+          <option value="2 ml">2 ml</option>
+          <option value="5 ml">5 ml</option>
+          <option value="10 ml">10 ml</option>
+          </select>
           </div>
+            )}
 
           <div className="form-group">
             <label>MRP ₹</label>

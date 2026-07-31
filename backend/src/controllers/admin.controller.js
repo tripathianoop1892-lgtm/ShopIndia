@@ -45,4 +45,36 @@ export const getDistributors = async(req, res) =>{
             return res.status(500).json({message: "error featching orders"})
         }
     }
-    
+        export const getCategorySummary = async(req, res) =>{
+        try{
+            const categorySummary = await Medicine.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            $cond: [
+                                { $eq: ["$type", ""] },
+                                "Uncategorized",
+                                { $ifNull: ["$type", "Uncategorized"] }
+                            ]
+                        },
+                        totalMedicine: { $sum: 1 }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        category: "$_id",
+                        totalMedicine: 1
+                    }
+                },
+                {
+                    $sort: { category: 1 }
+                }
+            ]);
+
+            return res.json(categorySummary);
+        } catch(err){
+            console.error(err);
+            return res.status(500).json({message: "error featching category summary"})
+        }
+    }

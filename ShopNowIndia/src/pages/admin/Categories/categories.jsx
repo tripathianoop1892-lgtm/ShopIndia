@@ -1,53 +1,73 @@
+import { useEffect } from "react";
 import "./Categories.css";
+import { getCategorySummary } from "../../../../../backend/src/controllers/admin.controller";
+import { useState } from "react";
+import { use } from "react";
+import { useMemo } from "react";
 
-const categories = [
-  {
-    id: 1,
-    category: "Tablet",
-    totalMedicine: 245,
-    status: "Active",
-  },
-  {
-    id: 2,
-    category: "Capsule",
-    totalMedicine: 180,
-    status: "Active",
-  },
-  {
-    id: 3,
-    category: "Injection",
-    totalMedicine: 95,
-    status: "Inactive",
-  },
-  {
-    id: 4,
-    category: "Syrup",
-    totalMedicine: 150,
-    status: "Active",
-  },
-];
+
 
 const Categories = () => {
+  const [categories,setCategories]= useState([]);
+  const [searchTerm,searchTerm]= useState("");
+  const [loading,setLoading]= useState(true);
+  const [categories,setCategories]= useState("");
+
+  useEffect(() =>{
+    const fetchCategories = async ()=>{
+      try{
+        setLoading(true);
+        const response = await getCategorySummary();
+        setCategories(Array.isArray(response)? response : []);
+
+      }catch(error){
+        setError("Unabale to lond categerory Summery");
+      }finally{
+        setLoading(false);
+      }
+    }
+    featchCategories();
+  },[]);
+
+  const filteredCategories=useMemo(()=>{
+    const term = searchTerm.trim().toLowerCase();
+    if(!term) return categories;
+    return categories.filter((item) =>{
+      const categerory=(item.categerory || ""). toLowerCase ();
+      return categerory.includes(term);
+    });
+  },[categories, searchTerm]);
+
+
+  
   return (
     <div className="categories-page">
 
       <div className="categories-header">
         <h2>Medicine Categories</h2>
 
-        <button className="add-btn">
-          + Add Category
-        </button>
+       
+        
+        
       </div>
 
       <div className="search-box">
         <input
           type="text"
           placeholder="Search Category..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
         />
       </div>
+      {error && <p className="error-">{"error"} </p>}
 
       <div className="categories-table">
-
+       {loading?(
+        <p className="empaty-state">Loading Categories... </p>
+       ) : filteredCategories.length === 0 ?(
+         <p className="empaty-state">No Categories found. </p>
+       ):(
+       
         <table>
 
           <thead>
@@ -55,48 +75,23 @@ const Categories = () => {
               <th>ID</th>
               <th>Category Name</th>
               <th>Total Medicines</th>
-              <th>Status</th>
-              <th>Action</th>
+              
             </tr>
           </thead>
 
           <tbody>
 
-            {categories.map((item) => (
+            { filteredCategories.map((item, index) => (
 
-              <tr key={item.id}>
+              <tr key={`${item.category}-${index}`}>
 
-                <td>{item.id}</td>
+                <td>{index+1}</td>
 
-                <td>{item.category}</td>
+                <td>{item.category || "uncategorized"}</td>
 
-                <td>{item.totalMedicine}</td>
+                <td>{item.totalMedicine || 0}</td>
 
-                <td>
-
-                  <span
-                    className={
-                      item.status === "Active"
-                        ? "active"
-                        : "inactive"
-                    }
-                  >
-                    {item.status}
-                  </span>
-
-                </td>
-
-                <td>
-
-                  <button className="edit-btn">
-                    Edit
-                  </button>
-
-                  <button className="delete-btn">
-                    Delete
-                  </button>
-
-                </td>
+             
 
               </tr>
 
@@ -105,11 +100,13 @@ const Categories = () => {
           </tbody>
 
         </table>
+       )}
 
       </div>
 
     </div>
   );
 };
+
 
 export default Categories;

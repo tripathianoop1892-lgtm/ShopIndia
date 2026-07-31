@@ -16,5 +16,6 @@ router.get("/shopkeepers",checkAuth, checkRole("admin"), getShopkeeper);
 router.get("/distributors",checkAuth, checkRole("admin"), getDistributors);
 router.get("/medicines", checkAuth, checkRole("admin"), getMedicine);
 router.get("/orders", checkAuth, checkRole("admin"), getOrders);
+router.get("/categories", checkAuth, checkRole("admin"), getCategorySummary);
 
 export default router

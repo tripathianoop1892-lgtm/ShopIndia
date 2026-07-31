@@ -1,11 +1,11 @@
 import Order from "../models/Order.js";
 import Medicine from "../models/medicine.js";
 import User from "../models/user.js";
-
+import coupons from "../models/coupons.js";
 export const createOrder = async (req, res) => {
   try {
     const user = req.user; 
-    const { items, sellerId, totalAmount } = req.body;
+    const { items, sellerId, totalAmount, couponCode,} = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ success: false, message: "Your cart is empty ❌" });
@@ -27,6 +27,36 @@ export const createOrder = async (req, res) => {
       });
     }
 
+    const subtotal=Number(totalAmount ||0);
+    let discountAmount = 0;
+    let finalAmount = subtotal;
+    let appliedCoutonCode ="";
+    if(couponCode && couponCode.trim()){
+      const normalizeCode = couponCode.trim().toUpperCase();
+      const coupon =await coupons.findOne({code: normalizeCode});
+
+      if (!coupon){
+        return res.status(404),json({success: false, message: "Coupon Not Found "});
+
+      }
+      if (coupon.status !=="active") {
+        return res.status(400),json({success: false, message: "Coupon is inactive "});
+    }
+      if (coupon.expiryDate && new Date(coupon.expiryDate)< new Date()){
+         return res.status(400),json({success: false, message: "Coupon has expired "});
+      }
+      if (subtotal<Number(coupon.miniorder||0)){
+          return res.status(400),json({success: false, message: `Minimum order amount is \u20b9$ {number(coupons.minOreder || 0)}`});
+      }
+      if (coupon.discountType==="Percentage"){
+        discountAmount=(subtotal*Number(coupon.discountValue)) /100;
+      }else{
+        discountAmount = Number(coupon,discountValue);
+      }
+      discountAmount = Math.min(discountAmount,subtotal);
+      finalAmount = Math.max(subtotal-discountAmount,0);
+      appliedCoutonCode = coupon.code;
+    }
     const orderType = user.role === "shopkeeper" ? "B2B" : "B2C";
     
     const orderData = {
@@ -39,7 +69,10 @@ export const createOrder = async (req, res) => {
         quantity: Number(i.quantity),
         price: Number(i.price)
       })),
-      totalAmount: Number(totalAmount),
+      totalAmount: Number(finalAmount.toFixed(2)),
+      couponCode: appliedCouponCode,
+      discountAmount:Number(discountAmount.toFixed(2)),
+      finalAmount: Number(finalAmount,toFixed(2)),
       status: "Pending"
     };
 
@@ -56,7 +89,12 @@ export const createOrder = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Order placed successfully ✅",
-      data: order
+      data: order,
+      discountApplied:{
+        couponCode: appliedCoutonCode,
+        discountAmount: Number(discountAmount.toFixed(2)),
+        finalAmount: Number(finalAmount.toFixed(2)),
+      }
     });
   } catch (err) {
     console.error("ORDER CREATION ERROR:", err);
