@@ -14,6 +14,10 @@ import orderRoutes from "./src/routes/order.routes.js";
 import earningsRoutes from "./src/routes/earnings.routes.js";
 import adminRoutes from "./src/routes/admin.routes.js";
 
+import bannerRoutes from "./src/routes/banner.routes.js";
+import couponRoutes from "./src/routes/coupon.routes.js";
+
+import prescriptionRoutes from "./src/routes/prescription.routes.js";
 
 // CONFIG
 import connectDB from "./src/config/db.js";
@@ -53,10 +57,12 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/earnings", earningsRoutes);
 
 // Admin//
-app.use("/api/admin", adminRoutes)
+app.use("/api/admin", adminRoutes);
+app.use("/api/admin/coupons", couponRoutes);
+app.use("/api/admin/banner", bannerRoutes);
 
-app.use("/api/admin/coupons,adminRoutes")
-app.use("/api/admin/banner,adminRoutes")
+// 📄 PRESCRIPTIONS
+app.use("/api/prescriptions", prescriptionRoutes);
 
 // =======================
 // SERVER

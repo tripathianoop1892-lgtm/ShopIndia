@@ -1,9 +1,9 @@
-const Banner = require("../models/banner.model");
+import Banner from "../models/banner.js";
 
 // ==========================
 // Add Banner
 // ==========================
-const addBanner = async (req, res) => {
+export const addBanner = async (req, res) => {
   try {
     const { title, subtitle, image, link, status } = req.body;
 
@@ -31,7 +31,7 @@ const addBanner = async (req, res) => {
 // ==========================
 // Get All Banners
 // ==========================
-const getAllBanners = async (req, res) => {
+export const getAllBanners = async (req, res) => {
   try {
     const banners = await Banner.find().sort({ createdAt: -1 });
 
@@ -49,9 +49,9 @@ const getAllBanners = async (req, res) => {
 };
 
 // ==========================
-// Get Banner By Id
+// Get Banner By ID
 // ==========================
-const getBannerById = async (req, res) => {
+export const getBannerById = async (req, res) => {
   try {
     const banner = await Banner.findById(req.params.id);
 
@@ -77,7 +77,7 @@ const getBannerById = async (req, res) => {
 // ==========================
 // Update Banner
 // ==========================
-const updateBanner = async (req, res) => {
+export const updateBanner = async (req, res) => {
   try {
     const banner = await Banner.findByIdAndUpdate(
       req.params.id,
@@ -111,7 +111,7 @@ const updateBanner = async (req, res) => {
 // ==========================
 // Delete Banner
 // ==========================
-const deleteBanner = async (req, res) => {
+export const deleteBanner = async (req, res) => {
   try {
     const banner = await Banner.findByIdAndDelete(req.params.id);
 
@@ -135,11 +135,13 @@ const deleteBanner = async (req, res) => {
 };
 
 // ==========================
-// Active Banners (Customer App)
+// Get Active Banners
 // ==========================
-const getActiveBanners = async (req, res) => {
+export const getActiveBanners = async (req, res) => {
   try {
-    const banners = await Banner.find({ status: "Active" });
+    const banners = await Banner.find({ status: "Active" }).sort({
+      displayOrder: 1,
+    });
 
     res.status(200).json({
       success: true,
@@ -151,13 +153,4 @@ const getActiveBanners = async (req, res) => {
       message: error.message,
     });
   }
-};
-
-module.exports = {
-  addBanner,
-  getAllBanners,
-  getBannerById,
-  updateBanner,
-  deleteBanner,
-  getActiveBanners,
 };

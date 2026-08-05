@@ -102,7 +102,11 @@ const CustomerOrders = () => {
                         {o.status}
                       </span>
                     </td>
-                    {o.status === "delivered" ? {} : {}}
+                    {o.status === "delivered" ? (
+                      <></>
+                                ) : (
+                                 <></>
+                               )}
                     <td className="text-right table-bold-amount credit-color" style={{ padding: "16px 20px", textAlign: "right", fontWeight: 700, fontSize: "15px", color: "#16a34a" }}>
                       {/* CRITICAL DATA STRUCTURAL PARAMETER ALIGNMENT FIX */}
                       ₹{Number(o.totalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}

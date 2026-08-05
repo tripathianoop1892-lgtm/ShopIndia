@@ -1,0 +1,130 @@
+.prescription-container{
+    padding:30px;
+    display:flex;
+    justify-content:center;
+}
+
+.prescription-card{
+    width:850px;
+    max-width: 95%;
+    background:#fff;
+    border-radius:20px;
+    padding:40px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.prescription-card h2{
+    color:#0b5ed7;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#666;
+    margin-bottom:25px;
+}
+
+.upload-box{
+    border:2px dashed #0b5ed7;
+    border-radius:10px;
+    padding:45px;
+    text-align:center;
+    cursor:pointer;
+    background:#f8fbff;
+    transition:.3s;
+}
+
+.upload-box:hover{
+    background:#eef6ff;
+}
+
+.preview{
+    margin-top:25px;
+    text-align:center;
+}
+
+.preview img{
+    width:350px;
+    max-width: 100px;
+    border-radius:12px;
+    border:2px solid #ddd;
+    margin-top: 20px;
+}
+
+.button-group{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+}
+
+.upload-btn{
+    background:#0b5ed7;
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.upload-btn:hover{
+    background:#0849a6;
+}
+
+.remove-btn{
+    background:#dc3545;
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.remove-btn:hover{
+    background:#b02a37;
+}
+
+.note{
+    margin-top:30px;
+    background:#fff8e5;
+    border-left:5px solid orange;
+    padding:15px;
+    border-radius:8px;
+}
+
+.note h4{
+    margin-bottom:8px;
+}
+
+.note p{
+    color:#555;
+}
+
+.upload-options{
+display:flex;
+gap:20px;
+justify-content:center;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.upload-btn-box{
+width: 160px;
+height: 55px;
+display: flex;
+background:#0b5ed7;
+color:white;
+padding:12px 22px;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.upload-btn-box:hover{
+background:#0849a6;
+}
+
+.filename{
+margin-top:15px;
+text-align:center;
+font-weight:600;
+color:#444;
+}

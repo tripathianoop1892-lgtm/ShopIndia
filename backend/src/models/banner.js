@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const bannerSchema = new mongoose.Schema(
   {
@@ -21,8 +21,8 @@ const bannerSchema = new mongoose.Schema(
 
     link: {
       type: String,
-      default: "",
       trim: true,
+      default: "",
     },
 
     displayOrder: {
@@ -51,4 +51,4 @@ const bannerSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Banner", bannerSchema);
+export default mongoose.model("Banner", bannerSchema);

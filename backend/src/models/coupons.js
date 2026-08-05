@@ -1,4 +1,5 @@
-import mongoose, { disconnect } from "mongoose";
+//import mongoose, { disconnect } from "mongoose";//
+import mongoose from "mongoose";
 
 const couponSchema = new mongoose.Schema(
     {
@@ -9,7 +10,7 @@ const couponSchema = new mongoose.Schema(
             unique: true,
         },
         discountType:{
-            type: true,
+            type: String,
             enum:["Percentage", "Fixed"],
             default: "Percentage",
 
@@ -21,12 +22,28 @@ const couponSchema = new mongoose.Schema(
         },
         mainOrder:{
             type:Number,
-            difault: true,
-            main:0
+            difault: 0,
+            min:0,
 
 
         },
-        expiry:{
+        maxWsagesPerUser:{
+            type:Number,
+            default: 1,
+            min: 1,
+
+        },
+        maxTotalUsage:{
+            type:Number,
+            default: null,
+
+        },
+        usedCount:{
+            type:Number,
+            default: 0,
+        },
+      
+        couponexpiryDate:{
             type:Date,
             required: true,
 

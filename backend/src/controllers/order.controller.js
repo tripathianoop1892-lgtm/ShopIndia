@@ -2,6 +2,7 @@ import Order from "../models/Order.js";
 import Medicine from "../models/medicine.js";
 import User from "../models/user.js";
 import coupons from "../models/coupons.js";
+import CouponUsage from "../models/couponUsage.js";
 export const createOrder = async (req, res) => {
   try {
     const user = req.user; 
@@ -48,6 +49,26 @@ export const createOrder = async (req, res) => {
       if (subtotal<Number(coupon.miniorder||0)){
           return res.status(400),json({success: false, message: `Minimum order amount is \u20b9$ {number(coupons.minOreder || 0)}`});
       }
+
+      const usage = await CouponUsage.countDocuments({
+        couponId: coupon._id,
+        userId: user._id,
+      });
+      if (usage >= coupon.maxUsagePerUser) {
+        return res.status(400).json({
+           success: false,
+           message: "You have already used this coupon.",
+        });
+      }
+      if (
+        coupon.maxTotalUsage  && coupon.usedCount >= coupon.maxTotalUsage
+
+      ){
+        return res.status(400).json({
+          success: false,
+          message: "Coupon Usage limit reached,"
+        });
+      }
       if (coupon.discountType==="Percentage"){
         discountAmount=(subtotal*Number(coupon.discountValue)) /100;
       }else{
@@ -85,6 +106,18 @@ export const createOrder = async (req, res) => {
     }
 
     const order = await Order.create(orderData);
+
+    if(coupon){
+      await CouponUsage.create({
+        couponId: coupon._id,
+        userId: user._id,
+        orderId: order._id,
+
+      });
+      coupon.usedCount+=1;
+      await coupon.save();
+      
+    }
 
     return res.status(201).json({
       success: true,

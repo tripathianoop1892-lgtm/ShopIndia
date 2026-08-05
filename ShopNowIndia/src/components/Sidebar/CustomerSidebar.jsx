@@ -26,22 +26,27 @@ const CustomerSidebar = ({ isOpen, onClose }) => {
       <div>
         <ul>
           <li>
-            <NavLink to="/customer" end>Dashboard</NavLink>
+            <NavLink to="/customer" end>🏠 Dashboard</NavLink>
           </li>
           <li>
-            <NavLink to="/customer/medicines">Medicines</NavLink>
+            <NavLink to="/customer/medicines">💊 Medicines</NavLink>
           </li>
+           <NavLink to="/customer/prescription">📷 Upload Prescription</NavLink>
           <li>
-            <NavLink to="/customer/cart">Cart</NavLink>
+            <NavLink to="/customer/cart">🛒 Cart</NavLink>
           </li>          
           <li>
-            <NavLink to="/customer/orders">Orders</NavLink>
-          </li>          
+            <NavLink to="/customer/orders">📦 Orders</NavLink>
+          </li>  
+           <li>
+            <NavLink to="/customer/notification">🔔 Notifications</NavLink>
+          </li>        
           <li>
-            <NavLink to="/customer/profile">Profile</NavLink>
+            <NavLink to="/customer/profile">👤 Profile</NavLink>
           </li>
           <li>
-            <NavLink to="/customer/settings">Settings</NavLink>
+            <NavLink to="/customer/settings">⚙️ Settings</NavLink>
+            
           </li>
         </ul>
       </div>

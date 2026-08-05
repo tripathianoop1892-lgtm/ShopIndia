@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import "./Categories.css";
-import { getCategorySummary } from "../../../../../backend/src/controllers/admin.controller";
+//import { getCategorySummary } from "../../../../../backend/src/controllers/admin.controller"; //
 import { useState } from "react";
-import { use } from "react";
+//import { use } from "react"; //
 import { useMemo } from "react";
 
 
 
 const Categories = () => {
   const [categories,setCategories]= useState([]);
-  const [searchTerm,searchTerm]= useState("");
+  const [searchTerm,setSearchTerm]= useState("");
   const [loading,setLoading]= useState(true);
-  const [categories,setCategories]= useState("");
+  const [error, setError] = useState("");
 
   useEffect(() =>{
     const fetchCategories = async ()=>{
@@ -21,20 +21,20 @@ const Categories = () => {
         setCategories(Array.isArray(response)? response : []);
 
       }catch(error){
-        setError("Unabale to lond categerory Summery");
+        setError("Unabale to load category Summery");
       }finally{
         setLoading(false);
       }
     }
-    featchCategories();
+    fetchCategories();
   },[]);
 
   const filteredCategories=useMemo(()=>{
     const term = searchTerm.trim().toLowerCase();
     if(!term) return categories;
     return categories.filter((item) =>{
-      const categerory=(item.categerory || ""). toLowerCase ();
-      return categerory.includes(term);
+      const category=(item.category || ""). toLowerCase ();
+      return category.includes(term);
     });
   },[categories, searchTerm]);
 

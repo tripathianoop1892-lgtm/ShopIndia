@@ -54,8 +54,8 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required:true,
     },
-    finalAmoumt:{
-      Type: Number,
+    finalAmount:{
+      type: Number,
       default:0,
     },
 

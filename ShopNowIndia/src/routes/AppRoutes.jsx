@@ -61,6 +61,12 @@ import Logout from "../pages/admin/Logout/logout";
 import CouponsForm from "../pages/admin/Coupons/couponsForm";
 import BannerForm from "../pages/admin/Banner/bannerForm";
 
+// customer prescription
+import CustomerPrescription from "../pages/prescription/CustomerPrescription";
+
+// Notification
+import CustomerNotification from "../pages/notification/CustomerNotification";
+
 const router = createBrowserRouter([
   // ==========================================
   // 🔐 OPEN / PUBLIC AUTHENTICATION ROUTES
@@ -152,6 +158,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <CustomerDashboard /> }, // Maps directly to: /customer
       { path: "medicines", element: <CustomerMedicineList /> }, // Maps directly to: /customer/medicines
+      { path: "prescription", element: <CustomerPrescription /> },
+      { path: "notification", element: <CustomerNotification /> },
       { path: "orders", element: <CustomerOrder /> }, // Maps directly to: /customer/orders
       { path: "cart", element: <Cart />},
       { path: "profile", element: <Profile /> }, // Maps directly to: /customer/profile

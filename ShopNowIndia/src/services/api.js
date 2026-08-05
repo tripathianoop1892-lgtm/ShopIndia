@@ -215,4 +215,110 @@ export const getAdminOrders = async () => {
     headers: getHeaders()
   });
   return res.json(); 
-}
+};
+
+// =======================
+// 📄 PRESCRIPTION APIs
+// =======================
+
+// 👉 Upload Prescription
+export const uploadPrescription = async (formData) => {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${BASE_URL}/prescriptions/upload`, {
+    method: "POST",
+    headers: token
+  ? {
+      Authorization: `Bearer ${token}`,
+    }
+  : {},
+    body: formData,
+  });
+
+  return res.json();
+};
+
+// 👉 Customer Prescription List
+export const getCustomerPrescriptions = async (customerId) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/customer/${customerId}`,
+    {
+      headers: getHeaders(),
+    }
+  );
+
+  return res.json();
+};
+
+// 👉 Shopkeeper Prescription List
+export const getShopkeeperPrescriptions = async (shopId) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/shopkeeper/${shopId}`,
+    {
+      headers: getHeaders(),
+    }
+  );
+
+  return res.json();
+};
+
+// 👉 Get Single Prescription
+export const getPrescriptionById = async (id) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/${id}`,
+    {
+      headers: getHeaders(),
+    }
+  );
+
+  return res.json();
+};
+
+// 👉 Update Prescription Status
+export const updatePrescriptionStatus = async (
+  id,
+  status,
+  remarks,
+  verifiedBy
+) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/${id}/status`,
+    {
+      method: "PATCH",
+      headers: getHeaders(),
+      body: JSON.stringify({
+        status,
+        remarks,
+        verifiedBy,
+      }),
+    }
+  );
+
+  return res.json();
+};
+
+// 👉 Delete Prescription
+export const deletePrescription = async (id) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/${id}`,
+    {
+      method: "DELETE",
+      headers: getHeaders(),
+    }
+  );
+
+  return res.json();
+};
+
+// 👉 Restore Prescription
+export const restorePrescription = async (id) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/${id}/restore`,
+    {
+      method: "PATCH",
+      headers: getHeaders(),
+    }
+  );
+
+  return res.json();
+};

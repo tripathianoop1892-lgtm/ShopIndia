@@ -1,26 +1,25 @@
-const express = require("express");
-const router = express.Router();
+//const express = require("express"); //
+//const router = express.Router();    //
+import express from "express";
 
-const {
+import {
   addBanner,
   getAllBanners,
   getBannerById,
   updateBanner,
   deleteBanner,
   getActiveBanners,
-} = require("../controllers/banner.controller");
+} from "../controllers/banner.controller.js";
 
-// ==========================
-// Banner Routes
-// ==========================
+const router = express.Router();
 
 // Add Banner
 router.post("/", addBanner);
 
-// Get All Banners (Admin)
+// Get All Banners
 router.get("/", getAllBanners);
 
-// Get Active Banners (Customer)
+// Get Active Banners
 router.get("/active", getActiveBanners);
 
 // Get Banner By ID
@@ -32,4 +31,6 @@ router.put("/:id", updateBanner);
 // Delete Banner
 router.delete("/:id", deleteBanner);
 
-module.exports = router;
+export default router;
+
+
