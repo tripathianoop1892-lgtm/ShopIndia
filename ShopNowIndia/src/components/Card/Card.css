@@ -352,6 +352,70 @@
   opacity: 0.7;
 }
 
+/* COUPON BLOCK */
+.coupon-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.coupon-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.coupon-input-row input {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.coupon-apply-btn {
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.coupon-apply-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.coupon-feedback {
+  font-size: 13px;
+  margin: 0;
+}
+
+.coupon-feedback.success {
+  color: var(--success-text);
+}
+
+.coupon-feedback.error {
+  color: var(--error-text);
+}
+
+.summary-stack {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.discount-box {
+  padding-left: 12px;
+  border-left: 1px solid var(--border-color);
+}
+
+.summary-value-amount.discount {
+  color: #dc2626;
+}
+
 /* ALERTS & REUSABLE ANIMATIONS */
 .notification-toast-banner {
   display: flex;

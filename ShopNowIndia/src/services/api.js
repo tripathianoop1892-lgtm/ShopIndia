@@ -129,6 +129,16 @@ export const getOrders = async (viewFilter = "") => {
   return res.json();
 };
 
+// 👉 Validate Coupon 
+export const ValidateCoupon = async (code, amount ) => {
+  const res = await fetch(`${BASE_URL}/admin/coupons/validate`, { 
+    method: "POST",
+    headers: getHeaders(), 
+    body: JSON.stringify({code, amount}),
+  });
+  return res.json();
+};
+
 // 👉 PLACE / CREATE ORDER
 export const placeOrder = async (orderPayload) => {
   const res = await fetch(`${BASE_URL}/orders`, {
@@ -331,4 +341,126 @@ export const searchShops = async (search) => {
   );
 
   return res.json();
+};
+
+export const getCoupons = async () => {
+  const res = await fetch(`${BASE_URL}/admin/coupons`, {
+    headers: getHeaders()
+  });
+  return res.json();
+};
+
+export const createCoupon = async (data) => {
+  const res = await fetch(`${BASE_URL}/admin/coupons`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
+
+export const updateCoupon = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/admin/coupons/${id}`, {
+    method: "PUT",
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
+
+export const deleteCoupon = async (id) => {
+  const res = await fetch(`${BASE_URL}/admin/coupons/${id}`, {
+    method: "DELETE",
+    headers: getHeaders(),
+  });
+  return res.json();
+};
+
+export const getCategorySummary = async () => {
+  const res = await fetch(`${BASE_URL}/admin/categories`, {
+    headers: getHeaders()
+  });
+  return res.json();
+}
+
+// =======================
+// 📊 REPORT APIs
+// =======================
+
+// Dashboard Summary
+export const getDashboardReport = async () => {
+  const res = await fetch(`${BASE_URL}/admin/reports/dashboard`, {
+    headers: getHeaders(),
+  });
+
+  return res.json();
+};
+
+// Sales Report
+export const getSalesReport = async () => {
+  const res = await fetch(`${BASE_URL}/admin/reports/sales`, {
+    headers: getHeaders(),
+  });
+
+  return res.json();
+};
+
+// CSV Export
+export const downloadSalesReport = async () => {
+  const res = await fetch(`${BASE_URL}/admin/reports/sales`, {
+    headers: getHeaders(),
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    throw new Error(data.message);
+  }
+
+  const rows = [
+    [
+      "Date",
+      "Orders",
+      "Revenue",
+      "Discount",
+      "Net Revenue",
+      "Status",
+    ],
+  ];
+
+  data.data.forEach((item) => {
+    rows.push([
+      item.date,
+      item.orders,
+      item.revenue,
+      item.discount,
+      item.netRevenue,
+      item.status,
+    ]);
+  });
+
+  const csv = rows
+    .map((row) => row.join(","))
+    .join("\n");
+
+  const blob = new Blob([csv], {
+    type: "text/csv;charset=utf-8;",
+  });
+
+  const url = window.URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `Sales_Report_${new Date()
+    .toISOString()
+    .split("T")[0]}.csv`;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  window.URL.revokeObjectURL(url);
 };

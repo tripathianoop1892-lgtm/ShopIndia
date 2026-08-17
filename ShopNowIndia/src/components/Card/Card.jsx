@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems, clearCartState } from "../../features/cartSlice";
-import { getCart, removeCartItem, placeOrder, addToCart } from "../../services/api";
+import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon } from "../../services/api";
 import { FaTrashAlt, FaStore, FaReceipt, FaShoppingBag, FaSpinner, FaCheckCircle, FaExclamationCircle, FaPlus, FaMinus } from "react-icons/fa";
 import "./Card.css";
 
@@ -13,6 +13,9 @@ const Cart = () => {
   const [actionLoading, setActionLoading] = useState(null); // Tracks specific group checkout loading states
   const [qtyUpdating, setQtyUpdating] = useState(null); // Tracks item-specific qty loaders
   const [notification, setNotification] = useState({ text: "", type: "" });
+  const [couponInputs, setCouponInputs] = useState({});
+  const [couponStatuses, setCouponStatuses] = useState({});
+  const [couponLoading, setCouponLoading] = useState(null);
 
   const fetchCart = async () => {
     try {
@@ -107,12 +110,59 @@ const Cart = () => {
     }
   };
 
+  const handleApplyCoupon = async (group) => {
+    const code = (couponInputs[group.sellerId] || "").trim();
+
+    if (!code) {
+      setCouponStatuses((prev) => ({
+        ...prev,
+        [group.sellerId]: { applied: false, message: "Enter a coupon code first" },
+      }));
+      return;
+    }
+
+    try {
+      setCouponLoading(group.sellerId);
+      const res = await validateCoupon(code, group.totalAmount);
+
+      if (res.success) {
+        setCouponStatuses((prev) => ({
+          ...prev,
+          [group.sellerId]: {
+            applied: true,
+            message: `Coupon applied successfully. Discount ₹${res.data.discountAmount}`,
+            code: res.data.code,
+            discountAmount: res.data.discountAmount,
+            finalAmount: res.data.finalAmount,
+          },
+        }));
+        showNotification(`Coupon ${res.data.code} applied successfully.`, "success");
+      } else {
+        setCouponStatuses((prev) => ({
+          ...prev,
+          [group.sellerId]: { applied: false, message: res.message || "Unable to apply coupon" },
+        }));
+        showNotification(res.message || "Unable to apply coupon", "error");
+      }
+    } catch (error) {
+      setCouponStatuses((prev) => ({
+        ...prev,
+        [group.sellerId]: { applied: false, message: "Unable to apply coupon" },
+      }));
+      showNotification("Unable to apply coupon", "error");
+    } finally {
+      setCouponLoading(null);
+    }
+  };
+
   const handleCheckoutGroup = async (group) => {
     try {
       setActionLoading(group.sellerId);
+      const couponState = couponStatuses[group.sellerId] || {};
       const orderPayload = {
         sellerId: group.sellerId,
         totalAmount: group.totalAmount,
+        couponCode: couponState.applied ? couponState.code : "",
         items: group.items.map((i) => ({
           medicineId: i.medicineId,
           name: i.name,
@@ -267,9 +317,49 @@ const Cart = () => {
             </div>
 
             <div className="vendor-card-footer-summary">
-              <div className="summary-accumulated-box">
-                <span className="summary-label">Aggregated Subtotal</span>
-                <span className="summary-value-amount">₹{group.totalAmount.toLocaleString('en-IN')}</span>
+              <div className="coupon-wrapper">
+                <div className="coupon-input-row">
+                  <input
+                    type="text"
+                    placeholder="Coupon code"
+                    value={couponInputs[group.sellerId] || ""}
+                    onChange={(event) =>
+                      setCouponInputs((prev) => ({
+                        ...prev,
+                        [group.sellerId]: event.target.value,
+                      }))
+                    }
+                  />
+                  <button
+                    className="coupon-apply-btn"
+                    onClick={() => handleApplyCoupon(group)}
+                    disabled={couponLoading === group.sellerId}
+                  >
+                    {couponLoading === group.sellerId ? "Applying..." : "Apply"}
+                  </button>
+                </div>
+
+                {couponStatuses[group.sellerId]?.message && (
+                  <p className={`coupon-feedback ${couponStatuses[group.sellerId].applied ? "success" : "error"}`}>
+                    {couponStatuses[group.sellerId].message}
+                  </p>
+                )}
+              </div>
+
+              <div className="summary-stack">
+                <div className="summary-accumulated-box">
+                  <span className="summary-label">Aggregated Subtotal</span>
+                  <span className="summary-value-amount">₹{group.totalAmount.toLocaleString('en-IN')}</span>
+                </div>
+
+                {couponStatuses[group.sellerId]?.applied && (
+                  <div className="summary-accumulated-box discount-box">
+                    <span className="summary-label">Discount</span>
+                    <span className="summary-value-amount discount">-₹{couponStatuses[group.sellerId].discountAmount.toLocaleString('en-IN')}</span>
+                    <span className="summary-label">Payable</span>
+                    <span className="summary-value-amount">₹{couponStatuses[group.sellerId].finalAmount.toLocaleString('en-IN')}</span>
+                  </div>
+                )}
               </div>
               
               <button 

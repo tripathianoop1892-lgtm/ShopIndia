@@ -22,7 +22,7 @@ const Customer = () => {
   useEffect(() => {
     fetchMarketplaceStock();
     fetchCurrentBasket();
-  }, []);
+  }, [dispatch]);
 
   const fetchMarketplaceStock = async () => {
     try {
@@ -92,9 +92,17 @@ const Customer = () => {
   
   const totalStagedUnits = currentCartItems.reduce((acc, curr) => acc + (Number(curr.quantity) || 0), 0);
   const totalBasketValue = currentCartItems.reduce((acc, curr) => acc + ((Number(curr.price) || 0) * (Number(curr.quantity) || 0)), 0);
-
+  const keyword = search.toLowerCase()
   const filteredMedicines = medicines.filter((m) =>
-    m.name?.toLowerCase().includes(search.toLowerCase())
+[
+  m.name,
+   m.company,
+   m.type,
+   m.strength,
+   m.packType,
+]
+.filter(Boolean)
+.some(value=> value.toLowerCase().includes(keyword))
   );
 
   return (

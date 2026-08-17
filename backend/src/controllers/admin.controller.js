@@ -79,3 +79,217 @@ export const getDistributors = async(req, res) =>{
         }
     }
 
+// ==============================
+// Dashboard Summary
+// ==============================
+export const getDashboardReport = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const monthStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      1
+    );
+
+    const [
+      totalOrders,
+      pendingOrders,
+      approvedOrders,
+      deliveredOrders,
+      rejectedOrders,
+
+      totalCustomers,
+      totalShopkeepers,
+      totalDistributors,
+
+      totalMedicines,
+
+      totalCoupons,
+
+      todayRevenue,
+      monthRevenue,
+      totalRevenue,
+
+      lowStock,
+      outOfStock,
+      expiredMedicines,
+      expiringSoon,
+    ] = await Promise.all([
+      Order.countDocuments(),
+
+      Order.countDocuments({ status: "Pending" }),
+      Order.countDocuments({ status: "Approved" }),
+      Order.countDocuments({ status: "Delivered" }),
+      Order.countDocuments({ status: "Rejected" }),
+
+      user.countDocuments({ role: "customer" }),
+      user.countDocuments({ role: "shopkeeper" }),
+      user.countDocuments({ role: "distributor" }),
+
+      Medicine.countDocuments(),
+
+      Coupon.countDocuments(),
+
+      Order.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: today },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            revenue: { $sum: "$finalAmount" },
+          },
+        },
+      ]),
+
+      Order.aggregate([
+        {
+          $match: {
+            createdAt: { $gte: monthStart },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            revenue: { $sum: "$finalAmount" },
+          },
+        },
+      ]),
+
+      Order.aggregate([
+        {
+          $group: {
+            _id: null,
+            revenue: { $sum: "$finalAmount" },
+          },
+        },
+      ]),
+
+      Medicine.countDocuments({
+        stock: { $gt: 0, $lte: 10 },
+      }),
+
+      Medicine.countDocuments({
+        stock: 0,
+      }),
+
+      Medicine.countDocuments({
+        expiry: { $lt: new Date() },
+      }),
+
+      Medicine.countDocuments({
+        expiry: {
+          $gte: new Date(),
+          $lte: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        },
+      }),
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        revenue: {
+          today: todayRevenue[0]?.revenue || 0,
+          month: monthRevenue[0]?.revenue || 0,
+          total: totalRevenue[0]?.revenue || 0,
+        },
+
+        orders: {
+          total: totalOrders,
+          pending: pendingOrders,
+          approved: approvedOrders,
+          delivered: deliveredOrders,
+          rejected: rejectedOrders,
+        },
+
+        users: {
+          customers: totalCustomers,
+          shopkeepers: totalShopkeepers,
+          distributors: totalDistributors,
+        },
+
+        medicines: {
+          total: totalMedicines,
+          lowStock,
+          outOfStock,
+          expired: expiredMedicines,
+          expiringSoon,
+        },
+
+        coupons: {
+          total: totalCoupons,
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load report.",
+    });
+  }
+};
+
+// ==============================
+// Daily Sales Report
+// ==============================
+export const getSalesReport = async (req, res) => {
+  try {
+    const sales = await Order.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%d-%m-%Y",
+              date: "$createdAt",
+            },
+          },
+
+          orders: {
+            $sum: 1,
+          },
+
+          revenue: {
+            $sum: "$finalAmount",
+          },
+
+          discount: {
+            $sum: "$discountAmount",
+          },
+        },
+      },
+
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+    ]);
+
+    const report = sales.map((item) => ({
+      date: item._id,
+      orders: item.orders,
+      revenue: item.revenue,
+      discount: item.discount,
+      netRevenue: item.revenue - item.discount,
+      status: "Completed",
+    }));
+
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to fetch sales report.",
+    });
+  }
+};
