@@ -6,7 +6,19 @@ import Cart from "../models/cart.models.js";
 export const addToCart = async (req, res) => {
   try {
     const userId = req.user._id; 
-    const { medicineId, name, company, price, image, quantity, sellerId, ownerId } = req.body;
+  const {
+  medicineId,
+  name,
+  company,
+  price,
+  image,
+  quantity,
+  sellerId,
+  ownerId,
+  sellingUnit,
+  individualSaleAllowed,
+  packSize,
+} = req.body;
 
     // Resolve seller ID dynamically regardless of whether frontend passes it as sellerId or ownerId
     const resolvedSellerId = sellerId || ownerId;
@@ -36,6 +48,9 @@ export const addToCart = async (req, res) => {
         price: Number(price) || 0,
         image: image || "",
         quantity: Number(quantity) || 1,
+        sellingUnit: sellingUnit || "Pack",
+        individualSaleAllowed: Boolean(individualSaleAllowed),
+        packSize: Number(packSize) || 1,
         sellerId: resolvedSellerId,
       });
     }

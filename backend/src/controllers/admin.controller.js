@@ -78,3 +78,4 @@ export const getDistributors = async(req, res) =>{
             return res.status(500).json({message: "error featching category summary"})
         }
     }
+

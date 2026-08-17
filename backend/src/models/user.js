@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    // 📱 Mobile Number
+    mobile: {
+  type: String,
+  trim: true,
+},
     password: {
       type: String,
       required: true,
@@ -28,6 +33,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null, // Populated via register for shopkeepers
     },
+    selectedShopId: {
+  type: String,
+  default: null,
+      },
+    // 🏪 Shop Name
+    shopName: {
+  type: String,
+  trim: true,
+  default: "",
+},
     // New parameters for Wholesaler B2B analytics
     rating: {
       type: Number,

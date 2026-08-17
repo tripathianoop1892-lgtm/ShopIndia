@@ -32,6 +32,21 @@ const cartSchema = new mongoose.Schema(
           type: Number,
           default: 1,
         },
+        // 💊 Medicine selling information
+sellingUnit: {
+  type: String,
+  default: "Pack",
+},
+
+individualSaleAllowed: {
+  type: Boolean,
+  default: false,
+},
+
+packSize: {
+  type: Number,
+  default: 1,
+},
         // 🚚 CRITICAL FIX: Track the item seller/distributor node to separate B2B routing
         sellerId: {
           type: String,

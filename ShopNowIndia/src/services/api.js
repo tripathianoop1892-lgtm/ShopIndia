@@ -322,3 +322,13 @@ export const restorePrescription = async (id) => {
 
   return res.json();
 };
+ // =======================
+// 🏪 SEARCH MEDICAL SHOPS
+// =======================
+export const searchShops = async (search) => {
+  const res = await fetch(
+    `${BASE_URL}/auth/shops?search=${encodeURIComponent(search)}`
+  );
+
+  return res.json();
+};

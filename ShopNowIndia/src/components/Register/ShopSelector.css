@@ -1,0 +1,314 @@
+/* ================================
+   SHOP SELECTOR
+================================ */
+
+.shop-selector-container {
+  width: 100%;
+  margin-top: 25px;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #e1e5e9;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+/* Heading */
+
+.shop-selector-container h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0;
+  margin-bottom: 6px;
+
+  font-size: 20px;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.shop-title-icon {
+  font-size: 20px;
+}
+
+/* Subtitle */
+
+.shop-selector-subtitle {
+  margin: 0 0 16px 0;
+
+  font-size: 14px;
+  color: #666666;
+}
+
+/* ================================
+   SEARCH BOX
+================================ */
+
+.shop-search-box {
+  position: relative;
+  width: 100%;
+}
+
+.shop-search-box input {
+  width: 100%;
+  height: 52px;
+
+  padding: 0 16px 0 45px;
+
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-size: 15px;
+  color: #222222;
+
+  outline: none;
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+.shop-search-box input:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.08);
+}
+
+.shop-search-box input::placeholder {
+  color: #999999;
+}
+
+.shop-search-icon {
+  position: absolute;
+
+  left: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #777777;
+  font-size: 16px;
+
+  pointer-events: none;
+}
+
+/* ================================
+   SEARCH STATUS
+================================ */
+
+.shop-search-status {
+  margin: 12px 0 0 0;
+
+  font-size: 14px;
+  color: #777777;
+}
+
+/* ================================
+   SEARCH RESULTS
+================================ */
+
+.shop-results {
+  width: 100%;
+  margin-top: 14px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ================================
+   SHOP CARD
+================================ */
+
+.shop-result-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  padding: 16px;
+
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+
+  background: #fafafa;
+
+  transition: 0.2s ease;
+}
+
+.shop-result-card:hover {
+  border-color: #2e7d32;
+  background: #f7fff7;
+}
+
+/* Shop information */
+
+.shop-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.shop-result-info h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 0 0 8px 0;
+
+  font-size: 16px;
+  font-weight: 700;
+  color: #222222;
+}
+
+.shop-result-info h4 svg {
+  color: #2e7d32;
+}
+
+/* Mobile */
+
+.shop-result-info p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 5px 0;
+
+  font-size: 13px;
+  color: #666666;
+}
+
+.shop-result-info p svg {
+  color: #2e7d32;
+  min-width: 13px;
+}
+
+/* Shop ID */
+
+.shop-id {
+  display: inline-block;
+
+  margin-top: 8px;
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  background: #e8f5e9;
+
+  color: #2e7d32;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ================================
+   SELECT BUTTON
+================================ */
+
+.select-shop-btn {
+  flex-shrink: 0;
+
+  padding: 10px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #2e7d32;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.select-shop-btn:hover {
+  background: #1b5e20;
+}
+
+.select-shop-btn:active {
+  transform: scale(0.97);
+}
+
+/* ================================
+   SELECTED SHOP
+================================ */
+
+.selected-shop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 15px;
+  padding: 15px 16px;
+
+  border: 1px solid #a5d6a7;
+  border-radius: 10px;
+
+  background: #f1f8f2;
+}
+
+.selected-shop strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 13px;
+  color: #2e7d32;
+}
+
+.selected-shop p {
+  margin: 0 0 4px 0;
+
+  font-size: 15px;
+  font-weight: 700;
+  color: #222222;
+}
+
+.selected-shop span:not(.selected-check) {
+  font-size: 12px;
+  color: #666666;
+}
+
+.selected-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  background: #2e7d32;
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ================================
+   MOBILE RESPONSIVE
+================================ */
+
+@media (max-width: 600px) {
+
+  .shop-selector-container {
+    padding: 18px;
+  }
+
+  .shop-selector-container h3 {
+    font-size: 18px;
+  }
+
+  .shop-result-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .select-shop-btn {
+    width: 100%;
+  }
+
+}

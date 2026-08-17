@@ -1,11 +1,16 @@
 .login-container {
-  width: 320px;
+  width: 420px;
   margin: 80px auto;
   padding: 30px;
   background: #f4f7fb;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(171, 226, 179, 0.1);
   text-align: center;
+  box-sizing: border-box;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
 }
 
 .login-container input {
@@ -14,11 +19,64 @@
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 6px;
+  box-sizing: border-box;
+  outline: none;
 }
+
+.login-container input:focus {
+  border-color: #00bcd4;
+}
+
+/* =========================
+   PASSWORD
+========================= */
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+/* Eye Button */
+.password-eye {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 28px;
+  height: 28px;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 15px;
+  line-height: 1;
+
+  z-index: 10;
+}
+
+/* =========================
+   LOGIN BUTTON
+========================= */
 
 .login-btn {
   width: 100%;
   padding: 12px;
+  margin-top: 5px;
   background: #00bcd4;
   color: white;
   border: none;
@@ -30,7 +88,12 @@
   background: #0097a7;
 }
 
+/* =========================
+   LINKS
+========================= */
+
 .login-container p {
   color: blue;
   cursor: pointer;
+  margin: 5px 0;
 }

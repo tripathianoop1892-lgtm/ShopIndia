@@ -26,7 +26,15 @@ const generateToken = (user, sessionShopId = null) => {
 // =======================
 export const registerUser = async (req, res) => {
   try {
-    const { email, password, role, name } = req.body;
+  const {
+  email,
+  password,
+  role,
+  name,
+  mobile,
+  shopName,
+    shopId,
+   } = req.body;
 
     const exist = await User.findOne({ email });
     if (exist) {
@@ -45,12 +53,15 @@ export const registerUser = async (req, res) => {
     }
 
     const user = await User.create({
-      email,
-      password: hashedPassword,
-      role,
-      name,
-      shopId: newShopId, // Customer stays cleanly as null in DB
-    });
+  email,
+  password: hashedPassword,
+  role,
+  name,
+  mobile: mobile || "",
+  shopName: role === "shopkeeper" ? shopName || "" : "",
+  shopId: newShopId,
+  selectedShopId: role === "customer" ? shopId || null : null,
+});
 
     return res.json({
       success: true,
@@ -71,7 +82,7 @@ export const registerUser = async (req, res) => {
 // =======================
 export const loginUser = async (req, res) => {
   try {
-    const { email, password, shopId } = req.body;
+    const { email, password,} = req.body;
 
     const user = await User.findOne({ email });
     // ❌ USER NOT FOUND
@@ -92,26 +103,13 @@ export const loginUser = async (req, res) => {
     }
 
     // 🔥 CUSTOMER DYNAMIC CHECK
-    if (user.role === "customer") {
-      if (!shopId) {
-        return res.json({
-          success: false,
-          message: "Shop ID required ❌",
-        });
-      }
-
-      // 🚀 THE FIX: Verify that the submitted Shop ID belongs to a real, valid shopkeeper in the system
-      const verifiedShopExists = await User.findOne({ shopId: shopId.trim(), role: "shopkeeper" });
-      if (!verifiedShopExists) {
-        return res.json({
-          success: false,
-          message: "Wrong Shop ID ❌ This Store Code does not exist.",
-        });
-      }
-    }
+   
 
     // 🔥 TOKEN (Passes the verified session identifier payload down to the signing method)
-    const token = generateToken(user, shopId ? shopId.trim() : null);
+     const token = generateToken(
+  user,
+  user.role === "customer" ? user.selectedShopId : null
+);
 
     return res.json({
       success: true,
@@ -122,7 +120,10 @@ export const loginUser = async (req, res) => {
         email: user.email,
         role: user.role,
         // Override returned object so frontend state hooks capture the active session storefront pathing
-        shopId: user.role === "customer" ? shopId.trim() : user.shopId,
+        shopId:
+  user.role === "customer"
+    ? user.selectedShopId
+    : user.shopId,
       },
     });
   } catch (err) {
@@ -169,6 +170,61 @@ export const forgotPassword = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error ❌",
+    });
+  }
+};
+ // =======================
+// 🔍 SEARCH MEDICAL SHOPS
+// =======================
+export const searchShops = async (req, res) => {
+  try {
+    const search = req.query.search?.trim();
+
+    // Search text nahi diya gaya
+    if (!search) {
+      return res.json({
+        success: true,
+        shops: [],
+      });
+    }
+
+    // Shopkeeper ko Shop Name / Mobile / Email se search karo
+    const shops = await User.find({
+      role: "shopkeeper",
+      $or: [
+        {
+          shopName: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          mobile: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          email: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ],
+    })
+      .select("_id name shopName mobile email shopId")
+      .limit(10);
+
+    return res.json({
+      success: true,
+      shops,
+    });
+  } catch (err) {
+    console.log("SEARCH SHOP ERROR:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to search shops ❌",
     });
   }
 };

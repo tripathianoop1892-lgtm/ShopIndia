@@ -27,6 +27,16 @@ const medicineSchema = new mongoose.Schema(
       type: String,
       default: "Strip",
     },
+// New quantity / selling rules
+    sellingUnit: {
+  type: String,
+  default: "pack",
+},
+
+individualSaleAllowed: {
+  type: Boolean,
+  default: false,
+},
     image: {
       type: String,
       default: "",
