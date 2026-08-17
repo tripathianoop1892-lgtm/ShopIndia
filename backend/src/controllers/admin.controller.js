@@ -1,3 +1,4 @@
+import coupons from "../models/coupons.js";
 import Medicine from "../models/medicine.js";
 import Order from "../models/Order.js";
 import user from "../models/user.js";
@@ -130,7 +131,7 @@ export const getDashboardReport = async (req, res) => {
 
       Medicine.countDocuments(),
 
-      Coupon.countDocuments(),
+      coupons.countDocuments(),
 
       Order.aggregate([
         {

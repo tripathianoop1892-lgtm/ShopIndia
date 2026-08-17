@@ -130,7 +130,7 @@ export const getOrders = async (viewFilter = "") => {
 };
 
 // 👉 Validate Coupon 
-export const ValidateCoupon = async (code, amount ) => {
+export const validateCoupon = async (code, amount ) => {
   const res = await fetch(`${BASE_URL}/admin/coupons/validate`, { 
     method: "POST",
     headers: getHeaders(), 
