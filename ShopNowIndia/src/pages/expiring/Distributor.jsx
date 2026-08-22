@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import { MedicinesList } from "../../services/api"; // ✅ API
-
+import * as XLSX from "xlsx";
 const DistributorExpiring = () => {
   const [medicines, setMedicines] = useState([]);
 
@@ -17,30 +17,77 @@ const DistributorExpiring = () => {
   useEffect(() => {
     fetchData();
   }, []);
+const fetchData = async () => {
+  try {
+    const res = await MedicinesList();
 
-  const fetchData = async () => {
-    try {
-      const res = await MedicinesList();
+    const today = new Date();
 
-      const today = new Date();
+    // 🔥 EXPIRING FILTER (next 180 days)
+    const expiringSoon = Array.isArray(res)
+      ? res.filter((med) => {
+          if (!med.expiry) return false;
 
-      // 🔥 EXPIRING FILTER (next 30 days)
-      const expiringSoon = res.filter((med) => {
-        const expDate = new Date(med.expiry);
-        const diff = (expDate - today) / (1000 * 60 * 60 * 24);
-        return diff < 90;
-      });
+          const expDate = new Date(med.expiry);
 
-      setMedicines(expiringSoon);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+          const diff =
+            (expDate - today) /
+            (1000 * 60 * 60 * 24);
 
+          return diff >= 0 && diff <= 180;
+        })
+      : [];
+
+    setMedicines(expiringSoon);
+  } catch (err) {
+    console.log(err);
+  }
+};
+// ==========================================
+// EXPORT TO EXCEL
+// ==========================================
+
+const exportToExcel = () => {
+  if (medicines.length === 0) {
+    alert("No expiring medicines available to export.");
+    return;
+  }
+
+  const excelData = medicines.map((med, index) => ({
+    "S.No": index + 1,
+    "Medicine Name": med.name || "",
+    "Expiry Date": formatDate(med.expiry),
+    "Stock": med.stock || 0,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    "Expiring Medicines"
+  );
+
+  XLSX.writeFile(
+    workbook,
+    "Expiring_Medicines_180_Days.xlsx"
+  );
+};
   return (
     <div className="main-content">
       <h2>Expiring Soon</h2>
+      
+       {/* 👇 EXPORT BUTTON यहीं ADD करना है */}
+  <button
+    onClick={exportToExcel}
+    className="export-btn"
+  >
+    Export to Excel
+  </button>
 
+  
       <table className="table">
         <thead>
           <tr>

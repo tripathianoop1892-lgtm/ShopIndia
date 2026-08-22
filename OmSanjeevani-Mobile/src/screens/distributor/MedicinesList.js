@@ -1,35 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   SafeAreaView,
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   TextInput,
-  Alert,
+  TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
+
+import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./MedicinesListStyles";
 
 import AppHeader from "../../components/headers/AppHeader";
-import SearchBar from "../../components/common/SearchBar";
 
 import {
-  updateMedicine,
   MedicinesList,
+  updateMedicine,
   deleteMedicine,
 } from "../../services/api";
 
-export default function Medicines({
+export default function MedicineListScreen({
   navigation,
 }) {
+  const [search, setSearch] = useState("");
   const [medicines, setMedicines] = useState([]);
-  const [filteredMedicines, setFilteredMedicines] =
-    useState([]);
-
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const [editId, setEditId] = useState(null);
 
@@ -40,81 +44,78 @@ export default function Medicines({
   // FETCH MEDICINES
   // ==========================================
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
       const res = await MedicinesList();
 
       console.log(
-        "Medicine API Response:",
+        "MEDICINE API RESPONSE:",
         res
       );
 
-      const data = Array.isArray(res?.medicines)
-        ? res.medicines
-        : Array.isArray(res)
-        ? res
-        : [];
+      const medicineData =
+        Array.isArray(res?.medicines)
+          ? res.medicines
+          : Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res)
+          ? res
+          : [];
 
-      setMedicines(data);
-      setFilteredMedicines(data);
+      setMedicines(medicineData);
+
     } catch (error) {
       console.log(
-        "Medicine List Error:",
+        "FETCH MEDICINES ERROR:",
         error
       );
 
       setMedicines([]);
-      setFilteredMedicines([]);
 
-      Alert.alert(
-        "Error",
-        "Unable to load medicines."
-      );
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // ==========================================
   // SEARCH
   // ==========================================
 
-  const handleSearch = (searchText) => {
-    const query = searchText
-      .trim()
-      .toLowerCase();
+  const filteredData = useMemo(() => {
+    const searchText =
+      search.trim().toLowerCase();
 
-    if (!query) {
-      setFilteredMedicines(medicines);
-      return;
+    if (!searchText) {
+      return medicines;
     }
 
-    const filtered = medicines.filter(
-      (item) => {
-        const name =
-          item.name?.toLowerCase() || "";
+    return medicines.filter((item) => {
+      const name =
+        item?.name
+          ?.toString()
+          .toLowerCase() || "";
 
-        const type =
-          item.type?.toLowerCase() || "";
+      const type =
+        item?.type
+          ?.toString()
+          .toLowerCase() || "";
 
-        return (
-          name.includes(query) ||
-          type.includes(query)
-        );
-      }
-    );
+      return (
+        name.includes(searchText) ||
+        type.includes(searchText)
+      );
+    });
 
-    setFilteredMedicines(filtered);
-  };
+  }, [search, medicines]);
 
   // ==========================================
-  // CHANGE INPUT
+  // CHANGE MEDICINE FIELD
   // ==========================================
 
   const handleChange = (
@@ -132,34 +133,27 @@ export default function Medicines({
           : item
       )
     );
-
-    setFilteredMedicines((prev) =>
-      prev.map((item) =>
-        item._id === id
-          ? {
-              ...item,
-              [field]: value,
-            }
-          : item
-      )
-    );
   };
 
   // ==========================================
-  // SAVE
+  // SAVE MEDICINE
   // ==========================================
 
   const handleSave = async (id) => {
     try {
-      const medicine = medicines.find(
-        (item) => item._id === id
-      );
+      const medicine =
+        medicines.find(
+          (item) => item._id === id
+        );
 
       if (!medicine) {
+        Alert.alert(
+          "Error",
+          "Medicine not found."
+        );
+
         return;
       }
-
-      setSaving(true);
 
       await updateMedicine(
         id,
@@ -173,24 +167,24 @@ export default function Medicines({
         "Medicine updated successfully."
       );
 
-      await fetchData();
+      fetchData();
+
     } catch (error) {
       console.log(
-        "Update Medicine Error:",
+        "UPDATE MEDICINE ERROR:",
         error
       );
 
       Alert.alert(
         "Error",
-        "Unable to update medicine."
+        error?.message ||
+          "Unable to update medicine."
       );
-    } finally {
-      setSaving(false);
     }
   };
 
   // ==========================================
-  // SELECT CHECKBOX
+  // SELECT MEDICINE
   // ==========================================
 
   const toggleSelect = (id) => {
@@ -204,7 +198,7 @@ export default function Medicines({
   };
 
   // ==========================================
-  // DELETE
+  // DELETE MEDICINE
   // ==========================================
 
   const handleDelete = (id) => {
@@ -219,17 +213,15 @@ export default function Medicines({
         {
           text: "Delete",
           style: "destructive",
+
           onPress: async () => {
             try {
-              setLoading(true);
-
               await deleteMedicine(id);
 
-              setSelectedMedicines(
-                (prev) =>
-                  prev.filter(
-                    (item) => item !== id
-                  )
+              setSelectedMedicines((prev) =>
+                prev.filter(
+                  (item) => item !== id
+                )
               );
 
               Alert.alert(
@@ -237,19 +229,19 @@ export default function Medicines({
                 "Medicine deleted successfully."
               );
 
-              await fetchData();
+              fetchData();
+
             } catch (error) {
               console.log(
-                "Delete Medicine Error:",
+                "DELETE MEDICINE ERROR:",
                 error
               );
 
               Alert.alert(
                 "Error",
-                "Unable to delete medicine."
+                error?.message ||
+                  "Unable to delete medicine."
               );
-            } finally {
-              setLoading(false);
             }
           },
         },
@@ -258,7 +250,7 @@ export default function Medicines({
   };
 
   // ==========================================
-  // DATE FORMAT
+  // FORMAT DATE
   // ==========================================
 
   const formatDate = (date) => {
@@ -266,22 +258,32 @@ export default function Medicines({
       return "N/A";
     }
 
-    const parsedDate = new Date(date);
+    const parsedDate =
+      new Date(date);
 
-    if (Number.isNaN(parsedDate.getTime())) {
+    if (
+      Number.isNaN(
+        parsedDate.getTime()
+      )
+    ) {
       return "N/A";
     }
 
-    return parsedDate.toLocaleDateString();
+    return parsedDate.toLocaleDateString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }
+    );
   };
 
   // ==========================================
-  // MEDICINE CARD
+  // RENDER MEDICINE
   // ==========================================
 
-  const renderMedicine = ({
-    item,
-  }) => {
+  const renderMedicine = ({ item }) => {
     const isEditing =
       editId === item._id;
 
@@ -290,73 +292,99 @@ export default function Medicines({
         item._id
       );
 
+    const price = Number(
+      item.offerPrice ??
+      item.price ??
+      item.mrp ??
+      0
+    );
+
     return (
-      <View style={styles.card}>
-        {/* Medicine Header */}
+      <View style={styles.medicineCard}>
+
+        {/* ===============================
+            HEADER
+        =============================== */}
 
         <View style={styles.cardHeader}>
-          <View style={styles.nameContainer}>
-            <TouchableOpacity
-              style={[
-                styles.checkbox,
-                isSelected &&
-                  styles.checkboxSelected,
-              ]}
-              onPress={() =>
-                toggleSelect(item._id)
+
+          <TouchableOpacity
+            style={styles.checkboxButton}
+            onPress={() =>
+              toggleSelect(item._id)
+            }
+          >
+            <Ionicons
+              name={
+                isSelected
+                  ? "checkbox"
+                  : "square-outline"
               }
-            >
-              {isSelected && (
-                <Text
-                  style={
-                    styles.checkmark
-                  }
-                >
-                  ✓
-                </Text>
-              )}
-            </TouchableOpacity>
+              size={25}
+              color={
+                isSelected
+                  ? "#2E7D32"
+                  : "#999999"
+              }
+            />
+          </TouchableOpacity>
 
-            <View style={styles.nameArea}>
-              <Text
-                style={styles.medicineName}
-                numberOfLines={2}
-              >
-                {item.name ||
-                  "Medicine"}
-              </Text>
+          <View style={styles.nameContainer}>
 
-              <Text
-                style={styles.company}
-              >
-                {item.company ||
-                  "Generic"}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.typeBadge}>
             <Text
-              style={styles.typeText}
+              style={styles.medicineName}
+              numberOfLines={2}
             >
-              {item.type || "N/A"}
+              {item.name ||
+                "Medicine Name"}
             </Text>
+
           </View>
+
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => {
+              if (isEditing) {
+                handleSave(item._id);
+              } else {
+                setEditId(item._id);
+              }
+            }}
+          >
+            <Ionicons
+              name={
+                isEditing
+                  ? "save-outline"
+                  : "create-outline"
+              }
+              size={21}
+              color="#FFFFFF"
+            />
+
+            <Text style={styles.editButtonText}>
+              {isEditing
+                ? "Save"
+                : "Edit"}
+            </Text>
+          </TouchableOpacity>
+
         </View>
 
-        {/* Type */}
+        {/* ===============================
+            TYPE
+        =============================== */}
 
-        <View style={styles.infoRow}>
-          <Text
-            style={styles.label}
-          >
+        <View style={styles.row}>
+
+          <Text style={styles.label}>
             Type
           </Text>
 
           {isEditing ? (
             <TextInput
-              style={styles.editInput}
+              style={styles.input}
               value={item.type || ""}
+              placeholder="Medicine Type"
               onChangeText={(value) =>
                 handleChange(
                   item._id,
@@ -364,35 +392,36 @@ export default function Medicines({
                   value
                 )
               }
-              placeholder="Medicine type"
             />
           ) : (
-            <Text
-              style={styles.value}
-            >
+            <Text style={styles.value}>
               {item.type || "N/A"}
             </Text>
           )}
+
         </View>
 
-        {/* Price */}
+        {/* ===============================
+            PRICE
+        =============================== */}
 
-        <View style={styles.infoRow}>
-          <Text
-            style={styles.label}
-          >
+        <View style={styles.row}>
+
+          <Text style={styles.label}>
             Price
           </Text>
 
           {isEditing ? (
             <TextInput
-              style={styles.editInput}
+              style={styles.input}
               value={String(
                 item.offerPrice ??
-                  item.price ??
-                  item.mrp ??
-                  0
+                item.price ??
+                item.mrp ??
+                ""
               )}
+              placeholder="Price"
+              keyboardType="numeric"
               onChangeText={(value) =>
                 handleChange(
                   item._id,
@@ -400,37 +429,36 @@ export default function Medicines({
                   value
                 )
               }
-              keyboardType="decimal-pad"
-              placeholder="Price"
             />
           ) : (
-            <Text
-              style={styles.price}
-            >
-              ₹
-              {item.offerPrice ??
-                item.price ??
-                item.mrp ??
-                0}
+            <Text style={styles.price}>
+              ₹{price.toFixed(2)}
             </Text>
           )}
+
         </View>
 
-        {/* Stock */}
+        {/* ===============================
+            STOCK
+        =============================== */}
 
-        <View style={styles.infoRow}>
-          <Text
-            style={styles.label}
-          >
+        <View style={styles.row}>
+
+          <Text style={styles.label}>
             Stock
           </Text>
 
           {isEditing ? (
             <TextInput
-              style={styles.editInput}
-              value={String(
-                item.stock ?? ""
-              )}
+              style={styles.input}
+              value={
+                item.stock !== undefined &&
+                item.stock !== null
+                  ? String(item.stock)
+                  : ""
+              }
+              placeholder="Stock"
+              keyboardType="numeric"
               onChangeText={(value) =>
                 handleChange(
                   item._id,
@@ -438,37 +466,40 @@ export default function Medicines({
                   value
                 )
               }
-              keyboardType="number-pad"
-              placeholder="Stock"
             />
           ) : (
             <Text
-              style={styles.value}
+              style={[
+                styles.value,
+                Number(item.stock || 0) <= 5 &&
+                  styles.lowStockText,
+              ]}
             >
               {item.stock ?? 0}
             </Text>
           )}
+
         </View>
 
-        {/* MFD */}
+        {/* ===============================
+            MFD
+        =============================== */}
 
-        <View style={styles.infoRow}>
-          <Text
-            style={styles.label}
-          >
+        <View style={styles.row}>
+
+          <Text style={styles.label}>
             MFD
           </Text>
 
           {isEditing ? (
             <TextInput
-              style={styles.editInput}
+              style={styles.input}
               value={
                 item.mfd
-                  ? String(
-                      item.mfd
-                    ).slice(0, 10)
+                  ? item.mfd.slice(0, 10)
                   : ""
               }
+              placeholder="YYYY-MM-DD"
               onChangeText={(value) =>
                 handleChange(
                   item._id,
@@ -476,36 +507,34 @@ export default function Medicines({
                   value
                 )
               }
-              placeholder="YYYY-MM-DD"
             />
           ) : (
-            <Text
-              style={styles.value}
-            >
+            <Text style={styles.value}>
               {formatDate(item.mfd)}
             </Text>
           )}
+
         </View>
 
-        {/* Expiry */}
+        {/* ===============================
+            EXPIRY
+        =============================== */}
 
-        <View style={styles.infoRow}>
-          <Text
-            style={styles.label}
-          >
+        <View style={styles.row}>
+
+          <Text style={styles.label}>
             Expiry
           </Text>
 
           {isEditing ? (
             <TextInput
-              style={styles.editInput}
+              style={styles.input}
               value={
                 item.expiry
-                  ? String(
-                      item.expiry
-                    ).slice(0, 10)
+                  ? item.expiry.slice(0, 10)
                   : ""
               }
+              placeholder="YYYY-MM-DD"
               onChangeText={(value) =>
                 handleChange(
                   item._id,
@@ -513,122 +542,87 @@ export default function Medicines({
                   value
                 )
               }
-              placeholder="YYYY-MM-DD"
             />
           ) : (
-            <Text
-              style={styles.value}
-            >
-              {formatDate(
-                item.expiry
-              )}
+            <Text style={styles.expiryText}>
+              {formatDate(item.expiry)}
             </Text>
           )}
+
         </View>
 
-        {/* Actions */}
+        {/* ===============================
+            DELETE
+        =============================== */}
 
-        <View
-          style={styles.actionContainer}
-        >
+        {isSelected && (
           <TouchableOpacity
-            style={styles.editButton}
-            disabled={
-              saving &&
-              isEditing
+            style={styles.deleteButton}
+            onPress={() =>
+              handleDelete(item._id)
             }
-            onPress={() => {
-              if (isEditing) {
-                handleSave(
-                  item._id
-                );
-              } else {
-                setEditId(
-                  item._id
-                );
-              }
-            }}
           >
-            {saving &&
-            isEditing ? (
-              <ActivityIndicator
-                size="small"
-                color="#FFFFFF"
-              />
-            ) : (
-              <Text
-                style={
-                  styles.editButtonText
-                }
-              >
-                {isEditing
-                  ? "Save"
-                  : "Edit"}
-              </Text>
-            )}
-          </TouchableOpacity>
+            <Ionicons
+              name="trash-outline"
+              size={20}
+              color="#FFFFFF"
+            />
 
-          {isSelected && (
-            <TouchableOpacity
-              style={
-                styles.deleteButton
-              }
-              onPress={() =>
-                handleDelete(
-                  item._id
-                )
-              }
+            <Text
+              style={styles.deleteButtonText}
             >
-              <Text
-                style={
-                  styles.deleteButtonText
-                }
-              >
-                Delete
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
+              Delete Medicine
+            </Text>
+
+          </TouchableOpacity>
+        )}
+
       </View>
     );
   };
 
   // ==========================================
-  // LOADING
+  // EMPTY LIST
   // ==========================================
 
-  if (loading) {
-    return (
-      <SafeAreaView
-        style={styles.container}
-      >
-        <AppHeader
-          title="My Medicines"
-          showBackButton
-          onBackPress={() =>
-            navigation.goBack()
-          }
-        />
+  const renderEmpty = () => {
+    if (loading) {
+      return (
+        <View style={styles.emptyContainer}>
 
-        <View
-          style={
-            styles.loadingContainer
-          }
-        >
           <ActivityIndicator
             size="large"
             color="#2E7D32"
           />
 
-          <Text
-            style={styles.loadingText}
-          >
+          <Text style={styles.emptyText}>
             Loading medicines...
           </Text>
+
         </View>
-      </SafeAreaView>
+      );
+    }
+
+    return (
+      <View style={styles.emptyContainer}>
+
+        <Ionicons
+          name="medkit-outline"
+          size={70}
+          color="#CCCCCC"
+        />
+
+        <Text style={styles.emptyTitle}>
+          No Medicines Found
+        </Text>
+
+        <Text style={styles.emptyText}>
+          Add medicines to see them here.
+        </Text>
+
+      </View>
     );
-  }
+  };
 
   // ==========================================
   // MAIN SCREEN
@@ -638,7 +632,6 @@ export default function Medicines({
     <SafeAreaView
       style={styles.container}
     >
-      {/* Header */}
 
       <AppHeader
         title="My Medicines"
@@ -648,75 +641,59 @@ export default function Medicines({
         }
       />
 
-      {/* Search */}
+      {/* SEARCH */}
 
-      <SearchBar
-        placeholder="Search medicine..."
-        onSearch={handleSearch}
-      />
+      <View style={styles.searchContainer}>
 
-      {/* Title */}
+        <Ionicons
+          name="search-outline"
+          size={22}
+          color="#777777"
+        />
 
-      <View
-        style={styles.titleContainer}
-      >
-        <Text
-          style={styles.title}
-        >
-          My Medicines
-        </Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search medicine or type..."
+          value={search}
+          onChangeText={setSearch}
+        />
 
-        <Text
-          style={styles.count}
-        >
-          {filteredMedicines.length} Medicines
-        </Text>
+        {search.length > 0 && (
+          <TouchableOpacity
+            onPress={() =>
+              setSearch("")
+            }
+          >
+            <Ionicons
+              name="close-circle"
+              size={21}
+              color="#999999"
+            />
+          </TouchableOpacity>
+        )}
+
       </View>
 
-      {/* Medicine List */}
+      {/* MEDICINE LIST */}
 
       <FlatList
-        data={filteredMedicines}
-        keyExtractor={(
-          item,
-          index
-        ) =>
+        data={filteredData}
+        keyExtractor={(item, index) =>
           item?._id?.toString() ||
           index.toString()
         }
         renderItem={renderMedicine}
-        showsVerticalScrollIndicator={
-          false
-        }
-        contentContainerStyle={
-          styles.list
-        }
-        ListEmptyComponent={
-          <View
-            style={
-              styles.emptyContainer
-            }
-          >
-            <Text
-              style={
-                styles.emptyTitle
-              }
-            >
-              No Medicines Found
-            </Text>
-
-            <Text
-              style={
-                styles.emptySubtitle
-              }
-            >
-              Medicines added by the
-              distributor will appear
-              here.
-            </Text>
-          </View>
-        }
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          styles.listContent,
+          filteredData.length === 0 &&
+            styles.emptyList,
+        ]}
+        ListEmptyComponent={renderEmpty}
+        refreshing={loading}
+        onRefresh={fetchData}
       />
+
     </SafeAreaView>
   );
 }

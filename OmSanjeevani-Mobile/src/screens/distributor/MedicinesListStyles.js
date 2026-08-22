@@ -1,67 +1,53 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  // ==========================================
-  // Main Container
-  // ==========================================
-
   container: {
     flex: 1,
     backgroundColor: "#F5F7FA",
   },
 
-  // ==========================================
-  // Title Section
-  // ==========================================
-
-  titleContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 12,
-  },
-
-  title: {
-    fontSize: 21,
-    fontWeight: "700",
-    color: "#222222",
-  },
-
-  count: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#2E7D32",
-  },
-
-  // ==========================================
-  // Medicine List
-  // ==========================================
-
-  list: {
-    paddingHorizontal: 16,
+  content: {
+    padding: 16,
     paddingBottom: 40,
   },
 
-  // ==========================================
-  // Medicine Card
-  // ==========================================
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
-  card: {
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#666666",
+  },
+
+  searchContainer: {
+    marginBottom: 16,
+  },
+
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 70,
+    paddingHorizontal: 20,
+  },
+
+  emptyText: {
+    marginTop: 12,
+    fontSize: 15,
+    color: "#777777",
+    textAlign: "center",
+  },
+
+  medicineCard: {
     backgroundColor: "#FFFFFF",
-
     borderRadius: 14,
+    padding: 15,
+    marginBottom: 12,
 
-    padding: 16,
-
-    marginBottom: 14,
-
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-
-    elevation: 3,
+    elevation: 2,
 
     shadowColor: "#000",
     shadowOffset: {
@@ -72,271 +58,156 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
 
-  // ==========================================
-  // Card Header
-  // ==========================================
-
-  cardHeader: {
+  medicineHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-
-    marginBottom: 14,
+    marginBottom: 12,
   },
 
-  nameContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-
+  medicineInfo: {
     flex: 1,
-    marginRight: 10,
-  },
-
-  checkbox: {
-    width: 24,
-    height: 24,
-
-    borderWidth: 1.5,
-    borderColor: "#BDBDBD",
-
-    borderRadius: 5,
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    marginRight: 10,
-    marginTop: 2,
-
-    backgroundColor: "#FFFFFF",
-  },
-
-  checkboxSelected: {
-    backgroundColor: "#2E7D32",
-    borderColor: "#2E7D32",
-  },
-
-  checkmark: {
-    color: "#FFFFFF",
-    fontSize: 15,
-    fontWeight: "700",
-  },
-
-  nameArea: {
-    flex: 1,
+    paddingRight: 10,
   },
 
   medicineName: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "700",
     color: "#222222",
-
-    marginBottom: 4,
   },
 
-  company: {
+  medicineType: {
     fontSize: 13,
-    color: "#666666",
+    color: "#777777",
+    marginTop: 4,
   },
 
-  // ==========================================
-  // Type Badge
-  // ==========================================
-
-  typeBadge: {
-    backgroundColor: "#E8F5E9",
-
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-
-    borderRadius: 7,
+  checkboxContainer: {
+    padding: 3,
   },
 
-  typeText: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#2E7D32",
-  },
-
-  // ==========================================
-  // Information Rows
-  // ==========================================
-
-  infoRow: {
+  detailsRow: {
     flexDirection: "row",
-    alignItems: "center",
-
-    minHeight: 52,
-
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F1F1",
+    flexWrap: "wrap",
+    borderTopWidth: 1,
+    borderTopColor: "#EEEEEE",
+    paddingTop: 12,
   },
 
-  label: {
-    width: 110,
-
-    fontSize: 13,
-    fontWeight: "500",
-
-    color: "#666666",
+  detailBox: {
+    width: "50%",
+    marginBottom: 12,
   },
 
-  value: {
-    flex: 1,
+  detailLabel: {
+    fontSize: 11,
+    color: "#888888",
+    marginBottom: 3,
+  },
 
+  detailValue: {
     fontSize: 14,
     fontWeight: "600",
-
     color: "#333333",
-
-    textAlign: "right",
   },
 
-  price: {
-    flex: 1,
-
+  priceText: {
     fontSize: 15,
     fontWeight: "700",
-
     color: "#2E7D32",
-
-    textAlign: "right",
   },
 
-  // ==========================================
-  // Edit Input
-  // ==========================================
+  stockText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#1565C0",
+  },
 
-  editInput: {
-    flex: 1,
+  expiryText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#C62828",
+  },
 
-    minHeight: 42,
-
+  input: {
+    height: 45,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-
+    borderColor: "#DADADA",
     borderRadius: 8,
-
-    backgroundColor: "#FFFFFF",
-
     paddingHorizontal: 10,
-
     fontSize: 14,
     color: "#222222",
-
-    textAlign: "right",
+    backgroundColor: "#FAFAFA",
   },
 
-  // ==========================================
-  // Action Buttons
-  // ==========================================
+  fullInput: {
+    width: "100%",
+  },
 
-  actionContainer: {
+  actionRow: {
     flexDirection: "row",
-
-    alignItems: "center",
-
-    gap: 10,
-
-    marginTop: 15,
+    justifyContent: "flex-end",
+    borderTopWidth: 1,
+    borderTopColor: "#EEEEEE",
+    paddingTop: 12,
+    marginTop: 4,
   },
 
   editButton: {
-    flex: 1,
-
-    height: 46,
-
-    borderRadius: 10,
-
-    backgroundColor: "#2E7D32",
-
-    justifyContent: "center",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+
+    backgroundColor: "#E8F5E9",
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 8,
+    marginLeft: 8,
   },
 
   editButtonText: {
-    color: "#FFFFFF",
-
-    fontSize: 14,
+    marginLeft: 5,
+    fontSize: 13,
     fontWeight: "700",
+    color: "#2E7D32",
+  },
+
+  saveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+
+    backgroundColor: "#2E7D32",
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+
+  saveButtonText: {
+    marginLeft: 5,
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#FFFFFF",
   },
 
   deleteButton: {
-    flex: 1,
-
-    height: 46,
-
-    borderRadius: 10,
-
-    backgroundColor: "#D32F2F",
-
-    justifyContent: "center",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+
+    backgroundColor: "#FFEBEE",
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 8,
+    marginLeft: 8,
   },
 
   deleteButtonText: {
-    color: "#FFFFFF",
-
-    fontSize: 14,
+    marginLeft: 5,
+    fontSize: 13,
     fontWeight: "700",
-  },
-
-  // ==========================================
-  // Loading
-  // ==========================================
-
-  loadingContainer: {
-    flex: 1,
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    paddingHorizontal: 30,
-  },
-
-  loadingText: {
-    marginTop: 12,
-
-    fontSize: 14,
-    color: "#666666",
-
-    textAlign: "center",
-  },
-
-  // ==========================================
-  // Empty State
-  // ==========================================
-
-  emptyContainer: {
-    flex: 1,
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    paddingHorizontal: 30,
-
-    marginTop: 80,
-  },
-
-  emptyTitle: {
-    fontSize: 20,
-
-    fontWeight: "700",
-
-    color: "#2E7D32",
-
-    marginBottom: 8,
-
-    textAlign: "center",
-  },
-
-  emptySubtitle: {
-    fontSize: 14,
-
-    color: "#777777",
-
-    lineHeight: 21,
-
-    textAlign: "center",
+    color: "#D32F2F",
   },
 });
 

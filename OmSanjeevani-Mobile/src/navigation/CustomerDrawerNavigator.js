@@ -28,6 +28,7 @@ import WishlistScreen from "../screens/customer/WishlistScreen";
 import OrdersScreen from "../screens/customer/OrdersScreen";
 import NotificationScreen from "../screens/customer/NotificationScreen";
 import ProfileScreen from "../screens/customer/ProfileScreen";
+import EditProfileScreen from "../screens/customer/EditProfileScreen";
 import CustomerPrescription from "../screens/customer/CustomerPrescription";
 import SettingsScreen from "../screens/customer/SettingsScreen";
 
@@ -207,7 +208,10 @@ function CustomDrawerContent(props) {
           label="Profile"
           screen="Profile"
         />
-
+        
+              
+  
+      
         {/* Settings */}
 
         <MenuItem
@@ -338,6 +342,10 @@ export default function CustomerDrawerNavigator() {
         component={ProfileScreen}
       />
 
+     <Drawer.Screen
+  name="CustomerEditProfile" 
+  component={EditProfileScreen}
+/>
       {/* ==================================
           SETTINGS
       =================================== */}

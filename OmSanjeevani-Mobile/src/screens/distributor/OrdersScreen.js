@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "./OrdersScreenStyles";
 
 import AppHeader from "../../components/headers/AppHeader";
+
 import {
   getOrders,
   updateOrder,
@@ -28,7 +29,7 @@ export default function OrdersScreen({
     useState(false);
 
   // ==========================================
-  // Fetch Orders
+  // FETCH ORDERS
   // ==========================================
 
   useEffect(() => {
@@ -59,13 +60,11 @@ export default function OrdersScreen({
   };
 
   // ==========================================
-  // Status Color
+  // STATUS COLOR
   // ==========================================
 
   const getStatusColor = (status) => {
-    switch (
-      status?.toLowerCase()
-    ) {
+    switch (status?.toLowerCase()) {
       case "pending":
         return "#FF9800";
 
@@ -87,7 +86,7 @@ export default function OrdersScreen({
   };
 
   // ==========================================
-  // Format Date
+  // FORMAT DATE
   // ==========================================
 
   const formatDate = (date) => {
@@ -95,14 +94,9 @@ export default function OrdersScreen({
       return "Date not available";
     }
 
-    const parsedDate =
-      new Date(date);
+    const parsedDate = new Date(date);
 
-    if (
-      Number.isNaN(
-        parsedDate.getTime()
-      )
-    ) {
+    if (Number.isNaN(parsedDate.getTime())) {
       return "Date not available";
     }
 
@@ -117,7 +111,7 @@ export default function OrdersScreen({
   };
 
   // ==========================================
-  // Update Status
+  // UPDATE ORDER STATUS
   // ==========================================
 
   const updateStatus = async (
@@ -162,7 +156,7 @@ export default function OrdersScreen({
   };
 
   // ==========================================
-  // Confirmation
+  // CONFIRM STATUS UPDATE
   // ==========================================
 
   const confirmStatusUpdate = (
@@ -199,7 +193,7 @@ export default function OrdersScreen({
   };
 
   // ==========================================
-  // Render Medicine
+  // RENDER MEDICINE
   // ==========================================
 
   const renderMedicine = (
@@ -223,9 +217,7 @@ export default function OrdersScreen({
         }
         style={styles.medicineRow}
       >
-        <View
-          style={styles.medicineInfo}
-        >
+        <View style={styles.medicineInfo}>
           <Text
             style={styles.medicineName}
             numberOfLines={2}
@@ -235,9 +227,7 @@ export default function OrdersScreen({
           </Text>
 
           <Text
-            style={
-              styles.medicineQuantity
-            }
+            style={styles.medicineQuantity}
           >
             Qty: {quantity}
           </Text>
@@ -253,16 +243,14 @@ export default function OrdersScreen({
   };
 
   // ==========================================
-  // Render Order
+  // RENDER ORDER
   // ==========================================
 
   const renderOrder = ({
     item,
   }) => {
     const statusColor =
-      getStatusColor(
-        item?.status
-      );
+      getStatusColor(item?.status);
 
     const medicines =
       Array.isArray(item?.items)
@@ -270,34 +258,27 @@ export default function OrdersScreen({
         : [];
 
     const totalAmount = Number(
+      item?.finalAmount ||
       item?.totalAmount ||
-        item?.price ||
-        0
+      item?.subtotal ||
+      item?.price ||
+      0
     );
 
     return (
-      <View
-        style={styles.orderCard}
-      >
-        {/* =====================================
-            Header
-        ====================================== */}
+      <View style={styles.orderCard}>
 
-        <View
-          style={styles.orderHeader}
-        >
+        {/* HEADER */}
+
+        <View style={styles.orderHeader}>
           <View>
             <Text
-              style={
-                styles.orderIdLabel
-              }
+              style={styles.orderIdLabel}
             >
               Order ID
             </Text>
 
-            <Text
-              style={styles.orderId}
-            >
+            <Text style={styles.orderId}>
               #{item?._id || "N/A"}
             </Text>
           </View>
@@ -315,8 +296,7 @@ export default function OrdersScreen({
               style={[
                 styles.statusText,
                 {
-                  color:
-                    statusColor,
+                  color: statusColor,
                 },
               ]}
             >
@@ -326,76 +306,43 @@ export default function OrdersScreen({
           </View>
         </View>
 
-        {/* =====================================
-            Shopkeeper
-        ====================================== */}
+        {/* SHOPKEEPER */}
 
-        <View
-          style={styles.infoRow}
-        >
+        <View style={styles.infoRow}>
           <Ionicons
             name="storefront-outline"
             size={21}
             color="#2E7D32"
           />
 
-          <View
-            style={
-              styles.infoContent
-            }
-          >
-            <Text
-              style={
-                styles.infoLabel
-              }
-            >
+          <View style={styles.infoContent}>
+            <Text style={styles.infoLabel}>
               Shopkeeper
             </Text>
 
-            <Text
-              style={
-                styles.infoValue
-              }
-            >
+            <Text style={styles.infoValue}>
               {item?.shopkeeperName ||
                 item?.buyerId?.name ||
-                item?.customerName ||
                 "Retail Pharmacy"}
             </Text>
           </View>
         </View>
 
-        {/* =====================================
-            Date
-        ====================================== */}
+        {/* DATE */}
 
-        <View
-          style={styles.infoRow}
-        >
+        <View style={styles.infoRow}>
           <Ionicons
             name="calendar-outline"
             size={21}
             color="#2E7D32"
           />
 
-          <View
-            style={
-              styles.infoContent
-            }
-          >
-            <Text
-              style={
-                styles.infoLabel
-              }
-            >
+          <View style={styles.infoContent}>
+            <Text style={styles.infoLabel}>
               Order Date
             </Text>
 
-            <Text
-              style={
-                styles.infoValue
-              }
-            >
+            <Text style={styles.infoValue}>
               {formatDate(
                 item?.createdAt
               )}
@@ -403,20 +350,10 @@ export default function OrdersScreen({
           </View>
         </View>
 
-        {/* =====================================
-            Medicines
-        ====================================== */}
+        {/* MEDICINES */}
 
-        <View
-          style={
-            styles.medicinesSection
-          }
-        >
-          <View
-            style={
-              styles.medicinesHeader
-            }
-          >
+        <View style={styles.medicinesSection}>
+          <View style={styles.medicinesHeader}>
             <Ionicons
               name="cube-outline"
               size={21}
@@ -424,66 +361,46 @@ export default function OrdersScreen({
             />
 
             <Text
-              style={
-                styles.medicinesTitle
-              }
+              style={styles.medicinesTitle}
             >
               Medicines Requested
             </Text>
           </View>
 
           {medicines.length > 0 ? (
-            medicines.map(
-              renderMedicine
-            )
+            medicines.map(renderMedicine)
           ) : (
             <Text
-              style={
-                styles.noItemsText
-              }
+              style={styles.noItemsText}
             >
-              No medicine details
-              available.
+              No medicine details available.
             </Text>
           )}
         </View>
 
-        {/* =====================================
-            Total Amount
-        ====================================== */}
+        {/* TOTAL */}
 
-        <View
-          style={styles.totalRow}
-        >
-          <Text
-            style={styles.totalLabel}
-          >
+        <View style={styles.totalRow}>
+          <Text style={styles.totalLabel}>
             Total Amount
           </Text>
 
-          <Text
-            style={
-              styles.totalAmount
-            }
-          >
+          <Text style={styles.totalAmount}>
             ₹
             {totalAmount.toLocaleString(
               "en-IN",
               {
                 minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
               }
             )}
           </Text>
         </View>
 
-        {/* =====================================
-            View Details
-        ====================================== */}
+        {/* VIEW DETAILS */}
 
         <TouchableOpacity
-          style={
-            styles.detailsButton
-          }
+          style={styles.detailsButton}
           onPress={() =>
             navigation.navigate(
               "DistributorOrderDetails",
@@ -500,32 +417,20 @@ export default function OrdersScreen({
           />
 
           <Text
-            style={
-              styles.detailsButtonText
-            }
+            style={styles.detailsButtonText}
           >
             View Order Details
           </Text>
         </TouchableOpacity>
 
-        {/* =====================================
-            Approve / Reject
-        ====================================== */}
+        {/* APPROVE / REJECT */}
 
-        {item?.status ===
-        "Pending" ? (
-          <View
-            style={
-              styles.actionRow
-            }
-          >
+        {item?.status === "Pending" ? (
+          <View style={styles.actionRow}>
+
             <TouchableOpacity
-              style={
-                styles.approveButton
-              }
-              disabled={
-                actionLoading
-              }
+              style={styles.approveButton}
+              disabled={actionLoading}
               onPress={() =>
                 confirmStatusUpdate(
                   item,
@@ -558,12 +463,8 @@ export default function OrdersScreen({
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={
-                styles.rejectButton
-              }
-              disabled={
-                actionLoading
-              }
+              style={styles.rejectButton}
+              disabled={actionLoading}
               onPress={() =>
                 confirmStatusUpdate(
                   item,
@@ -594,61 +495,58 @@ export default function OrdersScreen({
                 </>
               )}
             </TouchableOpacity>
+
           </View>
         ) : (
           <Text
-            style={
-              styles.processedText
-            }
+            style={styles.processedText}
           >
             Processed
           </Text>
         )}
+
       </View>
     );
   };
 
   // ==========================================
-  // Empty State
+  // EMPTY STATE
   // ==========================================
 
   const renderEmpty = () => {
     return (
-      <View
-        style={styles.emptyContainer}
-      >
+      <View style={styles.emptyContainer}>
+
         <Ionicons
           name="file-tray-outline"
           size={70}
           color="#CCCCCC"
         />
 
-        <Text
-          style={styles.emptyTitle}
-        >
+        <Text style={styles.emptyTitle}>
           No Orders Found
         </Text>
 
         <Text
-          style={
-            styles.emptySubtitle
-          }
+          style={styles.emptySubtitle}
         >
           No active B2B wholesale
           orders are available.
         </Text>
+
       </View>
     );
   };
 
   // ==========================================
-  // Main Screen
+  // MAIN SCREEN
   // ==========================================
 
   return (
     <SafeAreaView
       style={styles.container}
     >
+
       <AppHeader
         title="Incoming B2B Orders"
         showBackButton
@@ -657,15 +555,9 @@ export default function OrdersScreen({
         }
       />
 
-      {/* =====================================
-          Loading
-      ====================================== */}
-
       {loading ? (
         <View
-          style={
-            styles.loadingContainer
-          }
+          style={styles.loadingContainer}
         >
           <ActivityIndicator
             size="large"
@@ -673,9 +565,7 @@ export default function OrdersScreen({
           />
 
           <Text
-            style={
-              styles.loadingText
-            }
+            style={styles.loadingText}
           >
             Loading incoming orders...
           </Text>
@@ -690,22 +580,19 @@ export default function OrdersScreen({
             item?._id?.toString() ||
             index.toString()
           }
-          renderItem={
-            renderOrder
-          }
-          showsVerticalScrollIndicator={
-            false
-          }
+          renderItem={renderOrder}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={[
             styles.list,
             orders.length === 0 &&
               styles.emptyList,
           ]}
-          ListEmptyComponent={
-            renderEmpty
-          }
+          ListEmptyComponent={renderEmpty}
+          refreshing={loading}
+          onRefresh={fetchOrders}
         />
       )}
+
     </SafeAreaView>
   );
 }

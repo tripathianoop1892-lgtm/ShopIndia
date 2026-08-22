@@ -689,11 +689,20 @@ export default function CustomerHomeScreen({
     <SafeAreaView
       style={styles.container}
     >
-      <AppHeader
+    <AppHeader
   title="Pharmacy Marketplace"
-  showBackButton={false}
-  onBackPress={() => {}}
-  onMenuPress={() => navigation.openDrawer()}
+
+  onMenuPress={() =>
+    navigation.openDrawer()
+  }
+
+  onNotificationPress={() =>
+  navigation.navigate("Notifications")
+}
+
+  onProfilePress={() =>
+    navigation.navigate("Profile")
+  }
 />
 
       <ScrollView

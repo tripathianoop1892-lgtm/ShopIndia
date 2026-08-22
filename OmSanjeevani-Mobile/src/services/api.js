@@ -379,7 +379,19 @@ export const updateMedicine = async (id, data) => {
   );
 };
 
+// ==========================================
+// DELETE MEDICINE
+// DELETE /api/medicines/:id
+// ==========================================
 
+export const deleteMedicine = async (id) => {
+  return await apiRequest(
+    `/medicines/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+};
 
 // ==========================================
 // 📄 UPLOAD PRESCRIPTION
@@ -438,6 +450,181 @@ export const uploadPrescription = async (formData) => {
     throw error;
   }
 };
+
+// ==========================================
+// UPDATE PROFILE
+// PUT /api/auth/profile
+// ==========================================
+
+export const updateProfile = async (data) => {
+  return await apiRequest(
+    "/auth/profile",
+    {
+      method: "PUT",
+      body: data,
+    }
+  );
+};
+
+// ==========================================
+// ADMIN DASHBOARD
+// GET /api/admin/dashboard
+// ==========================================
+
+export const getAdminDashboard = async () => {
+  return await apiRequest("/admin/reports/dashboard", {
+    method: "GET",
+  });
+};
+
+// Sales Report
+export const getSalesReport = async () => {
+  return await apiRequest("/admin/reports/sales", {
+    method: "GET",
+  });
+};
+
+
+// ==========================================
+// GET ALL USERS
+// GET /api/admin/users
+// ==========================================
+
+export const getAdminUsers = async () => {
+  return await apiRequest("/admin/users", {
+    method: "GET",
+  });
+};
+
+
+// ==========================================
+// GET SHOPKEEPERS
+// GET /api/admin/shopkeepers
+// ==========================================
+
+export const getAdminShopkeepers = async () => {
+  return await apiRequest("/admin/shopkeepers", {
+    method: "GET",
+  });
+};
+
+
+// ==========================================
+// GET DISTRIBUTORS
+// GET /api/admin/distributors
+// ==========================================
+
+export const getAdminDistributors = async () => {
+  return await apiRequest("/admin/distributors", {
+    method: "GET",
+  });
+};
+
+
+// ==========================================
+// GET ALL MEDICINES FOR ADMIN
+// GET /api/admin/medicines
+// ==========================================
+
+export const getAdminMedicines = async () => {
+  return await apiRequest("/admin/medicines", {
+    method: "GET",
+  });
+};
+
+
+// ==========================================
+// GET ALL ORDERS FOR ADMIN
+// GET /api/admin/orders
+// ==========================================
+
+export const getAdminOrders = async () => {
+  return await apiRequest("/admin/orders", {
+    method: "GET",
+  });
+};
+
+// ==========================================
+// ADMIN SCREEN COMPATIBILITY FUNCTIONS
+// ==========================================
+
+// Shopkeepers
+export const getShopkeeper = async () => {
+  return await getAdminShopkeepers();
+};
+
+// Distributors
+export const getDistributors = async () => {
+  return await getAdminDistributors();
+};
+
+// Medicines
+export const getMedicine = async () => {
+  return await getAdminMedicines();
+};
+
+// Categories
+export const getCategorySummary = async () => {
+  return await apiRequest("/admin/categories", {
+    method: "GET",
+  });
+};
+
+// Reports
+export const getDashboardReport = async () => {
+  return await getAdminDashboard();
+};
+
+// Coupons
+export const getCoupons = async () => {
+  return await apiRequest("/admin/coupons", {
+    method: "GET",
+  });
+};
+
+// ==========================================
+// SUPPORT
+// ==========================================
+
+// GET SUPPORT TICKETS
+export const getSupportTickets = async () => {
+  return await apiRequest("/support", {
+    method: "GET",
+  });
+};
+
+// UPDATE SUPPORT TICKET STATUS
+export const updateSupportTicketStatus = async (
+  id,
+  status
+) => {
+  return await apiRequest(
+    `/support/${id}/status`,
+    {
+      method: "PATCH",
+      body: {
+        status,
+      },
+    }
+  );
+};
+
+// REPLY TO SUPPORT TICKET
+export const replySupportTicket = async (
+  id,
+  reply
+) => {
+  return await apiRequest(
+    `/support/${id}/reply`,
+    {
+      method: "POST",
+      body: {
+        reply,
+      },
+    }
+  );
+};
+
 // ==========================================
 // DEFAULT EXPORT
 // ==========================================
@@ -449,15 +636,36 @@ export default {
   searchShops,
 
   MedicinesList,
-  addMedicine,
+   addMedicine,
 
-  getCart,
-  addToCart,
-  removeCartItem,
+    getCart,
+    addToCart,
+    removeCartItem,
 
-  getOrders,
-  updateOrder,
-  updateMedicine,
-  createOrder,
-  uploadPrescription,
+    getOrders,
+    updateOrder,
+
+    updateMedicine,
+    deleteMedicine,
+
+    createOrder,
+    uploadPrescription,
+    updateProfile,
+
+    getAdminDashboard,
+    getAdminUsers,
+    getAdminShopkeepers,
+    getAdminDistributors,
+    getAdminMedicines,
+    getAdminOrders,
+    getShopkeeper,
+    getDistributors,
+    getMedicine,
+    getCategorySummary,
+    getDashboardReport,
+    getCoupons,
+    getSalesReport,
+    getSupportTickets,
+updateSupportTicketStatus,
+replySupportTicket,
 };

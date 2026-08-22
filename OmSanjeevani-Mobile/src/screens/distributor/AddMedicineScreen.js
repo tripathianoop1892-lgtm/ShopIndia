@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import {
-  SafeAreaView,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
   View,
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
+  Modal,
+  FlatList,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
   Alert,
 } from "react-native";
 
 import styles from "./AddMedicineScreenStyle";
 import { addMedicine } from "../../services/api";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
+// ==========================================
+// MEDICINE TYPES
+// ==========================================
 
 const MEDICINE_TYPES = [
   "Tablet",
@@ -67,6 +74,10 @@ const MEDICINE_TYPES = [
   "Medical Device",
 ];
 
+// ==========================================
+// PACK TYPES
+// ==========================================
+
 const PACK_TYPES = [
   "Strip",
   "Bottle",
@@ -90,12 +101,36 @@ const PACK_TYPES = [
   "Single Unit",
 ];
 
+// ==========================================
+// SELLING UNITS
+// ==========================================
+
+const SELLING_UNITS = [
+  "Pack",
+  "Tablet",
+  "Capsule",
+  "Bottle",
+  "Tube",
+  "Vial",
+  "Ampoule",
+  "Sachet",
+  "Piece",
+];
+
+// ==========================================
+// BOTTLE SIZES
+// ==========================================
+
 const BOTTLE_SIZES = [
   "30 ml",
   "60 ml",
   "100 ml",
   "200 ml",
 ];
+
+// ==========================================
+// TUBE SIZES
+// ==========================================
 
 const TUBE_SIZES = [
   "10 g",
@@ -104,6 +139,10 @@ const TUBE_SIZES = [
   "50 g",
 ];
 
+// ==========================================
+// VOLUMES
+// ==========================================
+
 const VOLUMES = [
   "1 ml",
   "2 ml",
@@ -111,36 +150,60 @@ const VOLUMES = [
   "10 ml",
 ];
 
+// ==========================================
+// MAIN COMPONENT
+// ==========================================
+
 export default function AddMedicineScreen({ navigation }) {
   const [form, setForm] = useState({
     name: "",
     company: "",
     type: "",
     strength: "",
+
     packSize: "",
     packType: "",
+
+    sellingUnit: "Pack",
+    individualSaleAllowed: false,
+
     bottleSize: "",
     tubeSize: "",
     volume: "",
+
     mrp: "",
     offerPrice: "",
     discount: "",
     stock: "",
+
     batch: "",
     image: "",
+
     mfgDate: "",
     expDate: "",
   });
 
   const [loading, setLoading] = useState(false);
+  const [openSelect, setOpenSelect] = useState(null);
+
+  const [showDatePicker, setShowDatePicker] =
+    useState(false);
+
+  const [dateField, setDateField] =
+    useState(null);
 
   // ==========================================
-  // Calculate Wholesale Offer Price
+  // CALCULATE OFFER PRICE
   // ==========================================
 
-  const calculateOfferPrice = (mrpValue, discountValue) => {
+  const calculateOfferPrice = (
+    mrpValue,
+    discountValue
+  ) => {
     const mrpNumber = Number(mrpValue);
-    const discountNumber = Number(discountValue);
+
+    const discountNumber =
+      Number(discountValue);
 
     if (
       mrpValue === "" ||
@@ -151,12 +214,16 @@ export default function AddMedicineScreen({ navigation }) {
       return "";
     }
 
-    if (discountNumber < 0 || discountNumber > 100) {
+    if (
+      discountNumber < 0 ||
+      discountNumber > 100
+    ) {
       return "";
     }
 
     const calculated =
-      mrpNumber * (1 - discountNumber / 100);
+      mrpNumber *
+      (1 - discountNumber / 100);
 
     return calculated >= 0
       ? calculated.toFixed(2)
@@ -164,7 +231,7 @@ export default function AddMedicineScreen({ navigation }) {
   };
 
   // ==========================================
-  // Handle Change
+  // HANDLE INPUT CHANGE
   // ==========================================
 
   const handleChange = (name, value) => {
@@ -173,12 +240,24 @@ export default function AddMedicineScreen({ navigation }) {
       [name]: value,
     };
 
-    if (name === "mrp" || name === "discount") {
-      updatedForm.offerPrice = calculateOfferPrice(
-        name === "mrp" ? value : form.mrp,
-        name === "discount" ? value : form.discount
-      );
+    if (
+      name === "mrp" ||
+      name === "discount"
+    ) {
+      updatedForm.offerPrice =
+        calculateOfferPrice(
+          name === "mrp"
+            ? value
+            : form.mrp,
+
+          name === "discount"
+            ? value
+            : form.discount
+        );
     }
+
+    // Reset conditional fields
+    // when Pack Type changes
 
     if (name === "packType") {
       updatedForm.bottleSize = "";
@@ -194,60 +273,136 @@ export default function AddMedicineScreen({ navigation }) {
   };
 
   // ==========================================
-  // Submit Medicine
+  // DATE FORMAT
+  // ==========================================
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+
+    const month = String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+      date.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  // ==========================================
+  // OPEN DATE PICKER
+  // ==========================================
+
+  const openDatePicker = (field) => {
+    setDateField(field);
+    setShowDatePicker(true);
+  };
+
+  // ==========================================
+  // HANDLE DATE CHANGE
+  // ==========================================
+
+  const handleDateChange = (
+    event,
+    selectedDate
+  ) => {
+    setShowDatePicker(false);
+
+    if (
+      !selectedDate ||
+      !dateField
+    ) {
+      return;
+    }
+
+    const formattedDate =
+      formatDate(selectedDate);
+
+    handleChange(
+      dateField,
+      formattedDate
+    );
+
+    setDateField(null);
+  };
+
+  // ==========================================
+  // SUBMIT MEDICINE
   // ==========================================
 
   const handleSubmit = async () => {
+    // Medicine Name
+
     if (!form.name.trim()) {
       Alert.alert(
         "Validation",
         "Please enter medicine name."
       );
+
       return;
     }
+
+    // MRP
 
     if (!form.mrp.trim()) {
       Alert.alert(
         "Validation",
         "Please enter MRP."
       );
+
       return;
     }
+
+    // Discount
 
     if (!form.discount.trim()) {
       Alert.alert(
         "Validation",
         "Please enter discount."
       );
+
       return;
     }
+
+    // Stock
 
     if (!form.stock.trim()) {
       Alert.alert(
         "Validation",
         "Please enter stock quantity."
       );
+
       return;
     }
+
+    // Expiry Date
 
     if (!form.expDate.trim()) {
       Alert.alert(
         "Validation",
         "Please enter expiry date."
       );
+
       return;
     }
 
     // Offer Price Validation
-    if (Number(form.offerPrice) > Number(form.mrp)) {
+
+    if (
+      Number(form.offerPrice) >
+      Number(form.mrp)
+    ) {
       Alert.alert(
         "Invalid Price",
         "Offer price cannot exceed MRP."
       );
+
       return;
     }
 
     // Discount Validation
+
     if (
       Number(form.discount) < 0 ||
       Number(form.discount) > 100
@@ -256,28 +411,36 @@ export default function AddMedicineScreen({ navigation }) {
         "Invalid Discount",
         "Discount must be between 0 and 100."
       );
+
       return;
     }
 
     // Stock Validation
-    if (Number(form.stock) < 0) {
+
+    if (
+      Number(form.stock) < 0
+    ) {
       Alert.alert(
         "Invalid Stock",
         "Stock cannot be negative."
       );
+
       return;
     }
 
     // Date Validation
+
     if (
       form.mfgDate &&
       form.expDate &&
-      new Date(form.expDate) <= new Date(form.mfgDate)
+      new Date(form.expDate) <=
+        new Date(form.mfgDate)
     ) {
       Alert.alert(
         "Invalid Date",
         "Expiry date must be after manufacturing date."
       );
+
       return;
     }
 
@@ -285,77 +448,151 @@ export default function AddMedicineScreen({ navigation }) {
       setLoading(true);
 
       // ==========================================
-      // Distributor Web Payload
+      // DATA TO SEND
       // ==========================================
 
       const dataToSend = {
         name: form.name.trim(),
-        company: form.company.trim(),
+
+        company:
+          form.company.trim(),
+
         type: form.type,
-        strength: form.strength.trim(),
 
-        packSize: Number(form.packSize),
-        packType: form.packType,
+        strength:
+          form.strength.trim(),
 
-        mrp: Number(form.mrp),
-        price: Number(form.offerPrice),
-        discount: Number(form.discount),
+        // Strip ke liye tablets per strip
 
-        stock: Number(form.stock),
+        packSize:
+          form.packType === "Strip"
+            ? Number(form.packSize)
+            : 0,
 
-        batch: form.batch.trim(),
-        image: form.image.trim(),
+        packType:
+          form.packType,
 
-        mfd: form.mfgDate,
-        expiry: form.expDate,
+        sellingUnit:
+          form.sellingUnit,
+
+        individualSaleAllowed:
+          form.individualSaleAllowed,
+
+        // Conditional sizes
+
+        bottleSize:
+          form.bottleSize,
+
+        tubeSize:
+          form.tubeSize,
+
+        volume:
+          form.volume,
+
+        // Price
+
+        mrp:
+          Number(form.mrp),
+
+        offerPrice:
+          Number(form.offerPrice),
+
+        price:
+          Number(form.offerPrice),
+
+        discount:
+          Number(form.discount),
+
+        stock:
+          Number(form.stock),
+
+        batch:
+          form.batch.trim(),
+
+        image:
+          form.image.trim(),
+
+        mfd:
+          form.mfgDate,
+
+        expiry:
+          form.expDate,
       };
 
+      console.log(
+        "ADD MEDICINE DATA:",
+        dataToSend
+      );
+
       // ==========================================
-      // Backend API
+      // API CALL
       // ==========================================
 
-      const res = await addMedicine(dataToSend);
+      const res =
+        await addMedicine(
+          dataToSend
+        );
 
-      if (res && res.success) {
+      console.log(
+        "ADD MEDICINE RESPONSE:",
+        res
+      );
+
+      if (
+        res &&
+        res.success
+      ) {
         Alert.alert(
           "Success",
           "Medicine Added Successfully ✅"
         );
+
+        // RESET FORM
 
         setForm({
           name: "",
           company: "",
           type: "",
           strength: "",
+
           packSize: "",
           packType: "",
+
+          sellingUnit: "Pack",
+          individualSaleAllowed: false,
+
           bottleSize: "",
           tubeSize: "",
           volume: "",
+
           mrp: "",
           offerPrice: "",
           discount: "",
           stock: "",
+
           batch: "",
           image: "",
+
           mfgDate: "",
           expDate: "",
         });
       } else {
         Alert.alert(
           "Error",
-          res?.message || "Error adding medicine."
+          res?.message ||
+            "Error adding medicine."
         );
       }
     } catch (error) {
       console.error(
-        "Distributor Add Medicine Error:",
+        "Add Medicine Error:",
         error
       );
 
       Alert.alert(
         "Error",
-        "Error adding medicine."
+        error?.message ||
+          "Error adding medicine."
       );
     } finally {
       setLoading(false);
@@ -363,7 +600,7 @@ export default function AddMedicineScreen({ navigation }) {
   };
 
   // ==========================================
-  // Reusable Input
+  // REUSABLE INPUT
   // ==========================================
 
   const renderInput = (
@@ -383,7 +620,10 @@ export default function AddMedicineScreen({ navigation }) {
         placeholderTextColor="#999999"
         value={form[name]}
         onChangeText={(value) =>
-          handleChange(name, value)
+          handleChange(
+            name,
+            value
+          )
         }
         keyboardType={keyboardType}
       />
@@ -391,7 +631,7 @@ export default function AddMedicineScreen({ navigation }) {
   );
 
   // ==========================================
-  // Reusable Select
+  // REUSABLE SELECT
   // ==========================================
 
   const renderSelect = (
@@ -405,55 +645,155 @@ export default function AddMedicineScreen({ navigation }) {
         {label}
       </Text>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.selectScroll}
+      <TouchableOpacity
+        style={styles.dropdownButton}
+        activeOpacity={0.8}
+        onPress={() =>
+          setOpenSelect(name)
+        }
       >
-        <View style={styles.optionRow}>
-          {options.map((option) => {
-            const selected =
-              form[name] === option;
+        <Text
+          style={[
+            styles.dropdownText,
 
-            return (
+            !form[name] &&
+              styles.dropdownPlaceholder,
+          ]}
+        >
+          {form[name] ||
+            placeholder}
+        </Text>
+
+        <Text
+          style={styles.dropdownArrow}
+        >
+          ▼
+        </Text>
+      </TouchableOpacity>
+
+      <Modal
+        visible={
+          openSelect === name
+        }
+        transparent
+        animationType="fade"
+        onRequestClose={() =>
+          setOpenSelect(null)
+        }
+      >
+        <View
+          style={styles.dropdownOverlay}
+        >
+          <View
+            style={styles.dropdownModal}
+          >
+            <View
+              style={styles.dropdownHeader}
+            >
+              <Text
+                style={styles.dropdownTitle}
+              >
+                {label}
+              </Text>
+
               <TouchableOpacity
-                key={option}
-                style={[
-                  styles.optionButton,
-                  selected &&
-                    styles.selectedOptionButton,
-                ]}
                 onPress={() =>
-                  handleChange(name, option)
+                  setOpenSelect(null)
                 }
               >
                 <Text
-                  style={[
-                    styles.optionText,
-                    selected &&
-                      styles.selectedOptionText,
-                  ]}
+                  style={styles.dropdownClose}
                 >
-                  {option}
+                  ×
                 </Text>
               </TouchableOpacity>
-            );
-          })}
-        </View>
-      </ScrollView>
+            </View>
 
-      {!form[name] && (
-        <Text style={styles.selectPlaceholder}>
-          {placeholder}
-        </Text>
-      )}
+            <FlatList
+              data={options}
+              keyExtractor={(
+                item,
+                index
+              ) =>
+                `${item}-${index}`
+              }
+              showsVerticalScrollIndicator
+              nestedScrollEnabled
+              renderItem={({
+                item,
+              }) => {
+                const selected =
+                  form[name] === item;
+
+                return (
+                  <TouchableOpacity
+                    style={[
+                      styles.dropdownItem,
+
+                      selected &&
+                        styles.selectedDropdownItem,
+                    ]}
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      handleChange(
+                        name,
+                        item
+                      );
+
+                      setOpenSelect(null);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.dropdownItemText,
+
+                        selected &&
+                          styles.selectedDropdownItemText,
+                      ]}
+                    >
+                      {item}
+                    </Text>
+
+                    {selected && (
+                      <Text
+                        style={styles.dropdownCheck}
+                      >
+                        ✓
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 
+  // ==========================================
+  // UI
+  // ==========================================
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+    >
+      {showDatePicker && (
+        <DateTimePicker
+          value={new Date()}
+          mode="date"
+          display="default"
+          onChange={
+            handleDateChange
+          }
+        />
+      )}
+
       <KeyboardAvoidingView
-        style={styles.keyboardContainer}
+        style={
+          styles.keyboardContainer
+        }
         behavior={
           Platform.OS === "ios"
             ? "padding"
@@ -461,24 +801,34 @@ export default function AddMedicineScreen({ navigation }) {
         }
       >
         <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={
+            false
+          }
+          contentContainerStyle={
+            styles.content
+          }
           keyboardShouldPersistTaps="handled"
         >
-          {/* Header */}
+          {/* HEADER */}
 
-          <View style={styles.header}>
-            <Text style={styles.title}>
-              💊 Add Medicine
-            </Text>
+          <View
+            style={styles.header}
+          >
+            <View>
+              <Text
+                style={styles.title}
+              >
+                💊 Add Medicine
+              </Text>
 
-            <Text style={styles.subtitle}>
-              Fill all details carefully to seed
-              wholesale stock.
-            </Text>
+              <Text
+                style={styles.subtitle}
+              >
+                Fill all medicine details
+                carefully to add inventory.
+              </Text>
+            </View>
           </View>
-
-          {/* Medicine Name */}
 
           {renderInput(
             "Medicine Name",
@@ -486,15 +836,11 @@ export default function AddMedicineScreen({ navigation }) {
             "Enter medicine name"
           )}
 
-          {/* Company */}
-
           {renderInput(
             "Company",
             "company",
             "Enter company name"
           )}
-
-          {/* Medicine Type */}
 
           {renderSelect(
             "Medicine Type",
@@ -503,8 +849,6 @@ export default function AddMedicineScreen({ navigation }) {
             "Select Medicine Type"
           )}
 
-          {/* Medicine Image */}
-
           {renderInput(
             "Medicine Image URL",
             "image",
@@ -512,15 +856,11 @@ export default function AddMedicineScreen({ navigation }) {
             "url"
           )}
 
-          {/* Strength */}
-
           {renderInput(
             "Strength",
             "strength",
             "e.g. 650mg"
           )}
-
-          {/* Pack Type */}
 
           {renderSelect(
             "Pack Type",
@@ -529,7 +869,14 @@ export default function AddMedicineScreen({ navigation }) {
             "Select Pack Type"
           )}
 
-          {/* Tablets Per Strip */}
+          {renderSelect(
+            "Selling Unit",
+            "sellingUnit",
+            SELLING_UNITS,
+            "Select Selling Unit"
+          )}
+
+          {/* STRIP */}
 
           {form.packType === "Strip" &&
             renderInput(
@@ -539,7 +886,7 @@ export default function AddMedicineScreen({ navigation }) {
               "numeric"
             )}
 
-          {/* Bottle Size */}
+          {/* BOTTLE */}
 
           {form.packType === "Bottle" &&
             renderSelect(
@@ -549,7 +896,7 @@ export default function AddMedicineScreen({ navigation }) {
               "Select Bottle Size"
             )}
 
-          {/* Tube Size */}
+          {/* TUBE */}
 
           {form.packType === "Tube" &&
             renderSelect(
@@ -559,18 +906,17 @@ export default function AddMedicineScreen({ navigation }) {
               "Select Tube Size"
             )}
 
-          {/* Vial / Ampoule Volume */}
+          {/* VIAL / AMPOULE */}
 
           {(form.packType === "Vial" ||
-            form.packType === "Ampoule") &&
+            form.packType ===
+              "Ampoule") &&
             renderSelect(
               "Volume",
               "volume",
               VOLUMES,
               "Select Volume"
             )}
-
-          {/* MRP */}
 
           {renderInput(
             "MRP ₹",
@@ -579,8 +925,6 @@ export default function AddMedicineScreen({ navigation }) {
             "decimal-pad"
           )}
 
-          {/* Discount */}
-
           {renderInput(
             "Discount %",
             "discount",
@@ -588,11 +932,15 @@ export default function AddMedicineScreen({ navigation }) {
             "decimal-pad"
           )}
 
-          {/* Wholesale Offer Price */}
+          {/* SELLING PRICE */}
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>
-              Wholesale Offer Price ₹
+          <View
+            style={styles.formGroup}
+          >
+            <Text
+              style={styles.label}
+            >
+              Retail Selling Price ₹
             </Text>
 
             <TextInput
@@ -600,19 +948,21 @@ export default function AddMedicineScreen({ navigation }) {
                 styles.input,
                 styles.readOnlyInput,
               ]}
-              value={form.offerPrice}
+              value={
+                form.offerPrice
+              }
               placeholder="Auto calculated"
               placeholderTextColor="#999999"
               editable={false}
             />
 
-            <Text style={styles.helperText}>
-              Auto-calculated wholesale listing
-              cost.
+            <Text
+              style={styles.helperText}
+            >
+              Auto-calculated retail cost
+              for consumers.
             </Text>
           </View>
-
-          {/* Stock */}
 
           {renderInput(
             "Stock Quantity",
@@ -621,48 +971,102 @@ export default function AddMedicineScreen({ navigation }) {
             "numeric"
           )}
 
-          {/* Batch */}
-
           {renderInput(
             "Batch Number",
             "batch",
             "Enter batch number"
           )}
 
-          {/* Manufacturing Date */}
+          {/* MANUFACTURING DATE */}
 
-          {renderInput(
-            "Manufacturing Date",
-            "mfgDate",
-            "YYYY-MM-DD"
-          )}
+          <View
+            style={styles.formGroup}
+          >
+            <Text
+              style={styles.label}
+            >
+              Manufacturing Date
+            </Text>
 
-          {/* Expiry Date */}
+            <TouchableOpacity
+              style={styles.dateInput}
+              activeOpacity={0.8}
+              onPress={() =>
+                openDatePicker(
+                  "mfgDate"
+                )
+              }
+            >
+              <Text
+                style={[
+                  styles.dateText,
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>
+                  !form.mfgDate &&
+                    styles.datePlaceholder,
+                ]}
+              >
+                {form.mfgDate ||
+                  "Select manufacturing date"}
+              </Text>
+
+              <Text
+                style={
+                  styles.calendarIcon
+                }
+              >
+                📅
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* EXPIRY DATE */}
+
+          <View
+            style={styles.formGroup}
+          >
+            <Text
+              style={styles.label}
+            >
               Expiry Date
             </Text>
 
-            <TextInput
-              style={styles.input}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#999999"
-              value={form.expDate}
-              onChangeText={(value) =>
-                handleChange(
-                  "expDate",
-                  value
+            <TouchableOpacity
+              style={styles.dateInput}
+              activeOpacity={0.8}
+              onPress={() =>
+                openDatePicker(
+                  "expDate"
                 )
               }
-            />
+            >
+              <Text
+                style={[
+                  styles.dateText,
+
+                  !form.expDate &&
+                    styles.datePlaceholder,
+                ]}
+              >
+                {form.expDate ||
+                  "Select expiry date"}
+              </Text>
+
+              <Text
+                style={
+                  styles.calendarIcon
+                }
+              >
+                📅
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          {/* Add Medicine Button */}
+          {/* ADD BUTTON */}
 
           <TouchableOpacity
             style={[
               styles.submitButton,
+
               loading &&
                 styles.disabledSubmitButton,
             ]}
@@ -670,7 +1074,11 @@ export default function AddMedicineScreen({ navigation }) {
             disabled={loading}
             onPress={handleSubmit}
           >
-            <Text style={styles.submitButtonText}>
+            <Text
+              style={
+                styles.submitButtonText
+              }
+            >
               {loading
                 ? "Adding Medicine..."
                 : "Add Medicine"}

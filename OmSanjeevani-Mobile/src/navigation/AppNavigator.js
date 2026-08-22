@@ -4,12 +4,16 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 
+
 import CustomerDrawerNavigator from "./CustomerDrawerNavigator";
 import ShopkeeperDrawerNavigator from "./ShopkeeperDrawerNavigator";
+import DistributorDrawerNavigator from "./DistributorDrawerNavigator";
+import AdminDrawerNavigator from "./AdminDrawerNavigator";
 import { CartProvider } from "../context/CartContext";
 import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
+
 
 // ==========================================
 // Authentication Screens
@@ -37,7 +41,7 @@ import OrderDetailsScreen from "../screens/customer/OrderDetailsScreen";
 // Shopkeeper Screens
 // ==========================================
 
-import ShopkeeperHomeScreen from "../screens/shopkeeper/ShopkeeperHomeScreen";
+
 import ShopkeeperMedicinesList from "../screens/shopkeeper/MedicineListScreen";
 import ShopkeeperAddMedicineScreen from "../screens/shopkeeper/AddMedicineScreen";
 import ShopkeeperOrdersScreen from "../screens/shopkeeper/OrdersScreen";
@@ -46,12 +50,9 @@ import ShopkeeperOrdersDetailsScreen from "../screens/shopkeeper/OrdersDetailsSc
 // ==========================================
 // Distributor Screens
 // ==========================================
+import EditProfileScreen from "../screens/customer/EditProfileScreen";
 
-import DistributorHomeScreen from "../screens/distributor/DistributorHomeScreen";
-import DistributorMedicines from "../screens/distributor/MedicinesList";
-import DistributorAddMedicineScreen from "../screens/distributor/AddMedicineScreen";
-import DistributorOrdersScreen from "../screens/distributor/OrdersScreen";
-import DistributorOrderDetailsScreen from "../screens/distributor/OrderDetailsScreen";
+
 
 // ==========================================
 // Stack Navigator
@@ -157,6 +158,10 @@ export default function AppNavigator() {
   name="ShopkeeperHome"
   component={ShopkeeperDrawerNavigator}
 />
+      <Stack.Screen
+  name="EditProfile"
+  component={EditProfileScreen}
+/>
         <Stack.Screen
           name="ShopkeeperMedicines"
           component={ShopkeeperMedicinesList}
@@ -182,29 +187,17 @@ export default function AppNavigator() {
         =================================== */}
 
         <Stack.Screen
-          name="DistributorHome"
-          component={DistributorHomeScreen}
-        />
+  name="DistributorHome"
+  component={DistributorDrawerNavigator}
+/>
+<Stack.Screen
+  name="AdminHome"
+  component={AdminDrawerNavigator}
+/>
 
-        <Stack.Screen
-          name="DistributorMedicines"
-          component={DistributorMedicines}
-        />
-
-        <Stack.Screen
-          name="DistributorAddMedicine"
-          component={DistributorAddMedicineScreen}
-        />
-
-        <Stack.Screen
-          name="DistributorOrders"
-          component={DistributorOrdersScreen}
-        />
-
-        <Stack.Screen
-          name="DistributorOrderDetails"
-          component={DistributorOrderDetailsScreen}
-        />
+        
+      
+      
     
       </Stack.Navigator>
       </CartProvider>

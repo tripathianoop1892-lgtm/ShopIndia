@@ -228,3 +228,80 @@ export const searchShops = async (req, res) => {
     });
   }
 };
+// =======================
+// UPDATE PROFILE
+// =======================
+export const updateProfile = async (req, res) => {
+  try {
+    const {
+      fullName,
+      mobile,
+      email,
+      shopName,
+      address,
+    } = req.body;
+
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user ❌",
+      });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found ❌",
+      });
+    }
+
+    if (fullName !== undefined) {
+      user.name = fullName.trim();
+    }
+
+    if (mobile !== undefined) {
+      user.mobile = mobile.trim();
+    }
+
+    if (email !== undefined) {
+      user.email = email.trim().toLowerCase();
+    }
+
+    if (shopName !== undefined) {
+      user.shopName = shopName.trim();
+    }
+
+    if (address !== undefined) {
+      user.address = address.trim();
+    }
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Profile updated successfully ✅",
+      user: {
+        _id: user._id,
+        name: user.name,
+        mobile: user.mobile,
+        email: user.email,
+        shopName: user.shopName,
+        address: user.address,
+        role: user.role,
+        shopId: user.shopId,
+      },
+    });
+
+  } catch (err) {
+    console.log("UPDATE PROFILE ERROR:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to update profile ❌",
+    });
+  }
+};

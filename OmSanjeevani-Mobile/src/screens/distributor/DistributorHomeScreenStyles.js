@@ -20,11 +20,13 @@ const styles = StyleSheet.create({
   // ==========================================
 
   dashboardHeader: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: 18,
-    marginBottom: 15,
+  backgroundColor: "#FFFFFF",
+  borderRadius: 16,
 
+  paddingHorizontal: 18,
+  paddingVertical: 12,
+
+  marginBottom: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

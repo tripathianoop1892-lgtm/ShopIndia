@@ -18,6 +18,7 @@ import bannerRoutes from "./src/routes/banner.routes.js";
 import couponRoutes from "./src/routes/coupon.routes.js";
 
 import prescriptionRoutes from "./src/routes/prescription.routes.js";
+import supportRoutes from "./src/routes/support.routes.js";
 
 // CONFIG
 import connectDB from "./src/config/db.js";
@@ -63,6 +64,9 @@ app.use("/api/admin/banner", bannerRoutes);
 
 // 📄 PRESCRIPTIONS
 app.use("/api/prescriptions", prescriptionRoutes);
+
+// 🎧 SUPPORT
+app.use("/api/support", supportRoutes);
 
 // =======================
 // SERVER

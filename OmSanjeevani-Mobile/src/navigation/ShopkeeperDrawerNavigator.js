@@ -15,6 +15,7 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 
+
 import styles from "./ShopkeeperDrawerNavigatorStyles";
 
 // ==========================================
@@ -31,7 +32,7 @@ import EarningsScreen from "../screens/shopkeeper/EarningsScreen";
 import ProfileScreen from "../screens/shopkeeper/ProfileScreen";
 import EditProfileScreen from "../screens/shopkeeper/EditProfileScreen";
 import SettingsScreen from "../screens/shopkeeper/SettingsScreen";
-
+import NotificationScreen from "../screens/shopkeeper/NotificationScreen";
 // ==========================================
 // DRAWER
 // ==========================================
@@ -213,8 +214,17 @@ function CustomDrawerContent(props) {
           label="Settings"
           screen="ShopkeeperSettings"
         />
+       
+       <MenuItem
+  icon="settings-outline"
+  label="Settings"
+  screen="ShopkeeperSettings"
+/>
 
-      </View>
+</View>
+      
+       
+   
 
       {/* ==================================
           BOTTOM SECTION
@@ -357,6 +367,15 @@ export default function ShopkeeperDrawerNavigator() {
         name="ShopkeeperSettings"
         component={SettingsScreen}
       />
+     
+     {/* ==================================
+    NOTIFICATION
+=================================== */}
+
+<Drawer.Screen
+  name="ShopkeeperNotification"
+  component={NotificationScreen}
+/>
 
     </Drawer.Navigator>
   );

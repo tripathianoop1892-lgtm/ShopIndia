@@ -23,7 +23,7 @@ export default function ProfileScreen({
       id: "1",
       title: "Edit Profile",
       icon: "create-outline",
-      screen: "EditProfile",
+      screen: "CustomerEditProfile",
     },
     {
       id: "2",
@@ -35,7 +35,7 @@ export default function ProfileScreen({
       id: "3",
       title: "My Prescriptions",
       icon: "document-text-outline",
-      screen: "Prescriptions",
+      screen: "CustomerPrescriptions",
     },
     {
       id: "4",
@@ -60,11 +60,19 @@ export default function ProfileScreen({
   return (
     <SafeAreaView style={styles.container}>
 
-      <AppHeader
-        title="My Profile"
-        showBackButton
-        onBackPress={() => navigation.goBack()}
-      />
+     <AppHeader
+  title="My Profile"
+  showBackButton={true}
+  onBackPress={() => navigation.goBack()}
+
+  onNotificationPress={() => {
+    navigation.navigate("Notifications");
+  }}
+
+  onProfilePress={() => {
+    navigation.navigate("Profile");
+  }}
+/>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -128,9 +136,9 @@ export default function ProfileScreen({
             <TouchableOpacity
               key={item.id}
               style={styles.menuItem}
-              onPress={() =>
-                navigation.navigate(item.screen)
-              }
+       onPress={() => {
+  navigation.navigate(item.screen);
+}}
             >
 
               <View style={styles.menuLeft}>
@@ -139,7 +147,7 @@ export default function ProfileScreen({
                   name={item.icon}
                   size={22}
                   color="#2E7D32"
-                />
+               />
 
                 <Text style={styles.menuText}>
                   {item.title}

@@ -26,7 +26,7 @@ import {
 } from "../../services/api";
 
 import styles from "./DashboardScreenStyles";
-
+import AppHeader from "../../components/headers/AppHeader";
 // ==========================================
 // SHOPKEEPER DASHBOARD
 // ==========================================
@@ -533,50 +533,16 @@ export default function DashboardScreen({
           />
         }
       >
-        {/* ==================================
-            HEADER
-        =================================== */}
-
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.menuButton}
-            activeOpacity={0.8}
-            onPress={() => {
-            console.log("MENU CLICKED");
-            navigation.openDrawer();
-            }}
-          >
-            <Ionicons
-              name="menu-outline"
-              size={28}
-              color="#008C3A"
-            />
-          </TouchableOpacity>
-
-          <View style={styles.headerInfo}>
-            <Text style={styles.title}>
-              Shopkeeper Dashboard
-            </Text>
-
-            <Text style={styles.subtitle}>
-              Select a verified distributor
-              to source supply inventory
-            </Text>
-          </View>
-
-          <View style={styles.orderBadge}>
-            <Ionicons
-              name="cube-outline"
-              size={15}
-              color="#008C3A"
-            />
-
-            <Text style={styles.orderBadgeText}>
-              {orders.length} Orders
-            </Text>
-          </View>
-        </View>
-
+       <AppHeader
+  title="Shopkeeper Dashboard"
+  onMenuPress={() => navigation.openDrawer()}
+  onNotificationPress={() =>
+    navigation.navigate("ShopkeeperNotification")
+  }
+  onProfilePress={() =>
+    navigation.navigate("ShopkeeperProfile")
+  }
+/>
         {/* ==================================
             STATS
         =================================== */}

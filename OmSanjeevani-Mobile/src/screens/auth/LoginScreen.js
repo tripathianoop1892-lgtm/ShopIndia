@@ -50,8 +50,10 @@ export default function LoginScreen({ navigation }) {
   // Login
   // ==========================================
 
-  const handleLogin = async () => {
-    // ----------------------------------------
+const handleLogin = async () => {
+
+
+  // ----------------------------------------
     // Email Validation
     // ----------------------------------------
 
@@ -203,12 +205,10 @@ await AsyncStorage.setItem(
         // Admin
         // ------------------------------------
 
-        case "admin":
-          Alert.alert(
-            "Admin Login",
-            "Admin mobile dashboard is not connected yet."
-          );
-          break;
+   case "admin":
+  navigation.replace("AdminHome");
+  break;
+          
 
         // ------------------------------------
         // Unknown Role

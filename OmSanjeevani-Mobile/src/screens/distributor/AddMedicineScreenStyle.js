@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   // ==========================================
-  // Main Container
+  // MAIN
   // ==========================================
 
   container: {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
 
   // ==========================================
-  // Header
+  // HEADER
   // ==========================================
 
   header: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
 
   // ==========================================
-  // Form
+  // FORM
   // ==========================================
 
   formGroup: {
@@ -59,14 +59,11 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 52,
     backgroundColor: "#FFFFFF",
-
     borderWidth: 1,
     borderColor: "#D9D9D9",
     borderRadius: 10,
-
     paddingHorizontal: 14,
     paddingVertical: 12,
-
     fontSize: 15,
     color: "#222222",
   },
@@ -85,69 +82,150 @@ const styles = StyleSheet.create({
   },
 
   // ==========================================
-  // Select / Options
+  // DROPDOWN BUTTON
   // ==========================================
 
-  selectScroll: {
-    flexGrow: 0,
-  },
-
-  optionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  optionButton: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-
-    marginRight: 8,
-
+  dropdownButton: {
+    minHeight: 52,
     backgroundColor: "#FFFFFF",
-
     borderWidth: 1,
     borderColor: "#D9D9D9",
     borderRadius: 10,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
-  selectedOptionButton: {
+  dropdownText: {
+    flex: 1,
+    fontSize: 15,
+    color: "#222222",
+  },
+
+  dropdownPlaceholder: {
+    color: "#999999",
+  },
+
+  dropdownArrow: {
+    fontSize: 14,
+    color: "#666666",
+    marginLeft: 10,
+  },
+
+  // ==========================================
+  // DROPDOWN MODAL
+  // ==========================================
+
+  dropdownOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+
+  dropdownModal: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    maxHeight: "75%",
+    overflow: "hidden",
+  },
+
+  dropdownHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEEEEE",
+  },
+
+  dropdownTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#222222",
+  },
+
+  dropdownClose: {
+    fontSize: 30,
+    lineHeight: 30,
+    color: "#777777",
+  },
+
+  dropdownItem: {
+    minHeight: 52,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  selectedDropdownItem: {
     backgroundColor: "#E8F5E9",
-    borderColor: "#2E7D32",
   },
 
-  optionText: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#555555",
+  dropdownItemText: {
+    fontSize: 15,
+    color: "#333333",
   },
 
-  selectedOptionText: {
+  selectedDropdownItemText: {
     color: "#2E7D32",
     fontWeight: "700",
   },
 
-  selectPlaceholder: {
-    marginTop: 8,
-    fontSize: 12,
-    color: "#999999",
+  dropdownCheck: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#2E7D32",
   },
 
   // ==========================================
-  // Add Medicine Button
+  // DATE INPUT
+  // ==========================================
+
+  dateInput: {
+    minHeight: 52,
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#D9D9D9",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  dateText: {
+    flex: 1,
+    fontSize: 15,
+    color: "#222222",
+  },
+
+  datePlaceholder: {
+    color: "#999999",
+  },
+
+  calendarIcon: {
+    fontSize: 20,
+    marginLeft: 10,
+  },
+
+  // ==========================================
+  // SUBMIT BUTTON
   // ==========================================
 
   submitButton: {
     height: 54,
-
     marginTop: 8,
-
     borderRadius: 12,
-
     backgroundColor: "#2E7D32",
-
     justifyContent: "center",
     alignItems: "center",
-
     elevation: 3,
 
     shadowColor: "#000",

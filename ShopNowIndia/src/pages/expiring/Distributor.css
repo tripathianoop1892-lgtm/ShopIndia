@@ -34,3 +34,23 @@ th, td {
   .container { padding: 14px 10px; }
   table { font-size: 13px; }
 }
+
+/* ==========================================
+   EXPORT TO EXCEL BUTTON
+========================================== */
+
+.export-btn {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.export-btn:hover {
+  background: #15803d;
+}

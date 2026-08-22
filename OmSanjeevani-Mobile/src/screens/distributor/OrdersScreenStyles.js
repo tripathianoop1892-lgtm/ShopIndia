@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+
   // ==========================================
-  // Main Container
+  // MAIN
   // ==========================================
 
   container: {
@@ -10,13 +11,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F7FA",
   },
 
-  // ==========================================
-  // Orders List
-  // ==========================================
-
   list: {
     padding: 15,
-    paddingBottom: 40,
+    paddingBottom: 30,
   },
 
   emptyList: {
@@ -24,423 +21,320 @@ const styles = StyleSheet.create({
   },
 
   // ==========================================
-  // Order Card
+  // LOADING
+  // ==========================================
+
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#666666",
+  },
+
+  // ==========================================
+  // ORDER CARD
   // ==========================================
 
   orderCard: {
     backgroundColor: "#FFFFFF",
-
-    borderRadius: 16,
-
+    borderRadius: 14,
     padding: 16,
-
     marginBottom: 15,
 
-    elevation: 3,
+    elevation: 2,
 
     shadowColor: "#000",
-
     shadowOffset: {
       width: 0,
       height: 2,
     },
 
     shadowOpacity: 0.08,
-
     shadowRadius: 4,
   },
 
   // ==========================================
-  // Order Header
+  // ORDER HEADER
   // ==========================================
 
   orderHeader: {
     flexDirection: "row",
-
     justifyContent: "space-between",
-
-    alignItems: "center",
-
-    paddingBottom: 14,
-
-    marginBottom: 14,
-
-    borderBottomWidth: 1,
-
-    borderBottomColor: "#EEEEEE",
+    alignItems: "flex-start",
+    marginBottom: 16,
   },
 
   orderIdLabel: {
     fontSize: 11,
-
     color: "#888888",
-
-    marginBottom: 4,
-
-    fontWeight: "500",
+    marginBottom: 3,
   },
 
   orderId: {
     fontSize: 14,
-
-    color: "#222222",
-
     fontWeight: "700",
+    color: "#222222",
+    maxWidth: 190,
   },
 
   // ==========================================
-  // Status Badge
+  // STATUS
   // ==========================================
 
   statusBadge: {
-    paddingHorizontal: 11,
-
+    paddingHorizontal: 10,
     paddingVertical: 6,
-
     borderRadius: 20,
-
-    alignItems: "center",
-
-    justifyContent: "center",
   },
 
   statusText: {
     fontSize: 12,
-
     fontWeight: "700",
   },
 
   // ==========================================
-  // Information Row
+  // INFO ROW
   // ==========================================
 
   infoRow: {
     flexDirection: "row",
-
     alignItems: "center",
-
     marginBottom: 14,
   },
 
   infoContent: {
-    flex: 1,
-
     marginLeft: 10,
+    flex: 1,
   },
 
   infoLabel: {
     fontSize: 11,
-
     color: "#888888",
-
     marginBottom: 2,
-
-    fontWeight: "500",
   },
 
   infoValue: {
     fontSize: 14,
-
-    color: "#333333",
-
     fontWeight: "600",
+    color: "#333333",
   },
 
   // ==========================================
-  // Medicines Section
+  // MEDICINES
   // ==========================================
 
   medicinesSection: {
-    backgroundColor: "#F8FAF8",
-
-    borderRadius: 12,
-
-    padding: 12,
-
-    marginTop: 2,
-
-    marginBottom: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#EEEEEE",
+    paddingTop: 14,
+    marginTop: 4,
   },
 
   medicinesHeader: {
     flexDirection: "row",
-
     alignItems: "center",
-
-    paddingBottom: 9,
-
-    marginBottom: 3,
-
-    borderBottomWidth: 1,
-
-    borderBottomColor: "#E5E7EB",
+    marginBottom: 10,
   },
 
   medicinesTitle: {
-    fontSize: 15,
-
+    fontSize: 14,
     fontWeight: "700",
-
-    color: "#2E7D32",
-
-    marginLeft: 7,
+    color: "#333333",
+    marginLeft: 8,
   },
-
-  // ==========================================
-  // Medicine Row
-  // ==========================================
 
   medicineRow: {
     flexDirection: "row",
-
     justifyContent: "space-between",
-
     alignItems: "center",
 
-    paddingVertical: 9,
+    backgroundColor: "#F8FAF8",
 
-    borderBottomWidth: 1,
+    padding: 10,
+    borderRadius: 8,
 
-    borderBottomColor: "#EEEEEE",
+    marginBottom: 7,
   },
 
   medicineInfo: {
     flex: 1,
-
-    marginRight: 10,
+    paddingRight: 10,
   },
 
   medicineName: {
-    fontSize: 14,
-
+    fontSize: 13,
     fontWeight: "600",
-
     color: "#333333",
-
-    marginBottom: 3,
   },
 
   medicineQuantity: {
-    fontSize: 12,
-
+    fontSize: 11,
     color: "#777777",
+    marginTop: 3,
   },
 
   medicinePrice: {
-    fontSize: 14,
-
+    fontSize: 13,
     fontWeight: "700",
-
     color: "#2E7D32",
   },
 
   noItemsText: {
     fontSize: 13,
-
     color: "#888888",
-
     textAlign: "center",
-
-    paddingVertical: 10,
+    paddingVertical: 12,
   },
 
   // ==========================================
-  // Total Amount
+  // TOTAL
   // ==========================================
 
   totalRow: {
     flexDirection: "row",
-
     justifyContent: "space-between",
-
     alignItems: "center",
 
-    paddingTop: 3,
+    borderTopWidth: 1,
+    borderTopColor: "#EEEEEE",
 
-    marginBottom: 15,
+    marginTop: 8,
+    paddingTop: 14,
+    marginBottom: 14,
   },
 
   totalLabel: {
-    fontSize: 16,
-
+    fontSize: 15,
     fontWeight: "600",
-
-    color: "#444444",
+    color: "#555555",
   },
 
   totalAmount: {
-    fontSize: 21,
-
+    fontSize: 19,
     fontWeight: "700",
-
     color: "#2E7D32",
   },
 
   // ==========================================
-  // View Details Button
+  // VIEW DETAILS BUTTON
   // ==========================================
 
   detailsButton: {
-    minHeight: 44,
+    height: 46,
 
-    borderRadius: 9,
+    backgroundColor: "#2E7D32",
 
-    backgroundColor: "#2563EB",
+    borderRadius: 10,
 
     flexDirection: "row",
-
-    alignItems: "center",
-
     justifyContent: "center",
-
-    paddingHorizontal: 12,
+    alignItems: "center",
 
     marginBottom: 12,
   },
 
   detailsButtonText: {
+    marginLeft: 7,
     color: "#FFFFFF",
-
     fontSize: 14,
-
     fontWeight: "700",
-
-    marginLeft: 6,
   },
 
   // ==========================================
-  // Action Buttons
+  // APPROVE / REJECT
   // ==========================================
 
   actionRow: {
     flexDirection: "row",
-
-    gap: 10,
-
-    marginTop: 2,
+    justifyContent: "space-between",
   },
 
   approveButton: {
     flex: 1,
+    height: 46,
 
-    minHeight: 44,
+    backgroundColor: "#2E7D32",
 
-    borderRadius: 9,
-
-    backgroundColor: "#16A34A",
+    borderRadius: 10,
 
     flexDirection: "row",
-
+    justifyContent: "center",
     alignItems: "center",
 
-    justifyContent: "center",
-
-    paddingHorizontal: 10,
+    marginRight: 6,
   },
 
   rejectButton: {
     flex: 1,
-
-    minHeight: 44,
-
-    borderRadius: 9,
+    height: 46,
 
     backgroundColor: "#E53935",
 
-    flexDirection: "row",
+    borderRadius: 10,
 
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
 
-    justifyContent: "center",
-
-    paddingHorizontal: 10,
+    marginLeft: 6,
   },
 
   actionButtonText: {
-    color: "#FFFFFF",
-
-    fontSize: 14,
-
-    fontWeight: "700",
-
     marginLeft: 6,
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "700",
   },
 
   processedText: {
     textAlign: "center",
 
     fontSize: 13,
-
-    color: "#64748B",
-
     fontWeight: "600",
-
-    paddingVertical: 8,
-  },
-
-  // ==========================================
-  // Loading
-  // ==========================================
-
-  loadingContainer: {
-    flex: 1,
-
-    justifyContent: "center",
-
-    alignItems: "center",
-
-    paddingHorizontal: 30,
-  },
-
-  loadingText: {
-    marginTop: 12,
-
-    fontSize: 14,
 
     color: "#777777",
 
-    fontWeight: "500",
+    paddingTop: 4,
   },
 
   // ==========================================
-  // Empty State
+  // EMPTY STATE
   // ==========================================
 
   emptyContainer: {
     flex: 1,
 
     justifyContent: "center",
-
     alignItems: "center",
 
     paddingHorizontal: 30,
-
-    marginTop: 80,
   },
 
   emptyTitle: {
-    fontSize: 21,
+    marginTop: 15,
 
+    fontSize: 18,
     fontWeight: "700",
 
     color: "#333333",
-
-    marginTop: 20,
-
-    textAlign: "center",
   },
 
   emptySubtitle: {
-    fontSize: 15,
+    marginTop: 7,
 
-    color: "#777777",
+    fontSize: 13,
+
+    color: "#888888",
 
     textAlign: "center",
-
-    marginTop: 10,
-
-    lineHeight: 22,
+    lineHeight: 20,
   },
+
 });
 
 export default styles;

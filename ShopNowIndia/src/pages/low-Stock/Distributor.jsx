@@ -14,7 +14,17 @@ const DistributorLowStock = () => {
       const res = await MedicinesList();
 
       // 🔥 LOW STOCK FILTER (< 10)
-      const lowStockData = res.filter((med) => med.stock < 50);
+     const medicineList = Array.isArray(res?.medicines)
+  ? res.medicines
+  : Array.isArray(res)
+  ? res
+  : [];
+
+const lowStockData = medicineList.filter(
+  (med) => Number(med.stock || 0) < 50
+);
+
+setMedicines(lowStockData);
 
       setMedicines(lowStockData);
     } catch (err) {

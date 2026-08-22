@@ -1,32 +1,32 @@
 import { StyleSheet, StatusBar } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: StatusBar.currentHeight || 0,
+ container: {
+  marginTop: StatusBar.currentHeight || 0,
+  position: "relative",
+  minHeight: 108,
 
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  flexDirection: "row",
+  alignItems: "center",
 
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+  paddingHorizontal: 16,
+  paddingVertical: 12,
 
-    backgroundColor: "#FFFFFF",
+  backgroundColor: "#FFFFFF",
 
-    borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
+  borderBottomWidth: 1,
+  borderBottomColor: "#EEEEEE",
 
-    elevation: 3,
+  elevation: 3,
 
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
   },
-
+  shadowOpacity: 0.08,
+  shadowRadius: 3,
+},
   leftSection: {
     flexDirection: "row",
     alignItems: "center",
@@ -51,24 +51,29 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  rightSection: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
+rightSection: {
+  position: "absolute",
 
-  iconButton: {
-    width: 42,
-    height: 42,
+  right: 8,
+  top: 10,
 
-    justifyContent: "center",
-    alignItems: "center",
+  flexDirection: "column",
+  alignItems: "center",
+},
 
-    marginLeft: 8,
+iconButton: {
+  width: 42,
+  height: 42,
 
-    borderRadius: 21,
+  justifyContent: "center",
+  alignItems: "center",
 
-    backgroundColor: "#F5F7FA",
-  },
+  marginBottom: 4,
+
+  borderRadius: 21,
+
+  backgroundColor: "#F5F7FA",
+},
 });
 
 export default styles;
