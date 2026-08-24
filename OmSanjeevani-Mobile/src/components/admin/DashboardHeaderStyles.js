@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+
   container: {
     backgroundColor: "#ffffff",
     paddingHorizontal: 16,
@@ -28,34 +29,6 @@ const styles = StyleSheet.create({
     color: "#64748b",
   },
 
-  adminContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  adminIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-
-    backgroundColor: "#2563eb",
-
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  adminInitial: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#ffffff",
-  },
-
-  adminText: {
-    marginLeft: 8,
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#1e293b",
-  },
 });
 
 export default styles;

@@ -496,7 +496,16 @@ export const getAdminUsers = async () => {
   });
 };
 
+// ==========================================
+// GET CUSTOMERS
+// GET /api/admin/customers
+// ==========================================
 
+export const getAdminCustomers = async () => {
+  return await apiRequest("/admin/customers", {
+    method: "GET",
+  });
+};
 // ==========================================
 // GET SHOPKEEPERS
 // GET /api/admin/shopkeepers
@@ -654,6 +663,7 @@ export default {
 
     getAdminDashboard,
     getAdminUsers,
+    getAdminCustomers,
     getAdminShopkeepers,
     getAdminDistributors,
     getAdminMedicines,

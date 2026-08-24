@@ -18,18 +18,6 @@ const DashboardHeader = () => {
           Admin Panel
         </Text>
       </View>
-
-      <View style={styles.adminContainer}>
-        <View style={styles.adminIcon}>
-          <Text style={styles.adminInitial}>
-            A
-          </Text>
-        </View>
-
-        <Text style={styles.adminText}>
-          Admin
-        </Text>
-      </View>
     </View>
   );
 };

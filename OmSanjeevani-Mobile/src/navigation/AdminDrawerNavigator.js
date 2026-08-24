@@ -1,6 +1,18 @@
 import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 import AdminDashboard from "../screens/admin/Dashboard";
 import Users from "../screens/admin/Users";
 import Shopkeepers from "../screens/admin/Shopkeepers";
@@ -21,12 +33,75 @@ import Profile from "../screens/admin/Profile";
 import styles from "./AdminDrawerNavigatorStyles";
 
 const Drawer = createDrawerNavigator();
+const CustomDrawerContent = (props) => {
 
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Logout",
+          style: "destructive",
+
+          onPress: async () => {
+            try {
+              await AsyncStorage.removeItem("token");
+              await AsyncStorage.removeItem("user");
+
+              props.navigation.getParent()?.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: "Login",
+                  },
+                ],
+              });
+
+            } catch (error) {
+              console.error("LOGOUT ERROR:", error);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  return (
+    <View style={styles.drawerContainer}>
+
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+
+      <TouchableOpacity
+        style={styles.logoutButton}
+        activeOpacity={0.7}
+        onPress={handleLogout}
+      >
+        <Text style={styles.logoutText}>
+          Logout
+        </Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+};
 const AdminDrawerNavigator = () => {
   return (
     <Drawer.Navigator
-      initialRouteName="AdminDashboard"
-      screenOptions={{
+  initialRouteName="AdminDashboard"
+
+  drawerContent={(props) => (
+    <CustomDrawerContent {...props} />
+  )}
+
+  screenOptions={({ navigation }) => ({
+
         headerShown: true,
 
         drawerActiveTintColor: "#2E7D32",
@@ -37,13 +112,42 @@ const AdminDrawerNavigator = () => {
         headerStyle: styles.header,
 
         headerTintColor: "#FFFFFF",
+      headerRight: () => (
+  <View style={styles.headerRightContainer}>
+    
+    <TouchableOpacity
+      style={styles.headerIconButton}
+      activeOpacity={0.7}
+     onPress={() => navigation.navigate("Profile")}
+    >
+      <Ionicons
+        name="person-circle-outline"
+        size={32}
+        color="#FFFFFF"
+      />
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={styles.headerIconButton}
+      activeOpacity={0.7}
+     onPress={() => navigation.navigate("Notifications")}
+    >
+      <Ionicons
+        name="notifications-outline"
+        size={28}
+        color="#FFFFFF"
+      />
+    </TouchableOpacity>
+
+  </View>
+),
 
         drawerLabelStyle: styles.drawerLabel,
 
         drawerActiveBackgroundColor: "#E8F5E9",
 
-        drawerItemStyle: styles.drawerItem,
-      }}
+       drawerItemStyle: styles.drawerItem,
+})}
     >
       <Drawer.Screen
         name="AdminDashboard"
