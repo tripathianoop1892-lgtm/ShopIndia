@@ -75,6 +75,15 @@ individualSaleAllowed: {
       type: Number,
       default: 0, // Price the Customer pays to the Shopkeeper
     },
+    rating:{
+      type: Number,
+      default:0,
+    },
+    reviewsCount:{
+      type:Number,
+      default:0,
+    },
+
     // Ownership Matrix
     ownerId: {
       type: mongoose.Schema.Types.ObjectId,

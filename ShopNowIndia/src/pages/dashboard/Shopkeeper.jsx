@@ -212,9 +212,15 @@ const Shopkeeper = () => {
                   </div>
                   <div className="distributor-meta-details">
                     <h4>{dist.name}</h4>
-                    <p style={{ textTransform: 'uppercase', fontSize: '10px', color: '#10b981', fontWeight: 'bold', margin: 0 }}>
+                    {/* NEW: Distributor Average Rating Block */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
+                    <span style={{ textTransform: 'uppercase', fontSize: '10px', color: '#10b981', fontWeight: 'bold' }}>
                       Verified {dist.role}
-                    </p>
+                    </span>
+                    <span style={{ color: "#f59e0b", fontSize: "11px", fontWeight: "bold" }}>
+                      ★ {dist.rating || "New"} ({dist.reviewsCount || 0})
+                    </span>
+                  </div>
                   </div>
                   <FaChevronRight className="arrow-indicator" />
                 </div>

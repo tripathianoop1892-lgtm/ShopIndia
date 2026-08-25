@@ -464,3 +464,48 @@ export const downloadSalesReport = async () => {
 
   window.URL.revokeObjectURL(url);
 };
+
+// Fetch Admin Reviews
+export const getReviews = async () => {
+  const res = await fetch(`${BASE_URL}/reviews/admin`, {
+    headers: getHeaders()
+  });
+  return res.json();
+};
+
+// Update Review Status
+export const updateReviewState = async (id, status) => {
+  const res = await fetch(`${BASE_URL}/reviews/${id}/status`, {
+    method: "PATCH",
+    headers: getHeaders(),
+    body: JSON.stringify({ status })
+  });
+  return res.json();
+};
+
+// Delete Review
+export const removeReview = async (id) => {
+  const res = await fetch(`${BASE_URL}/reviews/${id}`, {
+    method: "DELETE",
+    headers: getHeaders()
+  });
+  return res.json();
+};
+
+// POST a new customer review
+export const submitReview = async (reviewPayload) => {
+  const res = await fetch(`${BASE_URL}/reviews`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(reviewPayload),
+  });
+  return res.json();
+};
+
+// Fetch Entity's Received Reviews (For Shopkeepers & Distributors)
+export const getMyReviews = async () => {
+  const res = await fetch(`${BASE_URL}/reviews/me`, {
+    headers: getHeaders()
+  });
+  return res.json();
+};

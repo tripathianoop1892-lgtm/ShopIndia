@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
+import { getMyReviews } from "../../services/api"; // Added API import
 import { 
   FaUser, FaEnvelope, FaShieldAlt, FaStore, 
   FaStar, FaThList, FaSignOutAlt, FaIdBadge,
@@ -10,6 +11,24 @@ import "./Profile.css";
 const Profile = () => {
   const { user, logout, isCustomer, isShopkeeper, isDistributor, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+
+  // --- My Reviews State ---
+  const [myReviews, setMyReviews] = useState([]);
+
+  useEffect(() => {
+    if (activeTab === "reviews" && (isShopkeeper || isDistributor)) {
+      fetchReviews();
+    }
+  }, [activeTab, isShopkeeper, isDistributor]);
+
+  const fetchReviews = async () => {
+    try {
+      const res = await getMyReviews();
+      if (res.success) setMyReviews(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch reviews", err);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -68,6 +87,16 @@ const Profile = () => {
           >
             <FaFileContract /> Terms & Compliance
           </button>
+
+          {/* NEW: Reviews Tab for Sellers */}
+          {(isShopkeeper || isDistributor) && (
+            <button 
+              className={`tab-anchor-btn ${activeTab === "reviews" ? "active" : ""}`} 
+              onClick={() => setActiveTab("reviews")}
+            >
+              <FaStar /> My Business Reviews
+            </button>
+          )}
         </nav>
 
         <button onClick={handleLogout} className="sidebar-signout-action-btn">
@@ -196,6 +225,47 @@ const Profile = () => {
                 <span className="data-field-lbl">Operational Accountability</span>
                 <span className="data-field-val security-fine-print">All dispatched B2B bulk shipments capture fixed snapshot costs immediately at checkout to stabilize corporate financial ledgers.</span>
               </div>
+            </div>
+          </section>
+        )}
+
+        {/* NEW TAB 4: MY REVIEWS TAB */}
+        {activeTab === "reviews" && (
+          <section className="view-panel-card animation-fade-in">
+            <div className="panel-header">
+              <h3>My Business Reviews</h3>
+              <p>Feedback and ratings submitted by your business partners and customers.</p>
+            </div>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {myReviews.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "40px", color: "#64748b" }}>
+                  <FaStar style={{ fontSize: "32px", color: "#cbd5e1", marginBottom: "12px" }} />
+                  <p>You have no reviews yet.</p>
+                </div>
+              ) : (
+                myReviews.map((r) => (
+                  <div key={r._id} style={{ background: "#f8fafc", padding: "20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                      <div>
+                        <strong style={{ color: "#0f172a", fontSize: "15px" }}>
+                          {r.reviewerId?.name || "Unknown User"}
+                        </strong>
+                        <span style={{ fontSize: "12px", color: "#64748b", marginLeft: "8px", textTransform: "uppercase", fontWeight: "600" }}>
+                          ({r.reviewerId?.role || "User"})
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "4px", background: "#fef3c7", padding: "4px 10px", borderRadius: "20px", color: "#b45309", fontWeight: "700", fontSize: "13px" }}>
+                        <FaStar /> {r.rating}.0
+                      </div>
+                    </div>
+                    <p style={{ color: "#334155", margin: 0, fontSize: "14px", lineHeight: "1.5" }}>"{r.reviewText}"</p>
+                    <small style={{ color: "#94a3b8", fontSize: "11px", display: "block", marginTop: "12px" }}>
+                      {new Date(r.createdAt).toLocaleDateString()}
+                    </small>
+                  </div>
+                ))
+              )}
             </div>
           </section>
         )}

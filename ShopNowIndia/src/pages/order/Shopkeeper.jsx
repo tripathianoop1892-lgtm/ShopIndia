@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
-import { getOrders, updateOrder } from "../../services/api";
+import { getOrders, updateOrder, submitReview } from "../../services/api";
 import { shortId, formatDate, statusColor } from "../../utils/helpers";
+import { FaStar } from "react-icons/fa";
 
 const ShopkeeperOrder = () => {
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("b2c-retail"); // 'b2c-retail' or 'b2b-procure'
   const [actionLoading, setActionLoading] = useState(false);
+
+  // --- Review State ---
+  const [reviewModal, setReviewModal] = useState({ isOpen: false, targetId: null, targetName: "" });
+  const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: "" });
 
   useEffect(() => {
     fetchHistory();
@@ -22,12 +27,34 @@ const ShopkeeperOrder = () => {
     }
   };
 
-  // Dynamic execution action pipeline for B2C Retail Orders (Mirrors Wholesaler Logic)
+  // --- Handle Review Submission ---
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await submitReview({
+        targetId: reviewModal.targetId,
+        targetModel: "User", // We are reviewing the Distributor (User)
+        rating: reviewForm.rating,
+        reviewText: reviewForm.reviewText
+      });
+      
+      alert(res.message || "Review submitted successfully!");
+      if (res.success) {
+        setReviewModal({ isOpen: false, targetId: null, targetName: "" });
+        setReviewForm({ rating: 5, reviewText: "" });
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("Failed to submit review.");
+    }
+  };
+
+  // Dynamic execution action pipeline for B2C Retail Orders
   const updateStatus = async (id, status) => {
     try {
       setActionLoading(true);
       const res = await updateOrder(id, status);
-      
+
       if (res.success) {
         alert(`Retail Order successfully marked as ${status}`);
         fetchHistory(); // Refresh table state context
@@ -45,7 +72,7 @@ const ShopkeeperOrder = () => {
   return (
     <div className="bigdiv" style={{ padding: "20px" }}>
       <h2>📋 Order Management Ledger</h2>
-      
+
       {/* Tabs configuration logic */}
       <div style={{ display: "flex", gap: "10px", margin: "20px 0" }}>
         <button 
@@ -72,7 +99,6 @@ const ShopkeeperOrder = () => {
               <th>Invoice Sum</th>
               <th>Status</th>
               <th>Date Timestamp</th>
-              {/* Dynamic Action Header added exclusively for incoming B2C traffic metrics */}
               {activeTab === "b2c-retail" && <th>Action Pipeline</th>}
             </tr>
           </thead>
@@ -87,7 +113,22 @@ const ShopkeeperOrder = () => {
               orders.map(o => (
                 <tr key={o._id} style={{ borderBottom: "1px solid #eee", height: "50px" }}>
                   <td>#{shortId(o._id)}</td>
-                  <td>{activeTab === "b2b-procure" ? (o.sellerId?.name || o.company || "Distributor Entity") : (o.customerName || "Consumer")}</td>
+                  
+                  {/* Distributor / Customer Name Column */}
+                  <td>
+                    {activeTab === "b2b-procure" ? (o.sellerId?.name || o.company || "Distributor Entity") : (o.customerName || "Consumer")}
+                    
+                    {/* Write Review Button for B2B Approved Orders */}
+                    {activeTab === "b2b-procure" && o.status === "Approved" && (
+                       <button 
+                         onClick={() => setReviewModal({ isOpen: true, targetId: o.sellerId?._id, targetName: o.sellerId?.name })}
+                         style={{ display: "block", margin: "6px auto 0", fontSize: "11px", padding: "4px 8px", background: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe", borderRadius: "4px", cursor: "pointer", fontWeight: "600" }}
+                       >
+                         <FaStar style={{ marginBottom: "-2px", marginRight: "4px" }}/> Review Distributor
+                       </button>
+                    )}
+                  </td>
+                  
                   <td style={{ textAlign: "left", paddingLeft: "10px" }}>
                     {o.items?.map((item, idx) => (
                       <div key={idx} style={{ fontSize: "13px" }}>{item.name} (x{item.quantity})</div>
@@ -96,7 +137,7 @@ const ShopkeeperOrder = () => {
                   <td style={{ fontWeight: "bold", color: "#16a34a" }}>₹{Number(o.totalAmount || o.price || 0).toLocaleString('en-IN')}</td>
                   <td style={{ color: statusColor(o.status), fontWeight: "bold" }}>{o.status}</td>
                   <td>{formatDate(o.createdAt)}</td>
-                  
+
                   {/* DYNAMIC WORKFLOW CONTROLS RENDERING */}
                   {activeTab === "b2c-retail" && (
                     <td>
@@ -128,6 +169,43 @@ const ShopkeeperOrder = () => {
           </tbody>
         </table>
       </div>
+
+      {/* --- REVIEW MODAL OVERLAY --- */}
+      {reviewModal.isOpen && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999 }}>
+          <div style={{ background: "white", padding: "28px", borderRadius: "12px", width: "100%", maxWidth: "450px", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)" }}>
+            <h3 style={{ marginTop: 0, color: "#0f172a", fontSize: "20px" }}>Review Distributor</h3>
+            <p style={{ color: "#64748b", fontSize: "14px", marginTop: "-10px", marginBottom: "20px" }}>{reviewModal.targetName}</p>
+            
+            <form onSubmit={handleReviewSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <label style={{ fontSize: "14px", fontWeight: "600", color: "#334155" }}>
+                Rating (1-5):
+                <input 
+                  type="number" min="1" max="5" required 
+                  value={reviewForm.rating}
+                  onChange={(e) => setReviewForm({...reviewForm, rating: e.target.value})}
+                  style={{ width: "100%", padding: "10px", marginTop: "6px", borderRadius: "8px", border: "1px solid #cbd5e1" }}
+                />
+              </label>
+              
+              <label style={{ fontSize: "14px", fontWeight: "600", color: "#334155" }}>
+                Your Experience:
+                <textarea 
+                  rows="4" required placeholder="How was the delivery and quality?"
+                  value={reviewForm.reviewText}
+                  onChange={(e) => setReviewForm({...reviewForm, reviewText: e.target.value})}
+                  style={{ width: "100%", padding: "10px", marginTop: "6px", borderRadius: "8px", border: "1px solid #cbd5e1", resize: "none" }}
+                />
+              </label>
+              
+              <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "12px" }}>
+                <button type="button" onClick={() => setReviewModal({isOpen: false, targetId: null, targetName: ""})} style={{ padding: "10px 20px", cursor: "pointer", background: "#f1f5f9", border: "none", borderRadius: "6px", fontWeight: "600" }}>Cancel</button>
+                <button type="submit" style={{ padding: "10px 20px", background: "#2563eb", color: "white", border: "none", cursor: "pointer", borderRadius: "6px", fontWeight: "600" }}>Submit Review</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

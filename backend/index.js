@@ -19,7 +19,7 @@ import couponRoutes from "./src/routes/coupon.routes.js";
 
 import prescriptionRoutes from "./src/routes/prescription.routes.js";
 import supportRoutes from "./src/routes/support.routes.js";
-
+import reviewRoutes from "./src/routes/review.routes.js"
 // CONFIG
 import connectDB from "./src/config/db.js";
 
@@ -67,6 +67,8 @@ app.use("/api/prescriptions", prescriptionRoutes);
 
 // 🎧 SUPPORT
 app.use("/api/support", supportRoutes);
+
+app.use("/api/reviews",reviewRoutes)
 
 // =======================
 // SERVER

@@ -240,7 +240,12 @@ const Customer = () => {
                         <span className={`stock-status-dot ${isOutOfStock ? 'out' : 'active'}`} title={isOutOfStock ? "Out of Stock" : "In Stock"} />
                       </div>
                       <p className="med-manufacturer-text">{med.company || "Generic Manufacturer"}</p>
-                      
+
+                      {/* New Medicine Average Rating Block*/}
+                      <div style={{display:"flex",alignItems:"center", gap: "6px", marginBottom:"16px", fontSize: "12px", fontWeight:"600", color: "#647448b"}}>
+                        <span style={{ color: "#f59e0b"}}>★{med.rating||0}</span>
+                        <span>{med.reviewsCount || 0 }</span>
+                      </div>
                       {/* Product Specifications Sub-Table Container */}
                       <div className="medicine-specs-table">
                         <div className="spec-item">

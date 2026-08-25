@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./Customer.css";
-import { getOrders } from "../../services/api";
+import { getOrders, submitReview } from "../../services/api"; // Make sure submitReview is exported from api.js
 import { shortId, formatDate, statusColor } from "../../utils/helpers";
-import { FaReceipt, FaBoxes, FaSpinner, FaExchangeAlt, FaShoppingBag } from "react-icons/fa";
+import { FaReceipt, FaBoxes, FaSpinner, FaExchangeAlt, FaShoppingBag, FaStar } from "react-icons/fa";
 
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // --- Review Functionality States ---
+  const [reviewModal, setReviewModal] = useState({ isOpen: false, medicineId: null, name: "" });
+  const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: "" });
 
   useEffect(() => {
     fetchOrders();
@@ -21,6 +25,29 @@ const CustomerOrders = () => {
       console.error("Error compilation across customer retail data sheets:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // --- Handle Review Submission ---\
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await submitReview({
+        targetId: reviewModal.medicineId, // <-- Change this to targetId
+        targetModel: "Medicine",          // <-- Add targetModel explicitly
+        rating: reviewForm.rating,
+        reviewText: reviewForm.reviewText
+      });
+
+      alert(res.message || "Review submitted successfully!");
+
+      if (res.success) {
+        setReviewModal({ isOpen: false, medicineId: null, name: "" });
+        setReviewForm({ rating: 5, reviewText: "" });
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      alert("Failed to submit review. Please try again.");
     }
   };
 
@@ -88,9 +115,30 @@ const CustomerOrders = () => {
                     </td>
                     <td style={{ padding: "16px 20px", fontSize: "14px", color: "#4a5568" }}>
                       {o.items?.map((item, idx) => (
-                        <div key={idx} style={{ fontSize: "13px" }}>
+                        <div key={idx} style={{ fontSize: "13px", marginBottom: "8px" }}>
                           <FaBoxes style={{ marginRight: "6px", color: "#94a3b8", fontSize: "11px" }} />
                           <strong>{item.name}</strong> (x{item.quantity}) @ ₹{Number(item.price || 0).toLocaleString('en-IN')}/unit
+                          
+                          {/* CONDITIONAL REVIEW BUTTON */}
+                          {o.status === "Approved" && (
+                            <button 
+                              onClick={() => setReviewModal({ isOpen: true, medicineId: item.medicineId, name: item.name })}
+                              style={{
+                                display: "block",
+                                marginTop: "6px",
+                                fontSize: "11px",
+                                padding: "4px 8px",
+                                background: "#eff6ff",
+                                color: "#2563eb",
+                                border: "1px solid #bfdbfe",
+                                borderRadius: "4px",
+                                cursor: "pointer",
+                                fontWeight: "600"
+                              }}
+                            >
+                              <FaStar style={{ marginBottom: "-2px", marginRight: "4px" }}/> Write Review
+                            </button>
+                          )}
                         </div>
                       ))}
                     </td>
@@ -102,13 +150,7 @@ const CustomerOrders = () => {
                         {o.status}
                       </span>
                     </td>
-                    {o.status === "delivered" ? (
-                      <></>
-                                ) : (
-                                 <></>
-                               )}
                     <td className="text-right table-bold-amount credit-color" style={{ padding: "16px 20px", textAlign: "right", fontWeight: 700, fontSize: "15px", color: "#16a34a" }}>
-                      {/* CRITICAL DATA STRUCTURAL PARAMETER ALIGNMENT FIX */}
                       ₹{Number(o.totalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
@@ -117,7 +159,60 @@ const CustomerOrders = () => {
             </table>
           </div>
         )}
-    </div>
+      </div>
+
+      {/* --- REVIEW MODAL OVERLAY --- */}
+      {reviewModal.isOpen && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999 }}>
+          <div style={{ background: "white", padding: "28px", borderRadius: "12px", width: "100%", maxWidth: "450px", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}>
+            <h3 style={{ marginTop: 0, color: "#0f172a", fontSize: "20px", fontWeight: "700" }}>Review Product</h3>
+            <p style={{ color: "#64748b", fontSize: "14px", marginTop: "-10px", marginBottom: "20px" }}>{reviewModal.name}</p>
+            
+            <form onSubmit={handleReviewSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <label style={{ fontSize: "14px", fontWeight: "600", color: "#334155" }}>
+                Rating (1-5):
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="5" 
+                  required 
+                  value={reviewForm.rating}
+                  onChange={(e) => setReviewForm({...reviewForm, rating: e.target.value})}
+                  style={{ width: "100%", padding: "10px 14px", marginTop: "6px", borderRadius: "8px", border: "1px solid #cbd5e1", outline: "none" }}
+                />
+              </label>
+              
+              <label style={{ fontSize: "14px", fontWeight: "600", color: "#334155" }}>
+                Your Experience:
+                <textarea 
+                  rows="4" 
+                  required
+                  placeholder="How was the quality of this medicine?"
+                  value={reviewForm.reviewText}
+                  onChange={(e) => setReviewForm({...reviewForm, reviewText: e.target.value})}
+                  style={{ width: "100%", padding: "10px 14px", marginTop: "6px", borderRadius: "8px", border: "1px solid #cbd5e1", outline: "none", resize: "none" }}
+                />
+              </label>
+              
+              <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "12px" }}>
+                <button 
+                  type="button" 
+                  onClick={() => setReviewModal({isOpen: false, medicineId: null, name: ""})} 
+                  style={{ padding: "10px 20px", cursor: "pointer", background: "#f1f5f9", color: "#475569", border: "none", borderRadius: "6px", fontWeight: "600" }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  style={{ padding: "10px 20px", background: "#2563eb", color: "white", border: "none", cursor: "pointer", borderRadius: "6px", fontWeight: "600" }}
+                >
+                  Submit Review
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
