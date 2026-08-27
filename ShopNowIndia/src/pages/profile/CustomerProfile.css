@@ -1,0 +1,668 @@
+/* =========================================
+   CUSTOMER PROFILE PAGE
+========================================= */
+
+.customer-profile-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f7f6;
+  padding: 30px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.customer-profile-loading {
+  min-height: 100vh;
+  background: #f5f7f6;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+}
+
+.customer-profile-loading p {
+  margin: 0;
+  color: #666666;
+  font-size: 15px;
+}
+
+.customer-profile-loader {
+  width: 40px;
+  height: 40px;
+
+  border: 4px solid #dddddd;
+  border-top-color: #008c3a;
+  border-radius: 50%;
+
+  animation: customerProfileSpin 0.8s linear infinite;
+}
+
+@keyframes customerProfileSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.customer-profile-header {
+  width: 100%;
+  max-width: 900px;
+
+  margin: 0 auto 25px;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.customer-profile-header h1 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #222222;
+}
+
+.customer-profile-header p {
+  margin: 7px 0 0;
+
+  font-size: 14px;
+  color: #777777;
+}
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.customer-back-button {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #222222;
+
+  font-size: 28px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+
+  transition: 0.2s ease;
+}
+
+.customer-back-button:hover {
+  background: #e9f7ef;
+  color: #008c3a;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.customer-profile-container {
+  width: 100%;
+  max-width: 900px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   PROFILE CARD
+========================================= */
+
+.customer-profile-card {
+  background: #ffffff;
+
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+
+  padding: 32px 25px;
+  margin-bottom: 22px;
+
+  text-align: center;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================
+   AVATAR
+========================================= */
+
+.customer-avatar {
+  width: 90px;
+  height: 90px;
+
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  background: #008c3a;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 42px;
+}
+
+.customer-profile-card h2 {
+  margin: 0 0 8px;
+
+  font-size: 23px;
+  font-weight: 700;
+
+  color: #222222;
+}
+
+.customer-mobile {
+  margin: 5px 0;
+
+  font-size: 14px;
+  color: #555555;
+}
+
+.customer-email {
+  margin: 5px 0 0;
+
+  font-size: 14px;
+  color: #777777;
+}
+
+
+/* =========================================
+   PROFILE SECTION
+========================================= */
+
+.customer-profile-section {
+  background: #ffffff;
+
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+
+  padding: 25px;
+  margin-bottom: 22px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.customer-profile-section h2 {
+  margin: 0 0 20px;
+
+  padding-bottom: 15px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  color: #222222;
+}
+
+
+/* =========================================
+   SHOP DETAILS
+========================================= */
+
+.customer-shop-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.customer-detail-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.customer-detail-row:last-child {
+  border-bottom: none;
+}
+
+.customer-detail-label {
+  min-width: 130px;
+
+  font-size: 14px;
+  color: #777777;
+}
+
+.customer-detail-value {
+  flex: 1;
+
+  text-align: right;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #222222;
+
+  word-break: break-word;
+}
+
+
+/* =========================================
+   MENU SECTION
+========================================= */
+
+.customer-menu-section {
+  padding: 5px 25px;
+}
+
+
+/* =========================================
+   MENU ITEM
+========================================= */
+
+.customer-menu-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 17px 0;
+
+  background: transparent;
+
+  border: none;
+  border-bottom: 1px solid #eeeeee;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition: 0.2s ease;
+}
+
+.customer-menu-item:last-child {
+  border-bottom: none;
+}
+
+.customer-menu-item:hover {
+  padding-left: 8px;
+}
+
+.customer-menu-left {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.customer-menu-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 10px;
+
+  background: #e9f7ef;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 19px;
+}
+
+.customer-menu-text {
+  font-size: 15px;
+  font-weight: 500;
+
+  color: #333333;
+}
+
+.customer-menu-arrow {
+  font-size: 28px;
+  line-height: 1;
+
+  color: #999999;
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+.customer-logout-container {
+  padding-bottom: 30px;
+}
+
+.customer-logout-button {
+  width: 100%;
+
+  border: none;
+  border-radius: 9px;
+
+  padding: 14px 20px;
+
+  background: #e53935;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.customer-logout-button:hover {
+  background: #c62828;
+}
+
+
+/* =========================================
+   EDIT PROFILE
+========================================= */
+
+.customer-edit-container {
+  display: flex;
+  flex-direction: column;
+
+  gap: 22px;
+}
+
+
+/* =========================================
+   EDIT CARD
+========================================= */
+
+.customer-edit-card {
+  background: #ffffff;
+
+  border: 1px solid #e7e7e7;
+  border-radius: 14px;
+
+  padding: 25px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.customer-edit-card h2 {
+  margin: 0 0 25px;
+
+  padding-bottom: 15px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  color: #222222;
+}
+
+
+/* =========================================
+   INPUT GROUP
+========================================= */
+
+.customer-input-group {
+  margin-bottom: 20px;
+}
+
+.customer-input-group:last-child {
+  margin-bottom: 0;
+}
+
+.customer-input-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #444444;
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.customer-input-group input,
+.customer-input-group textarea {
+  width: 100%;
+
+  padding: 13px 14px;
+
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  color: #222222;
+
+  transition: 0.2s ease;
+}
+
+.customer-input-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.customer-input-group input:focus,
+.customer-input-group textarea:focus {
+  border-color: #008c3a;
+
+  box-shadow: 0 0 0 3px rgba(0, 140, 58, 0.1);
+}
+
+
+/* =========================================
+   EDIT ACTIONS
+========================================= */
+
+.customer-edit-actions {
+  display: flex;
+
+  gap: 15px;
+
+  padding-bottom: 30px;
+}
+
+.customer-save-button,
+.customer-cancel-button {
+  flex: 1;
+
+  border-radius: 9px;
+
+  padding: 14px 20px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+/* SAVE BUTTON */
+
+.customer-save-button {
+  border: none;
+
+  background: #008c3a;
+  color: #ffffff;
+}
+
+.customer-save-button:hover:not(:disabled) {
+  background: #007532;
+}
+
+.customer-save-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+
+/* CANCEL BUTTON */
+
+.customer-cancel-button {
+  border: 1px solid #dddddd;
+
+  background: #ffffff;
+  color: #555555;
+}
+
+.customer-cancel-button:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+  .customer-profile-page {
+    padding: 20px 15px;
+  }
+
+  .customer-profile-header {
+    margin-bottom: 20px;
+  }
+
+  .customer-profile-header h1 {
+    font-size: 24px;
+  }
+
+  .customer-profile-card {
+    padding: 28px 20px;
+  }
+
+  .customer-profile-section,
+  .customer-edit-card {
+    padding: 20px;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+  .customer-profile-page {
+    padding: 15px 12px;
+  }
+
+  .customer-profile-header h1 {
+    font-size: 22px;
+  }
+
+  .customer-profile-header p {
+    display: none;
+  }
+
+  .customer-profile-card {
+    padding: 25px 15px;
+  }
+
+  .customer-avatar {
+    width: 75px;
+    height: 75px;
+
+    font-size: 35px;
+  }
+
+  .customer-profile-card h2 {
+    font-size: 20px;
+  }
+
+  .customer-profile-section,
+  .customer-edit-card {
+    padding: 18px 15px;
+
+    border-radius: 12px;
+  }
+
+  .customer-profile-section h2,
+  .customer-edit-card h2 {
+    font-size: 17px;
+  }
+
+  .customer-detail-row {
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .customer-detail-label {
+    min-width: auto;
+  }
+
+  .customer-detail-value {
+    text-align: left;
+  }
+
+  .customer-menu-section {
+    padding: 5px 15px;
+  }
+
+  .customer-menu-item {
+    padding: 15px 0;
+  }
+
+  .customer-menu-icon {
+    width: 36px;
+    height: 36px;
+
+    font-size: 17px;
+  }
+
+  .customer-menu-text {
+    font-size: 14px;
+  }
+
+  .customer-edit-actions {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .customer-save-button,
+  .customer-cancel-button {
+    width: 100%;
+  }
+
+}
