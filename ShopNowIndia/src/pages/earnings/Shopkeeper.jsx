@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { getOrders } from "../../services/api";
 import { FaRupeeSign, FaArrowAltCircleUp, FaArrowAltCircleDown, FaWallet, FaSpinner, FaExchangeAlt, FaBuilding, FaUserCheck } from "react-icons/fa";
+import { exportRowsToExcel } from "../../utils/export";
 import "./Shopkeeper.css";
 
 const ShopkeeperEarnings = () => {
@@ -79,6 +80,15 @@ const ShopkeeperEarnings = () => {
     );
   }
 
+  const exportEarnings = () => exportRowsToExcel("shopkeeper-earnings", cashFlowMetrics.ledger.map((tx) => ({
+    "Transaction ID": tx._id,
+    Type: tx.type,
+    Counterparty: tx.entityName,
+    Status: tx.status,
+    Date: new Date(tx.createdAt).toLocaleDateString("en-IN"),
+    Amount: tx.type === "INFLOW" ? Number(tx.finalAmount ?? tx.totalAmount ?? 0) : -Number(tx.finalAmount ?? tx.totalAmount ?? 0),
+  })));
+
   return (
     <div className="shopkeeper-earnings-container">
       {/* HEADER SECTION */}
@@ -87,8 +97,9 @@ const ShopkeeperEarnings = () => {
           <h2>💼 Consolidated Cash Flow Dashboard</h2>
           <p>Real-time corporate capital auditing bridging distributor procurement and consumer sales pipelines.</p>
         </div>
-        <div className="realtime-status-pill">
-          <span className="pulse-dot"></span> Ledger Balanced
+        <div className="earnings-header-actions">
+          <button className="earnings-export-btn" onClick={exportEarnings}>Export Excel</button>
+          <div className="realtime-status-pill"><span className="pulse-dot"></span> Ledger Balanced</div>
         </div>
       </div>
 

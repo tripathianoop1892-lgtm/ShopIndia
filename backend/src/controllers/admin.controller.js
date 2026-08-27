@@ -2,6 +2,8 @@ import coupons from "../models/coupons.js";
 import Medicine from "../models/medicine.js";
 import Order from "../models/Order.js";
 import user from "../models/user.js";
+import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
 
 export const getCustomers = async(req, res) =>{
     try{
@@ -28,6 +30,63 @@ export const getDistributors = async(req, res) =>{
         return res.status(500).json({message: "error featching distributors"})
     }
 }
+
+export const createManagedUser = async (req, res) => {
+  try {
+    const { name, email, mobile = "", role, shopName = "", companyName = "", password } = req.body;
+    if (!name?.trim() || !email?.trim() || !password || !["shopkeeper", "distributor"].includes(role)) {
+      return res.status(400).json({ success: false, message: "Name, email, password, and a partner role are required." });
+    }
+
+    const exists = await user.findOne({ email: email.trim().toLowerCase() });
+    if (exists) return res.status(409).json({ success: false, message: "A user with this email already exists." });
+
+    const created = await user.create({
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      mobile: mobile.trim(),
+      role,
+      shopName: role === "shopkeeper" ? shopName.trim() : "",
+      companyName: role === "distributor" ? companyName.trim() : "",
+      shopId: role === "shopkeeper" ? `SHOP-${uuidv4().slice(0, 6)}` : null,
+      password: await bcrypt.hash(password, 10),
+      status: "Active",
+    });
+
+    return res.status(201).json({ success: true, data: { ...created.toObject(), password: undefined } });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Unable to create user." });
+  }
+};
+
+export const updateManagedUser = async (req, res) => {
+  try {
+    const { name, email, mobile, shopName, companyName, status } = req.body;
+    const updates = {};
+    if (name !== undefined) updates.name = name.trim();
+    if (email !== undefined) updates.email = email.trim().toLowerCase();
+    if (mobile !== undefined) updates.mobile = mobile.trim();
+    if (shopName !== undefined) updates.shopName = shopName.trim();
+    if (companyName !== undefined) updates.companyName = companyName.trim();
+    if (status !== undefined) updates.status = status;
+
+    const updated = await user.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("-password");
+    if (!updated) return res.status(404).json({ success: false, message: "User not found." });
+    return res.json({ success: true, data: updated });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Unable to update user." });
+  }
+};
+
+export const deleteManagedUser = async (req, res) => {
+  try {
+    const deleted = await user.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ success: false, message: "User not found." });
+    return res.json({ success: true, message: "User deleted." });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: "Unable to delete user." });
+  }
+};
 
     export const getMedicine = async(req, res) =>{
         try{

@@ -8,7 +8,7 @@ import "./Layout.css";
 
 const Layout = () => {
 
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 768);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -31,6 +31,7 @@ const Layout = () => {
         </div>
 
       </div>
+      {sidebarOpen && <button type="button" className="admin-sidebar-backdrop" aria-label="Close navigation menu" onClick={toggleSidebar} />}
 
     </div>
   );

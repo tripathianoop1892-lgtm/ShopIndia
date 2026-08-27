@@ -5,7 +5,7 @@ import Prescription from "../models/Prescription.js";
 // ======================================================
 export const uploadPrescription = async (req, res) => {
   try {
-    
+    const { customerId, customerName, shopId } = req.body;
 
     if (!customerId || !customerName || !shopId) {
       return res.status(400).json({
@@ -54,7 +54,9 @@ export const uploadPrescription = async (req, res) => {
 // ======================================================
 export const getCustomerPrescriptions = async (req, res) => {
   try {
-    const customerId = req.user._id;
+    if (req.user.role !== "admin" && String(req.user._id) !== req.params.customerId) {
+      return res.status(403).json({ success: false, message: "You are not authorized to view these prescriptions." });
+    }
     const prescriptions = await Prescription.find({
       customerId: req.params.customerId,
       isDeleted: false,

@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
 import CustomerSidebar from "../Sidebar/CustomerSidebar";
 import useAuth from "../../hooks/useAuth";
+import "./CustomerLayout.css";
 
 const CustomerLayout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isCustomer } = useAuth();
   const token = localStorage.getItem("token");
 
@@ -13,21 +16,15 @@ const CustomerLayout = () => {
   }
 
   return (
-    <div className="layout" style={{ display: "flex", minHeight: "100vh", width: "98vw" }}>
-      <CustomerSidebar />
-      <div 
-        className="main-content" 
-        style={{ 
-          flex: 1, 
-          marginLeft: "220px", 
-          padding: "20px",
-          background: "#f8fafc",
-          minHeight: "100vh",
-          boxSizing: "border-box"
-        }}
-      >
+    <div className="customer-layout">
+      <CustomerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen(true)} aria-label="Open navigation menu">
+        <FaBars />
+      </button>
+      <div className="customer-main-content">
         <Outlet />
       </div>
+      {sidebarOpen && <button type="button" className="portal-sidebar-backdrop" aria-label="Close navigation menu" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
 };

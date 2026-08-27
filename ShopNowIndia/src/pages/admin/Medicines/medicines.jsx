@@ -25,16 +25,12 @@ const Medicines = () => {
       <div className="page-header">
         <h2>Medicines</h2>
 
-        <button className="add-btn">
-          + Add Medicine
-        </button>
-      </div>
-
       <div className="search-box">
         <input
           type="text"
           placeholder="Search Medicine..."
         />
+      </div>
       </div>
 
       <div className="table-container">
@@ -49,8 +45,6 @@ const Medicines = () => {
               <th>Company</th>
               <th>Price</th>
               <th>Stock</th>
-              <th>Status</th>
-              <th>Action</th>
             </tr>
           </thead>
 
@@ -66,23 +60,6 @@ const Medicines = () => {
                 <td>{medicine.company}</td>
                 <td>{medicine.price}</td>
                 <td>{medicine.stock}</td>
-
-                <td>
-                  <span
-                    className={
-                      medicine.status === "Available"
-                        ? "available"
-                        : "low-stock"
-                    }
-                  >
-                    {medicine.status}
-                  </span>
-                </td>
-
-                <td>
-                  <button className="edit-btn">Edit</button>
-                  <button className="delete-btn">Delete</button>
-                </td>
 
               </tr>
 

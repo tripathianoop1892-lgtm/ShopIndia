@@ -9,10 +9,12 @@ import DistributorFields from "../../components/Register/DistributorFields";
 import ShopSelector from "../../components/Register/ShopSelector";
 
 import { registerUser } from "../../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sharedShopId = searchParams.get("shopId") || "";
 
   const [form, setForm] = useState({
     name: "",
@@ -30,7 +32,7 @@ const Register = () => {
     address: "",
 
     // 🏪 Customer selected medical shop
-    shopId: "",
+    shopId: sharedShopId,
 
     shopName: "",
     gstNumber: "",

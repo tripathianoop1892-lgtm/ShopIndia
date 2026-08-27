@@ -32,7 +32,8 @@ export const registerUser = async (req, res) => {
   role,
   name,
   mobile,
-  shopName,
+   shopName,
+   companyName,
     shopId,
    } = req.body;
 
@@ -59,6 +60,7 @@ export const registerUser = async (req, res) => {
   name,
   mobile: mobile || "",
   shopName: role === "shopkeeper" ? shopName || "" : "",
+  companyName: role === "distributor" ? companyName || "" : "",
   shopId: newShopId,
   selectedShopId: role === "customer" ? shopId || null : null,
 });

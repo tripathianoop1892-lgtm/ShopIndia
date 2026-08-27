@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getReviews, updateReviewState, removeReview } from "../../../services/api";
+import { getReviews } from "../../../services/api";
 import "./Reviews.css";
 
 const Reviews = () => {
@@ -23,18 +23,6 @@ const Reviews = () => {
     fetchAllReviews();
   }, []);
 
-  const handleStatusChange = async (id, status) => {
-    const res = await updateReviewState(id, status);
-    if (res.success) fetchAllReviews();
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this review?")) {
-      const res = await removeReview(id);
-      if (res.success) fetchAllReviews();
-    }
-  };
-
   return (
     <div className="reviews-page">
       <div className="reviews-header">
@@ -53,7 +41,6 @@ const Reviews = () => {
                 <th>Rating</th>
                 <th>Review</th>
                 <th>Status</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -67,11 +54,6 @@ const Reviews = () => {
                     <span className={review.status.toLowerCase()}>
                       {review.status}
                     </span>
-                  </td>
-                  <td>
-                    <button className="delete-btn" onClick={() => handleDelete(review._id)}>
-                      Delete
-                    </button>
                   </td>
                 </tr>
               ))}

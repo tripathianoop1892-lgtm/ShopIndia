@@ -1,0 +1,10 @@
+.customer-banner { margin-bottom: 32px; overflow: hidden; border-radius: 12px; background: #0f172a; box-shadow: 0 8px 20px rgba(15, 23, 42, .16); }
+.customer-banner-content { width: 100%; min-height: 190px; padding: 28px 32px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; border: 0; background-position: center; background-size: cover; color: #fff; text-align: left; cursor: pointer; }
+.customer-banner-content:disabled { cursor: default; }
+.customer-banner-content span { font-size: 14px; opacity: .9; }
+.customer-banner-content strong { font-size: clamp(24px, 4vw, 38px); max-width: 650px; }
+.customer-banner-content em { font-style: normal; font-weight: 700; margin-top: 5px; }
+.customer-banner-dots { display: flex; gap: 8px; justify-content: center; padding: 11px; background: #fff; }
+.customer-banner-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: #cbd5e1; cursor: pointer; }
+.customer-banner-dots button.active { width: 24px; background: #2563eb; }
+@media (max-width: 768px) { .customer-banner-content { min-height: 150px; padding: 24px; } }

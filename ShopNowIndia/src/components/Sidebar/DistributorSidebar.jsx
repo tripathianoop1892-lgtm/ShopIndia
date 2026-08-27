@@ -26,31 +26,31 @@ const DistributorSidebar = ({ isOpen, onClose }) => {
       <div>
         <ul>
           <li>
-            <NavLink to="/distributor" end>Dashboard</NavLink>
+            <NavLink to="/distributor" end onClick={onClose}>Dashboard</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/medicine-list">Medicines Inventory</NavLink>
+            <NavLink to="/distributor/medicine-list" onClick={onClose}>Medicines Inventory</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/add-medicine">Add Medicines</NavLink>
+            <NavLink to="/distributor/add-medicine" onClick={onClose}>Add Medicines</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/orders">Orders</NavLink>
+            <NavLink to="/distributor/orders" onClick={onClose}>Orders</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/earnings">Earnings</NavLink>
+            <NavLink to="/distributor/earnings" onClick={onClose}>Earnings</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/low-stock">Low Stock</NavLink>
+            <NavLink to="/distributor/low-stock" onClick={onClose}>Low Stock</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/expiring">Expiry Alert </NavLink>
+            <NavLink to="/distributor/expiring" onClick={onClose}>Expiry Alert </NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/profile">Profile</NavLink>
+            <NavLink to="/distributor/profile" onClick={onClose}>Profile</NavLink>
           </li>
           <li>
-            <NavLink to="/distributor/settings">Settings</NavLink>
+            <NavLink to="/distributor/settings" onClick={onClose}>Settings</NavLink>
           </li>
         </ul>
       </div>

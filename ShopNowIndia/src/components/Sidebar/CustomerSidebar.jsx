@@ -13,50 +13,36 @@ const CustomerSidebar = ({ isOpen, onClose }) => {
     navigate("/");
   };
 
-  return (
-    <div className={`customer-sidebar ${isOpen ? "open" : ""}`}>
-      <div className="customer-sidebar-header">
-        <div>
-          <img src="/omsanjeevani.png" alt="Wholesale Hub" className="customer-sidebar-logo" />
-        </div>
-        <button type="button" className="customer-sidebar-close" onClick={onClose} aria-label="Close sidebar">
-          ✕
-        </button>
-      </div>
-      <div>
-        <ul>
-          <li>
-            <NavLink to="/customer" end>🏠 Dashboard</NavLink>
-          </li>
-          <li>
-            <NavLink to="/customer/medicines">💊 Medicines</NavLink>
-          </li>
-           <NavLink to="/customer/prescription">📷 Upload Prescription</NavLink>
-          <li>
-            <NavLink to="/customer/cart">🛒 Cart</NavLink>
-          </li>          
-          <li>
-            <NavLink to="/customer/orders">📦 Orders</NavLink>
-          </li>  
-           <li>
-            <NavLink to="/customer/notification">🔔 Notifications</NavLink>
-          </li>        
-          <li>
-            <NavLink to="/customer/profile">👤 Profile</NavLink>
-          </li>
-          <li>
-            <NavLink to="/customer/settings">⚙️ Settings</NavLink>
-            
-          </li>
-        </ul>
-      </div>
+  const navigationItems = [
+    ["/customer", "Dashboard", true],
+    ["/customer/medicines", "Medicines"],
+    ["/customer/prescription", "Prescriptions"],
+    ["/customer/cart", "Cart"],
+    ["/customer/orders", "Orders"],
+    ["/customer/notification", "Notifications"],
+    ["/customer/profile", "Profile"],
+    ["/customer/settings", "Settings"],
+  ];
 
-      <div style={{ padding: "0 14px", marginTop: "15px" }}>
-        <button onClick={handleLogout} className="customer-logout-btn">
-          Sign Out
-        </button>
+  return (
+    <aside className={`customer-sidebar ${isOpen ? "open" : ""}`}>
+      <div className="customer-sidebar-header">
+        <img src="/omsanjeevani.png" alt="Om Sanjeevani" className="customer-sidebar-logo" />
+        <button type="button" className="customer-sidebar-close" onClick={onClose} aria-label="Close navigation menu">×</button>
       </div>
-    </div>
+      <nav aria-label="Customer navigation">
+        <ul>
+          {navigationItems.map(([to, label, end]) => (
+            <li key={to}>
+              <NavLink to={to} end={end} onClick={onClose}>{label}</NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="customer-sidebar-footer">
+        <button type="button" onClick={handleLogout} className="customer-logout-btn">Sign Out</button>
+      </div>
+    </aside>
   );
 };
 

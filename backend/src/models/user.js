@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema(
       enum: ["customer", "shopkeeper", "distributor", "admin"],
       default: "customer",
     },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive"],
+      default: "Active",
+    },
     shopId: {
       type: String,
       default: null, // Populated via register for shopkeepers
@@ -43,6 +48,11 @@ const userSchema = new mongoose.Schema(
   trim: true,
   default: "",
 },
+    companyName: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     // New parameters for Wholesaler B2B analytics
     rating: {
       type: Number,

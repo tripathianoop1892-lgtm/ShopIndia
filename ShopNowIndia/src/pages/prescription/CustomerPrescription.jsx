@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./CustomerPrescription.css";
-import { uploadPrescription } from "../../services/api";
+import { getCustomerPrescriptions, uploadPrescription } from "../../services/api";
 
 const CustomerPrescription = () => {
   const [image, setImage] = useState(null);
 const [fileName, setFileName] = useState("");
 const [file, setFile] = useState(null);
 const [loading, setLoading] = useState(false);
+const [prescriptions, setPrescriptions] = useState([]);
+
+const loadPrescriptions = async () => {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  if (!user?._id) return;
+  const response = await getCustomerPrescriptions(user._id);
+  if (response.success) setPrescriptions(response.prescriptions || []);
+};
+
+useEffect(() => { loadPrescriptions().catch(console.error); }, []);
  const handleFileChange = (e) => {
   const file = e.target.files[0];
 
@@ -48,6 +58,7 @@ const handleUpload = async () => {
       setImage(null);
       setFile(null);
       setFileName("");
+      loadPrescriptions();
     } else {
       alert(data.message);
     }
@@ -151,6 +162,13 @@ const handleUpload = async () => {
             Please upload a clear and complete prescription.
             Verify medicine details before placing your order.
           </p>
+        </div>
+
+        <div className="prescription-history">
+          <div className="prescription-history-header"><h3>Your prescriptions</h3><button type="button" onClick={() => loadPrescriptions()}>Refresh</button></div>
+          {prescriptions.length ? <div className="prescription-history-list">
+            {prescriptions.map((prescription) => <div className="prescription-history-row" key={prescription._id}><div><strong>{prescription.fileType === "pdf" ? "PDF prescription" : "Image prescription"}</strong><span>Uploaded {new Date(prescription.createdAt).toLocaleDateString("en-IN")}</span></div><span className={`prescription-status ${prescription.status.toLowerCase().replace(/\s+/g, "-")}`}>{prescription.status}</span></div>)}
+          </div> : <p className="prescription-empty">No prescriptions uploaded yet.</p>}
         </div>
 
       </div>

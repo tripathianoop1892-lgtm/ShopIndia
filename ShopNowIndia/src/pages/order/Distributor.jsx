@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import { getOrders, updateOrder } from "../../services/api"; 
 import { shortId, statusColor } from "../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const Distributor = () => {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  async function fetchOrders() {
     try {
       const data = await getOrders(); 
       setOrders(Array.isArray(data) ? data : []);
     } catch (err) {
       console.log(err);
     }
-  };
+  }
+
+  useEffect(() => {
+    getOrders().then((data) => setOrders(Array.isArray(data) ? data : [])).catch(console.error);
+  }, []);
 
   const updateStatus = async (id, status) => {
     try {
@@ -46,6 +48,7 @@ const Distributor = () => {
             <th>Total Amount</th>
             <th>Status</th>
             <th>Action</th>
+            <th>Payment</th>
           </tr>
         </thead>
 
@@ -71,7 +74,7 @@ const Distributor = () => {
                   {item.status}
                 </td>
 
-                <td>
+                  <td>
                   {item.status === "Pending" ? (
                     <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
                       <button
@@ -91,12 +94,13 @@ const Distributor = () => {
                   ) : (
                     <span style={{ color: "#64748b", fontSize: "13px" }}>Processed</span>
                   )}
-                </td>
+                  </td>
+                  <td><button onClick={() => navigate(`/distributor/payments/${item._id}`)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>View Details</button></td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ padding: "20px", color: "#94a3b8" }}>No active B2B wholesale orders found.</td>
+              <td colSpan="7" style={{ padding: "20px", color: "#94a3b8" }}>No active B2B wholesale orders found.</td>
             </tr>
           )}
         </tbody>

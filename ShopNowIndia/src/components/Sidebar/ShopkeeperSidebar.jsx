@@ -1,131 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { QRCodeCanvas } from "qrcode.react";
 import "./ShopkeeperSidebar.css";
 
 const ShopkeeperSidebar = ({ isOpen, onClose }) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
-  const [showQR, setShowQR] = useState(false);
+  const handleLogout = () => { logout(); localStorage.clear(); navigate("/"); };
+  const links = [
+    ["/shopkeeper", "Dashboard", true],
+    ["/shopkeeper/medicine-list", "Medicines Inventory"],
+    ["/shopkeeper/add-medicine", "Add Medicine"],
+    ["/shopkeeper/cart", "Cart"],
+    ["/shopkeeper/orders", "Orders"],
+    ["/shopkeeper/earnings", "Earnings"],
+    ["/shopkeeper/qr", "Store QR Code"],
+    ["/shopkeeper/profile", "Profile"],
+    ["/shopkeeper/settings", "Settings"],
+  ];
 
-  const shopId = user?.shopId || localStorage.getItem("shopId");
-  const shopLink = shopId
-    ? `${window.location.origin}/register?shopId=${shopId}`
-    : "";
-
-  const handleLogout = () => {
-    logout();
-    localStorage.clear();
-    navigate("/");
-  };
-
-  return (
-    <div className={`shopkeeper-sidebar ${isOpen ? "open" : ""}`}>
-      <div className="shopkeeper-sidebar-header">
-        <div>
-          <img
-            src="/omsanjeevani.png"
-            alt="Retail Hub"
-            className="shopkeeper-sidebar-logo"
-          />
-        </div>
-
-        <button
-          type="button"
-          className="shopkeeper-sidebar-close"
-          onClick={onClose}
-          aria-label="Close sidebar"
-        >
-          ✕
-        </button>
-      </div>
-
-      <div>
-        <ul>
-          <li>
-            <NavLink to="/shopkeeper" end>
-              Dashboard
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/medicine-list">
-              Medicines Inventory
-            </NavLink>
-          </li>
-
-          {/* 🚀 ADDED NAVIGATION LIST ENTRY */}
-          <li>
-            <NavLink to="/shopkeeper/add-medicine">
-              Add Medicine
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/cart">
-              Cart
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/orders">
-              Orders
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/earnings">
-              Earnings
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/profile">
-              Profile
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/shopkeeper/settings">
-              Settings
-            </NavLink>
-          </li>
-        </ul>
-      </div>
-
-      <div style={{ padding: "0 14px", marginTop: "15px" }}>
-        {shopId && (
-          <div className="shop-id-section">
-            <p className="shop-id-label">STORE FRONT ID</p>
-            <code className="shop-id-code">{shopId}</code>
-            <button onClick={() => setShowQR(true)} className="qr-btn">
-              📷 Open Store QR
-            </button>
-          </div>
-        )}
-
-        <button onClick={handleLogout} className="logout-btn">
-          Sign Out
-        </button>
-      </div>
-
-      {showQR && (
-        <div className="qr-modal-overlay" onClick={() => setShowQR(false)}>
-          <div className="qr-modal-box" onClick={(e) => e.stopPropagation()}>
-            <h3>Store Front QR Code</h3>
-            <p>Scan to register or look up medications linked to your shop.</p>
-            <div className="qr-code-container">
-              <QRCodeCanvas value={shopLink} size={200} />
-            </div>
-            <button onClick={() => setShowQR(false)} className="qr-close-btn">
-              Minimize Window
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  return <aside className={`shopkeeper-sidebar ${isOpen ? "open" : ""}`}>
+    <div className="shopkeeper-sidebar-header"><img src="/omsanjeevani.png" alt="Om Sanjeevani" className="shopkeeper-sidebar-logo" /><button type="button" className="shopkeeper-sidebar-close" onClick={onClose} aria-label="Close navigation menu">×</button></div>
+    <nav aria-label="Shopkeeper navigation"><ul>{links.map(([to, label, end]) => <li key={to}><NavLink to={to} end={end} onClick={onClose}>{label}</NavLink></li>)}</ul></nav>
+    <div className="shopkeeper-sidebar-footer"><button type="button" onClick={handleLogout} className="logout-btn">Sign Out</button></div>
+  </aside>;
 };
 
 export default ShopkeeperSidebar;

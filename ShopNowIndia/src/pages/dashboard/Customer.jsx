@@ -4,6 +4,7 @@ import { MedicinesList, addToCart, getCart } from "../../services/api";
 import { setCartItems } from "../../features/cartSlice";
 import useAuth from "../../hooks/useAuth";
 import Header from "../../components/Header/Header";
+import CustomerBannerSlider from "../../components/customer/CustomerBannerSlider";
 import { 
   FaSearch, FaShoppingBasket, FaMedkit, FaBuilding, 
   FaExclamationTriangle, FaBoxes, FaClipboardList, FaRupeeSign 
@@ -128,6 +129,8 @@ const Customer = () => {
           />
         </div>
       </div>
+
+      <CustomerBannerSlider />
 
       {/* ===== INSIGHT STATS GRID ===== */}
       <div className="dashboard-stats-row">

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Shopkeeper.css";
 import { getOrders, updateOrder, submitReview } from "../../services/api";
 import { shortId, formatDate, statusColor } from "../../utils/helpers";
 import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ShopkeeperOrder = () => {
   const [orders, setOrders] = useState([]);
@@ -12,12 +13,9 @@ const ShopkeeperOrder = () => {
   // --- Review State ---
   const [reviewModal, setReviewModal] = useState({ isOpen: false, targetId: null, targetName: "" });
   const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: "" });
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchHistory();
-  }, [activeTab]);
-
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
     try {
       const filter = activeTab === "b2b-procure" ? "b2b-purchases" : "b2c-retail";
       const data = await getOrders(filter);
@@ -25,7 +23,11 @@ const ShopkeeperOrder = () => {
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
 
   // --- Handle Review Submission ---
   const handleReviewSubmit = async (e) => {
@@ -99,13 +101,14 @@ const ShopkeeperOrder = () => {
               <th>Invoice Sum</th>
               <th>Status</th>
               <th>Date Timestamp</th>
+              <th>Payment</th>
               {activeTab === "b2c-retail" && <th>Action Pipeline</th>}
             </tr>
           </thead>
           <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={activeTab === "b2c-retail" ? "7" : "6"} style={{ padding: "20px", color: "#94a3b8" }}>
+                <td colSpan={activeTab === "b2c-retail" ? "8" : "7"} style={{ padding: "20px", color: "#94a3b8" }}>
                   No execution ledger found matching parameter parameters.
                 </td>
               </tr>
@@ -137,6 +140,7 @@ const ShopkeeperOrder = () => {
                   <td style={{ fontWeight: "bold", color: "#16a34a" }}>₹{Number(o.totalAmount || o.price || 0).toLocaleString('en-IN')}</td>
                   <td style={{ color: statusColor(o.status), fontWeight: "bold" }}>{o.status}</td>
                   <td>{formatDate(o.createdAt)}</td>
+                  <td><button onClick={() => navigate(`/shopkeeper/payments/${o._id}${activeTab === "b2b-procure" ? "?view=b2b-purchases" : ""}`)} style={{ border: "none", borderRadius: "4px", padding: "6px 10px", background: "#2563eb", color: "white", cursor: "pointer", fontSize: "12px" }}>View Details</button></td>
 
                   {/* DYNAMIC WORKFLOW CONTROLS RENDERING */}
                   {activeTab === "b2c-retail" && (

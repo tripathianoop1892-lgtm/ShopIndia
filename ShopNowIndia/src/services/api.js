@@ -509,3 +509,85 @@ export const getMyReviews = async () => {
   });
   return res.json();
 };
+
+// =======================
+// ADMIN USER MANAGEMENT
+// =======================
+export const createManagedUser = async (data) => {
+  const res = await fetch(`${BASE_URL}/admin/users`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
+
+export const updateManagedUser = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/admin/users/${id}`, { method: "PATCH", headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
+
+export const deleteManagedUser = async (id) => {
+  const res = await fetch(`${BASE_URL}/admin/users/${id}`, { method: "DELETE", headers: getHeaders() });
+  return res.json();
+};
+
+// =======================
+// BANNERS
+// =======================
+export const getBanners = async () => {
+  const res = await fetch(`${BASE_URL}/admin/banner`, { headers: getHeaders() });
+  return res.json();
+};
+
+export const getActiveBanners = async () => {
+  const res = await fetch(`${BASE_URL}/admin/banner/active`);
+  return res.json();
+};
+
+export const createBanner = async (data) => {
+  const res = await fetch(`${BASE_URL}/admin/banner`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
+
+export const updateBanner = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/admin/banner/${id}`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
+
+export const deleteBanner = async (id) => {
+  const res = await fetch(`${BASE_URL}/admin/banner/${id}`, { method: "DELETE", headers: getHeaders() });
+  return res.json();
+};
+
+// =======================
+// SUPPORT
+// =======================
+export const getSupportTickets = async () => {
+  const res = await fetch(`${BASE_URL}/support`, { headers: getHeaders() });
+  return res.json();
+};
+
+export const updateSupportTicketStatus = async (id, status) => {
+  const res = await fetch(`${BASE_URL}/support/${id}/status`, { method: "PATCH", headers: getHeaders(), body: JSON.stringify({ status }) });
+  return res.json();
+};
+
+export const replySupportTicket = async (id, reply) => {
+  const res = await fetch(`${BASE_URL}/support/${id}/reply`, { method: "POST", headers: getHeaders(), body: JSON.stringify({ reply }) });
+  return res.json();
+};
+
+// =======================
+// ADMIN NOTIFICATIONS
+// =======================
+export const getAdminNotifications = async () => {
+  const res = await fetch(`${BASE_URL}/admin/notifications`, { headers: getHeaders() });
+  return res.json();
+};
+
+export const createAdminNotification = async (data) => {
+  const res = await fetch(`${BASE_URL}/admin/notifications`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
+
+export const deleteAdminNotification = async (id) => {
+  const res = await fetch(`${BASE_URL}/admin/notifications/${id}`, { method: "DELETE", headers: getHeaders() });
+  return res.json();
+};

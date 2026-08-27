@@ -20,6 +20,7 @@ import couponRoutes from "./src/routes/coupon.routes.js";
 import prescriptionRoutes from "./src/routes/prescription.routes.js";
 import supportRoutes from "./src/routes/support.routes.js";
 import reviewRoutes from "./src/routes/review.routes.js"
+import notificationRoutes from "./src/routes/notification.routes.js";
 // CONFIG
 import connectDB from "./src/config/db.js";
 
@@ -61,6 +62,7 @@ app.use("/api/earnings", earningsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/coupons", couponRoutes);
 app.use("/api/admin/banner", bannerRoutes);
+app.use("/api/admin/notifications", notificationRoutes);
 
 // 📄 PRESCRIPTIONS
 app.use("/api/prescriptions", prescriptionRoutes);
@@ -78,4 +80,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} 🚀`);
 });
-

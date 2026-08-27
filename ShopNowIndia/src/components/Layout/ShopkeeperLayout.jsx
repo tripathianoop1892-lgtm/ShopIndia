@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
 import ShopkeeperSidebar from "../Sidebar/ShopkeeperSidebar";
 import useAuth from "../../hooks/useAuth";
+import "./ShopkeeperLayout.css";
 
 const ShopkeeperLayout = () => {
-  const { user, isShopkeeper } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isShopkeeper } = useAuth();
   const token = localStorage.getItem("token");
 
   // Auth Guard: If no session tokens or roles match, push back cleanly to landing login login
@@ -13,26 +16,17 @@ const ShopkeeperLayout = () => {
   }
 
   return (
-    <div className="shopkeeper-layout" style={{ display: "flex", minHeight: "100vh", width: "98.5vw" }}>
-      {/* Sidebar Layout Navigation View */}
-      <ShopkeeperSidebar />
-
-      {/* Main Container Right view-port wrapper box */}
-      <div 
-        className="shopkeeper-main-content" 
-        style={{ 
-          flex: 1, 
-          marginLeft: "220px", // Exact width alignment match for standard layout fixed sidebar 
-          padding: "20px",
-          background: "#f4f7fb",
-          minHeight: "100vh",
-          boxSizing: "border-box"
-        }}
-      >
+    <div className="shopkeeper-layout">
+      <ShopkeeperSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen(true)} aria-label="Open navigation menu">
+        <FaBars />
+      </button>
+      <div className="shopkeeper-main-content">
         <div className="shopkeeper-content">
           <Outlet />
         </div>
       </div>
+      {sidebarOpen && <button type="button" className="portal-sidebar-backdrop" aria-label="Close navigation menu" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
 };

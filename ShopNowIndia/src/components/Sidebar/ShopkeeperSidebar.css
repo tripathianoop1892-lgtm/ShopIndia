@@ -231,20 +231,20 @@
 /* ===== MOBILE ===== */
 
 @media (max-width: 900px) {
-  .sidebar {
+  .shopkeeper-sidebar {
     transform: translateX(-100%);
     width: 260px;
   }
 
-  .sidebar.open {
+  .shopkeeper-sidebar.open {
     transform: translateX(0);
   }
 
-  .sidebar-close {
+  .shopkeeper-sidebar-close {
     display: inline-flex;
   }
 
-  .sidebar-logo {
+  .shopkeeper-sidebar-logo {
     width: 140px;
     height: auto;
     display: block;

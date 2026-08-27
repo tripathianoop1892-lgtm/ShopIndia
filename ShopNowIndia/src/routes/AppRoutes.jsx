@@ -23,6 +23,7 @@ import ShopkeeperMedicineList from "../pages/medicine-list/Shopkeeper";
 import ShopkeeperOrder from "../pages/order/Shopkeeper";
 import ShopkeeperEarnings from "../pages/earnings/Shopkeeper";
 import AddMedicineShopkeeper from "../features/add-medicine/Shopkeeper";
+import StoreQr from "../pages/shopkeeper/StoreQr";
 
 // Distributor Segment Pages
 import DistributorDashboard from "../pages/dashboard/Distributor";
@@ -66,6 +67,7 @@ import CustomerPrescription from "../pages/prescription/CustomerPrescription";
 
 // Notification
 import CustomerNotification from "../pages/notification/CustomerNotification";
+import OrderPaymentDetail from "../pages/payment/OrderPaymentDetail";
 
 const router = createBrowserRouter([
   // ==========================================
@@ -124,6 +126,8 @@ const router = createBrowserRouter([
       { path: "add-medicine", element: <AddMedicineShopkeeper /> }, // Maps directly to: /shopkeeper/add-medicine
       { path: "orders", element: <ShopkeeperOrder /> }, // Maps directly to: /shopkeeper/orders
       { path: "earnings", element: <ShopkeeperEarnings /> }, // Maps directly to: /shopkeeper/earnings
+      { path: "qr", element: <StoreQr /> },
+      { path: "payments/:orderId", element: <OrderPaymentDetail /> },
       { path: "cart", element: <Cart /> },
       { path: "profile", element: <Profile /> }, // Maps directly to: /shopkeeper/profile
       { path: "settings", element: <Settings /> } // Maps directly to: /shopkeeper/settings
@@ -141,6 +145,7 @@ const router = createBrowserRouter([
       { path: "medicine-list", element: <DistributorMedicineList /> }, // Maps directly to: /distributor/medicine-list
       { path: "add-medicine", element: <AddMedicineDistributor /> }, // Maps directly to: /distributor/add-medicine
       { path: "orders", element: <DistributorOrder /> }, // Maps directly to: /distributor/orders
+      { path: "payments/:orderId", element: <OrderPaymentDetail /> },
       { path: "earnings", element: <DistributorEarnings /> }, // Maps directly to: /distributor/earnings
       { path: "low-stock", element: <DistributorLowStock /> }, // Maps directly to: /distributor/low-stock
       { path: "expiring", element: <DistributorExpiring /> }, // Maps directly to: /distributor/expiring

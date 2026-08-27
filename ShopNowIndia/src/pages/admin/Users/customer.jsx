@@ -6,6 +6,7 @@ import { getCustomers } from "../../../services/api";
 
 const Customer = () => {
   const [customers, setCustomers] =useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchCustomers = async ()=>{
@@ -26,15 +27,14 @@ const Customer = () => {
       <div className="page-header">
         <h2>Customers</h2>
 
-        <button className="add-btn">
-          + Add Customer
-        </button>
       </div>
 
       <div className="search-box">
         <input
           type="text"
           placeholder="Search Customer..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
         />
       </div>
 
@@ -51,14 +51,13 @@ const Customer = () => {
               <th>Email</th>
               <th>City</th>
               <th>Status</th>
-              <th>Action</th>
             </tr>
 
           </thead>
 
           <tbody>
 
-            {customers.map((customer) => (
+            {customers.filter((customer) => [customer.name, customer.mobile, customer.email, customer.city].filter(Boolean).some((value) => value.toLowerCase().includes(search.toLowerCase()))).map((customer) => (
 
               <tr key={customer._id}>
 
@@ -78,18 +77,6 @@ const Customer = () => {
                   >
                     {customer.status}
                   </span>
-                </td>
-
-                <td>
-
-                  <button className="edit-btn">
-                    Edit
-                  </button>
-
-                  <button className="delete-btn">
-                    Delete
-                  </button>
-
                 </td>
 
               </tr>

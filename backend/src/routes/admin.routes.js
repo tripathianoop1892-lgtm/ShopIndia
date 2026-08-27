@@ -8,6 +8,9 @@ import {
   getCategorySummary,
   getDashboardReport,
   getSalesReport,
+  createManagedUser,
+  updateManagedUser,
+  deleteManagedUser,
 } from "../controllers/admin.controller.js";
 
 import { checkAuth, checkRole } from "../middlewares/auth.middleware.js";
@@ -23,5 +26,8 @@ router.get("/orders", checkAuth, checkRole("admin"), getOrders);
 router.get("/categories", checkAuth, checkRole("admin"), getCategorySummary);
 router.get("/reports/dashboard", checkAuth, checkRole("admin"), getDashboardReport);
 router.get("/reports/sales", checkAuth, checkRole("admin"), getSalesReport);
+router.post("/users", checkAuth, checkRole("admin"), createManagedUser);
+router.patch("/users/:id", checkAuth, checkRole("admin"), updateManagedUser);
+router.delete("/users/:id", checkAuth, checkRole("admin"), deleteManagedUser);
 
 export default router;
