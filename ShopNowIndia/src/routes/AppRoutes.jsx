@@ -12,6 +12,12 @@ import Features from "../pages/features/Features";
 import Terms from "../pages/terms/Terms";
 import Policy from "../pages/policy/Policy";
 
+// Profile Pages
+import CustomerProfile from "../pages/profile/CustomerProfile";
+import ShopkeeperProfile from "../pages/profile/ShopkeeperProfile";
+import DistributorProfile from "../pages/profile/DistributorProfile";
+import AdminProfile from "../pages/admin/Profile/profile";
+
 // Layout Wrappers
 import ShopkeeperLayout from "../components/Layout/ShopkeeperLayout";
 import DistributorLayout from "../components/Layout/DistributorLayout";
@@ -38,7 +44,7 @@ import CustomerDashboard from "../pages/dashboard/Customer";
 import CustomerMedicineList from "../pages/medicine-list/Customer";
 import CustomerOrder from "../pages/order/Customer";
 import Cart from "../components/Card/Card";
-import Profile from "../pages/profile/Profile";
+
 import Settings from "../pages/settings/Settings";
 import Layout from "../components/Admin/Layout/layout";
 import Dashboard from "../pages/admin/Dashboard/dashboard";
@@ -108,7 +114,7 @@ const router = createBrowserRouter([
     { path: "reviews", element: <Reviews /> },
     { path: "support", element: <Support /> },
     { path: "settings", element: <Setting /> },
-    { path: "profile", element: <Profile /> }
+    { path: "profile", element: <AdminProfile /> }
   ]
 },
 
@@ -125,7 +131,7 @@ const router = createBrowserRouter([
       { path: "orders", element: <ShopkeeperOrder /> }, // Maps directly to: /shopkeeper/orders
       { path: "earnings", element: <ShopkeeperEarnings /> }, // Maps directly to: /shopkeeper/earnings
       { path: "cart", element: <Cart /> },
-      { path: "profile", element: <Profile /> }, // Maps directly to: /shopkeeper/profile
+      { path: "profile", element: <ShopkeeperProfile /> }, // Maps directly to: /shopkeeper/profile
       { path: "settings", element: <Settings /> } // Maps directly to: /shopkeeper/settings
     ],
   },
@@ -144,7 +150,7 @@ const router = createBrowserRouter([
       { path: "earnings", element: <DistributorEarnings /> }, // Maps directly to: /distributor/earnings
       { path: "low-stock", element: <DistributorLowStock /> }, // Maps directly to: /distributor/low-stock
       { path: "expiring", element: <DistributorExpiring /> }, // Maps directly to: /distributor/expiring
-      { path: "profile", element: <Profile /> }, // Maps directly to: /distributor/profile
+      { path: "profile", element: <DistributorProfile /> }, // Maps directly to: /distributor/profile
       { path: "settings", element: <Settings /> } // Maps directly to: /distributor/settings
     ],
   },
@@ -162,7 +168,7 @@ const router = createBrowserRouter([
       { path: "notification", element: <CustomerNotification /> },
       { path: "orders", element: <CustomerOrder /> }, // Maps directly to: /customer/orders
       { path: "cart", element: <Cart />},
-      { path: "profile", element: <Profile /> }, // Maps directly to: /customer/profile
+      { path: "profile", element: <CustomerProfile /> }, // Maps directly to: /customer/profile
       { path: "settings", element: <Settings /> } // Maps directly to: /customer/settings
     ],
   },
