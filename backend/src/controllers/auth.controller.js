@@ -2,6 +2,9 @@ import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
+import OtpVerification from "../models/otpVerification.js";
+import { normaliseMobile, sendOtp } from "../services/otp.service.js";
 
 // 🔐 TOKEN GENERATE (UPDATED: Binds dynamic shopId sessions for customer roles)
 const generateToken = (user, sessionShopId = null) => {
@@ -24,6 +27,25 @@ const generateToken = (user, sessionShopId = null) => {
 // =======================
 // REGISTER
 // =======================
+export const requestRegistrationOtp = async (req, res) => {
+  try {
+    const { channel, email, mobile } = req.body;
+    if (!["email", "mobile"].includes(channel)) return res.status(400).json({ success: false, message: "Select email or mobile verification." });
+    const contact = channel === "email" ? email?.trim().toLowerCase() : normaliseMobile(mobile || "");
+    if (!contact || (channel === "email" && !/^\S+@\S+\.\S+$/.test(contact)) || (channel === "mobile" && !/^\+\d{10,15}$/.test(contact))) return res.status(400).json({ success: false, message: `Enter a valid ${channel === "email" ? "email address" : "mobile number"}.` });
+    const exists = await User.findOne(channel === "email" ? { email: contact } : { mobile: contact });
+    if (exists) return res.status(409).json({ success: false, message: `This ${channel} is already registered.` });
+    const code = String(crypto.randomInt(100000, 1000000));
+    await OtpVerification.deleteMany({ contact, channel });
+    await OtpVerification.create({ contact, channel, codeHash: crypto.createHash("sha256").update(code).digest("hex"), expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
+    await sendOtp({ channel, contact, code });
+    return res.json({ success: true, message: `OTP sent to your ${channel}.` });
+  } catch (error) {
+    console.error("OTP REQUEST ERROR:", error);
+    return res.status(503).json({ success: false, message: error.message || "Unable to send OTP." });
+  }
+};
+
 export const registerUser = async (req, res) => {
   try {
   const {
@@ -34,10 +56,24 @@ export const registerUser = async (req, res) => {
   mobile,
    shopName,
    companyName,
-    shopId,
+   shopId,
+   verificationChannel,
+   otp,
    } = req.body;
 
-    const exist = await User.findOne({ email });
+    if (!name?.trim() || !password || !["customer", "shopkeeper", "distributor"].includes(role) || !email?.trim() || !mobile?.trim()) return res.status(400).json({ success: false, message: "Name, email, mobile number, password, and role are required." });
+    if (!["email", "mobile"].includes(verificationChannel) || !otp) return res.status(400).json({ success: false, message: "Verify your selected email or mobile number with OTP." });
+    const normalEmail = email.trim().toLowerCase();
+    const normalMobile = normaliseMobile(mobile);
+    const contact = verificationChannel === "email" ? normalEmail : normalMobile;
+    const verification = await OtpVerification.findOne({ contact, channel: verificationChannel }).sort({ createdAt: -1 });
+    const expectedHash = crypto.createHash("sha256").update(String(otp)).digest("hex");
+    if (!verification || verification.expiresAt < new Date() || verification.attempts >= 5 || !crypto.timingSafeEqual(Buffer.from(verification.codeHash), Buffer.from(expectedHash))) {
+      if (verification) { verification.attempts += 1; await verification.save(); }
+      return res.status(400).json({ success: false, message: "Invalid or expired OTP." });
+    }
+
+    const exist = await User.findOne({ $or: [{ email: normalEmail }, { mobile: normalMobile }] });
     if (exist) {
       return res.json({
         success: false,
@@ -54,16 +90,17 @@ export const registerUser = async (req, res) => {
     }
 
     const user = await User.create({
-  email,
+  email: normalEmail,
   password: hashedPassword,
   role,
   name,
-  mobile: mobile || "",
+  mobile: normalMobile,
   shopName: role === "shopkeeper" ? shopName || "" : "",
   companyName: role === "distributor" ? companyName || "" : "",
   shopId: newShopId,
   selectedShopId: role === "customer" ? shopId || null : null,
 });
+    await OtpVerification.deleteMany({ $or: [{ contact: normalEmail }, { contact: normalMobile }] });
 
     return res.json({
       success: true,
@@ -84,9 +121,10 @@ export const registerUser = async (req, res) => {
 // =======================
 export const loginUser = async (req, res) => {
   try {
-    const { email, password,} = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const identifier = email?.trim();
+    const user = await User.findOne({ $or: [{ email: identifier?.toLowerCase() }, { mobile: normaliseMobile(identifier || "") }] });
     // ❌ USER NOT FOUND
     if (!user) {
       return res.json({
@@ -305,5 +343,28 @@ export const updateProfile = async (req, res) => {
       success: false,
       message: "Unable to update profile ❌",
     });
+  }
+};
+
+export const getAccountSettings = async (req, res) => {
+  const user = await User.findById(req.user._id).select("settings");
+  return res.json({ success: true, data: user?.settings || {} });
+};
+
+export const updateAccountSettings = async (req, res) => {
+  try {
+    if (req.body.newPassword) {
+      if (!req.body.currentPassword || req.body.newPassword.length < 6 || req.body.newPassword !== req.body.confirmPassword) return res.status(400).json({ success: false, message: "Enter the current password and matching new password of at least 6 characters." });
+      const account = await User.findById(req.user._id);
+      if (!await bcrypt.compare(req.body.currentPassword, account.password)) return res.status(400).json({ success: false, message: "Current password is incorrect." });
+      account.password = await bcrypt.hash(req.body.newPassword, 10);
+      await account.save();
+    }
+    const allowed = ["emailAlerts", "orderUpdates", "lowStockWarning", "autoRefreshCatalog", "defaultMarkup", "minimumB2BOrder", "autoApproveReorders"];
+    const settings = Object.fromEntries(Object.entries(req.body).filter(([key]) => allowed.includes(key)));
+    const user = await User.findByIdAndUpdate(req.user._id, { $set: Object.fromEntries(Object.entries(settings).map(([key, value]) => [`settings.${key}`, value])) }, { new: true, runValidators: true }).select("settings");
+    return res.json({ success: true, data: user.settings });
+  } catch {
+    return res.status(500).json({ success: false, message: "Unable to save settings." });
   }
 };

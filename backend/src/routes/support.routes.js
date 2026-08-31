@@ -6,6 +6,7 @@ import {
   getSupportTicketById,
   updateSupportTicketStatus,
   replySupportTicket,
+  createPublicSupportTicket,
 } from "../controllers/support.controller.js";
 
 import {
@@ -14,6 +15,7 @@ import {
 } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
+router.post("/public", createPublicSupportTicket);
 
 
 // ==========================================

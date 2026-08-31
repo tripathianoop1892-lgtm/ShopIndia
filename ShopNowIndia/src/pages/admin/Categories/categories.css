@@ -11,7 +11,13 @@
 
 .categories-header h2{
     color:#1e293b;
+    margin: 0;
 }
+
+.categories-header p { margin: 6px 0 0; color: #64748b; }
+
+.category-error, .empty-state { margin: 0; padding: 18px; color: #64748b; }
+.category-error { margin-bottom: 16px; border-radius: 8px; background: #fef2f2; color: #b91c1c; }
 
 .add-btn{
     background:#2563eb;

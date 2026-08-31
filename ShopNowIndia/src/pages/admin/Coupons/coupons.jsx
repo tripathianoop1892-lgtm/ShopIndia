@@ -19,7 +19,7 @@ const Coupons = () => {
       } else {
         setError(response.message || "Unable to load coupons");
       }
-    } catch (err) {
+    } catch {
       setError("Unable to connect to the server");
     } finally {
       setLoading(false);
@@ -52,7 +52,7 @@ const Coupons = () => {
       } else {
         setError(response.message || "Unable to delete coupon");
       }
-    } catch (err) {
+    } catch {
       setError("Unable to delete coupon");
     }
   };

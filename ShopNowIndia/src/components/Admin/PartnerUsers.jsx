@@ -26,7 +26,6 @@ const PartnerUsers = ({ title, role, getUsers }) => {
       .some((value) => value.toLowerCase().includes(keyword)));
   }, [users, search]);
 
-  const openAdd = () => { setEditing(null); setForm(emptyForm); setShowForm(true); };
   const openEdit = (user) => {
     setEditing(user);
     setForm({ name: user.name || "", email: user.email || "", mobile: user.mobile || "", shopName: user.shopName || "", companyName: user.companyName || "", password: "" });

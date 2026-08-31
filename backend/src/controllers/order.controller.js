@@ -3,6 +3,8 @@ import Medicine from "../models/medicine.js";
 import User from "../models/user.js";
 import coupons from "../models/coupons.js";
 import CouponUsage from "../models/couponUsage.js";
+import { notifyUser } from "../services/notification.service.js";
+import PaymentIntent from "../models/paymentIntent.js";
 export const createOrder = async (req, res) => {
   try {
     const user = req.user;
@@ -14,6 +16,7 @@ export const createOrder = async (req, res) => {
       deliveryCharge,
       platformFee,
       couponCode,
+      paymentReference,
     } = req.body;
 
     // ==========================================
@@ -182,6 +185,11 @@ export const createOrder = async (req, res) => {
       0
     );
 
+    const payment = await PaymentIntent.findOne({ _id: paymentReference, userId: user._id, status: "paid" });
+    if (!payment || payment.amount !== Math.round(finalAmount * 100)) {
+      return res.status(402).json({ success: false, message: "A verified Razorpay payment for the exact order amount is required." });
+    }
+
     // ==========================================
     // 6. REDUCE STOCK
     // ==========================================
@@ -257,6 +265,9 @@ export const createOrder = async (req, res) => {
       ),
 
       status: "Pending",
+      paymentStatus: "Paid",
+      paymentMethod: "Razorpay",
+      paymentId: payment.razorpayPaymentId,
     };
 
     // ==========================================
@@ -283,6 +294,21 @@ export const createOrder = async (req, res) => {
 
     const order =
       await Order.create(orderData);
+    payment.status = "consumed";
+    await payment.save();
+
+    await Promise.all([
+      notifyUser({
+        recipientId: order.buyerId,
+        title: "Order placed",
+        message: `Your ${order.orderType} order #${String(order._id).slice(-8).toUpperCase()} has been placed successfully.`,
+      }),
+      notifyUser({
+        recipientId: order.sellerId,
+        title: `New ${order.orderType} order`,
+        message: `${user.name} placed order #${String(order._id).slice(-8).toUpperCase()} for ₹${order.finalAmount.toLocaleString("en-IN")}.`,
+      }),
+    ]);
 
     // ==========================================
     // 11. SAVE COUPON USAGE
@@ -376,6 +402,7 @@ export const updateOrderStatus = async (req, res) => {
     
     const currentOrder = await Order.findById(req.params.id);
     if (!currentOrder) return res.status(404).json({ message: "Order records match failure" });
+    const previousStatus = currentOrder.status;
 
     if (user.role === "shopkeeper" && currentOrder.orderType !== "B2C") {
       return res.status(403).json({ 
@@ -441,6 +468,13 @@ export const updateOrderStatus = async (req, res) => {
 
     currentOrder.status = status;
     await currentOrder.save();
+    if (previousStatus !== status) {
+      await notifyUser({
+        recipientId: currentOrder.buyerId,
+        title: "Order status updated",
+        message: `Order #${String(currentOrder._id).slice(-8).toUpperCase()} is now ${status}.`,
+      });
+    }
     return res.json({ success: true, message: `Order marked as ${status}`, data: currentOrder });
 
   } catch (err) {

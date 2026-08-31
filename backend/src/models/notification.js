@@ -6,11 +6,12 @@ const notificationSchema = new mongoose.Schema(
     message: { type: String, required: true, trim: true },
     receiverRole: {
       type: String,
-      enum: ["customer", "shopkeeper", "distributor", "all"],
+      enum: ["customer", "shopkeeper", "distributor", "all", "individual"],
       default: "all",
     },
+    recipientId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
     status: { type: String, enum: ["Sent", "Draft"], default: "Sent" },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
   },
   { timestamps: true }
 );

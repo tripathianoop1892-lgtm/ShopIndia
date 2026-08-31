@@ -6,10 +6,11 @@ const DistributorLowStock = () => {
   const [medicines, setMedicines] = useState([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability
     fetchData();
   }, []);
 
-  const fetchData = async () => {
+  async function fetchData() {
     try {
       const res = await MedicinesList();
 

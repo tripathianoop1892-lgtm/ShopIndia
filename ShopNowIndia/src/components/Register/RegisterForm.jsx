@@ -7,7 +7,7 @@ import {
   FaLock,
 } from "react-icons/fa";
 
-const RegisterForm = ({ form, handleChange }) => {
+const RegisterForm = ({ form, handleChange, requestOtp, sendingOtp }) => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -98,6 +98,17 @@ const RegisterForm = ({ form, handleChange }) => {
           </span>
 
         </div>
+
+        <div className="input-box full">
+          <select name="verificationChannel" value={form.verificationChannel} onChange={handleChange} aria-label="OTP delivery method">
+            <option value="email">Receive OTP by email</option>
+            <option value="mobile">Receive OTP by SMS</option>
+          </select>
+        </div>
+        <div className="input-box">
+          <input type="text" name="otp" inputMode="numeric" maxLength="6" placeholder="Enter 6-digit OTP" value={form.otp} onChange={handleChange} />
+        </div>
+        <button type="button" className="register-btn" onClick={requestOtp} disabled={sendingOtp}>{sendingOtp ? "Sending OTP..." : "Send OTP"}</button>
 
       </div>
 

@@ -11,6 +11,8 @@ import {
   createManagedUser,
   updateManagedUser,
   deleteManagedUser,
+  getPlatformSettings,
+  updatePlatformSettings,
 } from "../controllers/admin.controller.js";
 
 import { checkAuth, checkRole } from "../middlewares/auth.middleware.js";
@@ -29,5 +31,7 @@ router.get("/reports/sales", checkAuth, checkRole("admin"), getSalesReport);
 router.post("/users", checkAuth, checkRole("admin"), createManagedUser);
 router.patch("/users/:id", checkAuth, checkRole("admin"), updateManagedUser);
 router.delete("/users/:id", checkAuth, checkRole("admin"), deleteManagedUser);
+router.get("/settings", checkAuth, checkRole("admin"), getPlatformSettings);
+router.put("/settings", checkAuth, checkRole("admin"), updatePlatformSettings);
 
 export default router;

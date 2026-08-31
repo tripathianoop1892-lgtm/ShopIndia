@@ -15,6 +15,7 @@ const ShopkeeperSidebar = ({ isOpen, onClose }) => {
     ["/shopkeeper/orders", "Orders"],
     ["/shopkeeper/earnings", "Earnings"],
     ["/shopkeeper/qr", "Store QR Code"],
+    ["/shopkeeper/notifications", "Notifications"],
     ["/shopkeeper/profile", "Profile"],
     ["/shopkeeper/settings", "Settings"],
   ];

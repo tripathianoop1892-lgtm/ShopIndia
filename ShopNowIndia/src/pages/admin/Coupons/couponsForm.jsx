@@ -78,7 +78,7 @@ const CouponsForm = () => {
       } else {
         setError(response.message || "Unable to save coupon");
       }
-    } catch (err) {
+    } catch {
       setError("Unable to save coupon");
     } finally {
       setSaving(false);

@@ -41,7 +41,13 @@ const DistributorSidebar = ({ isOpen, onClose }) => {
             <NavLink to="/distributor/earnings" onClick={onClose}>Earnings</NavLink>
           </li>
           <li>
+            <NavLink to="/distributor/notifications" onClick={onClose}>Notifications</NavLink>
+          </li>
+          <li>
             <NavLink to="/distributor/low-stock" onClick={onClose}>Low Stock</NavLink>
+          </li>
+          <li>
+            <NavLink to="/distributor/stock" onClick={onClose}>Update Stock</NavLink>
           </li>
           <li>
             <NavLink to="/distributor/expiring" onClick={onClose}>Expiry Alert </NavLink>

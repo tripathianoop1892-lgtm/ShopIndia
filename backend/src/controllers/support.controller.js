@@ -56,6 +56,18 @@ export const createSupportTicket = async (
   }
 };
 
+export const createPublicSupportTicket = async (req, res) => {
+  try {
+    const { name, email, mobile = "", message } = req.body;
+    if (!name?.trim() || !email?.trim() || !message?.trim()) return res.status(400).json({ success: false, message: "Name, email, and message are required." });
+    const ticket = await Support.create({ userId: null, name: name.trim(), role: "guest", subject: "Website contact request", message: `${message.trim()}\n\nEmail: ${email.trim()}${mobile.trim() ? `\nPhone: ${mobile.trim()}` : ""}`, status: "Pending" });
+    return res.status(201).json({ success: true, data: ticket, message: "Your support request has been sent." });
+  } catch (error) {
+    console.error("PUBLIC SUPPORT ERROR:", error);
+    return res.status(500).json({ success: false, message: "Unable to send your support request." });
+  }
+};
+
 
 // ==========================================
 // GET SUPPORT TICKETS

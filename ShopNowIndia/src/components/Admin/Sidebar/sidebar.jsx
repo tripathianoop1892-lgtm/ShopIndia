@@ -144,7 +144,7 @@ const Sidebar = ({ isOpen }) => {
         </li>
 
         <li>
-          <NavLink to="/logout">
+          <NavLink to="/admin/logout">
             <FaSignOutAlt />
             <span>Logout</span>
           </NavLink>

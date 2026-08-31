@@ -5,7 +5,7 @@ const Logout = () => {
 
   const handleLogout = () => {
 
-    localStorage.removeItem("token");
+    localStorage.clear();
 
     alert("Logout Successfully");
 

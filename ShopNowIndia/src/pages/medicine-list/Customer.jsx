@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css"; // Uses the same styled sheet for layout consistency
-import { MedicinesList, addToCart, getCart } from "../../services/api";
+import { MedicinesList, addToCart, getCart, getOrders } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../../features/cartSlice";
 import { FaShoppingBasket, FaSpinner, FaHistory } from "react-icons/fa";

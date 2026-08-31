@@ -1,127 +1,63 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import "./Login.css";
 import { loginUser } from "../../services/api";
 import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleLogin = async () => {
-    if (!form.email || !form.password) {
-      alert("All fields required ❌");
-      return;
-    }
-
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    if (!form.email || !form.password) return alert("Email and password are required.");
+    setLoading(true);
     try {
-      const payload = {
-        email: form.email,
-        password: form.password,
-      };
-
-      const res = await loginUser(payload);
-
-      if (!res.success) {
-        alert(res.message || "Invalid credentials ❌");
-        return;
-      }
-
-      // Save user + token
+      const res = await loginUser(form);
+      if (!res.success) return alert(res.message || "Invalid credentials.");
       login(res.user, res.token);
-
-      alert("Login Successful ✅");
-
-      // Role based navigation
-      const role = res.user?.role?.toLowerCase();
-
-      if (role === "customer") {
-        navigate("/customer");
-      } else if (role === "shopkeeper") {
-        navigate("/shopkeeper");
-      } else if (role === "distributor") {
-        navigate("/distributor");
-      } else if (role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
+      const destinations = { customer: "/customer", shopkeeper: "/shopkeeper", distributor: "/distributor", admin: "/admin" };
+      navigate(destinations[res.user?.role?.toLowerCase()] || "/");
     } catch (error) {
       console.error(error);
-      alert("Server connection error ❌");
+      alert("Unable to connect to the server.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
+    <main className="login-page">
+      <section className="login-brand-panel">
+        <div className="login-brand-content">
+          <img src="/omsanjeevani.png" alt="Om Sanjeevani" className="login-brand-logo" />
+          <p className="login-eyebrow">Welcome back</p>
+          <h1>Your pharmacy network,<br /><span>always connected.</span></h1>
+          <p className="login-brand-description">Sign in to manage medicines, orders, payments, and care from one trusted platform.</p>
+          <img src="/medicine.png" alt="Medicines and healthcare" className="login-hero-image" />
+          <div className="login-features"><span>Verified medicines</span><span>Secure accounts</span><span>Connected delivery</span></div>
+        </div>
+      </section>
 
-      <h2>Login Page</h2>
+      <section className="login-form-panel">
+        <form className="login-card" onSubmit={handleLogin}>
+          <p className="login-card-eyebrow">Account access</p>
+          <h2>Sign in to OmSanjeevani</h2>
+          <p className="login-card-subtitle">Enter your details to continue to your portal.</p>
 
-      {/* EMAIL */}
-      <input
-        type="email"
-        placeholder="Enter Email"
-        value={form.email}
-        onChange={(e) =>
-          setForm({
-            ...form,
-            email: e.target.value,
-          })
-        }
-      />
+          <label className="login-field"><span>Email address</span><div><FaEnvelope /><input type="email" placeholder="you@example.com" autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></div></label>
+          <label className="login-field"><span>Password</span><div><FaLock /><input type={showPassword ? "text" : "password"} placeholder="Enter your password" autoComplete="current-password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /><button type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button></div></label>
 
-      {/* PASSWORD */}
-      <div className="password-wrapper">
-
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Enter Password"
-          value={form.password}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              password: e.target.value,
-            })
-          }
-        />
-
-        <button
-          type="button"
-          className="password-eye"
-          onClick={() => setShowPassword(!showPassword)}
-          aria-label={showPassword ? "Hide password" : "Show password"}
-        >
-          {showPassword ? "🙈" : "👁️"}
-        </button>
-
-      </div>
-
-      {/* LOGIN BUTTON */}
-      <button
-        className="login-btn"
-        onClick={handleLogin}
-      >
-        Login
-      </button>
-
-      {/* FORGOT PASSWORD */}
-      <p onClick={() => navigate("/forgot")}>
-        Forgot Password?
-      </p>
-
-      {/* CREATE ACCOUNT */}
-      <p onClick={() => navigate("/register")}>
-        Create Account
-      </p>
-
-    </div>
+          <button className="login-btn" disabled={loading}>{loading ? "Signing in..." : "Sign In"}</button>
+          <button type="button" className="login-forgot-link" onClick={() => navigate("/forgot")}>Forgot password?</button>
+          <p className="login-register-text">New to OmSanjeevani? <button type="button" onClick={() => navigate("/register")}>Create an account</button></p>
+        </form>
+      </section>
+    </main>
   );
 };
 

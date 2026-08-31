@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./TransactionHistory.css";
+import { getOrders } from "../../services/api";
 
 const TransactionHistory = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetchOrders();
+    getOrders()
+      .then((data) => setOrders(Array.isArray(data) ? data : []))
+      .catch((error) => console.error("Unable to load transactions:", error));
   }, []);
-
-  const fetchOrders = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/orders");
-      const data = await res.json();
-      setOrders(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <div className="history-container">
@@ -36,11 +29,11 @@ const TransactionHistory = () => {
         <tbody>
           {orders.length > 0 ? (
             orders.map((item) => (
-              <tr key={item.id}>
-                <td>#{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.quantity}</td>
-                <td>₹{item.price}</td>
+              <tr key={item._id}>
+                <td>#{item._id.slice(-8)}</td>
+                <td>{item.items?.map((medicine) => medicine.name).join(", ") || "—"}</td>
+                <td>{item.items?.reduce((sum, medicine) => sum + Number(medicine.quantity || 0), 0) || 0}</td>
+                <td>₹{Number(item.finalAmount ?? item.totalAmount ?? 0).toLocaleString("en-IN")}</td>
 
                 <td
                   className={

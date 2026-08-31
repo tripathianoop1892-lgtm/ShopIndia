@@ -9,6 +9,21 @@ export const getNotifications = async (_req, res) => {
   }
 };
 
+export const getMyNotifications = async (req, res) => {
+  try {
+    const data = await Notification.find({
+      status: "Sent",
+      $or: [
+        { receiverRole: { $in: [req.user.role, "all"] } },
+        { recipientId: req.user._id },
+      ],
+    }).sort({ createdAt: -1 });
+    return res.json({ success: true, data });
+  } catch {
+    return res.status(500).json({ success: false, message: "Unable to load notifications." });
+  }
+};
+
 export const createNotification = async (req, res) => {
   try {
     const { title, message, receiverRole = "all", status = "Sent" } = req.body;

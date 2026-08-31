@@ -14,11 +14,12 @@ const Distributor = () => {
   const [selectedMedicines, setSelectedMedicines] = useState([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability
     fetchData();
   }, []);
 
   // FETCH DATA
-  const fetchData = async () => {
+  async function fetchData() {
 
     try {
 

@@ -21,6 +21,7 @@ import prescriptionRoutes from "./src/routes/prescription.routes.js";
 import supportRoutes from "./src/routes/support.routes.js";
 import reviewRoutes from "./src/routes/review.routes.js"
 import notificationRoutes from "./src/routes/notification.routes.js";
+import paymentRoutes from "./src/routes/payment.routes.js";
 // CONFIG
 import connectDB from "./src/config/db.js";
 
@@ -63,6 +64,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/admin/coupons", couponRoutes);
 app.use("/api/admin/banner", bannerRoutes);
 app.use("/api/admin/notifications", notificationRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // 📄 PRESCRIPTIONS
 app.use("/api/prescriptions", prescriptionRoutes);
