@@ -30,17 +30,45 @@ const orderSchema = new mongoose.Schema(
       default: null, // Used to capture context for B2C scoping
     },
     items: [
-      {
-        medicineId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Medicine",
-          required: true,
-        },
-        name: { type: String, required: true },
-        quantity: { type: Number, required: true },
-        price: { type: Number, required: true }, // Captured snapshot cost at checkout
-      },
-    ],
+  {
+    medicineId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Medicine",
+      required: true,
+    },
+
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
+    // 📦 Batch snapshot at the time of order
+    batch: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    // 📅 Expiry snapshot at the time of order
+    expiry: {
+      type: Date,
+      default: null,
+    },
+  },
+],
     totalAmount: {
       type: Number,
       required: true,

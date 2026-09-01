@@ -130,8 +130,6 @@ const Customer = () => {
         </div>
       </div>
 
-      <CustomerBannerSlider />
-
       {/* ===== INSIGHT STATS GRID ===== */}
       <div className="dashboard-stats-row">
         <div className="stat-card total-meds">
@@ -179,20 +177,8 @@ const Customer = () => {
         </div>
       </div>
 
-      {/* ===== CORPORATE ACCOUNT PROMO ROW ===== */}
-      <div className="marketing-promo-banner">
-        <div className="promo-text-content">
-          <span className="promo-badge">Corporate Campaign</span>
-          <h2>Sleek <strong>Inventory Procurement</strong></h2>
-          <h3>Real-time integration connecting wholesale distribution stocks to active digital storefronts.</h3>
-          <div className="promo-code-box">
-            Active Channel: <strong>B2C Retail Pharmacy</strong>
-          </div>
-        </div>
-        <div className="promo-action-side">
-          <button className="promo-shop-btn">View Order History</button>
-        </div>
-      </div>
+      
+      <CustomerBannerSlider />
 
       {loading ? (
         <div className="marketplace-loading-state">

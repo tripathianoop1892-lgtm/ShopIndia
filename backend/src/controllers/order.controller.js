@@ -1,8 +1,13 @@
+import mongoose from "mongoose";
 import Order from "../models/Order.js";
 import Medicine from "../models/medicine.js";
 import User from "../models/user.js";
 import coupons from "../models/coupons.js";
 import CouponUsage from "../models/couponUsage.js";
+
+// =======================
+// 🛒 CREATE ORDER
+// =======================
 export const createOrder = async (req, res) => {
   try {
     const user = req.user;
@@ -10,63 +15,279 @@ export const createOrder = async (req, res) => {
     const {
       items,
       sellerId,
-      subtotal,
       deliveryCharge,
       platformFee,
       couponCode,
     } = req.body;
 
     // ==========================================
-    // 1. CART VALIDATION
+    // 1. USER VALIDATION
     // ==========================================
 
-    if (!items || items.length === 0) {
+    if (!user || !user._id || !user.role) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user ❌",
+      });
+    }
+
+    // ==========================================
+    // 2. CART VALIDATION
+    // ==========================================
+
+    if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Your cart is empty ❌",
       });
     }
 
+    if (!sellerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Seller is required ❌",
+      });
+    }
+
     // ==========================================
-    // 2. STOCK VALIDATION
+    // 3. SELLER VALIDATION
     // ==========================================
 
-    for (let item of items) {
-      const targetMed = await Medicine.findById(item.medicineId);
+    const seller = await User.findById(sellerId);
 
-      if (!targetMed) {
-        return res.status(404).json({
-          success: false,
-          message: `Medicine ${item.name} not found ❌`,
-        });
-      }
+    if (!seller) {
+      return res.status(404).json({
+        success: false,
+        message: "Seller not found ❌",
+      });
+    }
 
-      if (targetMed.stock < item.quantity) {
-        return res.status(400).json({
+    // ==========================================
+    // 4. ORDER TYPE + SELLER ROLE
+    // ==========================================
+
+    let orderType = "";
+
+    // SHOPKEEPER → DISTRIBUTOR
+    if (user.role === "shopkeeper") {
+      orderType = "B2B";
+
+      if (seller.role !== "distributor") {
+        return res.status(403).json({
           success: false,
-          message: `Insufficient stock for ${item.name} ❌`,
+          message: "Shopkeeper can order only from distributor ❌",
         });
       }
     }
 
+    // CUSTOMER → SHOPKEEPER
+    else if (user.role === "customer") {
+      orderType = "B2C";
+
+      if (seller.role !== "shopkeeper") {
+        return res.status(403).json({
+          success: false,
+          message: "Customer can order only from shopkeeper ❌",
+        });
+      }
+
+      // Customer must be connected to this shop
+      if (
+        !user.shopId ||
+        !seller.shopId ||
+        String(user.shopId) !== String(seller.shopId)
+      ) {
+        return res.status(403).json({
+          success: false,
+          message: "This shop is not connected to your account ❌",
+        });
+      }
+    }
+
+    // OTHER ROLES
+    else {
+      return res.status(403).json({
+        success: false,
+        message: "This account cannot place an order ❌",
+      });
+    }
+
     // ==========================================
-    // 3. AMOUNT VALUES
+    // 5. MEDICINE VALIDATION
     // ==========================================
 
-    const orderSubtotal = Number(subtotal || 0);
-    const orderDeliveryCharge = Number(deliveryCharge || 0);
-    const orderPlatformFee = Number(platformFee || 0);
+    const validatedItems = [];
+    let calculatedSubtotal = 0;
+
+    for (const item of items) {
+      if (!item.medicineId) {
+        return res.status(400).json({
+          success: false,
+          message: "Medicine ID is required ❌",
+        });
+      }
+
+      const quantity = Number(item.quantity);
+
+      if (!Number.isInteger(quantity) || quantity <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid medicine quantity ❌",
+        });
+      }
+
+      const medicine = await Medicine.findById(item.medicineId);
+
+      if (!medicine) {
+        return res.status(404).json({
+          success: false,
+          message: "Medicine not found ❌",
+        });
+      }
+
+      // ==========================================
+      // B2B MEDICINE OWNERSHIP
+      // SHOPKEEPER → DISTRIBUTOR
+      // ==========================================
+
+      if (orderType === "B2B") {
+        if (
+          medicine.ownerRole !== "distributor" ||
+          String(medicine.ownerId) !== String(seller._id)
+        ) {
+          return res.status(403).json({
+            success: false,
+            message: `${medicine.name} is not supplied by this distributor ❌`,
+          });
+        }
+      }
+
+      // ==========================================
+      // B2C MEDICINE OWNERSHIP
+      // CUSTOMER → SHOPKEEPER
+      // ==========================================
+
+      if (orderType === "B2C") {
+        if (
+          medicine.ownerRole !== "shopkeeper" ||
+          String(medicine.ownerId) !== String(seller._id) ||
+          String(medicine.shopId) !== String(seller.shopId)
+        ) {
+          return res.status(403).json({
+            success: false,
+            message: `${medicine.name} is not available from this shop ❌`,
+          });
+        }
+      }
+
+      // ==========================================
+      // STOCK CHECK
+      // ==========================================
+
+      if (Number(medicine.stock || 0) < quantity) {
+        return res.status(400).json({
+          success: false,
+          message: `Insufficient stock for ${medicine.name} ❌`,
+        });
+      }
+
+      // ==========================================
+      // SERVER SIDE PRICE
+      // ==========================================
+
+      let actualPrice = 0;
+
+      if (orderType === "B2B") {
+        actualPrice = Number(
+          medicine.wholesalePrice || medicine.price || 0
+        );
+      }
+
+      if (orderType === "B2C") {
+        actualPrice = Number(
+          medicine.retailPrice ||
+          medicine.price ||
+          medicine.mrp ||
+          0
+        );
+      }
+
+      if (!Number.isFinite(actualPrice) || actualPrice < 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Invalid price for ${medicine.name} ❌`,
+        });
+      }
+
+      const itemTotal = actualPrice * quantity;
+
+      calculatedSubtotal += itemTotal;
+
+    validatedItems.push({
+  medicineId: medicine._id,
+  name: medicine.name,
+  quantity,
+  price: actualPrice,
+
+  // 📦 Batch snapshot
+  batch: medicine.batch || "",
+
+  // 📅 Expiry snapshot
+  expiry: medicine.expiry || null,
+});
+    }
+
+    // ==========================================
+    // 6. SERVER CALCULATED SUBTOTAL
+    // ==========================================
+
+    const orderSubtotal = Number(
+      calculatedSubtotal.toFixed(2)
+    );
+
+    // ==========================================
+    // 7. DELIVERY + PLATFORM FEE
+    // ==========================================
+
+    const orderDeliveryCharge = Number(
+      deliveryCharge || 0
+    );
+
+    const orderPlatformFee = Number(
+      platformFee || 0
+    );
+
+    if (
+      !Number.isFinite(orderDeliveryCharge) ||
+      orderDeliveryCharge < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid delivery charge ❌",
+      });
+    }
+
+    if (
+      !Number.isFinite(orderPlatformFee) ||
+      orderPlatformFee < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid platform fee ❌",
+      });
+    }
+
+    // ==========================================
+    // 8. COUPON
+    // ==========================================
 
     let discountAmount = 0;
-    let appliedCoutonCode = "";
+    let appliedCouponCode = "";
     let coupon = null;
 
-    // ==========================================
-    // 4. COUPON
-    // ==========================================
-
     if (couponCode && couponCode.trim()) {
-      const normalizeCode = couponCode.trim().toUpperCase();
+      const normalizeCode =
+        couponCode.trim().toUpperCase();
 
       coupon = await coupons.findOne({
         code: normalizeCode,
@@ -75,14 +296,14 @@ export const createOrder = async (req, res) => {
       if (!coupon) {
         return res.status(404).json({
           success: false,
-          message: "Coupon Not Found",
+          message: "Coupon not found ❌",
         });
       }
 
       if (coupon.status !== "active") {
         return res.status(400).json({
           success: false,
-          message: "Coupon is inactive",
+          message: "Coupon is inactive ❌",
         });
       }
 
@@ -92,11 +313,10 @@ export const createOrder = async (req, res) => {
       ) {
         return res.status(400).json({
           success: false,
-          message: "Coupon has expired",
+          message: "Coupon has expired ❌",
         });
       }
 
-      // Minimum order check
       if (
         orderSubtotal <
         Number(coupon.miniorder || 0)
@@ -109,10 +329,7 @@ export const createOrder = async (req, res) => {
         });
       }
 
-      // ==========================================
-      // COUPON USER USAGE
-      // ==========================================
-
+      // USER COUPON USAGE
       const usage =
         await CouponUsage.countDocuments({
           couponId: coupon._id,
@@ -130,84 +347,104 @@ export const createOrder = async (req, res) => {
         });
       }
 
-      // ==========================================
       // TOTAL COUPON USAGE
-      // ==========================================
-
       if (
         coupon.maxTotalUsage &&
         coupon.usedCount >= coupon.maxTotalUsage
       ) {
         return res.status(400).json({
           success: false,
-          message: "Coupon Usage limit reached",
+          message:
+            "Coupon usage limit reached",
         });
       }
 
-      // ==========================================
-      // DISCOUNT CALCULATION
-      // ==========================================
-
+      // DISCOUNT
       if (
         coupon.discountType === "Percentage"
       ) {
         discountAmount =
           (orderSubtotal *
-            Number(coupon.discountValue)) /
+            Number(coupon.discountValue || 0)) /
           100;
       } else {
         discountAmount = Number(
-          coupon.discountValue
+          coupon.discountValue || 0
         );
       }
 
-      // Discount cannot be greater than subtotal
       discountAmount = Math.min(
-        discountAmount,
+        Math.max(discountAmount, 0),
         orderSubtotal
       );
 
-      appliedCoutonCode = coupon.code;
+      appliedCouponCode = coupon.code;
     }
 
     // ==========================================
-    // 5. FINAL AMOUNT
+    // 9. FINAL AMOUNT
     // ==========================================
 
-    const finalAmount = Math.max(
-      orderSubtotal -
-        discountAmount +
-        orderDeliveryCharge +
-        orderPlatformFee,
-      0
+    const finalAmount = Number(
+      Math.max(
+        orderSubtotal -
+          discountAmount +
+          orderDeliveryCharge +
+          orderPlatformFee,
+        0
+      ).toFixed(2)
     );
 
     // ==========================================
-    // 6. REDUCE STOCK
+    // 10. ATOMIC STOCK REDUCTION
     // ==========================================
 
-    for (let item of items) {
-      await Medicine.findByIdAndUpdate(
-        item.medicineId,
-        {
-          $inc: {
-            stock: -Number(item.quantity),
+    const reducedStock = [];
+
+    for (const item of validatedItems) {
+      const updatedMedicine =
+        await Medicine.findOneAndUpdate(
+          {
+            _id: item.medicineId,
+            stock: { $gte: item.quantity },
           },
+          {
+            $inc: {
+              stock: -item.quantity,
+            },
+          },
+          {
+            new: true,
+          }
+        );
+
+      if (!updatedMedicine) {
+        // Rollback previously reduced stock
+        for (const rollback of reducedStock) {
+          await Medicine.findByIdAndUpdate(
+            rollback.medicineId,
+            {
+              $inc: {
+                stock: rollback.quantity,
+              },
+            }
+          );
         }
-      );
+
+        return res.status(409).json({
+          success: false,
+          message: `Stock changed while placing ${item.name}. Please try again ❌`,
+        });
+      }
+
+      reducedStock.push({
+        medicineId: item.medicineId,
+        quantity: item.quantity,
+      });
     }
 
     // ==========================================
-    // 7. ORDER TYPE
-    // ==========================================
-
-    const orderType =
-      user.role === "shopkeeper"
-        ? "B2B"
-        : "B2C";
-
-    // ==========================================
-    // 8. ORDER DATA
+    // 11. ORDER DATA
     // ==========================================
 
     const orderData = {
@@ -215,16 +452,10 @@ export const createOrder = async (req, res) => {
 
       buyerId: user._id,
 
-      sellerId: sellerId,
+      sellerId: seller._id,
 
-      items: items.map((i) => ({
-        medicineId: i.medicineId,
-        name: i.name,
-        quantity: Number(i.quantity),
-        price: Number(i.price),
-      })),
+      items: validatedItems,
 
-      // Original order amount before coupon
       totalAmount: Number(
         (
           orderSubtotal +
@@ -233,9 +464,7 @@ export const createOrder = async (req, res) => {
         ).toFixed(2)
       ),
 
-      subtotal: Number(
-        orderSubtotal.toFixed(2)
-      ),
+      subtotal: orderSubtotal,
 
       deliveryCharge: Number(
         orderDeliveryCharge.toFixed(2)
@@ -245,47 +474,57 @@ export const createOrder = async (req, res) => {
         orderPlatformFee.toFixed(2)
       ),
 
-      couponCode: appliedCoutonCode,
+      couponCode: appliedCouponCode,
 
       discountAmount: Number(
         discountAmount.toFixed(2)
       ),
 
-      // Final amount customer has to pay
-      finalAmount: Number(
-        finalAmount.toFixed(2)
-      ),
+      finalAmount,
 
       status: "Pending",
     };
 
     // ==========================================
-    // 9. CUSTOMER / SHOPKEEPER DETAILS
+    // 12. SHOP / CUSTOMER DETAILS
     // ==========================================
 
-    if (user.role === "shopkeeper") {
-      orderData.shopkeeperName =
-        user.name;
+    if (orderType === "B2B") {
+      orderData.shopkeeperName = user.name;
+      orderData.shopId = user.shopId || null;
+    }
 
-      orderData.shopId =
-        user.shopId;
-    } else {
-      orderData.customerName =
-        user.name;
-
-      orderData.shopId =
-        user.shopId;
+    if (orderType === "B2C") {
+      orderData.customerName = user.name;
+      orderData.shopId = seller.shopId;
     }
 
     // ==========================================
-    // 10. CREATE ORDER
+    // 13. CREATE ORDER
     // ==========================================
 
-    const order =
-      await Order.create(orderData);
+    let order;
+
+    try {
+      order = await Order.create(orderData);
+    } catch (orderError) {
+      // Rollback stock if order creation fails
+      for (const rollback of reducedStock) {
+        await Medicine.findByIdAndUpdate(
+          rollback.medicineId,
+          {
+            $inc: {
+              stock: rollback.quantity,
+            },
+          }
+        );
+      }
+
+      throw orderError;
+    }
 
     // ==========================================
-    // 11. SAVE COUPON USAGE
+    // 14. SAVE COUPON USAGE
     // ==========================================
 
     if (coupon) {
@@ -295,13 +534,14 @@ export const createOrder = async (req, res) => {
         orderId: order._id,
       });
 
-      coupon.usedCount += 1;
+      coupon.usedCount =
+        Number(coupon.usedCount || 0) + 1;
 
       await coupon.save();
     }
 
     // ==========================================
-    // 12. RESPONSE
+    // 15. RESPONSE
     // ==========================================
 
     return res.status(201).json({
@@ -314,17 +554,16 @@ export const createOrder = async (req, res) => {
 
       discountApplied: {
         couponCode:
-          appliedCoutonCode,
+          appliedCouponCode,
 
         discountAmount: Number(
           discountAmount.toFixed(2)
         ),
 
-        finalAmount: Number(
-          finalAmount.toFixed(2)
-        ),
+        finalAmount,
       },
     });
+
   } catch (err) {
     console.error(
       "ORDER CREATION ERROR:",
@@ -334,7 +573,7 @@ export const createOrder = async (req, res) => {
     return res.status(500).json({
       success: false,
       message:
-        "Internal Server Order processing failure ❌",
+        "Internal server order processing failure ❌",
     });
   }
 };
@@ -369,82 +608,452 @@ export const getOrders = async (req, res) => {
   }
 };
 
+
+// ==========================================
+// 🔄 UPDATE ORDER STATUS
+// Transaction Safe Version
+// ==========================================
+
 export const updateOrderStatus = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const { status } = req.body;
     const user = req.user;
-    
-    const currentOrder = await Order.findById(req.params.id);
-    if (!currentOrder) return res.status(404).json({ message: "Order records match failure" });
 
-    if (user.role === "shopkeeper" && currentOrder.orderType !== "B2C") {
-      return res.status(403).json({ 
-        success: false, 
-        message: "Access Denied: Shopkeepers can only manage B2C retail orders." 
-      });
-    }
-    if (user.role === "shopkeeper" && String(currentOrder.sellerId) !== String(user._id)) {
-      return res.status(403).json({ 
-        success: false, 
-        message: "Access Denied: You are not authorized to manage this specific store's orders." 
+    // ==========================================
+    // 1. BASIC VALIDATION
+    // ==========================================
+
+    if (!user || !user._id || !user.role) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized user ❌",
       });
     }
 
-    if (status === "Rejected" && currentOrder.status === "Pending") {
-      for (let item of currentOrder.items) {
-        await Medicine.findByIdAndUpdate(item.medicineId, {
-          $inc: { stock: item.quantity }
-        });
+    const allowedStatuses = [
+      "Pending",
+      "Approved",
+      "Rejected",
+      "Delivered",
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid order status ❌",
+      });
+    }
+
+    // ==========================================
+    // 2. START TRANSACTION
+    // ==========================================
+
+    let updatedOrder;
+
+    await session.withTransaction(async () => {
+      // ==========================================
+      // 3. FIND ORDER
+      // ==========================================
+
+      const currentOrder = await Order.findById(
+        req.params.id
+      ).session(session);
+
+      if (!currentOrder) {
+        const error = new Error("Order not found ❌");
+        error.statusCode = 404;
+        throw error;
       }
-    }
 
-    // APPROVAL LOGIC MODIFIED TO MATCH EXACT TIERS
-    if (currentOrder.orderType === "B2B" && status === "Approved" && currentOrder.status !== "Approved") {
-      const shopkeeperUser = await User.findById(currentOrder.buyerId);
-      
-      for (let item of currentOrder.items) {
-        let existingRetailStock = await Medicine.findOne({
-          name: item.name,
-          shopId: shopkeeperUser.shopId,
-          ownerRole: "shopkeeper"
-        });
-        
-        if (existingRetailStock) {
-          existingRetailStock.stock += item.quantity;
-          await existingRetailStock.save();
-        } else {
-          const masterDistributorMed = await Medicine.findById(item.medicineId);
-          await Medicine.create({
-            name: item.name,
-            company: masterDistributorMed?.company || "N/A",
-            type: masterDistributorMed?.type || "Tablet",
-            strength: masterDistributorMed?.strength || "",
-            packSize: masterDistributorMed?.packSize || 10,
-            packType: masterDistributorMed?.packType || "Strip",
-            image: masterDistributorMed?.image || "",
-            stock: item.quantity,
-            expiry: masterDistributorMed?.expiry,
-            
-            // 🎯 FIXED PRICING CONFIGURATION FOR PROCUREMENT
-            mrp: masterDistributorMed?.mrp || item.price,
-            wholesalePrice: item.price, // Track baseline purchase cost snapshot
-            retailPrice: masterDistributorMed?.mrp || (item.price * 1.2), // Offer price to sell to customers
-            price: 0, 
-            
-            ownerId: shopkeeperUser._id,
-            ownerRole: "shopkeeper",
-            shopId: shopkeeperUser.shopId
-          });
+      // ==========================================
+      // 4. STATUS TRANSITION SECURITY
+      // ==========================================
+
+      if (
+        currentOrder.status === "Rejected" ||
+        currentOrder.status === "Delivered"
+      ) {
+        const error = new Error(
+          `This order is already ${currentOrder.status} and cannot be changed ❌`
+        );
+
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // Approved → only Delivered
+      if (
+        currentOrder.status === "Approved" &&
+        status !== "Delivered"
+      ) {
+        const error = new Error(
+          "An approved order can only be marked as Delivered ❌"
+        );
+
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // Pending → only Approved / Rejected
+      if (
+        currentOrder.status === "Pending" &&
+        status !== "Approved" &&
+        status !== "Rejected"
+      ) {
+        const error = new Error(
+          "Pending order can only be Approved or Rejected ❌"
+        );
+
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // ==========================================
+      // 5. ROLE + OWNERSHIP SECURITY
+      // ==========================================
+
+      // ------------------------------------------
+      // B2B
+      // Shopkeeper → Distributor
+      // ------------------------------------------
+
+      if (currentOrder.orderType === "B2B") {
+        if (user.role !== "distributor") {
+          const error = new Error(
+            "Only the distributor can manage B2B orders ❌"
+          );
+
+          error.statusCode = 403;
+          throw error;
+        }
+
+        if (
+          String(currentOrder.sellerId) !==
+          String(user._id)
+        ) {
+          const error = new Error(
+            "You are not authorized to manage this B2B order ❌"
+          );
+
+          error.statusCode = 403;
+          throw error;
         }
       }
-    }
 
-    currentOrder.status = status;
-    await currentOrder.save();
-    return res.json({ success: true, message: `Order marked as ${status}`, data: currentOrder });
+      // ------------------------------------------
+      // B2C
+      // Customer → Shopkeeper
+      // ------------------------------------------
+
+      else if (currentOrder.orderType === "B2C") {
+        if (user.role !== "shopkeeper") {
+          const error = new Error(
+            "Only the shopkeeper can manage B2C orders ❌"
+          );
+
+          error.statusCode = 403;
+          throw error;
+        }
+
+        if (
+          String(currentOrder.sellerId) !==
+          String(user._id)
+        ) {
+          const error = new Error(
+            "You are not authorized to manage this shop's order ❌"
+          );
+
+          error.statusCode = 403;
+          throw error;
+        }
+      }
+
+      // ==========================================
+      // 6. REJECT ORDER
+      // ==========================================
+
+      if (
+        status === "Rejected" &&
+        currentOrder.status === "Pending"
+      ) {
+        // Order creation ke time stock reduce hua tha.
+        // Rejection par stock वापस करना है.
+
+        for (const item of currentOrder.items) {
+          const restoredMedicine =
+            await Medicine.findOneAndUpdate(
+              {
+                _id: item.medicineId,
+              },
+              {
+                $inc: {
+                  stock: Number(item.quantity),
+                },
+              },
+              {
+                new: true,
+                session,
+              }
+            );
+
+          if (!restoredMedicine) {
+            const error = new Error(
+              `Medicine ${item.name} could not be restored ❌`
+            );
+
+            error.statusCode = 409;
+            throw error;
+          }
+        }
+      }
+
+      // ==========================================
+      // 7. APPROVE B2B ORDER
+      // Distributor → Shopkeeper
+      // ==========================================
+
+      if (
+        currentOrder.orderType === "B2B" &&
+        status === "Approved" &&
+        currentOrder.status === "Pending"
+      ) {
+        const shopkeeperUser =
+          await User.findById(
+            currentOrder.buyerId
+          ).session(session);
+
+        if (!shopkeeperUser) {
+          const error = new Error(
+            "Shopkeeper not found ❌"
+          );
+
+          error.statusCode = 404;
+          throw error;
+        }
+
+        if (
+          shopkeeperUser.role !== "shopkeeper"
+        ) {
+          const error = new Error(
+            "B2B buyer is not a shopkeeper ❌"
+          );
+
+          error.statusCode = 400;
+          throw error;
+        }
+
+        if (!shopkeeperUser.shopId) {
+          const error = new Error(
+            "Shopkeeper does not have an active shop ❌"
+          );
+
+          error.statusCode = 400;
+          throw error;
+        }
+
+        // ==========================================
+        // TRANSFER EACH MEDICINE
+        // ==========================================
+
+        for (const item of currentOrder.items) {
+          const distributorMedicine =
+            await Medicine.findOne({
+              _id: item.medicineId,
+              ownerId: currentOrder.sellerId,
+              ownerRole: "distributor",
+            }).session(session);
+
+          if (!distributorMedicine) {
+            const error = new Error(
+              `${item.name} is not available from this distributor ❌`
+            );
+
+            error.statusCode = 404;
+            throw error;
+          }
+
+          // ==========================================
+          // ORDER SNAPSHOT
+          // ==========================================
+
+          const batch =
+            item.batch ||
+            distributorMedicine.batch ||
+            "";
+
+          const expiry =
+            item.expiry ||
+            distributorMedicine.expiry ||
+            null;
+
+          // ==========================================
+          // FIND SAME MEDICINE + SAME BATCH
+          // SAME SHOP + SAME OWNER
+          // ==========================================
+
+          const existingRetailStock =
+            await Medicine.findOne({
+              name: item.name,
+              batch: batch,
+              shopId: shopkeeperUser.shopId,
+              ownerId: shopkeeperUser._id,
+              ownerRole: "shopkeeper",
+            }).session(session);
+
+          // ==========================================
+          // SAME BATCH EXISTS
+          // ==========================================
+
+          if (existingRetailStock) {
+            existingRetailStock.stock =
+              Number(
+                existingRetailStock.stock || 0
+              ) +
+              Number(item.quantity);
+
+            // Keep batch + expiry information
+            existingRetailStock.batch = batch;
+            existingRetailStock.expiry = expiry;
+
+            await existingRetailStock.save({
+              session,
+            });
+          }
+
+          // ==========================================
+          // NEW BATCH
+          // CREATE NEW SHOPKEEPER STOCK
+          // ==========================================
+
+          else {
+            const newRetailStock =
+              new Medicine({
+                name: item.name,
+
+                company:
+                  distributorMedicine.company ||
+                  "",
+
+                type:
+                  distributorMedicine.type ||
+                  "",
+
+                strength:
+                  distributorMedicine.strength ||
+                  "",
+
+                packSize:
+                  distributorMedicine.packSize ||
+                  10,
+
+                packType:
+                  distributorMedicine.packType ||
+                  "Strip",
+
+                sellingUnit:
+                  distributorMedicine.sellingUnit ||
+                  "pack",
+
+                individualSaleAllowed:
+                  distributorMedicine.individualSaleAllowed ||
+                  false,
+
+                image:
+                  distributorMedicine.image ||
+                  "",
+
+                stock:
+                  Number(item.quantity),
+
+                // 📦 Batch
+                batch: batch,
+
+                // 📅 Expiry
+                expiry: expiry,
+
+                // 🏭 Manufacturing date
+                mfd:
+                  distributorMedicine.mfd ||
+                  "",
+
+                // 💰 MRP
+                mrp:
+                  Number(
+                    distributorMedicine.mrp || 0
+                  ),
+
+                // 💰 Shopkeeper purchase price
+                wholesalePrice:
+                  Number(item.price || 0),
+
+                // 💰 Customer selling price
+                retailPrice:
+                  Number(
+                    distributorMedicine.mrp || 0
+                  ),
+
+                price: 0,
+
+                // 👤 Shopkeeper ownership
+                ownerId:
+                  shopkeeperUser._id,
+
+                ownerRole:
+                  "shopkeeper",
+
+                shopId:
+                  shopkeeperUser.shopId,
+              });
+
+            await newRetailStock.save({
+              session,
+            });
+          }
+        }
+      }
+
+      // ==========================================
+      // 8. UPDATE ORDER STATUS
+      // ==========================================
+
+      currentOrder.status = status;
+
+      await currentOrder.save({
+        session,
+      });
+
+      updatedOrder = currentOrder;
+    });
+
+    // ==========================================
+    // 9. SUCCESS RESPONSE
+    // ==========================================
+
+    return res.json({
+      success: true,
+      message: `Order marked as ${status} ✅`,
+      data: updatedOrder,
+    });
 
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Error changing order tracking pipeline status" });
+    console.error(
+      "UPDATE ORDER STATUS ERROR:",
+      err
+    );
+
+    return res.status(
+      err.statusCode || 500
+    ).json({
+      success: false,
+      message:
+        err.statusCode
+          ? err.message
+          : "Error changing order status ❌",
+    });
+
+  } finally {
+    await session.endSession();
   }
 };
