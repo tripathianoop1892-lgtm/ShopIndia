@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCartItems, clearCartState } from "../../features/cartSlice";
-import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon } from "../../services/api";
+import { setCartItems } from "../../features/cartSlice";
+import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon, createRazorpayOrder, verifyRazorpayPayment } from "../../services/api";
 import { FaTrashAlt, FaStore, FaReceipt, FaShoppingBag, FaSpinner, FaCheckCircle, FaExclamationCircle, FaPlus, FaMinus } from "react-icons/fa";
 import "./Card.css";
 
@@ -17,7 +17,12 @@ const Cart = () => {
   const [couponStatuses, setCouponStatuses] = useState({});
   const [couponLoading, setCouponLoading] = useState(null);
 
-  const fetchCart = async () => {
+  const showNotification = useCallback((text, type) => {
+    setNotification({ text, type });
+    setTimeout(() => setNotification({ text: "", type: "" }), 4000);
+  }, []);
+
+  const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getCart();
@@ -29,16 +34,11 @@ const Cart = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch, showNotification]);
 
   useEffect(() => {
     fetchCart();
-  }, [dispatch]);
-
-  const showNotification = (text, type) => {
-    setNotification({ text, type });
-    setTimeout(() => setNotification({ text: "", type: "" }), 4000);
-  };
+  }, [fetchCart]);
 
   // 🏢 MULTI-DISTRIBUTOR GROUPING MATRIX
   const groupedOrders = useMemo(() => {
@@ -144,7 +144,7 @@ const Cart = () => {
         }));
         showNotification(res.message || "Unable to apply coupon", "error");
       }
-    } catch (error) {
+    } catch {
       setCouponStatuses((prev) => ({
         ...prev,
         [group.sellerId]: { applied: false, message: "Unable to apply coupon" },
@@ -161,7 +161,11 @@ const Cart = () => {
       const couponState = couponStatuses[group.sellerId] || {};
       const orderPayload = {
         sellerId: group.sellerId,
-        totalAmount: group.totalAmount,
+        // The server calculates the payable amount from these fields.
+        // Passing only `totalAmount` made persisted orders total ₹0.
+        subtotal: group.totalAmount,
+        deliveryCharge: 0,
+        platformFee: 0,
         couponCode: couponState.applied ? couponState.code : "",
         items: group.items.map((i) => ({
           medicineId: i.medicineId,
@@ -171,7 +175,40 @@ const Cart = () => {
         })),
       };
 
-      const res = await placeOrder(orderPayload);
+      const amount = couponState.applied ? couponState.finalAmount : group.totalAmount;
+      const paymentOrder = await createRazorpayOrder(amount);
+      if (!paymentOrder.success) throw new Error(paymentOrder.message || "Unable to start Razorpay payment.");
+      if (!window.Razorpay) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          script.onload = resolve;
+          script.onerror = () => reject(new Error("Unable to load Razorpay Checkout."));
+          document.body.appendChild(script);
+        });
+      }
+      const paymentReference = await new Promise((resolve, reject) => {
+        const checkout = new window.Razorpay({
+          key: paymentOrder.data.keyId,
+          amount: paymentOrder.data.amount,
+          currency: paymentOrder.data.currency,
+          name: "OmSanjeevani",
+          description: `Order from ${group.sellerName}`,
+          order_id: paymentOrder.data.orderId,
+          handler: async (response) => {
+            try {
+              const verification = await verifyRazorpayPayment({ intentId: paymentOrder.data.intentId, ...response });
+              if (!verification.success) throw new Error(verification.message || "Payment verification failed.");
+              resolve(verification.data.paymentReference);
+            } catch (error) { reject(error); }
+          },
+          modal: { ondismiss: () => reject(new Error("Payment was cancelled.")) },
+          theme: { color: "#2563eb" },
+        });
+        checkout.open();
+      });
+
+      const res = await placeOrder({ ...orderPayload, paymentReference });
       if (res.success) {
         showNotification(`Order dispatched successfully to ${group.sellerName}! ✅`, "success");
         

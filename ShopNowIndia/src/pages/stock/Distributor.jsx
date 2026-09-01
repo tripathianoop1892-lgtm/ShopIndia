@@ -1,94 +1,58 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
+import { MedicinesList, updateMedicine } from "../../services/api";
 
 const DistributorStock = () => {
   const [medicines, setMedicines] = useState([]);
-  const [qty, setQty] = useState({}); // 🔥 separate state
-
-  useEffect(() => {
-    fetchMedicines();
-  }, []);
+  const [qty, setQty] = useState({});
+  const [updating, setUpdating] = useState("");
+  const [message, setMessage] = useState("");
 
   const fetchMedicines = async () => {
-    const res = await fetch("http://localhost:5000/medicines");
-    const data = await res.json();
-    setMedicines(data);
+    const data = await MedicinesList();
+    setMedicines(Array.isArray(data) ? data : []);
   };
 
-  // 🔥 qty change
-  const handleQtyChange = (id, value) => {
-    setQty((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
+  useEffect(() => { fetchMedicines().catch(() => setMessage("Unable to load stock.")); }, []);
 
-  // 🔥 update stock
-  const updateStock = async (id, currentStock) => {
-    const value = Number(qty[id]);
-
-    if (!value) {
-      alert("Enter valid qty ❌");
+  const updateStock = async (medicine) => {
+    const adjustment = Number(qty[medicine._id]);
+    if (!Number.isFinite(adjustment) || adjustment === 0) {
+      setMessage("Enter a non-zero stock adjustment.");
+      return;
+    }
+    const stock = Number(medicine.stock || 0) + adjustment;
+    if (stock < 0) {
+      setMessage("Stock cannot be negative.");
       return;
     }
 
-    const newStock = currentStock + value;
-
-    await fetch(`http://localhost:5000/medicine/${id}`, { // 🔥 route fix
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ stock: newStock }),
-    });
-
-    // 🔥 reset input
-    setQty((prev) => ({ ...prev, [id]: "" }));
-
-    fetchMedicines(); // refresh
+    try {
+      setUpdating(medicine._id);
+      const response = await updateMedicine(medicine._id, { stock });
+      if (!response.success) throw new Error(response.message || "Unable to update stock.");
+      setQty((previous) => ({ ...previous, [medicine._id]: "" }));
+      setMessage("Stock updated.");
+      await fetchMedicines();
+    } catch (error) {
+      setMessage(error.message || "Unable to update stock.");
+    } finally {
+      setUpdating("");
+    }
   };
 
   return (
     <div className="stock-container">
       <h2>Stock Update</h2>
-
+      {message && <p>{message}</p>}
       <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Medicine</th>
-            <th>Stock</th>
-            <th>Update</th>
-          </tr>
-        </thead>
-
+        <thead><tr><th>ID</th><th>Medicine</th><th>Stock</th><th>Adjustment</th></tr></thead>
         <tbody>
-          {medicines.map((med) => (
-            <tr key={med._id}>
-              <td>{med._id.slice(-4)}</td>
-              <td>{med.name}</td>
-              <td>{med.stock}</td>
-
-              <td>
-                <input
-                  type="number"
-                  placeholder="Qty"
-                  value={qty[med._id] || ""}
-                  onChange={(e) =>
-                    handleQtyChange(med._id, e.target.value)
-                  }
-                />
-
-                <button
-                  onClick={() =>
-                    updateStock(med._id, med.stock)
-                  }
-                >
-                  Update
-                </button>
-              </td>
-            </tr>
-          ))}
+          {medicines.map((medicine) => <tr key={medicine._id}>
+            <td>{medicine._id.slice(-4)}</td><td>{medicine.name}</td><td>{medicine.stock}</td>
+            <td><input type="number" placeholder="+/- Qty" value={qty[medicine._id] || ""} onChange={(event) => setQty((previous) => ({ ...previous, [medicine._id]: event.target.value }))} /><button onClick={() => updateStock(medicine)} disabled={updating === medicine._id}>{updating === medicine._id ? "Updating..." : "Update"}</button></td>
+          </tr>)}
+          {!medicines.length && <tr><td colSpan="4">No medicines found.</td></tr>}
         </tbody>
       </table>
     </div>

@@ -39,6 +39,7 @@ import DistributorEarnings from "../pages/earnings/Distributor";
 import DistributorLowStock from "../pages/low-Stock/Distributor";
 import DistributorExpiring from "../pages/expiring/Distributor";
 import AddMedicineDistributor from "../features/add-medicine/Distributor";
+import DistributorStock from "../pages/stock/Distributor";
 
 // Customer Segment Pages
 import CustomerDashboard from "../pages/dashboard/Customer";
@@ -116,7 +117,8 @@ const router = createBrowserRouter([
     { path: "reviews", element: <Reviews /> },
     { path: "support", element: <Support /> },
     { path: "settings", element: <Setting /> },
-    { path: "profile", element: <AdminProfile /> }
+    { path: "profile", element: <AdminProfile /> },
+    { path: "logout", element: <Logout /> }
   ]
 },
 
@@ -133,6 +135,7 @@ const router = createBrowserRouter([
       { path: "orders", element: <ShopkeeperOrder /> }, // Maps directly to: /shopkeeper/orders
       { path: "earnings", element: <ShopkeeperEarnings /> }, // Maps directly to: /shopkeeper/earnings
       { path: "qr", element: <StoreQr /> },
+      { path: "notifications", element: <CustomerNotification /> },
       { path: "payments/:orderId", element: <OrderPaymentDetail /> },
       { path: "cart", element: <Cart /> },
       { path: "profile", element: <ShopkeeperProfile /> }, // Maps directly to: /shopkeeper/profile
@@ -151,10 +154,12 @@ const router = createBrowserRouter([
       { path: "medicine-list", element: <DistributorMedicineList /> }, // Maps directly to: /distributor/medicine-list
       { path: "add-medicine", element: <AddMedicineDistributor /> }, // Maps directly to: /distributor/add-medicine
       { path: "orders", element: <DistributorOrder /> }, // Maps directly to: /distributor/orders
+      { path: "notifications", element: <CustomerNotification /> },
       { path: "payments/:orderId", element: <OrderPaymentDetail /> },
       { path: "earnings", element: <DistributorEarnings /> }, // Maps directly to: /distributor/earnings
       { path: "low-stock", element: <DistributorLowStock /> }, // Maps directly to: /distributor/low-stock
       { path: "expiring", element: <DistributorExpiring /> }, // Maps directly to: /distributor/expiring
+      { path: "stock", element: <DistributorStock /> },
       { path: "profile", element: <DistributorProfile /> }, // Maps directly to: /distributor/profile
       { path: "settings", element: <Settings /> } // Maps directly to: /distributor/settings
     ],

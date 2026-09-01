@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { getAccountSettings, updateAccountSettings } from "../../services/api";
 import { 
   FaSlidersH, FaBell, FaShieldAlt, FaSave, 
   FaStore, FaPercentage, FaExclamationTriangle, FaCheckCircle
@@ -7,7 +8,7 @@ import {
 import "./Settings.css";
 
 const Settings = () => {
-  const { user, isCustomer, isShopkeeper, isDistributor, isAdmin } = useAuth();
+  const { user, isShopkeeper, isDistributor } = useAuth();
   const [activeSection, setActiveSection] = useState("preferences");
   const [saveStatus, setSaveStatus] = useState(false);
 
@@ -31,10 +32,21 @@ const Settings = () => {
     confirmPassword: ""
   });
 
-  const handleActionSave = (e) => {
+  useEffect(() => {
+    getAccountSettings().then((response) => {
+      if (!response.success) return;
+      setPrefForm((current) => ({ ...current, ...response.data }));
+      setTradeForm((current) => ({ ...current, ...response.data }));
+    }).catch(console.error);
+  }, []);
+
+  const handleActionSave = async (e) => {
     e.preventDefault();
+    const response = await updateAccountSettings({ ...prefForm, ...tradeForm, ...(activeSection === "security" ? securityForm : {}) });
+    if (!response.success) return alert(response.message || "Unable to save settings.");
     setSaveStatus(true);
-    setTimeout(() => setSaveStatus(false), 3000); // UI Toast flash reset
+    setSecurityForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    setTimeout(() => setSaveStatus(false), 3000);
   };
 
   if (!user) {

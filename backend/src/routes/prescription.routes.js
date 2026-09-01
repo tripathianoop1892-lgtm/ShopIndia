@@ -5,6 +5,7 @@ import {
   getCustomerPrescriptions,
   getShopkeeperPrescriptions,
   getPrescriptionById,
+  getPrescriptionFile,
   updatePrescriptionStatus,
   deletePrescription,
   restorePrescription,
@@ -53,6 +54,12 @@ router.get(
 // Get Single Prescription
 // GET /api/prescriptions/:id
 // ======================================================
+
+router.get(
+  "/:id/file",
+  checkAuth,
+  getPrescriptionFile
+);
 
 router.get(
   "/:id",

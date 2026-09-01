@@ -100,6 +100,9 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       default:0,
     },
+    paymentStatus: { type: String, enum: ["Pending", "Paid", "Failed"], default: "Pending" },
+    paymentMethod: { type: String, default: "Razorpay" },
+    paymentId: { type: String, default: "" },
 
     status: {
       type: String,

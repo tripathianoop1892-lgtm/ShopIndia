@@ -4,7 +4,8 @@ const replySchema = new mongoose.Schema(
   {
     message: {
       type: String,
-      required: true,
+      required: false,
+      default: null,
       trim: true,
     },
 
@@ -51,6 +52,7 @@ const supportSchema = new mongoose.Schema(
         "shopkeeper",
         "distributor",
         "admin",
+        "guest",
       ],
       required: true,
     },

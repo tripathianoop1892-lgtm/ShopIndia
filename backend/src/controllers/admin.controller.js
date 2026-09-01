@@ -4,6 +4,7 @@ import Order from "../models/Order.js";
 import user from "../models/user.js";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import PlatformSettings from "../models/platformSettings.js";
 
 export const getCustomers = async(req, res) =>{
     try{
@@ -85,6 +86,26 @@ export const deleteManagedUser = async (req, res) => {
     return res.json({ success: true, message: "User deleted." });
   } catch (err) {
     return res.status(500).json({ success: false, message: "Unable to delete user." });
+  }
+};
+
+export const getPlatformSettings = async (_req, res) => {
+  try {
+    const settings = await PlatformSettings.findOne();
+    return res.json({ success: true, data: settings || new PlatformSettings() });
+  } catch {
+    return res.status(500).json({ success: false, message: "Unable to load settings." });
+  }
+};
+
+export const updatePlatformSettings = async (req, res) => {
+  try {
+    const allowedFields = ["websiteName", "adminEmail", "contactNumber", "address", "platformCommission", "deliveryCharge", "gst"];
+    const updates = Object.fromEntries(Object.entries(req.body).filter(([field]) => allowedFields.includes(field)));
+    const settings = await PlatformSettings.findOneAndUpdate({}, updates, { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true });
+    return res.json({ success: true, data: settings, message: "Settings saved." });
+  } catch {
+    return res.status(500).json({ success: false, message: "Unable to save settings." });
   }
 };
 

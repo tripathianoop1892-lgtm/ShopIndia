@@ -9,16 +9,19 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
+      sparse: true,
       lowercase: true,
       trim: true,
     },
     // 📱 Mobile Number
     mobile: {
-  type: String,
-  trim: true,
-},
+      type: String,
+      trim: true,
+      unique: true,
+      sparse: true,
+    },
     password: {
       type: String,
       required: true,
@@ -61,7 +64,16 @@ const userSchema = new mongoose.Schema(
     reviewsCount: {
       type: Number,
       default: 1,
-    }
+    },
+    settings: {
+      emailAlerts: { type: Boolean, default: true },
+      orderUpdates: { type: Boolean, default: true },
+      lowStockWarning: { type: Boolean, default: true },
+      autoRefreshCatalog: { type: Boolean, default: true },
+      defaultMarkup: { type: Number, default: 15 },
+      minimumB2BOrder: { type: Number, default: 1500 },
+      autoApproveReorders: { type: Boolean, default: false },
+    },
   },
   {
     timestamps: true,

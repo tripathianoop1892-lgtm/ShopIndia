@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./CustomerPrescription.css";
-import { getCustomerPrescriptions, uploadPrescription } from "../../services/api";
+import { getCustomerPrescriptions, getPrescriptionFile, uploadPrescription } from "../../services/api";
 
 const CustomerPrescription = () => {
   const [image, setImage] = useState(null);
@@ -69,6 +69,15 @@ const handleUpload = async () => {
   } finally {
     setLoading(false);
   }
+};
+const openPrescription = async (id) => {
+  try {
+    const response = await getPrescriptionFile(id);
+    if (!response.ok) throw new Error("Unable to open prescription file.");
+    const url = URL.createObjectURL(await response.blob());
+    window.open(url, "_blank", "noopener,noreferrer");
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  } catch (error) { alert(error.message); }
 };
   return (
     <div className="prescription-container">
@@ -167,7 +176,7 @@ const handleUpload = async () => {
         <div className="prescription-history">
           <div className="prescription-history-header"><h3>Your prescriptions</h3><button type="button" onClick={() => loadPrescriptions()}>Refresh</button></div>
           {prescriptions.length ? <div className="prescription-history-list">
-            {prescriptions.map((prescription) => <div className="prescription-history-row" key={prescription._id}><div><strong>{prescription.fileType === "pdf" ? "PDF prescription" : "Image prescription"}</strong><span>Uploaded {new Date(prescription.createdAt).toLocaleDateString("en-IN")}</span></div><span className={`prescription-status ${prescription.status.toLowerCase().replace(/\s+/g, "-")}`}>{prescription.status}</span></div>)}
+            {prescriptions.map((prescription) => <div className="prescription-history-row" key={prescription._id}><div><strong>{prescription.fileType === "pdf" ? "PDF prescription" : "Image prescription"}</strong><span>Uploaded {new Date(prescription.createdAt).toLocaleDateString("en-IN")}</span><button type="button" className="prescription-file-button" onClick={() => openPrescription(prescription._id)}>View file</button></div><span className={`prescription-status ${prescription.status.toLowerCase().replace(/\s+/g, "-")}`}>{prescription.status}</span></div>)}
           </div> : <p className="prescription-empty">No prescriptions uploaded yet.</p>}
         </div>
 

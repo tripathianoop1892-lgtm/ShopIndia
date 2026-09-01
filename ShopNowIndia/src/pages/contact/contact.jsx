@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Contact.css";
 import Footer from "../../components/footer/footer";
 import Navbar from "../../components/navbar/navbar";
@@ -9,8 +9,20 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SendIcon from '@mui/icons-material/Send';
+import { createPublicSupportTicket } from "../../services/api";
 
 const Contact = () => {
+  const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
+  const [status, setStatus] = useState("");
+  const submit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await createPublicSupportTicket(form);
+      if (!response.success) throw new Error(response.message);
+      setStatus("Your message has been sent.");
+      setForm({ name: "", email: "", mobile: "", message: "" });
+    } catch (error) { setStatus(error.message || "Unable to send your message."); }
+  };
   return (
     <>
       <Navbar />
@@ -89,30 +101,31 @@ const Contact = () => {
               <h2>Send Message</h2>
               <p className="column-subtitle">Submit your query straight to our marketplace compliance administrators.</p>
               
-              <form onSubmit={(e) => e.preventDefault()}>
+              <form onSubmit={submit}>
                 <div className="form-input-group">
                   <label>Full Name</label>
-                  <input type="text" placeholder="Enter Your Name" required />
+                  <input type="text" placeholder="Enter Your Name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} required />
                 </div>
 
                 <div className="form-input-group">
                   <label>Email Address</label>
-                  <input type="email" placeholder="Enter Your Email" required />
+                  <input type="email" placeholder="Enter Your Email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required />
                 </div>
 
                 <div className="form-input-group">
                   <label>Phone Number</label>
-                  <input type="tel" placeholder="Enter Your Phone Number" />
+                  <input type="tel" placeholder="Enter Your Phone Number" value={form.mobile} onChange={(event) => setForm({ ...form, mobile: event.target.value })} />
                 </div>
 
                 <div className="form-input-group">
                   <label>Message Content</label>
-                  <textarea rows="5" placeholder="Write Your Message Here..." required></textarea>
+                  <textarea rows="5" placeholder="Write Your Message Here..." value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} required></textarea>
                 </div>
 
                 <button type="submit" className="form-submit-dispatch-btn">
                   <SendIcon className="submit-btn-icon" /> Send Message
                 </button>
+                {status && <p>{status}</p>}
               </form>
             </div>
 

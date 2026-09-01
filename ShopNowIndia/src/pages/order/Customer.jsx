@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Customer.css";
 import { getOrders, submitReview } from "../../services/api"; // Make sure submitReview is exported from api.js
-import { shortId, formatDate, statusColor } from "../../utils/helpers";
+import { shortId, formatDate } from "../../utils/helpers";
 import { FaReceipt, FaBoxes, FaSpinner, FaExchangeAlt, FaShoppingBag, FaStar } from "react-icons/fa";
 
 const CustomerOrders = () => {

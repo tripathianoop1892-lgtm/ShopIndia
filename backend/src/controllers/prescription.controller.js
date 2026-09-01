@@ -1,4 +1,7 @@
 import Prescription from "../models/Prescription.js";
+import User from "../models/user.js";
+import { notifyUser } from "../services/notification.service.js";
+import path from "path";
 
 // ======================================================
 // Upload Prescription
@@ -31,6 +34,13 @@ export const uploadPrescription = async (req, res) => {
       image: req.file.filename,
       fileType,
       status: "Pending",
+    });
+
+    const shopkeeper = await User.findOne({ shopId, role: "shopkeeper" }).select("_id");
+    await notifyUser({
+      recipientId: shopkeeper?._id,
+      title: "New prescription uploaded",
+      message: `${customerName} uploaded a prescription for review.`,
     });
 
     return res.status(201).json({
@@ -119,6 +129,7 @@ export const getPrescriptionById = async (req, res) => {
         message: "Prescription not found.",
       });
     }
+    const previousStatus = prescription.status;
 
     return res.status(200).json({
       success: true,
@@ -132,6 +143,18 @@ export const getPrescriptionById = async (req, res) => {
       success: false,
       message: "Internal Server Error",
     });
+  }
+};
+
+export const getPrescriptionFile = async (req, res) => {
+  try {
+    const prescription = await Prescription.findById(req.params.id);
+    if (!prescription || prescription.isDeleted) return res.status(404).json({ success: false, message: "Prescription not found." });
+    const canAccess = req.user.role === "admin" || String(prescription.customerId) === String(req.user._id) || (req.user.role === "shopkeeper" && prescription.shopId === req.user.shopId);
+    if (!canAccess) return res.status(403).json({ success: false, message: "You are not authorized to open this file." });
+    return res.sendFile(path.resolve("uploads", "prescriptions", prescription.image));
+  } catch {
+    return res.status(500).json({ success: false, message: "Unable to open prescription file." });
   }
 };
 
@@ -167,6 +190,14 @@ export const updatePrescriptionStatus = async (req, res) => {
     prescription.verifiedAt = new Date();
 
     await prescription.save();
+
+    if (status && status !== previousStatus) {
+      await notifyUser({
+        recipientId: prescription.customerId,
+        title: "Prescription status updated",
+        message: `Your prescription is now ${prescription.status}.${prescription.remarks ? ` Note: ${prescription.remarks}` : ""}`,
+      });
+    }
 
     return res.status(200).json({
       success: true,

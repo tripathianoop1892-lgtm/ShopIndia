@@ -8,7 +8,7 @@ import ShopkeeperFields from "../../components/Register/ShopkeeperFields";
 import DistributorFields from "../../components/Register/DistributorFields";
 import ShopSelector from "../../components/Register/ShopSelector";
 
-import { registerUser } from "../../services/api";
+import { registerUser, requestRegistrationOtp } from "../../services/api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Register = () => {
@@ -22,6 +22,8 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    verificationChannel: "email",
+    otp: "",
 
     role: "customer",
 
@@ -79,6 +81,20 @@ const Register = () => {
     }
   };
 
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const requestOtp = async () => {
+    try {
+      setSendingOtp(true);
+      const response = await requestRegistrationOtp({ channel: form.verificationChannel, email: form.email, mobile: form.mobile });
+      if (!response.success) throw new Error(response.message);
+      alert(response.message);
+    } catch (error) {
+      alert(error.message || "Unable to send OTP.");
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
   return (
     <div className="register-page">
 
@@ -122,6 +138,8 @@ const Register = () => {
         <RegisterForm
           form={form}
           handleChange={handleChange}
+          requestOtp={requestOtp}
+          sendingOtp={sendingOtp}
         />
 
         <RoleSelector

@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 // 🔥 COMMON HEADERS (AUTO TOKEN - FIXED)
 const getHeaders = () => {
@@ -45,6 +45,11 @@ export const registerUser = async (form) => {
   return res.json();
 };
 
+export const requestRegistrationOtp = async (data) => {
+  const res = await fetch(`${BASE_URL}/auth/register/request-otp`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+  return res.json();
+};
+
 // =======================
 // 🔑 FORGOT PASSWORD
 // =======================
@@ -63,6 +68,9 @@ export const forgotPassword = async (email, password) => {
 
   return res.json();
 };
+
+export const getAccountSettings = async () => (await fetch(`${BASE_URL}/auth/settings`, { headers: getHeaders() })).json();
+export const updateAccountSettings = async (data) => (await fetch(`${BASE_URL}/auth/settings`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) })).json();
 
 // =======================
 // 💊 MEDICINE APIs
@@ -146,6 +154,16 @@ export const placeOrder = async (orderPayload) => {
     headers: getHeaders(),
     body: JSON.stringify(orderPayload),
   });
+  return res.json();
+};
+
+export const createRazorpayOrder = async (amount) => {
+  const res = await fetch(`${BASE_URL}/payments/razorpay/order`, { method: "POST", headers: getHeaders(), body: JSON.stringify({ amount }) });
+  return res.json();
+};
+
+export const verifyRazorpayPayment = async (data) => {
+  const res = await fetch(`${BASE_URL}/payments/razorpay/verify`, { method: "POST", headers: getHeaders(), body: JSON.stringify(data) });
   return res.json();
 };
 
@@ -284,6 +302,8 @@ export const getPrescriptionById = async (id) => {
   return res.json();
 };
 
+export const getPrescriptionFile = async (id) => fetch(`${BASE_URL}/prescriptions/${id}/file`, { headers: getHeaders() });
+
 // 👉 Update Prescription Status
 export const updatePrescriptionStatus = async (
   id,
@@ -382,6 +402,16 @@ export const getCategorySummary = async () => {
   });
   return res.json();
 }
+
+export const getAdminSettings = async () => {
+  const res = await fetch(`${BASE_URL}/admin/settings`, { headers: getHeaders() });
+  return res.json();
+};
+
+export const updateAdminSettings = async (data) => {
+  const res = await fetch(`${BASE_URL}/admin/settings`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+};
 
 // =======================
 // 📊 REPORT APIs
@@ -564,6 +594,8 @@ export const getSupportTickets = async () => {
   return res.json();
 };
 
+export const createPublicSupportTicket = async (data) => (await fetch(`${BASE_URL}/support/public`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })).json();
+
 export const updateSupportTicketStatus = async (id, status) => {
   const res = await fetch(`${BASE_URL}/support/${id}/status`, { method: "PATCH", headers: getHeaders(), body: JSON.stringify({ status }) });
   return res.json();
@@ -589,5 +621,10 @@ export const createAdminNotification = async (data) => {
 
 export const deleteAdminNotification = async (id) => {
   const res = await fetch(`${BASE_URL}/admin/notifications/${id}`, { method: "DELETE", headers: getHeaders() });
+  return res.json();
+};
+
+export const getMyNotifications = async () => {
+  const res = await fetch(`${BASE_URL}/admin/notifications/me`, { headers: getHeaders() });
   return res.json();
 };
