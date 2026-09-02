@@ -131,7 +131,7 @@ const Report = () => {
       color: "#ef4444",
     },
     {
-      title: "Approved Orders",
+      title: "Paid Orders",
       value: dashboard.orders.approved,
       color: "#3b82f6",
     },

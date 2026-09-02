@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { updateProfile } from "../../services/api";
 import "./ShopkeeperProfile.css";
 
 const ShopkeeperProfile = () => {
-  const navigate = useNavigate();
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   // =========================
@@ -68,9 +66,28 @@ const ShopkeeperProfile = () => {
   // EDIT PROFILE
   // =========================
 
-const handleEditProfile = () => {
-  navigate("/shopkeeper/edit-profile");
-};
+  const handleEditProfile = async () => {
+    const fullName = window.prompt("Full name", user?.name || "");
+    if (fullName === null) return;
+    const mobile = window.prompt("Mobile number", user?.mobile || user?.phone || "");
+    if (mobile === null) return;
+    const email = window.prompt("Email address", user?.email || "");
+    if (email === null) return;
+    const shopNameValue = window.prompt("Shop name", user?.shopName || "");
+    if (shopNameValue === null) return;
+    const addressValue = window.prompt("Shop address", user?.address || "");
+    if (addressValue === null) return;
+    try {
+      const response = await updateProfile({ fullName, mobile, email, shopName: shopNameValue, address: addressValue });
+      if (!response.success) throw new Error(response.message || "Unable to update profile.");
+      const updatedUser = { ...(user || {}), ...response.user, phone: response.user.mobile };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      alert("Profile updated successfully.");
+    } catch (error) {
+      alert(error.message || "Unable to update profile.");
+    }
+  };
 
   return (
     <div className="shopkeeper-profile-page">

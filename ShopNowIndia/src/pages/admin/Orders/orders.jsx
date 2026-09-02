@@ -19,7 +19,7 @@ const Orders = () => {
 
   return <section className="orders-page">
     <div className="orders-header"><h2>Orders Management</h2><button className="export-btn" onClick={exportOrders}>Export Orders</button></div>
-    <div className="search-filter"><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search order, customer, or shopkeeper..." /><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="All">All Status</option><option>Pending</option><option>Approved</option><option>Delivered</option><option>Rejected</option></select></div>
+    <div className="search-filter"><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search order, customer, or shopkeeper..." /><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="All">All Status</option><option>Paid</option><option>Pending</option><option>Approved</option><option>Delivered</option><option>Rejected</option></select></div>
     <div className="orders-table"><table><thead><tr><th>Order ID</th><th>Type</th><th>Customer</th><th>Shopkeeper</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody>
       {filteredOrders.map((order) => <tr key={order._id}><td>#{order._id.slice(-8)}</td><td>{order.orderType}</td><td>{order.customerName || "—"}</td><td>{order.shopkeeperName || "—"}</td><td>₹{Number(order.finalAmount ?? order.totalAmount ?? 0).toLocaleString("en-IN")}</td><td><span className={order.status.toLowerCase()}>{order.status}</span></td><td>{new Date(order.createdAt).toLocaleDateString("en-IN")}</td></tr>)}
       {!filteredOrders.length && <tr><td colSpan="7">No orders found.</td></tr>}

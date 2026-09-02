@@ -112,7 +112,7 @@ const Shopkeeper = () => {
 
   const metrics = useMemo(() => {
     // Only calculate expenses for approved or delivered orders if preferred, or all requests combined:
-    const validProcurements = orders.filter(o => o.status === "Approved" || o.status === "Delivered" || o.status === "Pending");
+    const validProcurements = orders.filter(o => ["Paid", "Approved", "Delivered", "Pending"].includes(o.status));
     
     return {
       totalMedicines: medicines.filter(m => m.ownerRole === "distributor").length,
@@ -259,6 +259,7 @@ const Shopkeeper = () => {
                           src={m.image || "https://cdn-icons-png.flaticon.com/512/822/822143.png"}
                           alt={m.name}
                           className="medicine-image"
+                          onError={(event) => { event.currentTarget.src = "/medicine.png"; }}
                         />
                       </div>
 

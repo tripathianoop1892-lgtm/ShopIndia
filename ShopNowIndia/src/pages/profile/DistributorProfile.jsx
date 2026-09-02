@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { updateProfile } from "../../services/api";
 import "./DistributorProfile.css";
 
 const DistributorProfile = () => {
@@ -136,30 +137,12 @@ const DistributorProfile = () => {
     setSaving(true);
 
     try {
-      const existingUser =
-        localStorage.getItem("user") ||
-        localStorage.getItem("userData");
-
-      const parsedUser = existingUser
-        ? JSON.parse(existingUser)
-        : {};
-
-      const updatedUser = {
-        ...parsedUser,
-
-        name: form.name.trim(),
-        email: form.email.trim(),
-        mobile: form.mobile.trim(),
-        phone: form.mobile.trim(),
-        companyName: form.companyName.trim(),
-        warehouseAddress:
-          form.warehouseAddress.trim(),
-        address: form.address.trim(),
-        city: form.city.trim(),
-        district: form.district.trim(),
-        state: form.state.trim(),
-        pincode: form.pincode.trim(),
-      };
+      const response = await updateProfile({
+        fullName: form.name.trim(), email: form.email.trim(), mobile: form.mobile.trim(),
+        companyName: form.companyName.trim(), address: form.address.trim(),
+      });
+      if (!response.success) throw new Error(response.message || "Unable to update profile.");
+      const updatedUser = { ...(distributor || {}), ...response.user, phone: response.user.mobile, companyName: form.companyName.trim(), warehouseAddress: form.warehouseAddress.trim(), city: form.city.trim(), district: form.district.trim(), state: form.state.trim(), pincode: form.pincode.trim() };
 
       localStorage.setItem(
         "user",

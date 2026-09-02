@@ -98,6 +98,19 @@ export const getPlatformSettings = async (_req, res) => {
   }
 };
 
+export const getPublicPlatformSettings = async (_req, res) => {
+  try {
+    const settings = await PlatformSettings.findOne().lean();
+    return res.json({ success: true, data: {
+      platformCommission: Number(settings?.platformCommission || 0),
+      deliveryCharge: Number(settings?.deliveryCharge || 0),
+      gst: Number(settings?.gst || 0),
+    } });
+  } catch {
+    return res.status(500).json({ success: false, message: "Unable to load checkout settings." });
+  }
+};
+
 export const updatePlatformSettings = async (req, res) => {
   try {
     const allowedFields = ["websiteName", "adminEmail", "contactNumber", "address", "platformCommission", "deliveryCharge", "gst"];
@@ -201,7 +214,7 @@ export const getDashboardReport = async (req, res) => {
       Order.countDocuments(),
 
       Order.countDocuments({ status: "Pending" }),
-      Order.countDocuments({ status: "Approved" }),
+      Order.countDocuments({ status: "Paid" }),
       Order.countDocuments({ status: "Delivered" }),
       Order.countDocuments({ status: "Rejected" }),
 

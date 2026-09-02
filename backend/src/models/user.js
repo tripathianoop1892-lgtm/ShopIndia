@@ -56,6 +56,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    address: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     // New parameters for Wholesaler B2B analytics
     rating: {
       type: Number,

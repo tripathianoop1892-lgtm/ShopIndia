@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getReviews } from "../../../services/api";
+import { getReviews, updateReviewState, removeReview } from "../../../services/api";
 import "./Reviews.css";
 
 const Reviews = () => {
@@ -23,6 +23,19 @@ const Reviews = () => {
     fetchAllReviews();
   }, []);
 
+  const changeStatus = async (id, status) => {
+    const response = await updateReviewState(id, status);
+    if (!response.success) return alert(response.message || "Unable to update review.");
+    fetchAllReviews();
+  };
+
+  const deleteReview = async (id) => {
+    if (!window.confirm("Delete this review?")) return;
+    const response = await removeReview(id);
+    if (!response.success) return alert(response.message || "Unable to delete review.");
+    fetchAllReviews();
+  };
+
   return (
     <div className="reviews-page">
       <div className="reviews-header">
@@ -36,25 +49,27 @@ const Reviews = () => {
           <table>
             <thead>
               <tr>
-                <th>Customer</th>
-                <th>Medicine</th>
+                <th>Reviewer</th>
+                <th>Reviewed item</th>
                 <th>Rating</th>
                 <th>Review</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {reviews.map((review) => (
                 <tr key={review._id}>
-                  <td>{review.customerId?.name || "Unknown"}</td>
-                  <td>{review.medicineId?.name || "Unknown"}</td>
+                  <td>{review.reviewerId?.name || "Unknown"}</td>
+                  <td>{review.targetId?.name || review.targetId?.companyName || review.targetModel}</td>
                   <td>{"⭐".repeat(review.rating)}</td>
                   <td>{review.reviewText}</td>
                   <td>
-                    <span className={review.status.toLowerCase()}>
+                    <span className={(review.status || "Pending").toLowerCase()}>
                       {review.status}
                     </span>
                   </td>
+                  <td><button onClick={() => changeStatus(review._id, "Approved")}>Approve</button><button onClick={() => changeStatus(review._id, "Rejected")}>Reject</button><button onClick={() => deleteReview(review._id)}>Delete</button></td>
                 </tr>
               ))}
             </tbody>

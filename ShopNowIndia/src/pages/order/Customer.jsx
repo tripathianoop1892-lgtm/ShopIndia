@@ -146,7 +146,7 @@ const CustomerOrders = () => {
                       {formatDate(o.createdAt)}
                     </td>
                     <td style={{ padding: "16px 20px", textAlign: "center" }}>
-                      <span className={`badge-status ${o.status?.toLowerCase() === "approved" || o.status?.toLowerCase() === "delivered" ? "settled" : o.status?.toLowerCase() === "pending" ? "pending" : "cancelled"}`}>
+                      <span className={`badge-status ${["paid", "approved", "delivered"].includes(o.status?.toLowerCase()) ? "settled" : o.status?.toLowerCase() === "pending" ? "pending" : "cancelled"}`}>
                         {o.status}
                       </span>
                     </td>

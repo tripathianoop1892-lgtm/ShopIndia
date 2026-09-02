@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
-import { getOrders, updateOrder, submitReview } from "../../services/api";
+import { getOrders, submitReview } from "../../services/api";
 import { shortId, formatDate, statusColor } from "../../utils/helpers";
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -8,26 +8,26 @@ import { useNavigate } from "react-router-dom";
 const ShopkeeperOrder = () => {
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("b2c-retail"); // 'b2c-retail' or 'b2b-procure'
-  const [actionLoading, setActionLoading] = useState(false);
 
   // --- Review State ---
   const [reviewModal, setReviewModal] = useState({ isOpen: false, targetId: null, targetName: "" });
   const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: "" });
   const navigate = useNavigate();
 
-  const fetchHistory = useCallback(async () => {
-    try {
-      const filter = activeTab === "b2b-procure" ? "b2b-purchases" : "b2c-retail";
-      const data = await getOrders(filter);
-      setOrders(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [activeTab]);
-
   useEffect(() => {
-    fetchHistory();
-  }, [fetchHistory]);
+    let cancelled = false;
+    const loadOrders = async () => {
+      try {
+        const filter = activeTab === "b2b-procure" ? "b2b-purchases" : "b2c-retail";
+        const data = await getOrders(filter);
+        if (!cancelled) setOrders(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (!cancelled) console.log(err);
+      }
+    };
+    void loadOrders();
+    return () => { cancelled = true; };
+  }, [activeTab]);
 
   // --- Handle Review Submission ---
   const handleReviewSubmit = async (e) => {
@@ -51,6 +51,7 @@ const ShopkeeperOrder = () => {
     }
   };
 
+  /* Removed: payment is the order commitment; sellers do not approve or reject paid orders.
   // Dynamic execution action pipeline for B2C Retail Orders
   const updateStatus = async (id, status) => {
     try {
@@ -70,6 +71,7 @@ const ShopkeeperOrder = () => {
       setActionLoading(false);
     }
   };
+  */
 
   return (
     <div className="bigdiv" style={{ padding: "20px" }}>
@@ -102,13 +104,12 @@ const ShopkeeperOrder = () => {
               <th>Status</th>
               <th>Date Timestamp</th>
               <th>Payment</th>
-              {activeTab === "b2c-retail" && <th>Action Pipeline</th>}
             </tr>
           </thead>
           <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={activeTab === "b2c-retail" ? "8" : "7"} style={{ padding: "20px", color: "#94a3b8" }}>
+                <td colSpan="7" style={{ padding: "20px", color: "#94a3b8" }}>
                   No execution ledger found matching parameter parameters.
                 </td>
               </tr>
@@ -142,31 +143,6 @@ const ShopkeeperOrder = () => {
                   <td>{formatDate(o.createdAt)}</td>
                   <td><button onClick={() => navigate(`/shopkeeper/payments/${o._id}${activeTab === "b2b-procure" ? "?view=b2b-purchases" : ""}`)} style={{ border: "none", borderRadius: "4px", padding: "6px 10px", background: "#2563eb", color: "white", cursor: "pointer", fontSize: "12px" }}>View Details</button></td>
 
-                  {/* DYNAMIC WORKFLOW CONTROLS RENDERING */}
-                  {activeTab === "b2c-retail" && (
-                    <td>
-                      {o.status === "Pending" ? (
-                        <div style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
-                          <button
-                            disabled={actionLoading}
-                            onClick={() => updateStatus(o._id, "Approved")}
-                            style={{ background: "#16a34a", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", fontSize: "12px" }}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            disabled={actionLoading}
-                            onClick={() => updateStatus(o._id, "Rejected")}
-                            style={{ background: "#ef4444", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", fontSize: "12px" }}
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      ) : (
-                        <span style={{ color: "#64748b", fontSize: "13px", fontWeight: "500" }}>Settled Matrix</span>
-                      )}
-                    </td>
-                  )}
                 </tr>
               ))
             )}

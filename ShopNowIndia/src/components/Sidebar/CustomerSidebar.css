@@ -11,7 +11,8 @@
   padding: 18px 14px;
   box-sizing: border-box;
   z-index: 1100;
-  overflow-y: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   transform: translateX(0);
   transition: transform 0.25s ease;
 }
@@ -139,6 +140,16 @@
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
+}
+
+@media (max-height: 760px) and (min-width: 901px) {
+  .customer-sidebar { padding-top: 10px; }
+  .customer-sidebar-header { margin-bottom: 8px; }
+  .customer-sidebar-logo { width: 95px; }
+  .customer-sidebar ul li { margin-bottom: 3px; }
+  .customer-sidebar ul li a { padding: 7px 10px; }
+  .customer-sidebar-footer { margin-top: 6px; }
+  .customer-logout-btn { margin-top: 6px; padding: 9px; }
 }
 
 

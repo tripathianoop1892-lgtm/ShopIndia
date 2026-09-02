@@ -55,6 +55,11 @@ const orderSchema = new mongoose.Schema(
       min: 0,
     },
 
+    image: {
+      type: String,
+      default: "",
+    },
+
     // 📦 Batch snapshot at the time of order
     batch: {
       type: String,
@@ -106,7 +111,7 @@ const orderSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["Pending", "Approved", "Rejected", "Delivered"],
+      enum: ["Pending", "Paid", "Approved", "Rejected", "Delivered"],
       default: "Pending",
     },
   },

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { updateProfile } from "../../services/api";
 import "./CustomerProfile.css";
 
 const CustomerProfile = () => {
@@ -136,37 +137,12 @@ const CustomerProfile = () => {
     setSaving(true);
 
     try {
-      const oldUserData =
-        localStorage.getItem("user");
-
-      const oldUser = oldUserData
-        ? JSON.parse(oldUserData)
-        : {};
-
-      const updatedUser = {
-        ...oldUser,
-
-        fullName:
-          formData.fullName.trim(),
-
-        name:
-          formData.fullName.trim(),
-
-        mobile:
-          formData.mobile.trim(),
-
-        phone:
-          formData.mobile.trim(),
-
-        email:
-          formData.email.trim(),
-
-        shopName:
-          formData.shopName.trim(),
-
-        address:
-          formData.address.trim(),
-      };
+      const response = await updateProfile({
+        fullName: formData.fullName.trim(), mobile: formData.mobile.trim(),
+        email: formData.email.trim(), shopName: formData.shopName.trim(), address: formData.address.trim(),
+      });
+      if (!response.success) throw new Error(response.message || "Unable to update profile.");
+      const updatedUser = { ...(customer || {}), ...response.user, fullName: response.user.name, phone: response.user.mobile };
 
       localStorage.setItem(
         "user",

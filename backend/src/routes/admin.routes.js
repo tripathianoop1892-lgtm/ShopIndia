@@ -12,6 +12,7 @@ import {
   updateManagedUser,
   deleteManagedUser,
   getPlatformSettings,
+  getPublicPlatformSettings,
   updatePlatformSettings,
 } from "../controllers/admin.controller.js";
 
@@ -31,6 +32,7 @@ router.get("/reports/sales", checkAuth, checkRole("admin"), getSalesReport);
 router.post("/users", checkAuth, checkRole("admin"), createManagedUser);
 router.patch("/users/:id", checkAuth, checkRole("admin"), updateManagedUser);
 router.delete("/users/:id", checkAuth, checkRole("admin"), deleteManagedUser);
+router.get("/platform-settings", getPublicPlatformSettings);
 router.get("/settings", checkAuth, checkRole("admin"), getPlatformSettings);
 router.put("/settings", checkAuth, checkRole("admin"), updatePlatformSettings);
 

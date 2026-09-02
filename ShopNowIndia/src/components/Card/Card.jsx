@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../../features/cartSlice";
-import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon, createRazorpayOrder, verifyRazorpayPayment } from "../../services/api";
+import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon, createRazorpayOrder, verifyRazorpayPayment, getCheckoutSettings } from "../../services/api";
 import { FaTrashAlt, FaStore, FaReceipt, FaShoppingBag, FaSpinner, FaCheckCircle, FaExclamationCircle, FaPlus, FaMinus } from "react-icons/fa";
 import "./Card.css";
 
@@ -9,6 +9,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   
   const cartList = useSelector((state) => state.cart.cartItems || []);
+  const user = useSelector((state) => state.auth.user);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null); // Tracks specific group checkout loading states
   const [qtyUpdating, setQtyUpdating] = useState(null); // Tracks item-specific qty loaders
@@ -16,6 +17,7 @@ const Cart = () => {
   const [couponInputs, setCouponInputs] = useState({});
   const [couponStatuses, setCouponStatuses] = useState({});
   const [couponLoading, setCouponLoading] = useState(null);
+  const [checkoutSettings, setCheckoutSettings] = useState({ platformCommission: 0, deliveryCharge: 0, gst: 0 });
 
   const showNotification = useCallback((text, type) => {
     setNotification({ text, type });
@@ -39,6 +41,12 @@ const Cart = () => {
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
+
+  useEffect(() => {
+    getCheckoutSettings().then((response) => {
+      if (response.success) setCheckoutSettings((current) => ({ ...current, ...response.data }));
+    }).catch(() => showNotification("Unable to load platform charges.", "error"));
+  }, [showNotification]);
 
   // 🏢 MULTI-DISTRIBUTOR GROUPING MATRIX
   const groupedOrders = useMemo(() => {
@@ -159,13 +167,15 @@ const Cart = () => {
     try {
       setActionLoading(group.sellerId);
       const couponState = couponStatuses[group.sellerId] || {};
+      const platformFee = Number((group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100).toFixed(2));
+      const deliveryCharge = user?.role === "customer" ? Number(checkoutSettings.deliveryCharge || 0) : 0;
       const orderPayload = {
         sellerId: group.sellerId,
         // The server calculates the payable amount from these fields.
         // Passing only `totalAmount` made persisted orders total ₹0.
         subtotal: group.totalAmount,
-        deliveryCharge: 0,
-        platformFee: 0,
+        deliveryCharge,
+        platformFee,
         couponCode: couponState.applied ? couponState.code : "",
         items: group.items.map((i) => ({
           medicineId: i.medicineId,
@@ -175,7 +185,7 @@ const Cart = () => {
         })),
       };
 
-      const amount = couponState.applied ? couponState.finalAmount : group.totalAmount;
+      const amount = (couponState.applied ? couponState.finalAmount : group.totalAmount) + deliveryCharge + platformFee;
       const paymentOrder = await createRazorpayOrder(amount);
       if (!paymentOrder.success) throw new Error(paymentOrder.message || "Unable to start Razorpay payment.");
       if (!window.Razorpay) {
@@ -397,6 +407,11 @@ const Cart = () => {
                     <span className="summary-value-amount">₹{couponStatuses[group.sellerId].finalAmount.toLocaleString('en-IN')}</span>
                   </div>
                 )}
+                <div className="summary-accumulated-box">
+                  <span className="summary-label">Platform fees</span>
+                  <span className="summary-value-amount">â‚¹{(group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100).toLocaleString('en-IN')}</span>
+                  {user?.role === "customer" && <><span className="summary-label">Delivery</span><span className="summary-value-amount">â‚¹{Number(checkoutSettings.deliveryCharge || 0).toLocaleString('en-IN')}</span></>}
+                </div>
               </div>
               
               <button 

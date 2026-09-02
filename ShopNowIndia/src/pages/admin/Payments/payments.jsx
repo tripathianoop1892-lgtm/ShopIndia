@@ -3,7 +3,7 @@ import { getAdminOrders } from "../../../services/api";
 import { exportRowsToExcel } from "../../../utils/export";
 import "./Payments.css";
 
-const paymentStatus = (order) => order.status === "Rejected" ? "Failed" : order.status === "Pending" ? "Pending" : "Success";
+const paymentStatus = (order) => order.paymentStatus === "Paid" ? "Success" : order.paymentStatus || "Pending";
 
 const Payments = () => {
   const [orders, setOrders] = useState([]);
@@ -22,7 +22,7 @@ const Payments = () => {
     <div className="payments-header"><div><h2>Payments</h2><p>Payment summary based on live order records</p></div><button className="export-btn" onClick={exportPayments}>Export Report</button></div>
     <div className="search-filter"><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search transaction..." /><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="All">All Status</option><option>Success</option><option>Pending</option><option>Failed</option></select></div>
     <div className="payments-table"><table><thead><tr><th>Order ID</th><th>Party</th><th>Amount</th><th>Method</th><th>Payment Status</th><th>Order Status</th><th>Date</th></tr></thead><tbody>
-      {payments.map((payment) => <tr key={payment._id}><td>#{payment._id.slice(-8)}</td><td>{payment.customerName || payment.shopkeeperName || "—"}</td><td>₹{Number(payment.finalAmount ?? payment.totalAmount ?? 0).toLocaleString("en-IN")}</td><td>Not captured</td><td><span className={payment.paymentStatus.toLowerCase()}>{payment.paymentStatus}</span></td><td>{payment.status}</td><td>{new Date(payment.createdAt).toLocaleDateString("en-IN")}</td></tr>)}
+      {payments.map((payment) => <tr key={payment._id}><td>#{payment._id.slice(-8)}</td><td>{payment.customerName || payment.shopkeeperName || "—"}</td><td>₹{Number(payment.finalAmount ?? payment.totalAmount ?? 0).toLocaleString("en-IN")}</td><td>{payment.paymentMethod || (payment.paymentStatus === "Paid" ? "Razorpay" : "Not available")}</td><td><span className={payment.paymentStatus.toLowerCase()}>{payment.paymentStatus}</span></td><td>{payment.status}</td><td>{new Date(payment.createdAt).toLocaleDateString("en-IN")}</td></tr>)}
       {!payments.length && <tr><td colSpan="7">No payment records found.</td></tr>}
     </tbody></table></div>
   </section>;
