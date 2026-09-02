@@ -8,8 +8,8 @@ import mongoose from "mongoose";
 export const getAdminReviews = async (req, res) => {
   try {
     const reviews = await Review.find()
-      .populate("customerId", "name")
-      .populate("medicineId", "name")
+      .populate("reviewerId", "name role")
+      .populate("targetId", "name companyName")
       .sort({ createdAt: -1 });
       
     return res.json({ success: true, data: reviews });
@@ -22,6 +22,9 @@ export const getAdminReviews = async (req, res) => {
 export const updateReviewStatus = async (req, res) => {
   try {
     const { status } = req.body;
+    if (!["Pending", "Approved", "Rejected"].includes(status)) {
+      return res.status(400).json({ success: false, message: "Invalid review status" });
+    }
     const review = await Review.findByIdAndUpdate(
       req.params.id,
       { status },
@@ -52,6 +55,10 @@ export const submitReview = async (req, res) => {
   try {
     const { targetId, targetModel, rating, reviewText } = req.body;
     const reviewerId = req.user._id;
+
+    if (!mongoose.isValidObjectId(targetId) || !["Medicine", "User"].includes(targetModel) || !Number.isInteger(Number(rating)) || Number(rating) < 1 || Number(rating) > 5 || !reviewText?.trim()) {
+      return res.status(400).json({ success: false, message: "Provide a valid review target, rating, and comment." });
+    }
 
     // Prevent duplicate reviews from the same user for the same target
     const existingReview = await Review.findOne({ reviewerId, targetId });

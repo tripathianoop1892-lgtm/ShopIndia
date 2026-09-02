@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ShopSelector.css";
 
 import { FaStore, FaSearch, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
@@ -10,6 +10,19 @@ const ShopSelector = ({ form, setForm }) => {
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedShop, setSelectedShop] = useState(null);
+
+  // A QR link already contains the shop ID. Resolve it immediately so the
+  // customer can see which pharmacy is preselected without searching again.
+  useEffect(() => {
+    if (!form.shopId || selectedShop?.shopId === form.shopId) return;
+    searchShops(form.shopId).then((res) => {
+      const shop = res.shops?.find((item) => item.shopId === form.shopId);
+      if (shop) {
+        setSelectedShop(shop);
+        setSearch(shop.shopName || "");
+      }
+    }).catch(() => {});
+  }, [form.shopId, selectedShop]);
 
   const handleSearch = async (e) => {
     const value = e.target.value;

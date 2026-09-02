@@ -214,7 +214,10 @@ const Customer = () => {
                   <div key={med._id} className="customer-medicine-card">
                     <div className="card-media-header">
                       {med.image ? (
-                        <img src={med.image} alt={med.name} className="medicine-render-img" />
+                        <>
+                          <img src={med.image} alt={med.name} className="medicine-render-img" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.querySelector(".fallback-image-placeholder")?.removeAttribute("hidden"); }} />
+                          <div className="fallback-image-placeholder" hidden><FaMedkit className="fallback-med-icon" /><span>Image unavailable</span></div>
+                        </>
                       ) : (
                         <div className="fallback-image-placeholder">
                           <FaMedkit className="fallback-med-icon" />

@@ -5,6 +5,7 @@ export const shortId = (id) => {
 
 // Status color
 export const statusColor = (status) => {
+  if (status === "Paid") return "#2563eb";
   switch (status) {
     case "Pending":
       return "orange";

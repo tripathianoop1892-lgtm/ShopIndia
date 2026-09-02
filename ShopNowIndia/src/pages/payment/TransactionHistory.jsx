@@ -37,7 +37,7 @@ const TransactionHistory = () => {
 
                 <td
                   className={
-                    item.status === "Approved"
+                    item.status === "Paid" || item.status === "Approved"
                       ? "success"
                       : item.status === "Rejected"
                       ? "failed"

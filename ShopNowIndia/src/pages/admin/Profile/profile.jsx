@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { updateProfile } from "../../../services/api";
 import "./profile.css";
 
 const AdminProfile = () => {
@@ -112,7 +113,7 @@ const AdminProfile = () => {
   // SAVE PROFILE
   // ==========================================
 
-  const handleSaveProfile = () => {
+  const handleSaveProfile = async () => {
     if (!profile.fullName.trim()) {
       alert("Please enter your full name.");
       return;
@@ -129,38 +130,9 @@ const AdminProfile = () => {
     }
 
     try {
-      const storedUser =
-        localStorage.getItem("user") ||
-        localStorage.getItem("userData");
-
-      const existingUser = storedUser
-        ? JSON.parse(storedUser)
-        : {};
-
-      const updatedUser = {
-        ...existingUser,
-
-        fullName:
-          profile.fullName.trim(),
-
-        name:
-          profile.fullName.trim(),
-
-        email:
-          profile.email.trim(),
-
-        mobile:
-          profile.mobile.trim(),
-
-        phone:
-          profile.mobile.trim(),
-
-        role:
-          profile.role,
-
-        address:
-          profile.address.trim(),
-      };
+      const response = await updateProfile({ fullName: profile.fullName.trim(), email: profile.email.trim(), mobile: profile.mobile.trim(), address: profile.address.trim() });
+      if (!response.success) throw new Error(response.message || "Unable to update profile.");
+      const updatedUser = { ...response.user, fullName: response.user.name, phone: response.user.mobile };
 
       localStorage.setItem(
         "user",

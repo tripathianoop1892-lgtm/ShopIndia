@@ -6,6 +6,7 @@ import coupons from "../models/coupons.js";
 import CouponUsage from "../models/couponUsage.js";
 import { notifyUser } from "../services/notification.service.js";
 import PaymentIntent from "../models/paymentIntent.js";
+import PlatformSettings from "../models/platformSettings.js";
 
 // =======================
 // 🛒 CREATE ORDER
@@ -17,8 +18,6 @@ export const createOrder = async (req, res) => {
     const {
       items,
       sellerId,
-      deliveryCharge,
-      platformFee,
       couponCode,
       paymentReference,
     } = req.body;
@@ -235,6 +234,7 @@ export const createOrder = async (req, res) => {
 
         // 📅 Expiry snapshot
         expiry: medicine.expiry || null,
+        image: medicine.image || "",
       });
     }
 
@@ -250,12 +250,17 @@ export const createOrder = async (req, res) => {
     // 7. DELIVERY + PLATFORM FEE
     // ==========================================
 
+    // Fees come from the administrator's platform rules, never from a browser.
+    const settings = await PlatformSettings.findOne().lean();
+    const deliveryRate = Number(settings?.deliveryCharge || 0);
+    const commissionRate = Number(settings?.platformCommission || 0);
+    const gstRate = Number(settings?.gst || 0);
     const orderDeliveryCharge = Number(
-      deliveryCharge || 0
+      orderType === "B2C" ? deliveryRate : 0
     );
 
     const orderPlatformFee = Number(
-      platformFee || 0
+      (orderSubtotal * (commissionRate + gstRate) / 100).toFixed(2)
     );
 
     if (
@@ -505,7 +510,9 @@ export const createOrder = async (req, res) => {
 
       finalAmount,
 
-      status: "Pending",
+      // Payment has already been verified at this point. It is accepted
+      // automatically and ready for fulfilment; no seller approval is needed.
+      status: "Paid",
 
       paymentStatus: "Paid",
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
-import { getOrders, updateOrder } from "../../services/api"; 
+import { getOrders } from "../../services/api";
 import { shortId, statusColor } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ const Distributor = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
+  /* Retained only as historical reference for the removed seller approval flow.
   async function fetchOrders() {
     try {
       const data = await getOrders(); 
@@ -16,11 +17,13 @@ const Distributor = () => {
       console.log(err);
     }
   }
+  */
 
   useEffect(() => {
     getOrders().then((data) => setOrders(Array.isArray(data) ? data : [])).catch(console.error);
   }, []);
 
+  /* Removed: payment is the order commitment; sellers do not approve or reject paid orders.
   const updateStatus = async (id, status) => {
     try {
       const res = await updateOrder(id, status); 
@@ -34,6 +37,7 @@ const Distributor = () => {
       console.log(err);
     }
   };
+  */
 
   return (
     <div className="order-container" style={{ padding: "20px" }}>
@@ -47,7 +51,6 @@ const Distributor = () => {
             <th>Medicines Requested</th>
             <th>Total Amount</th>
             <th>Status</th>
-            <th>Action</th>
             <th>Payment</th>
           </tr>
         </thead>
@@ -74,33 +77,12 @@ const Distributor = () => {
                   {item.status}
                 </td>
 
-                  <td>
-                  {item.status === "Pending" ? (
-                    <div style={{ display: "flex", gap: "8px", justifyContent: "center" }}>
-                      <button
-                        onClick={() => updateStatus(item._id, "Approved")}
-                        style={{ background: "#16a34a", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}
-                      >
-                        Approve
-                      </button>
-
-                      <button
-                        onClick={() => updateStatus(item._id, "Rejected")}
-                        style={{ background: "#ef4444", color: "white", border: "none", padding: "6px 12px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  ) : (
-                    <span style={{ color: "#64748b", fontSize: "13px" }}>Processed</span>
-                  )}
-                  </td>
                   <td><button onClick={() => navigate(`/distributor/payments/${item._id}`)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>View Details</button></td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7" style={{ padding: "20px", color: "#94a3b8" }}>No active B2B wholesale orders found.</td>
+              <td colSpan="6" style={{ padding: "20px", color: "#94a3b8" }}>No active B2B wholesale orders found.</td>
             </tr>
           )}
         </tbody>

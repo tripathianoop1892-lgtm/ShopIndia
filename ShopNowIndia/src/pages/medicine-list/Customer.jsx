@@ -31,7 +31,8 @@ const CustomerMedicineList = () => {
                   name: item.name,
                   price: item.price,
                   company: item.company || "Generic",
-                  type: item.type || "Tablet" // Preserves drug specifications[cite: 1, 2]
+                  type: item.type || "Tablet", // Preserves drug specifications[cite: 1, 2]
+                  image: item.image || ""
                 });
               }
             });
@@ -64,7 +65,7 @@ const CustomerMedicineList = () => {
         name: med.name,
         company: med.company || "",
         price: finalCustomerPrice,
-        image: "",
+        image: med.image || "",
         quantity: 1,
         sellerId: sellerId || "Retail-Store",
       };
@@ -98,6 +99,7 @@ const CustomerMedicineList = () => {
           <thead>
             {/* Exactly replicates the Header Style profile from image_8809ab.png */}
             <tr style={{ background: "#2c3e50", color: "white", height: "45px" }}>
+              <th style={{ padding: "12px", fontWeight: "600" }}>Image</th>
               <th style={{ padding: "12px", fontWeight: "600" }}>Medicine Name</th>
               <th style={{ padding: "12px", fontWeight: "600" }}>Company</th>
               <th style={{ padding: "12px", fontWeight: "600" }}>Type</th>
@@ -108,7 +110,7 @@ const CustomerMedicineList = () => {
           <tbody>
             {purchasedMedicines.length === 0 ? (
               <tr>
-                <td colSpan="5" style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>
+                <td colSpan="6" style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>
                   No personal medicine logs found. Place retail orders on your dashboard to populate.
                 </td>
               </tr>
@@ -118,6 +120,7 @@ const CustomerMedicineList = () => {
                 const quantityInCart = cartMatch ? cartMatch.quantity || cartMatch.qty : 0;
                 return (
                   <tr key={m._id} style={{ borderBottom: "1px solid #f1f5f9", height: "50px" }}>
+                    <td style={{ padding: "8px" }}>{m.image ? <img src={m.image} alt="" onError={(event) => { event.currentTarget.style.display = "none"; }} style={{ width: 42, height: 42, objectFit: "contain" }} /> : "—"}</td>
                     <td style={{ padding: "12px", fontWeight: "600", color: "#2c3e50" }}>{m.name}</td>
                     <td style={{ padding: "12px", color: "#4a5568" }}>{m.company}</td>
                     <td style={{ padding: "12px", color: "#4a5568" }}>{m.type}</td>

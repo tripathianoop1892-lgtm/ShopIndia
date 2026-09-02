@@ -33,11 +33,11 @@ const ShopkeeperEarnings = () => {
   // 📊 COMPREHENSIVE CASH FLOW COMPILATION ENGINE
   const cashFlowMetrics = useMemo(() => {
     // 1. Inflow calculations (Settled Customer Orders)
-    const settledSales = b2cSales.filter(o => o.status === "Approved" || o.status === "Delivered");
+    const settledSales = b2cSales.filter(o => ["Paid", "Approved", "Delivered"].includes(o.status));
     const totalInflow = settledSales.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
 
     // 2. Outflow calculations (Settled Distributor Purchases)
-    const settledPurchases = b2bPurchases.filter(o => o.status === "Approved" || o.status === "Delivered");
+    const settledPurchases = b2bPurchases.filter(o => ["Paid", "Approved", "Delivered"].includes(o.status));
     const totalOutflow = settledPurchases.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
 
     // 3. Absolute Net Metrics

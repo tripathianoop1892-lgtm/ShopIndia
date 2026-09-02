@@ -5,13 +5,14 @@
   top: 0;
   left: 0;
   width: 230px;
-  height: 100%;
+  height: 100dvh;
   background: linear-gradient(180deg, #24364a, #1e293b);
   color: #fff;
   padding: 18px 14px;
   box-sizing: border-box;
   z-index: 1100;
-  overflow-y: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   transform: translateX(0);
   transition: transform 0.25s ease;
 }
@@ -162,6 +163,15 @@
 .logout-btn:hover {
   transform: translateY(-1px);
   background: #dc2626;
+}
+
+@media (max-height: 760px) and (min-width: 901px) {
+  .shopkeeper-sidebar { padding-top: 10px; }
+  .shopkeeper-sidebar-header { margin-bottom: 8px; }
+  .shopkeeper-sidebar-logo { width: 95px; }
+  .shopkeeper-sidebar ul li { margin-bottom: 3px; }
+  .shopkeeper-sidebar ul li a { padding: 7px 10px; }
+  .logout-btn { margin-top: 8px; padding: 9px; }
 }
 
 /* ===== QR MODAL ===== */

@@ -250,6 +250,12 @@ export const searchShops = async (req, res) => {
             $options: "i",
           },
         },
+        {
+          shopId: {
+            $regex: search,
+            $options: "i",
+          },
+        },
       ],
     })
       .select("_id name shopName mobile email shopId")
@@ -278,6 +284,7 @@ export const updateProfile = async (req, res) => {
       mobile,
       email,
       shopName,
+      companyName,
       address,
     } = req.body;
 
@@ -315,6 +322,10 @@ export const updateProfile = async (req, res) => {
       user.shopName = shopName.trim();
     }
 
+    if (companyName !== undefined) {
+      user.companyName = companyName.trim();
+    }
+
     if (address !== undefined) {
       user.address = address.trim();
     }
@@ -330,6 +341,7 @@ export const updateProfile = async (req, res) => {
         mobile: user.mobile,
         email: user.email,
         shopName: user.shopName,
+        companyName: user.companyName,
         address: user.address,
         role: user.role,
         shopId: user.shopId,
