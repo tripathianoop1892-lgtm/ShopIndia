@@ -174,36 +174,46 @@ const CustomerProfile = () => {
   // MENU CLICK
   // ==========================================
 
-  const handleMenuClick = (screen) => {
-    if (screen === "CustomerEditProfile") {
-      handleEditProfile();
-      return;
-    }
+const handleMenuClick = (screen) => {
+  if (screen === "CustomerEditProfile") {
+    handleEditProfile();
+    return;
+  }
 
-    console.log(`${screen} clicked`);
-
-    // बाद में यहाँ routing connect करेंगे
+  const routes = {
+    Orders: "/customer/orders",
+    CustomerPrescriptions: "/customer/prescriptions",
+    Notifications: "/customer/notifications",
+    Support: "/customer/support",
+    PrivacyPolicy: "/customer/privacy-policy",
   };
+
+  const route = routes[screen];
+
+  if (route) {
+    window.location.href = route;
+  }
+};
+
 
   // ==========================================
   // LOGOUT
   // ==========================================
+const handleLogout = () => {
+  const confirmLogout = window.confirm(
+    "Are you sure you want to logout?"
+  );
 
-  const handleLogout = () => {
-    const confirmLogout = window.confirm(
-      "Are you sure you want to logout?"
-    );
+  if (!confirmLogout) {
+    return;
+  }
 
-    if (!confirmLogout) {
-      return;
-    }
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
 
-    localStorage.removeItem("user");
+  window.location.href = "/login";
+};
 
-    console.log("Logout successful");
-
-    // बाद में यहाँ login page routing connect करेंगे
-  };
 
   // ==========================================
   // LOADING

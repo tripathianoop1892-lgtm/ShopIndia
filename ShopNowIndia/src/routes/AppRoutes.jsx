@@ -69,6 +69,10 @@ import Logout from "../pages/admin/Logout/logout";
 import CouponsForm from "../pages/admin/Coupons/couponsForm";
 import BannerForm from "../pages/admin/Banner/bannerForm";
 
+// Help and Support
+
+import HelpSupport from "../pages/help/HelpSupport";
+
 // customer prescription
 import CustomerPrescription from "../pages/prescription/CustomerPrescription";
 
@@ -117,6 +121,7 @@ const router = createBrowserRouter([
     { path: "reviews", element: <Reviews /> },
     { path: "support", element: <Support /> },
     { path: "settings", element: <Setting /> },
+    { path: "help-support", element: <HelpSupport /> },
     { path: "profile", element: <AdminProfile /> },
     { path: "logout", element: <Logout /> }
   ]
@@ -139,7 +144,8 @@ const router = createBrowserRouter([
       { path: "payments/:orderId", element: <OrderPaymentDetail /> },
       { path: "cart", element: <Cart /> },
       { path: "profile", element: <ShopkeeperProfile /> }, // Maps directly to: /shopkeeper/profile
-      { path: "settings", element: <Settings /> } // Maps directly to: /shopkeeper/settings
+      { path: "settings", element: <Settings /> }, // Maps directly to: /shopkeeper/settings
+      { path: "help-support", element: <HelpSupport /> },
     ],
   },
 
@@ -161,7 +167,8 @@ const router = createBrowserRouter([
       { path: "expiring", element: <DistributorExpiring /> }, // Maps directly to: /distributor/expiring
       { path: "stock", element: <DistributorStock /> },
       { path: "profile", element: <DistributorProfile /> }, // Maps directly to: /distributor/profile
-      { path: "settings", element: <Settings /> } // Maps directly to: /distributor/settings
+      { path: "settings", element: <Settings /> }, // Maps directly to: /distributor/settings
+      { path: "help-support", element: <HelpSupport /> },
     ],
   },
 
@@ -179,7 +186,8 @@ const router = createBrowserRouter([
       { path: "orders", element: <CustomerOrder /> }, // Maps directly to: /customer/orders
       { path: "cart", element: <Cart />},
       { path: "profile", element: <CustomerProfile /> }, // Maps directly to: /customer/profile
-      { path: "settings", element: <Settings /> } // Maps directly to: /customer/settings
+      { path: "settings", element: <Settings /> }, // Maps directly to: /customer/settings
+      { path: "support", element: <HelpSupport /> },
     ],
   },
 

@@ -397,6 +397,9 @@ const Cart = () => {
                 <div className="summary-accumulated-box">
                   <span className="summary-label">Aggregated Subtotal</span>
                   <span className="summary-value-amount">₹{group.totalAmount.toLocaleString('en-IN')}</span>
+                  <span className="summary-label">Platform fees</span>
+                  <span className="summary-value-amount">₹{(group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100).toLocaleString('en-IN')}</span>
+                  {user?.role === "customer" && <><span className="summary-label">Delivery</span><span className="summary-value-amount">₹{Number(checkoutSettings.deliveryCharge || 0).toLocaleString('en-IN')}</span></>}
                 </div>
 
                 {couponStatuses[group.sellerId]?.applied && (
@@ -408,9 +411,8 @@ const Cart = () => {
                   </div>
                 )}
                 <div className="summary-accumulated-box">
-                  <span className="summary-label">Platform fees</span>
-                  <span className="summary-value-amount">â‚¹{(group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100).toLocaleString('en-IN')}</span>
-                  {user?.role === "customer" && <><span className="summary-label">Delivery</span><span className="summary-value-amount">â‚¹{Number(checkoutSettings.deliveryCharge || 0).toLocaleString('en-IN')}</span></>}
+                  <span className="summary-label">Final Subtotal</span>
+                  <span className="summary-value-amount">₹{(group.totalAmount + (group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100) + checkoutSettings.deliveryCharge).toLocaleString('en-IN')}</span>
                 </div>
               </div>
               
