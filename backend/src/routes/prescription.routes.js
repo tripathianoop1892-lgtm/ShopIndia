@@ -9,6 +9,7 @@ import {
   updatePrescriptionStatus,
   deletePrescription,
   restorePrescription,
+  readPrescription,
 } from "../controllers/prescription.controller.js";
 
 import { checkAuth } from "../middlewares/auth.middleware.js";
@@ -55,10 +56,23 @@ router.get(
 // GET /api/prescriptions/:id
 // ======================================================
 
+
+
 router.get(
   "/:id/file",
   checkAuth,
   getPrescriptionFile
+);
+
+// ======================================================
+// Read Prescription
+// POST /api/prescriptions/:id/read
+// ======================================================
+
+router.post(
+  "/:id/read",
+  checkAuth,
+  readPrescription
 );
 
 router.get(
@@ -66,6 +80,8 @@ router.get(
   checkAuth,
   getPrescriptionById
 );
+
+
 
 // ======================================================
 // Verify / Reject / Complete Prescription

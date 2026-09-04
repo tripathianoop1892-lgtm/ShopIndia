@@ -145,7 +145,7 @@ const router = createBrowserRouter([
       { path: "cart", element: <Cart /> },
       { path: "profile", element: <ShopkeeperProfile /> }, // Maps directly to: /shopkeeper/profile
       { path: "settings", element: <Settings /> }, // Maps directly to: /shopkeeper/settings
-      { path: "help-support", element: <HelpSupport /> },
+      { path: "support", element: <HelpSupport /> },
     ],
   },
 
@@ -168,7 +168,7 @@ const router = createBrowserRouter([
       { path: "stock", element: <DistributorStock /> },
       { path: "profile", element: <DistributorProfile /> }, // Maps directly to: /distributor/profile
       { path: "settings", element: <Settings /> }, // Maps directly to: /distributor/settings
-      { path: "help-support", element: <HelpSupport /> },
+      { path: "support", element: <HelpSupport /> },
     ],
   },
 

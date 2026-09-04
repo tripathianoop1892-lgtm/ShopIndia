@@ -182,8 +182,8 @@ const handleMenuClick = (screen) => {
 
   const routes = {
     Orders: "/customer/orders",
-    CustomerPrescriptions: "/customer/prescriptions",
-    Notifications: "/customer/notifications",
+    CustomerPrescriptions: "/customer/prescription",
+    Notifications: "/customer/notification",
     Support: "/customer/support",
     PrivacyPolicy: "/customer/privacy-policy",
   };

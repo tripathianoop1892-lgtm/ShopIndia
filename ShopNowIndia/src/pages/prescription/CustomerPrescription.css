@@ -641,6 +641,64 @@
   font-size: 12px;
 }
 
+/* =========================================================
+   READ ERROR
+========================================================= */
+
+.prescription-read-error {
+  padding: 40px 25px;
+  text-align: center;
+}
+
+.prescription-read-error .read-icon {
+  margin-bottom: 15px;
+  background: #fff4e5;
+}
+
+.prescription-read-error h4 {
+  margin: 0 0 10px;
+  color: #b42318;
+  font-size: 19px;
+}
+
+.prescription-read-error p {
+  max-width: 500px;
+  margin: 0 auto;
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.prescription-read-error .read-warning {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 9px;
+  background: #fff8e6;
+  color: #8a5a00;
+  font-size: 12px;
+}
+
+.prescription-read-retry {
+  margin-top: 20px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 9px;
+  background: #2f80ed;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.prescription-read-retry:hover {
+  background: #1769d1;
+}
+
+.prescription-read-retry:active {
+  transform: scale(0.98);
+}
 
 /* =========================================================
    EXTRACTED PRESCRIPTION DATA

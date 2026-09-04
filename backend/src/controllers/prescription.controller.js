@@ -1,7 +1,9 @@
 import Prescription from "../models/Prescription.js";
 import User from "../models/user.js";
 import { notifyUser } from "../services/notification.service.js";
+import { readPrescriptionWithAI } from "../services/prescription-ai.service.js";
 import path from "path";
+
 
 // ======================================================
 // Upload Prescription
@@ -129,7 +131,7 @@ export const getPrescriptionById = async (req, res) => {
         message: "Prescription not found.",
       });
     }
-    const previousStatus = prescription.status;
+    
 
     return res.status(200).json({
       success: true,
@@ -159,6 +161,89 @@ export const getPrescriptionFile = async (req, res) => {
 };
 
 // ======================================================
+// Read Prescription using AI
+// POST /api/prescriptions/:id/read
+// ======================================================
+export const readPrescription = async (req, res) => {
+  try {
+    const prescription = await Prescription.findById(req.params.id);
+
+    if (!prescription || prescription.isDeleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Prescription not found.",
+      });
+    }
+
+    // ==================================================
+    // Authorization
+    // ==================================================
+    const isAdmin = req.user.role === "admin";
+
+    const isCustomer =
+      String(prescription.customerId) === String(req.user._id);
+
+    const isShopkeeper =
+      req.user.role === "shopkeeper" &&
+      String(prescription.shopId) === String(req.user.shopId);
+
+    if (!isAdmin && !isCustomer && !isShopkeeper) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to read this prescription.",
+      });
+    }
+
+    // ==================================================
+    // Prescription file path
+    // ==================================================
+    const filePath = path.resolve(
+      "uploads",
+      "prescriptions",
+      prescription.image
+    );
+
+    if (!prescription.image) {
+      return res.status(400).json({
+        success: false,
+        message: "Prescription file is missing.",
+      });
+    }
+
+    // ==================================================
+    // MIME type
+    // ==================================================
+    const mimeType =
+      prescription.fileType === "pdf"
+        ? "application/pdf"
+        : "image/jpeg";
+
+    // ==================================================
+    // AI Reading
+    // ==================================================
+    const extracted = await readPrescriptionWithAI({
+      filePath,
+      mimeType,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Prescription read successfully.",
+      extracted,
+    });
+  } catch (error) {
+    console.error("Read Prescription Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Prescription could not be read. Please check the original prescription.",
+    });
+  }
+};
+
+// ======================================================
 // Verify / Reject / Complete Prescription
 // ======================================================
 export const updatePrescriptionStatus = async (req, res) => {
@@ -178,7 +263,7 @@ export const updatePrescriptionStatus = async (req, res) => {
         message: "Prescription not found.",
       });
     }
-
+    const previousStatus = prescription.status;
     if (status) prescription.status = status;
 
     if (remarks !== undefined)

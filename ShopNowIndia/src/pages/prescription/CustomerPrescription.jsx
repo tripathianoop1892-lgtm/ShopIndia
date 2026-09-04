@@ -4,6 +4,7 @@ import {
   getCustomerPrescriptions,
   getPrescriptionFile,
   uploadPrescription,
+  readPrescription,
 } from "../../services/api";
 
 const CustomerPrescription = () => {
@@ -163,48 +164,47 @@ const CustomerPrescription = () => {
   };
 
   // =========================
-  // READ PRESCRIPTION
-  // =========================
-  const handleReadPrescription = async (prescription) => {
-    try {
-      setReading(true);
-      setReadPrescription({
-        ...prescription,
-        extracted: null,
-      });
+// READ PRESCRIPTION
+// =========================
+const handleReadPrescription = async (prescription) => {
+  try {
+    setReading(true);
 
-      /*
-       * IMPORTANT:
-       *
-       * Actual OCR / AI reading will be connected here.
-       *
-       * Example future API:
-       *
-       * const response = await readPrescription(prescription._id);
-       *
-       * setReadPrescription({
-       *   ...prescription,
-       *   extracted: response.data
-       * });
-       *
-       * For now we do NOT create fake medicine details.
-       */
+    // Open reader modal immediately
+    setReadPrescription({
+      ...prescription,
+      extracted: null,
+      readError: null,
+    });
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+    // Actual backend OCR / AI API
+    const response = await readPrescription(prescription._id);
 
-      setReadPrescription((prev) => ({
-        ...prev,
-        extracted: null,
-      }));
-    } catch (error) {
-      console.error("Read prescription error:", error);
-
-      alert("Unable to read prescription.");
-      setReadPrescription(null);
-    } finally {
-      setReading(false);
+    if (!response?.success) {
+      throw new Error(
+        response?.message || "Unable to read prescription."
+      );
     }
-  };
+
+    setReadPrescription((prev) => ({
+      ...prev,
+      extracted: response.extracted || response.data || null,
+      readError: null,
+    }));
+  } catch (error) {
+    console.error("Read prescription error:", error);
+
+    setReadPrescription((prev) => ({
+      ...prev,
+      extracted: null,
+      readError:
+        error.message ||
+        "Prescription could not be read. Please check the original prescription.",
+    }));
+  } finally {
+    setReading(false);
+  }
+};
 
   // =========================
   // CLOSE READ MODAL
@@ -490,8 +490,34 @@ const CustomerPrescription = () => {
               </div>
             )}
 
+{/* READ ERROR */}
+{!reading && readPrescription.readError && (
+  <div className="prescription-read-error">
+    <div className="read-icon">⚠️</div>
+
+    <h4>Prescription read नहीं हो पाई</h4>
+
+    <p>{readPrescription.readError}</p>
+
+    <p className="read-warning">
+      कृपया original prescription को ध्यान से देखें या
+      साफ image/PDF upload करें।
+    </p>
+
+    <button
+      type="button"
+      className="prescription-read-retry"
+      onClick={() => handleReadPrescription(readPrescription)}
+    >
+      🔄 Try Again
+    </button>
+  </div>
+)}
+
             {/* Future OCR result */}
-            {!reading && !readPrescription.extracted && (
+            {!reading &&
+  !readPrescription.extracted &&
+  !readPrescription.readError && (
 
               <div className="prescription-read-empty">
 
@@ -556,22 +582,33 @@ const CustomerPrescription = () => {
                       key={index}
                     >
 
-                      <strong>
-                        💊 {medicine.name}
-                      </strong>
+                     <strong>
+  💊 {medicine.name || "Medicine name not detected"}
+</strong>
 
-                      <span>
-                        Dosage: {medicine.dosage || "-"}
-                      </span>
+<span>
+  🧪 Salt / Formula: {medicine.salt || "-"}
+</span>
 
-                      <span>
-                        Frequency: {medicine.frequency || "-"}
-                      </span>
+<span>
+  💪 Strength: {medicine.strength || "-"}
+</span>
 
-                      <span>
-                        Duration: {medicine.duration || "-"}
-                      </span>
+<span>
+  💊 Dosage Form: {medicine.dosageForm || "-"}
+</span>
 
+<span>
+  📏 Dosage: {medicine.dosage || "-"}
+</span>
+
+<span>
+  🕐 Frequency: {medicine.frequency || "-"}
+</span>
+
+<span>
+  📅 Duration: {medicine.duration || "-"}
+</span>
                     </div>
 
                   )

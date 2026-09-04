@@ -250,6 +250,17 @@ export const getAdminOrders = async () => {
 // =======================
 // 📄 PRESCRIPTION APIs
 // =======================
+export const readPrescription = async (prescriptionId) => {
+  const res = await fetch(
+    `${BASE_URL}/prescriptions/${prescriptionId}/read`,
+    {
+      method: "POST",
+      headers: getHeaders(),
+    }
+  );
+
+  return res.json();
+};
 
 // 👉 Upload Prescription
 export const uploadPrescription = async (formData) => {

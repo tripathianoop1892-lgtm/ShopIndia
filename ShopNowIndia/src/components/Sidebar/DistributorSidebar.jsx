@@ -56,6 +56,9 @@ const DistributorSidebar = ({ isOpen, onClose }) => {
             <NavLink to="/distributor/profile" onClick={onClose}>Profile</NavLink>
           </li>
           <li>
+            <NavLink to="/distributor/support" onClick={onClose}>Help & Support</NavLink>
+          </li>
+          <li>
             <NavLink to="/distributor/settings" onClick={onClose}>Settings</NavLink>
           </li>
         </ul>

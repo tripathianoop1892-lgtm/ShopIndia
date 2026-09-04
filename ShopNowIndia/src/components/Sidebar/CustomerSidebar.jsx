@@ -21,6 +21,7 @@ const CustomerSidebar = ({ isOpen, onClose }) => {
     ["/customer/orders", "Orders"],
     ["/customer/notification", "Notifications"],
     ["/customer/profile", "Profile"],
+    ["/customer/support", "Help & Support"],
     ["/customer/settings", "Settings"],
   ];
 
