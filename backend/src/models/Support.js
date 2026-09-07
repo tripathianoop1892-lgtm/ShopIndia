@@ -36,7 +36,9 @@ const supportSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // Public contact requests are not associated with a signed-in user.
+      required: false,
+      default: null,
     },
 
     name: {

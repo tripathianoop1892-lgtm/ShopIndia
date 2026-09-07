@@ -3,10 +3,12 @@ import "./Customer.css";
 import { getOrders, submitReview } from "../../services/api"; // Make sure submitReview is exported from api.js
 import { shortId, formatDate } from "../../utils/helpers";
 import { FaReceipt, FaBoxes, FaSpinner, FaExchangeAlt, FaShoppingBag, FaStar } from "react-icons/fa";
+import Invoice from "../../components/Invoice/Invoice";
 
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [invoiceOrder, setInvoiceOrder] = useState(null);
 
   // --- Review Functionality States ---
   const [reviewModal, setReviewModal] = useState({ isOpen: false, medicineId: null, name: "" });
@@ -101,6 +103,7 @@ const CustomerOrders = () => {
                   <th style={{ background: "#f8fafc", color: "#475569", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", padding: "14px 20px", borderBottom: "2px solid #e2e8f0" }}>Items Detail Count</th>
                   <th style={{ background: "#f8fafc", color: "#475569", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", padding: "14px 20px", borderBottom: "2px solid #e2e8f0" }}>Date Timestamp</th>
                   <th style={{ background: "#f8fafc", color: "#475569", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", padding: "14px 20px", borderBottom: "2px solid #e2e8f0", textAlign: "center" }}>Pipeline State</th>
+                  <th style={{ background: "#f8fafc", color: "#475569", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", padding: "14px 20px", borderBottom: "2px solid #e2e8f0" }}>Invoice</th>
                   <th style={{ background: "#f8fafc", color: "#475569", fontWeight: 600, fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", padding: "14px 20px", borderBottom: "2px solid #e2e8f0", textAlign: "right" }}>Invoice Total sum</th>
                 </tr>
               </thead>
@@ -150,6 +153,7 @@ const CustomerOrders = () => {
                         {o.status}
                       </span>
                     </td>
+                    <td style={{ padding: "16px 20px" }}><button type="button" onClick={() => setInvoiceOrder(o)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}><FaReceipt /> Invoice</button></td>
                     <td className="text-right table-bold-amount credit-color" style={{ padding: "16px 20px", textAlign: "right", fontWeight: 700, fontSize: "15px", color: "#16a34a" }}>
                       ₹{Number(o.totalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
@@ -160,6 +164,8 @@ const CustomerOrders = () => {
           </div>
         )}
       </div>
+
+      {invoiceOrder && <Invoice order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />}
 
       {/* --- REVIEW MODAL OVERLAY --- */}
       {reviewModal.isOpen && (

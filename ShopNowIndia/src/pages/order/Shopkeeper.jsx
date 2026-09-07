@@ -3,16 +3,16 @@ import "./Shopkeeper.css";
 import { getOrders, submitReview } from "../../services/api";
 import { shortId, formatDate, statusColor } from "../../utils/helpers";
 import { FaStar } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import Invoice from "../../components/Invoice/Invoice";
 
 const ShopkeeperOrder = () => {
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("b2c-retail"); // 'b2c-retail' or 'b2b-procure'
+  const [invoiceOrder, setInvoiceOrder] = useState(null);
 
   // --- Review State ---
   const [reviewModal, setReviewModal] = useState({ isOpen: false, targetId: null, targetName: "" });
   const [reviewForm, setReviewForm] = useState({ rating: 5, reviewText: "" });
-  const navigate = useNavigate();
 
   useEffect(() => {
     let cancelled = false;
@@ -103,7 +103,7 @@ const ShopkeeperOrder = () => {
               <th>Invoice Sum</th>
               <th>Status</th>
               <th>Date Timestamp</th>
-              <th>Payment</th>
+              <th>Invoice</th>
             </tr>
           </thead>
           <tbody>
@@ -141,7 +141,7 @@ const ShopkeeperOrder = () => {
                   <td style={{ fontWeight: "bold", color: "#16a34a" }}>₹{Number(o.totalAmount || o.price || 0).toLocaleString('en-IN')}</td>
                   <td style={{ color: statusColor(o.status), fontWeight: "bold" }}>{o.status}</td>
                   <td>{formatDate(o.createdAt)}</td>
-                  <td><button onClick={() => navigate(`/shopkeeper/payments/${o._id}${activeTab === "b2b-procure" ? "?view=b2b-purchases" : ""}`)} style={{ border: "none", borderRadius: "4px", padding: "6px 10px", background: "#2563eb", color: "white", cursor: "pointer", fontSize: "12px" }}>View Details</button></td>
+                  <td><button type="button" onClick={() => setInvoiceOrder(o)} style={{ border: "none", borderRadius: "4px", padding: "6px 10px", background: "#2563eb", color: "white", cursor: "pointer", fontSize: "12px" }}>Invoice</button></td>
 
                 </tr>
               ))
@@ -149,6 +149,8 @@ const ShopkeeperOrder = () => {
           </tbody>
         </table>
       </div>
+
+      {invoiceOrder && <Invoice order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />}
 
       {/* --- REVIEW MODAL OVERLAY --- */}
       {reviewModal.isOpen && (
