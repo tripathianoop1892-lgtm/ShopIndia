@@ -126,9 +126,9 @@ const ShopkeeperOrder = () => {
         if (status === "Approved") {
           alert("Order approved successfully.");
         } else if (status === "Rejected") {
-          alert(
-            "Order rejected successfully. Refund process initiated."
-          );
+          alert(res.message || "Order rejected.");
+        } else if (status === "Delivered") {
+          alert("Order marked as delivered.");
         }
 
         const filter =
@@ -347,7 +347,7 @@ const ShopkeeperOrder = () => {
 
                     {/* Review Distributor */}
                     {activeTab === "b2b-procure" &&
-                      o.status === "Approved" &&
+                      o.status === "Delivered" &&
                       o.sellerId?._id && (
                         <button
                           type="button"
@@ -417,7 +417,7 @@ const ShopkeeperOrder = () => {
                   >
                     ₹
                     {Number(
-                      o.totalAmount || o.price || 0
+                      o.finalAmount ?? o.totalAmount ?? o.price ?? 0
                     ).toLocaleString("en-IN")}
                   </td>
 
@@ -471,6 +471,10 @@ const ShopkeeperOrder = () => {
                           ✕ Reject
                         </button>
                       </div>
+                    ) : activeTab === "b2c-retail" && o.status === "Approved" ? (
+                      <button type="button" className="approve-order-btn" disabled={actionLoading} onClick={() => updateStatus(o._id, "Delivered")}>
+                        Mark delivered
+                      </button>
                     ) : (
                       <span className="no-order-action">
                         —

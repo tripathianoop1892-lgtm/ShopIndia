@@ -37,6 +37,8 @@ const HelpSupport = () => {
     }
 
     loadTickets();
+    // Ticket loading is intentionally mount-only; loadTickets is recreated per render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ==========================================

@@ -16,7 +16,7 @@ const OrderPaymentDetail = ({ view = "" }) => {
   if (loading) return <p>Loading payment details...</p>;
   if (!order) return <section className="payment-detail-page"><button onClick={() => navigate(-1)}>← Back</button><h2>Payment record not found</h2><p>This order may not belong to the current account.</p></section>;
   const amount = Number(order.finalAmount ?? order.totalAmount ?? 0);
-  const paymentStatus = order.status === "Rejected" ? "Failed" : order.status === "Pending" ? "Pending" : "Successful";
+  const paymentStatus = order.paymentStatus === "Refunded" ? "Refunded" : order.status === "Rejected" ? (order.refundStatus === "failed" ? "Refund failed" : "Refund pending") : order.paymentStatus === "Pending" ? "Pending" : "Successful";
   return <section className="payment-detail-page">
     <button className="payment-back" onClick={() => navigate(-1)}>← Back to Orders</button>
     <div className="payment-detail-card"><div className="payment-detail-header"><div><p>Payment Details</p><h2>Order #{order._id.slice(-8).toUpperCase()}</h2></div><span className={`payment-state ${paymentStatus.toLowerCase()}`}>{paymentStatus}</span></div>

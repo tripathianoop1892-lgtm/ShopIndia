@@ -1,12 +1,27 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
-import { getOrders } from "../../services/api";
+import { getOrders, updateOrder } from "../../services/api";
 import { shortId, statusColor } from "../../utils/helpers";
 import Invoice from "../../components/Invoice/Invoice";
 
 const Distributor = () => {
   const [orders, setOrders] = useState([]);
   const [invoiceOrder, setInvoiceOrder] = useState(null);
+
+  const loadOrders = async () => {
+    const data = await getOrders();
+    setOrders(Array.isArray(data) ? data : []);
+  };
+
+  const updateStatus = async (id, status) => {
+    const rejectionReason = status === "Rejected"
+      ? window.prompt("Why is this order being rejected?")?.trim()
+      : "";
+    if (status === "Rejected" && !rejectionReason) return;
+    const response = await updateOrder(id, status, rejectionReason);
+    if (!response.success) return alert(response.message || "Unable to update this order.");
+    await loadOrders();
+  };
 
   /* Retained only as historical reference for the removed seller approval flow.
   async function fetchOrders() {
@@ -20,7 +35,9 @@ const Distributor = () => {
   */
 
   useEffect(() => {
-    getOrders().then((data) => setOrders(Array.isArray(data) ? data : [])).catch(console.error);
+    getOrders()
+      .then((data) => setOrders(Array.isArray(data) ? data : []))
+      .catch(console.error);
   }, []);
 
   /* Removed: payment is the order commitment; sellers do not approve or reject paid orders.
@@ -51,6 +68,7 @@ const Distributor = () => {
             <th>Medicines Requested</th>
             <th>Total Amount</th>
             <th>Status</th>
+            <th>Action</th>
             <th>Invoice</th>
           </tr>
         </thead>
@@ -77,12 +95,21 @@ const Distributor = () => {
                   {item.status}
                 </td>
 
+                <td>
+                  {(item.status === "Paid" || item.status === "Pending") && <>
+                    <button type="button" onClick={() => updateStatus(item._id, "Approved")}>Approve</button>{" "}
+                    <button type="button" onClick={() => updateStatus(item._id, "Rejected")}>Reject</button>
+                  </>}
+                  {item.status === "Approved" && <button type="button" onClick={() => updateStatus(item._id, "Delivered")}>Mark delivered</button>}
+                  {!["Paid", "Pending", "Approved"].includes(item.status) && "—"}
+                </td>
+
                   <td><button type="button" onClick={() => setInvoiceOrder(item)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>Invoice</button></td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ padding: "20px", color: "#94a3b8" }}>No active B2B wholesale orders found.</td>
+              <td colSpan="7" style={{ padding: "20px", color: "#94a3b8" }}>No active B2B wholesale orders found.</td>
             </tr>
           )}
         </tbody>

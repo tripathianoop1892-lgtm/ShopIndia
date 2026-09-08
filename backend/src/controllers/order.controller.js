@@ -984,8 +984,7 @@ if (
           currentOrder.orderType ===
             "B2B" &&
           status === "Approved" &&
-          currentOrder.status ===
-            "Pending"
+          (currentOrder.status === "Pending" || currentOrder.status === "Paid")
         ) {
           const shopkeeperUser =
             await User.findById(
@@ -1220,8 +1219,9 @@ await currentOrder.save({
       }
     );
 
-   // Refund customer after rejection
-if (status === "Rejected") {
+    // Keep the order's refund state accurate when Razorpay is unavailable.
+    let refundSucceeded = null;
+    if (status === "Rejected") {
   try {
     const refundResult = await refundPayment(
       updatedOrder.paymentId
@@ -1231,11 +1231,18 @@ if (status === "Rejected") {
       `REFUND SUCCESS: Order ${updatedOrder._id} refunded successfully.`,
       refundResult
     );
+    updatedOrder.paymentStatus = "Refunded";
+    updatedOrder.refundStatus = "processed";
+    await updatedOrder.save();
+    refundSucceeded = true;
   } catch (refundError) {
     console.error(
       `REFUND FAILED: Order ${updatedOrder._id}:`,
       refundError
     );
+    updatedOrder.refundStatus = "failed";
+    await updatedOrder.save();
+    refundSucceeded = false;
   }
 }
 
@@ -1261,7 +1268,9 @@ if (status === "Rejected") {
         .slice(-8)
         .toUpperCase()} has been rejected. Reason: ${
         updatedOrder.rejectionReason
-      }. Your payment refund has been initiated.`
+      }. ${refundSucceeded
+        ? "Your payment has been refunded."
+        : "The refund could not be completed automatically; support will follow up."}`
     : `Order #${String(updatedOrder._id)
         .slice(-8)
         .toUpperCase()} is now ${status}.`,

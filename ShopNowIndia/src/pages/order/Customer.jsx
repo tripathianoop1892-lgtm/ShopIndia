@@ -123,7 +123,7 @@ const CustomerOrders = () => {
                           <strong>{item.name}</strong> (x{item.quantity}) @ ₹{Number(item.price || 0).toLocaleString('en-IN')}/unit
                           
                           {/* CONDITIONAL REVIEW BUTTON */}
-                          {o.status === "Approved" && (
+                          {o.status === "Delivered" && (
                             <button 
                               onClick={() => setReviewModal({ isOpen: true, medicineId: item.medicineId, name: item.name })}
                               style={{

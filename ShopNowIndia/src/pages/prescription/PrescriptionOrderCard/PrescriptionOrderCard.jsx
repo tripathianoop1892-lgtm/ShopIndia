@@ -12,10 +12,6 @@ const PrescriptionOrderCard = ({
 }) => {
   const [quantities, setQuantities] = useState({});
 
-  if (!prescriptionOrder.length) {
-    return null;
-  }
-
   const selectedItems = prescriptionOrder.filter(
     (item) =>
       item.available &&
@@ -56,6 +52,8 @@ const PrescriptionOrderCard = ({
       return total + price * quantity;
     }, 0);
   }, [selectedItems, quantities]);
+
+  if (!prescriptionOrder.length) return null;
 
   // ==============================
   // CHECKOUT / ORDER SUMMARY MODE

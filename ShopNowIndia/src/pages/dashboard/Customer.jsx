@@ -23,6 +23,8 @@ const Customer = () => {
   useEffect(() => {
     fetchMarketplaceStock();
     fetchCurrentBasket();
+    // These loaders deliberately run only when the dashboard mounts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const fetchMarketplaceStock = async () => {

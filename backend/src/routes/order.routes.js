@@ -2,6 +2,7 @@ import express from "express";
 import {
   createOrder,
   getOrders,
+  updateOrderStatus,
 } from "../controllers/order.controller.js";
 
 import { checkAuth, checkRole } from "../middlewares/auth.middleware.js";
@@ -24,4 +25,6 @@ router.get(
 );
 
 // 🔄 UPDATE STATUS (ONLY DISTRIBUTOR)
+router.put("/:id", checkAuth, checkRole("shopkeeper", "distributor"), updateOrderStatus);
+
 export default router;

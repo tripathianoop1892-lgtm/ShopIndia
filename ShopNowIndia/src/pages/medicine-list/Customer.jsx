@@ -14,6 +14,8 @@ const CustomerMedicineList = () => {
   useEffect(() => {
     fetchCustomerSpecificMedicines();
     fetchCurrentBasket();
+    // Load this account's catalogue and basket once when this route mounts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fetchCustomerSpecificMedicines = async () => {
     try {

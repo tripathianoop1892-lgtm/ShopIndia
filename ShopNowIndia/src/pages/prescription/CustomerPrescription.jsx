@@ -8,7 +8,6 @@ import {
   readPrescription as readPrescriptionAPI,
   deletePrescription,
   MedicinesList,
-  addToCart,
 } from "../../services/api";
 
 const CustomerPrescription = () => {
