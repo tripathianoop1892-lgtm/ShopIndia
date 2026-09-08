@@ -1,0 +1,168 @@
+.prescription-order-card {
+  margin-top: 20px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dfe5ec;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.prescription-order-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 12px;
+}
+
+.prescription-order-header h3 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: #172033;
+}
+
+.prescription-order-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #667085;
+}
+
+.prescription-order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prescription-order-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.prescription-order-info {
+  flex: 1;
+}
+
+.prescription-order-info h4 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  color: #172033;
+}
+
+.prescription-medicine-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 18px;
+  font-size: 13px;
+  color: #475467;
+}
+
+.prescription-medicine-details span {
+  line-height: 1.5;
+}
+
+.prescription-order-available {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.prescription-order-available strong {
+  font-size: 16px;
+}
+
+.prescription-order-unavailable {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.prescription-order-select {
+  min-width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prescription-order-select label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.prescription-order-select input {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.prescription-order-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.prescription-order-bottom strong {
+  font-size: 14px;
+  color: #344054;
+}
+
+.prescription-order-bottom button {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  background: #e50914;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.prescription-order-bottom button:hover {
+  opacity: 0.9;
+}
+
+.prescription-order-bottom button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .prescription-order-card {
+    padding: 14px;
+  }
+
+  .prescription-order-item {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .prescription-medicine-details {
+    grid-template-columns: 1fr;
+  }
+
+  .prescription-order-select {
+    justify-content: flex-start;
+  }
+
+  .prescription-order-bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .prescription-order-bottom button {
+    width: 100%;
+  }
+}

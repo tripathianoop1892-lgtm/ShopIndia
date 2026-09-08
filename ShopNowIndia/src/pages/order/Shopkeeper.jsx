@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
-import { getOrders, submitReview } from "../../services/api";
+import { getOrders, submitReview, updateOrder } from "../../services/api";
 import { shortId, formatDate, statusColor } from "../../utils/helpers";
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,13 @@ import { useNavigate } from "react-router-dom";
 const ShopkeeperOrder = () => {
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("b2c-retail"); // 'b2c-retail' or 'b2b-procure'
+  const [actionLoading, setActionLoading] = useState(false);
+const [rejectModal, setRejectModal] = useState({
+  isOpen: false,
+  orderId: null,
+});
+const [rejectionReason, setRejectionReason] = useState("");
+const [customRejectionReason, setCustomRejectionReason] = useState("");
 
   // --- Review State ---
   const [reviewModal, setReviewModal] = useState({ isOpen: false, targetId: null, targetName: "" });
@@ -51,28 +58,71 @@ const ShopkeeperOrder = () => {
     }
   };
 
-  /* Removed: payment is the order commitment; sellers do not approve or reject paid orders.
-  // Dynamic execution action pipeline for B2C Retail Orders
-  const updateStatus = async (id, status) => {
-    try {
-      setActionLoading(true);
-      const res = await updateOrder(id, status);
+  // --- B2C ORDER STATUS UPDATE ---
+const updateStatus = async (id, status, reason = "") => {
+  try {
+    setActionLoading(true);
 
-      if (res.success) {
-        alert(`Retail Order successfully marked as ${status}`);
-        fetchHistory(); // Refresh table state context
-      } else {
-        alert(res.message || "Failed to update retail order status");
-      }
-    } catch (err) {
-      console.error("Pipeline status switch exception:", err);
-      alert("Network exception updating order parameter.");
-    } finally {
-      setActionLoading(false);
+    const res = await updateOrder(id, status, reason);
+
+    if (res.success) {
+      alert(
+        status === "Approved"
+          ? "Order approved successfully."
+          : "Order rejected successfully. Refund process initiated."
+      );
+
+      const filter =
+        activeTab === "b2b-procure"
+          ? "b2b-purchases"
+          : "b2c-retail";
+
+      const data = await getOrders(filter);
+      setOrders(Array.isArray(data) ? data : []);
+
+      setRejectModal({
+        isOpen: false,
+        orderId: null,
+      });
+
+      setRejectionReason("");
+      setCustomRejectionReason("");
+    } else {
+      alert(res.message || "Failed to update order.");
     }
-  };
-  */
+  } catch (error) {
+    console.error("Order status update error:", error);
+    alert("Network exception while updating order.");
+  } finally {
+    setActionLoading(false);
+  }
+};
 
+// --- REJECT ORDER ---
+const handleRejectSubmit = async (e) => {
+  e.preventDefault();
+
+  const finalReason =
+    rejectionReason === "Other"
+      ? customRejectionReason.trim()
+      : rejectionReason;
+
+  if (!finalReason) {
+    alert("Please select or enter a rejection reason.");
+    return;
+  }
+
+  if (finalReason.length > 500) {
+    alert("Rejection reason cannot exceed 500 characters.");
+    return;
+  }
+
+  await updateStatus(
+    rejectModal.orderId,
+    "Rejected",
+    finalReason
+  );
+};
   return (
     <div className="bigdiv" style={{ padding: "20px" }}>
       <h2>📋 Order Management Ledger</h2>
@@ -98,25 +148,26 @@ const ShopkeeperOrder = () => {
           <thead>
             <tr style={{ background: "#f8fafc", height: "45px" }}>
               <th>Order ID</th>
-              <th>{activeTab === "b2b-procure" ? "Wholesaler Distributor" : "Customer Client Name"}</th>
+              <th> {activeTab === "b2b-procure"? "Wholesaler Distributor": "Customer Client Name"}</th>
               <th>Items Detail Count</th>
               <th>Invoice Sum</th>
               <th>Status</th>
+              <th>Action</th>
               <th>Date Timestamp</th>
               <th>Payment</th>
-            </tr>
-          </thead>
-          <tbody>
+                    </tr>
+               </thead>
+               <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ padding: "20px", color: "#94a3b8" }}>
+                <td colSpan="8" style={{ padding: "20px", color: "#94a3b8" }}>
                   No execution ledger found matching parameter parameters.
                 </td>
               </tr>
             ) : (
               orders.map(o => (
-                <tr key={o._id} style={{ borderBottom: "1px solid #eee", height: "50px" }}>
-                  <td>#{shortId(o._id)}</td>
+                <tr key={o._id} style={{ borderBottom: "1px solid #eee", height: "50px" }}> 
+                  <td>#{shortId(o._id)}</td> 
                   
                   {/* Distributor / Customer Name Column */}
                   <td>
@@ -139,17 +190,73 @@ const ShopkeeperOrder = () => {
                     ))}
                   </td>
                   <td style={{ fontWeight: "bold", color: "#16a34a" }}>₹{Number(o.totalAmount || o.price || 0).toLocaleString('en-IN')}</td>
-                  <td style={{ color: statusColor(o.status), fontWeight: "bold" }}>{o.status}</td>
-                  <td>{formatDate(o.createdAt)}</td>
-                  <td><button onClick={() => navigate(`/shopkeeper/payments/${o._id}${activeTab === "b2b-procure" ? "?view=b2b-purchases" : ""}`)} style={{ border: "none", borderRadius: "4px", padding: "6px 10px", background: "#2563eb", color: "white", cursor: "pointer", fontSize: "12px" }}>View Details</button></td>
+                <td style={{ color: statusColor(o.status), fontWeight: "bold" }}>
+  {o.status}
+</td>
 
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+<td>
+  {activeTab === "b2c-retail" &&
+  (o.status === "Paid" || o.status === "Pending") ? (
+    <div className="order-action-buttons">
+      <button
+        className="approve-order-btn"
+        disabled={actionLoading}
+        onClick={() => updateStatus(o._id, "Approved")}
+      >
+        ✓ Approve
+      </button>
 
+      <button
+        className="reject-order-btn"
+        disabled={actionLoading}
+        onClick={() =>
+          setRejectModal({
+            isOpen: true,
+            orderId: o._id,
+          })
+        }
+      >
+        ✕ Reject
+      </button>
+    </div>
+  ) : (
+    <span className="no-order-action">—</span>
+  )}
+</td>
+
+<td>{formatDate(o.createdAt)}</td>
+
+<td>
+  <button
+    onClick={() =>
+
+      navigate(
+        `/shopkeeper/payments/${o._id}${
+          activeTab === "b2b-procure" ? "?view=b2b-purchases" : ""
+        }`
+      )
+    }
+    style={{
+      border: "none",
+      borderRadius: "4px",
+      padding: "6px 10px",
+      background: "#2563eb",
+      color: "white",
+      cursor: "pointer",
+      fontSize: "12px",
+    }}
+  >
+    View Details
+  </button>
+</td>
+</tr>
+))
+)}
+
+</tbody>
+</table>
+</div>
+  
       {/* --- REVIEW MODAL OVERLAY --- */}
       {reviewModal.isOpen && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999 }}>
@@ -181,11 +288,107 @@ const ShopkeeperOrder = () => {
               <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "12px" }}>
                 <button type="button" onClick={() => setReviewModal({isOpen: false, targetId: null, targetName: ""})} style={{ padding: "10px 20px", cursor: "pointer", background: "#f1f5f9", border: "none", borderRadius: "6px", fontWeight: "600" }}>Cancel</button>
                 <button type="submit" style={{ padding: "10px 20px", background: "#2563eb", color: "white", border: "none", cursor: "pointer", borderRadius: "6px", fontWeight: "600" }}>Submit Review</button>
+
               </div>
             </form>
           </div>
         </div>
       )}
+      {/* --- REJECT ORDER MODAL --- */}
+{rejectModal.isOpen && (
+  <div className="reject-modal-overlay">
+    <div className="reject-modal">
+      <h3>Reject Customer Order</h3>
+
+      <p>
+        Please select the reason for rejecting this order.
+      </p>
+
+      <form onSubmit={handleRejectSubmit}>
+        <label>
+          Rejection Reason
+        </label>
+
+        <select
+          value={rejectionReason}
+          onChange={(e) => {
+            setRejectionReason(e.target.value);
+            setCustomRejectionReason("");
+          }}
+          required
+        >
+          <option value="">
+            Select rejection reason
+          </option>
+
+          <option value="Prescription में लिखी medicine उपलब्ध नहीं है।">
+            Prescription medicine is not available.
+          </option>
+
+          <option value="Original prescription और ordered medicine में अंतर है।">
+            Ordered medicine does not match prescription.
+          </option>
+
+          <option value="Prescription की writing स्पष्ट नहीं है।">
+            Prescription writing is unclear.
+          </option>
+
+          <option value="Prescription की validity को लेकर समस्या है।">
+            Prescription validity issue.
+          </option>
+
+          <option value="Doctor की prescription में यह medicine नहीं लिखी गई है।">
+            Medicine is not written on doctor's prescription.
+          </option>
+
+          <option value="Other">
+            Other
+          </option>
+        </select>
+
+        {rejectionReason === "Other" && (
+          <textarea
+            rows="4"
+            maxLength="500"
+            placeholder="Enter rejection reason..."
+            value={customRejectionReason}
+            onChange={(e) =>
+              setCustomRejectionReason(e.target.value)
+            }
+            required
+          />
+        )}
+
+        <div className="reject-modal-actions">
+          <button
+            type="button"
+            className="cancel-reject-btn"
+            disabled={actionLoading}
+            onClick={() => {
+              setRejectModal({
+                isOpen: false,
+                orderId: null,
+              });
+
+              setRejectionReason("");
+              setCustomRejectionReason("");
+            }}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            className="confirm-reject-btn"
+            disabled={actionLoading}
+          >
+            {actionLoading ? "Processing..." : "Confirm Reject"}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import coupons from "../models/coupons.js";
 import CouponUsage from "../models/couponUsage.js";
 import { notifyUser } from "../services/notification.service.js";
 import PaymentIntent from "../models/paymentIntent.js";
+import { refundPayment } from "./payment.controller.js";
 import PlatformSettings from "../models/platformSettings.js";
 
 // =======================
@@ -722,7 +723,7 @@ export const updateOrderStatus = async (
     await mongoose.startSession();
 
   try {
-    const { status } = req.body;
+    const { status, rejectionReason } = req.body;
     const user = req.user;
 
     // ==========================================
@@ -749,7 +750,29 @@ export const updateOrderStatus = async (
         message: "Invalid order status ❌",
       });
     }
+     
+    // ==========================================
+// REJECTION REASON VALIDATION
+// ==========================================
 
+if (status === "Rejected") {
+  if (
+    typeof rejectionReason !== "string" ||
+    !rejectionReason.trim()
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Rejection reason is required ❌",
+    });
+  }
+
+  if (rejectionReason.trim().length > 500) {
+    return res.status(400).json({
+      success: false,
+      message: "Rejection reason must be 500 characters or less ❌",
+    });
+  }
+}
     // ==========================================
     // 2. START TRANSACTION
     // ==========================================
@@ -815,21 +838,21 @@ export const updateOrderStatus = async (
           throw error;
         }
 
-        // Pending → only Approved / Rejected
-        if (
-          currentOrder.status ===
-            "Pending" &&
-          status !== "Approved" &&
-          status !== "Rejected"
-        ) {
-          const error = new Error(
-            "Pending order can only be Approved or Rejected ❌"
-          );
+        // Pending / Paid → only Approved / Rejected
+if (
+  (currentOrder.status === "Pending" ||
+    currentOrder.status === "Paid") &&
+  status !== "Approved" &&
+  status !== "Rejected"
+) {
+  const error = new Error(
+    "This order can only be Approved or Rejected ❌"
+  );
 
-          error.statusCode = 400;
+  error.statusCode = 400;
 
-          throw error;
-        }
+  throw error;
+}
 
         // ==========================================
         // 5. ROLE + OWNERSHIP SECURITY
@@ -913,11 +936,11 @@ export const updateOrderStatus = async (
         // 6. REJECT ORDER
         // ==========================================
 
-        if (
-          status === "Rejected" &&
-          currentOrder.status ===
-            "Pending"
-        ) {
+      if (
+  status === "Rejected" &&
+  (currentOrder.status === "Pending" ||
+    currentOrder.status === "Paid")
+) {
           // Stock was reduced at order creation.
           // Restore it on rejection.
 
@@ -951,7 +974,7 @@ export const updateOrderStatus = async (
             }
           }
         }
-
+        
         // ==========================================
         // 7. APPROVE B2B ORDER
         // Distributor → Shopkeeper
@@ -1182,14 +1205,39 @@ export const updateOrderStatus = async (
 
         currentOrder.status = status;
 
-        await currentOrder.save({
-          session,
-        });
+if (status === "Rejected") {
+  currentOrder.rejectionReason = rejectionReason.trim();
+} else {
+  currentOrder.rejectionReason = "";
+}
+
+await currentOrder.save({
+  session,
+});
 
         updatedOrder =
           currentOrder;
       }
     );
+
+   // Refund customer after rejection
+if (status === "Rejected") {
+  try {
+    const refundResult = await refundPayment(
+      updatedOrder.paymentId
+    );
+
+    console.log(
+      `REFUND SUCCESS: Order ${updatedOrder._id} refunded successfully.`,
+      refundResult
+    );
+  } catch (refundError) {
+    console.error(
+      `REFUND FAILED: Order ${updatedOrder._id}:`,
+      refundError
+    );
+  }
+}
 
     // ==========================================
     // 9. STATUS CHANGE NOTIFICATION
@@ -1207,11 +1255,16 @@ export const updateOrderStatus = async (
           title:
             "Order status updated",
 
-          message: `Order #${String(
-            updatedOrder._id
-          )
-            .slice(-8)
-            .toUpperCase()} is now ${status}.`,
+         message:
+  status === "Rejected"
+    ? `Order #${String(updatedOrder._id)
+        .slice(-8)
+        .toUpperCase()} has been rejected. Reason: ${
+        updatedOrder.rejectionReason
+      }. Your payment refund has been initiated.`
+    : `Order #${String(updatedOrder._id)
+        .slice(-8)
+        .toUpperCase()} is now ${status}.`,
         });
       } catch (notificationError) {
         console.error(

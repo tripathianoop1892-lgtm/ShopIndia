@@ -1,155 +1,264 @@
-/* ===== MAIN CONTENT ===== */
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
 
 .main-content {
-
   margin-left: 50px;
-
   min-height: 100vh;
-
   padding: 30px;
-
   background: #f4f7fb;
-
   box-sizing: border-box;
-
   overflow-x: hidden;
 }
 
-/* ===== FORM CONTAINER ===== */
+
+/* =========================================================
+   FORM CONTAINER
+========================================================= */
 
 .modern-form-container {
-
   width: 100%;
-
   max-width: 1200px;
-
-  margin: auto;
-
+  margin: 0 auto;
   background: #ffffff;
-
   border-radius: 20px;
-
   padding: 35px;
-
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-
   box-sizing: border-box;
 }
 
-/* ===== HEADER ===== */
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .form-header {
-
   margin-bottom: 30px;
 }
 
 .form-header h1 {
-
+  margin: 0 0 10px;
   font-size: 42px;
-
+  line-height: 1.2;
   font-weight: 700;
-
   color: #0f172a;
-
-  margin-bottom: 10px;
 }
 
 .form-header p {
-
+  margin: 0;
   color: #64748b;
-
   font-size: 16px;
+  line-height: 1.5;
 }
 
-/* ===== GRID ===== */
+
+/* =========================================================
+   FORM GRID
+========================================================= */
 
 .modern-form-grid {
-
   display: grid;
-
   grid-template-columns: repeat(
     auto-fit,
     minmax(280px, 1fr)
   );
-
   gap: 24px;
+  align-items: start;
 }
 
-/* ===== GROUP ===== */
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
 
 .form-group {
-
+  min-width: 0;
   display: flex;
-
   flex-direction: column;
 }
 
-/* ===== LABEL ===== */
 
-.form-group label {
+/* =========================================================
+   LABEL
+========================================================= */
 
+.form-group > label:first-child {
   margin-bottom: 8px;
-
   font-size: 15px;
-
   font-weight: 600;
-
   color: #1e293b;
 }
 
-/* ===== INPUT ===== */
 
-.form-group input,
+/* =========================================================
+   INPUT + SELECT
+========================================================= */
+
+.form-group input:not([type="checkbox"]),
 .form-group select {
-
   width: 100%;
-
-  padding: 15px;
+  min-height: 50px;
+  padding: 14px 15px;
 
   border-radius: 14px;
-
   border: 1.5px solid #dbe3ec;
 
   outline: none;
 
   font-size: 15px;
+  font-family: inherit;
+
+  color: #1e293b;
+  background: #ffffff;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.form-group input::placeholder {
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.form-group select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.form-group input:not([type="checkbox"]):focus,
+.form-group select:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   READ ONLY - RETAIL SELLING PRICE
+========================================================= */
+
+.form-group input[readonly] {
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DATE INPUT
+========================================================= */
+
+.form-group input[type="date"] {
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   NUMBER INPUT
+========================================================= */
+
+.form-group input[type="number"] {
+  appearance: textfield;
+}
+
+.form-group input[type="number"]::-webkit-inner-spin-button,
+.form-group input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   CHECKBOX / INDIVIDUAL SALE
+========================================================= */
+
+.form-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+
+  margin: 0;
+
+  accent-color: #2563eb;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+
+/* checkbox ke andar wala label */
+.form-group label:has(input[type="checkbox"]) {
+  margin: 0;
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 15px;
+
+  border: 1.5px solid #dbe3ec;
+  border-radius: 14px;
 
   background: #ffffff;
 
-  transition: 0.3s ease;
+  color: #1e293b;
+
+  cursor: pointer;
 
   box-sizing: border-box;
 }
 
-/* ===== FOCUS ===== */
 
-.form-group input:focus,
-.form-group select:focus {
+/* =========================================================
+   SMALL HELP TEXT
+========================================================= */
 
-  border-color: #2563eb;
-
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+.form-group small {
+  font-size: 13px;
+  line-height: 1.4;
 }
 
-/* ===== BUTTON AREA ===== */
+
+/* =========================================================
+   BUTTON AREA
+========================================================= */
 
 .form-button {
-
   grid-column: 1 / -1;
-
   margin-top: 10px;
 }
 
-/* ===== BUTTON ===== */
+
+/* =========================================================
+   BUTTON
+========================================================= */
 
 .form-button button {
-
   width: 100%;
 
+  min-height: 54px;
   padding: 16px;
 
   border: none;
-
   border-radius: 14px;
 
   background: linear-gradient(
@@ -158,68 +267,151 @@
     #1d4ed8
   );
 
-  color: white;
+  color: #ffffff;
 
   font-size: 17px;
-
   font-weight: 600;
+  font-family: inherit;
 
   cursor: pointer;
 
-  transition: 0.3s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
 }
 
-/* ===== HOVER ===== */
+
+/* =========================================================
+   BUTTON HOVER
+========================================================= */
 
 .form-button button:hover {
-
   transform: translateY(-2px);
 
-  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.25);
+  box-shadow:
+    0 10px 22px rgba(37, 99, 235, 0.25);
 }
 
-/* ===== RESPONSIVE ===== */
+
+/* =========================================================
+   BUTTON ACTIVE
+========================================================= */
+
+.form-button button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
 
 @media (max-width: 992px) {
 
   .main-content {
-
     margin-left: 0;
-
     padding: 20px;
   }
 
   .modern-form-container {
-
+    max-width: 100%;
     padding: 25px;
+    border-radius: 18px;
   }
 
   .form-header h1 {
-
     font-size: 32px;
+  }
+
+  .modern-form-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+    gap: 20px;
   }
 }
 
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
 @media (max-width: 600px) {
 
-  .modern-form-grid {
-
-    grid-template-columns: 1fr;
+  .main-content {
+    padding: 12px;
   }
 
   .modern-form-container {
-
     padding: 18px;
+    border-radius: 16px;
   }
 
-  .form-group input,
-  .form-group select {
+  .form-header {
+    margin-bottom: 22px;
+  }
 
+  .form-header h1 {
+    font-size: 27px;
+  }
+
+  .form-header p {
+    font-size: 14px;
+  }
+
+  .modern-form-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .form-group input:not([type="checkbox"]),
+  .form-group select {
+    min-height: 48px;
     padding: 13px;
+    font-size: 14px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-button {
+    margin-top: 5px;
   }
 
   .form-button button {
-
+    min-height: 50px;
     padding: 14px;
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .main-content {
+    padding: 8px;
+  }
+
+  .modern-form-container {
+    padding: 14px;
+  }
+
+  .form-header h1 {
+    font-size: 24px;
+  }
+
+  .form-header p {
+    font-size: 13px;
+  }
+
+  .modern-form-grid {
+    gap: 15px;
   }
 }

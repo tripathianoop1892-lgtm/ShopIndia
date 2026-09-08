@@ -1,3 +1,4 @@
+import "dotenv/config";
 import dns from "dns";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -5,7 +6,7 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
+
 import cartRoutes from "./src/routes/cart.routes.js";
 // ROUTES
 import authRoutes from "./src/routes/auth.routes.js";
@@ -25,7 +26,7 @@ import paymentRoutes from "./src/routes/payment.routes.js";
 // CONFIG
 import connectDB from "./src/config/db.js";
 
-dotenv.config();
+
 
 const app = express();
 

@@ -31,11 +31,11 @@ router.post(
 
 // ======================================================
 // Customer Prescription List
-// GET /api/prescriptions/customer
+// GET /api/prescriptions/customer/:customerId
 // ======================================================
 
 router.get(
-  "/customer",
+  "/customer/:customerId",
   checkAuth,
   getCustomerPrescriptions
 );

@@ -114,6 +114,12 @@ const orderSchema = new mongoose.Schema(
       enum: ["Pending", "Paid", "Approved", "Rejected", "Delivered"],
       default: "Pending",
     },
+    rejectionReason: {
+  type: String,
+  default: "",
+  trim: true,
+  maxlength: 500,
+},
   },
   {
     timestamps: true,

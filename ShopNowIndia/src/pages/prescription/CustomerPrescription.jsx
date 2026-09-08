@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./CustomerPrescription.css";
+import PrescriptionOrderCard from "./PrescriptionOrderCard/PrescriptionOrderCard";
 import {
   getCustomerPrescriptions,
   getPrescriptionFile,
   uploadPrescription,
-  readPrescription,
+  readPrescription as readPrescriptionAPI,
+  deletePrescription,
+  MedicinesList,
+  addToCart,
 } from "../../services/api";
 
 const CustomerPrescription = () => {
@@ -17,6 +21,10 @@ const CustomerPrescription = () => {
   // Read Prescription modal
   const [readPrescription, setReadPrescription] = useState(null);
   const [reading, setReading] = useState(false);
+  const [prescriptionOrder, setPrescriptionOrder] = useState(null);
+  const [readPrescriptionCache, setReadPrescriptionCache] = useState({});
+  const [selectedPrescriptionMedicines, setSelectedPrescriptionMedicines] = useState([]);
+  const [prescriptionCheckoutMode, setPrescriptionCheckoutMode] = useState(false);
 
   const loadPrescriptions = async () => {
     try {
@@ -164,11 +172,64 @@ const CustomerPrescription = () => {
   };
 
   // =========================
+// DELETE PRESCRIPTION
+// =========================
+const handleDeletePrescription = async (id) => {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this prescription?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const response = await deletePrescription(id);
+
+    if (!response?.success) {
+      throw new Error(
+        response?.message || "Unable to delete prescription."
+      );
+    }
+
+    alert("Prescription deleted successfully.");
+
+    await loadPrescriptions();
+  } catch (error) {
+    console.error("Delete prescription error:", error);
+
+    alert(
+      error?.message ||
+        "Unable to delete prescription. Please try again."
+    );
+  }
+};
+  // =========================
 // READ PRESCRIPTION
 // =========================
 const handleReadPrescription = async (prescription) => {
   try {
     setReading(true);
+   const cached = readPrescriptionCache[prescription._id];
+
+const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+if (cached && Date.now() - cached.cachedAt < CACHE_DURATION) {
+  setReadPrescription({
+    ...prescription,
+    extracted: cached.extracted,
+    readError: null,
+  });
+
+  setReading(false);
+  return;
+}
+
+if (cached) {
+  setReadPrescriptionCache((prev) => {
+    const updated = { ...prev };
+    delete updated[prescription._id];
+    return updated;
+  });
+}
 
     // Open reader modal immediately
     setReadPrescription({
@@ -178,14 +239,22 @@ const handleReadPrescription = async (prescription) => {
     });
 
     // Actual backend OCR / AI API
-    const response = await readPrescription(prescription._id);
+    const response = await readPrescriptionAPI(prescription._id);
 
     if (!response?.success) {
       throw new Error(
         response?.message || "Unable to read prescription."
       );
     }
-
+    
+    const extractedData = response.extracted || response.data || null;
+setReadPrescriptionCache((prev) => ({
+  ...prev,
+  [prescription._id]: {
+    extracted: extractedData,
+    cachedAt: Date.now(),
+  },
+}));
     setReadPrescription((prev) => ({
       ...prev,
       extracted: response.extracted || response.data || null,
@@ -213,7 +282,142 @@ const handleReadPrescription = async (prescription) => {
     setReadPrescription(null);
   };
 
-  // =========================
+    // =========================
+// ORDER MEDICINES FROM PRESCRIPTION
+// =========================
+const handleOrderMedicines = async () => {
+  try {
+    const extractedMedicines =
+      readPrescription?.extracted?.medicines;
+
+    if (!extractedMedicines?.length) {
+      alert("Prescription में कोई medicine detect नहीं हुई.");
+      return;
+    }
+
+    // Customer ke current shop ka medicine catalog
+   const catalog = await MedicinesList();
+
+const customerMedicines = Array.isArray(catalog)
+  ? catalog
+  : Array.isArray(catalog?.medicines)
+  ? catalog.medicines
+  : Array.isArray(catalog?.data)
+  ? catalog.data
+  : Array.isArray(catalog?.data?.medicines)
+  ? catalog.data.medicines
+  : [];
+
+      if (!customerMedicines.length) {
+      alert("Customer dashboard में कोई medicine उपलब्ध नहीं है.");
+      return;
+    }
+
+    const orderMedicines = extractedMedicines.map(
+      (prescriptionMedicine) => {
+        const prescriptionName = String(
+          prescriptionMedicine?.name || ""
+        )
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "");
+
+        const prescriptionStrength = String(
+          prescriptionMedicine?.strength || ""
+        )
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "");
+
+        const prescriptionForm = String(
+          prescriptionMedicine?.dosageForm || ""
+        )
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "");
+
+        const matchedMedicine = customerMedicines.find(
+          (medicine) => {
+            const medicineName = String(
+              medicine?.name || ""
+            )
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "");
+
+            const medicineStrength = String(
+              medicine?.strength || ""
+            )
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "");
+
+            const medicineType = String(
+              medicine?.type || ""
+            )
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "");
+
+            const nameMatch =
+              medicineName === prescriptionName;
+
+            const strengthMatch =
+              !prescriptionStrength ||
+              !medicineStrength ||
+              medicineStrength === prescriptionStrength;
+
+            const formMatch =
+              !prescriptionForm ||
+              !medicineType ||
+              medicineType === prescriptionForm;
+
+            return (
+              nameMatch &&
+              strengthMatch &&
+              formMatch
+            );
+          }
+        );
+
+        return {
+          prescriptionMedicine,
+          matchedMedicine: matchedMedicine || null,
+          available: Boolean(matchedMedicine),
+        };
+      }
+    );
+
+    setPrescriptionOrder(orderMedicines);
+
+    // Available medicines ko automatically select karna
+    const availableMedicineIds = orderMedicines
+      .filter(
+        (item) =>
+          item.available &&
+          item.matchedMedicine?._id
+      )
+      .map(
+        (item) => item.matchedMedicine._id
+      );
+
+    setSelectedPrescriptionMedicines(
+      availableMedicineIds
+    );
+  } catch (error) {
+    console.error(
+      "Order medicines error:",
+      error
+    );
+
+    alert(
+      error?.message ||
+        "Prescription medicines check नहीं हो सकीं."
+    );
+  }
+};  
+const togglePrescriptionMedicine = (medicineId) => {
+  setSelectedPrescriptionMedicines((prev) =>
+    prev.includes(medicineId)
+      ? prev.filter((id) => id !== medicineId)
+      : [...prev, medicineId]
+  );
+};
+    // =========================
   // REMOVE SELECTED FILE
   // =========================
   const removeSelectedFile = () => {
@@ -387,16 +591,16 @@ const handleReadPrescription = async (prescription) => {
 
                     <div className="prescription-actions">
 
-                      {/* VIEW ORIGINAL */}
-                      <button
-                        type="button"
-                        className="prescription-file-button"
-                        onClick={() =>
-                          openPrescription(prescription._id)
-                        }
-                      >
-                        👁 View Prescription
-                      </button>
+                      {/* DELETE PRESCRIPTION */}
+               <button
+              type="button"
+              className="prescription-delete-button"
+              onClick={() =>
+             handleDeletePrescription(prescription._id)
+                 }
+               >
+             🗑 Delete Prescription
+             </button>
 
                       {/* READ PRESCRIPTION */}
                       <button
@@ -627,24 +831,53 @@ const handleReadPrescription = async (prescription) => {
               </div>
 
             )}
-
+            
+         {prescriptionOrder && (
+  <PrescriptionOrderCard
+    prescriptionOrder={prescriptionOrder}
+    selectedPrescriptionMedicines={
+      selectedPrescriptionMedicines
+    }
+    onToggleMedicine={
+      togglePrescriptionMedicine
+    }
+    onContinue={() => {
+      setPrescriptionCheckoutMode(true);
+    }}
+    checkoutMode={prescriptionCheckoutMode}
+    onBackToMedicines={() => {
+      setPrescriptionCheckoutMode(false);
+    }}
+    onProceedToAddress={() => {
+      alert("Address step next.");
+    }}
+  />
+)}
             <div className="prescription-read-footer">
 
-              <button
-                type="button"
-                onClick={() =>
-                  openPrescription(readPrescription._id)
-                }
-              >
-                👁 View Original
-              </button>
+  <button
+  type="button"
+  onClick={handleOrderMedicines}
+>
+  🛒 Order Medicines
+</button>
 
-              <button
-                type="button"
-                onClick={closeReadPrescription}
-              >
-                Close
-              </button>
+  <button
+    type="button"
+    onClick={() =>
+      openPrescription(readPrescription._id)
+    }
+  >
+    👁 View Original
+  </button>
+
+  <button
+    type="button"
+    onClick={closeReadPrescription}
+  >
+    Close
+  </button>
+
 
             </div>
 

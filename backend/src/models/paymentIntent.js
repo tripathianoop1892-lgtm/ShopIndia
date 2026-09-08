@@ -7,6 +7,21 @@ const paymentIntentSchema = new mongoose.Schema({
   currency: { type: String, default: "INR" },
   status: { type: String, enum: ["created", "paid", "consumed"], default: "created" },
   razorpayPaymentId: { type: String, default: "" },
+  refundStatus: {
+  type: String,
+  enum: ["none", "pending", "processed", "failed"],
+  default: "none",
+},
+
+refundId: {
+  type: String,
+  default: "",
+},
+
+refundedAt: {
+  type: Date,
+  default: null,
+},
 }, { timestamps: true });
 
 export default mongoose.model("PaymentIntent", paymentIntentSchema);

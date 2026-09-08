@@ -403,7 +403,7 @@
   padding: 20px;
   box-sizing: border-box;
 
-  background: rgba(16, 24, 40, 0.68);
+  background: rgba(16, 24, 40, 0.35);
 
   display: flex;
   align-items: center;
@@ -818,26 +818,36 @@
 
 .prescription-read-footer button {
   border: none;
-
   padding: 10px 17px;
-
   border-radius: 9px;
-
   cursor: pointer;
-
   font-size: 13px;
   font-weight: 700;
+  transition: all 0.2s ease;
 }
 
+/* Order Medicines */
 .prescription-read-footer button:first-child {
+  background: #f4b400;
+  color: #ffffff;
+}
+
+.prescription-read-footer button:first-child:hover {
+  background: #d99f00;
+  transform: translateY(-1px);
+}
+
+/* View Original */
+.prescription-read-footer button:nth-child(2) {
   background: #eef5ff;
   color: #1769aa;
 }
 
-.prescription-read-footer button:first-child:hover {
+.prescription-read-footer button:nth-child(2):hover {
   background: #dcecff;
 }
 
+/* Close */
 .prescription-read-footer button:last-child {
   background: #f2f4f7;
   color: #344054;
@@ -846,7 +856,6 @@
 .prescription-read-footer button:last-child:hover {
   background: #e4e7ec;
 }
-
 
 /* =========================================================
    SCROLLBAR - MODAL

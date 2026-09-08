@@ -170,12 +170,17 @@ export const verifyRazorpayPayment = async (data) => {
 };
 
 // 👉 UPDATE ORDER STATUS (For Distributors to Approve/Reject B2B Orders)
-export const updateOrder = async (id, status) => {
+
+export const updateOrder = async (id, status, rejectionReason = "") => {
   const res = await fetch(`${BASE_URL}/orders/${id}`, {
     method: "PUT",
     headers: getHeaders(),
-    body: JSON.stringify({ status }),
+    body: JSON.stringify({
+      status,
+      rejectionReason,
+    }),
   });
+
   return res.json();
 };
 

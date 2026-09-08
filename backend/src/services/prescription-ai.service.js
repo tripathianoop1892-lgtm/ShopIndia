@@ -58,10 +58,10 @@ const prescriptionSchema = {
           },
 
           duration: {
-            type: "string",
-            description:
-              "Duration such as 5 days, 7 days, or 2 weeks.",
-          },
+  type: "string",
+  description:
+    "Extract the exact treatment duration written by the doctor on the prescription, such as 3 days, 5 days, 7 days, 1 week, or 2 weeks. Do not calculate, assume, or guess the duration. If the duration is not clearly written or cannot be read, return 'Not mentioned'.",
+},
 
           instructions: {
             type: "string",
@@ -131,7 +131,7 @@ export const readPrescriptionWithAI = async ({
   });
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+   model: "gemini-3.6-flash",
     contents: [
       {
         role: "user",

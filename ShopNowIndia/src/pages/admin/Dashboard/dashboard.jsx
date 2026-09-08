@@ -1,42 +1,111 @@
 import "./Dashboard.css";
-import Card from "../../../components/Card/Card";
+import { useState, useEffect } from "react";
+
+import {
+  getCustomers,
+  getShopkeeper,
+  getDistributors,
+  getMedicine,
+} from "../../../services/api";
+
 
 const Dashboard = () => {
+    const [stats, setStats] = useState({
+    users: 0,
+    shopkeepers: 0,
+    distributors: 0,
+    medicines: 0,
+  });
+
+  useEffect(() => {
+    const fetchAdminStats = async () => {
+      try {
+        const [
+          usersData,
+          shopkeepersData,
+          distributorsData,
+          medicinesData,
+        ] = await Promise.all([
+          getCustomers(),
+          getShopkeeper(),
+          getDistributors(),
+          getMedicine(),
+        ]);
+
+        const getCount = (data, keys = []) => {
+          if (Array.isArray(data)) {
+            return data.length;
+          }
+
+          if (Array.isArray(data?.data)) {
+            return data.data.length;
+          }
+
+          for (const key of keys) {
+            if (Array.isArray(data?.[key])) {
+              return data[key].length;
+            }
+          }
+
+          return 0;
+        };
+
+        setStats({
+          users: getCount(usersData, ["users"]),
+          shopkeepers: getCount(shopkeepersData, ["shopkeepers"]),
+          distributors: getCount(distributorsData, ["distributors"]),
+          medicines: getCount(medicinesData, ["medicines"]),
+        });
+      } catch (error) {
+        console.error("Admin Dashboard Stats Error:", error);
+      }
+    };
+
+    fetchAdminStats();
+  }, []);
   return (
+
     <div className="dashboard">
 
       <div className="dashboard-title">
         <h1>Dashboard</h1>
         <p>Welcome Back, Admin 👋</p>
       </div>
-
       <div className="dashboard-cards">
 
-        <Card
-          title="Total Users"
-          value="12,540"
-          color="#2563eb"
-        />
+  <div className="admin-stat-card users-card">
+    <div className="admin-stat-icon">👥</div>
+    <div className="admin-stat-info">
+      <p>Total Users</p>
+      <h2>{stats.users.toLocaleString()}</h2>
+    </div>
+  </div>
 
-        <Card
-          title="Shopkeepers"
-          value="2,350"
-          color="#16a34a"
-        />
+  <div className="admin-stat-card shopkeepers-card">
+    <div className="admin-stat-icon">🏪</div>
+    <div className="admin-stat-info">
+      <p>Shopkeepers</p>
+      <h2>{stats.shopkeepers.toLocaleString()}</h2>
+    </div>
+  </div>
 
-        <Card
-          title="Distributors"
-          value="425"
-          color="#f59e0b"
-        />
+  <div className="admin-stat-card distributors-card">
+    <div className="admin-stat-icon">🚚</div>
+    <div className="admin-stat-info">
+      <p>Distributors</p>
+      <h2>{stats.distributors.toLocaleString()}</h2>
+    </div>
+  </div>
 
-        <Card
-          title="Medicines"
-          value="8,950"
-          color="#ef4444"
-        />
+  <div className="admin-stat-card medicines-card">
+    <div className="admin-stat-icon">💊</div>
+    <div className="admin-stat-info">
+      <p>Medicines</p>
+      <h2>{stats.medicines.toLocaleString()}</h2>
+    </div>
+  </div>
 
-      </div>
+</div>
 
       <div className="dashboard-row">
 
