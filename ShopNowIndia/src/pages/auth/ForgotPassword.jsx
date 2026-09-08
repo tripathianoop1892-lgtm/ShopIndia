@@ -1,59 +1,45 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { requestPasswordReset, resetPassword } from "../../services/api";
 import "./ForgotPassword.css";
 
 function ForgotPassword() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  // 🔥 NEW STATE
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!form.email || !form.password || !form.confirmPassword) {
-      alert("All fields required ❌");
-      return;
-    }
-
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match ❌");
-      return;
-    }
-
+  const sendCode = async () => {
+    if (!email.trim()) return setMessage("Enter your email address first.");
+    setLoading(true);
     try {
-      const res = await fetch(
-        "http://localhost:5000/api/auth/forgot-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: form.email,
-            newPassword: form.password,
-          }),
-        }
-      );
+      const response = await requestPasswordReset(email);
+      setMessage(response.message || "Unable to send a reset code.");
+      if (response.success) setCodeSent(true);
+    } catch {
+      setMessage("Unable to contact the server. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      const data = await res.json();
-
-      if (!data.success) {
-        alert(data.message);
-        return;
-      }
-
-      alert("Password Updated Successfully ✅");
-
-      window.location.href = "/login";
-
-    } catch (err) {
-      console.log(err);
-      alert("Server error ❌");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!otp || !password || !confirmPassword) return setMessage("Enter the reset code and your new password.");
+    if (password !== confirmPassword) return setMessage("Passwords do not match.");
+    setLoading(true);
+    try {
+      const response = await resetPassword({ email, otp, newPassword: password });
+      setMessage(response.message || "Unable to reset password.");
+      if (response.success) setTimeout(() => navigate("/login"), 900);
+    } catch {
+      setMessage("Unable to contact the server. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,74 +47,18 @@ function ForgotPassword() {
     <div id="new">
       <form onSubmit={handleSubmit}>
         <h1>Reset Password</h1>
-
+        <p>We will send a six-digit reset code to your registered email.</p>
         <div id="form1">
           <h2>Email</h2>
-          <input
-            type="email"
-            placeholder="Enter Email"
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, email: e.target.value }))
-            }
-          />
+          <input type="email" placeholder="Enter email" value={email} disabled={codeSent || loading} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required />
         </div>
-
-        {/* 🔥 PASSWORD */}
-        <div id="form1" style={{ position: "relative" }}>
-          <h2>New Password</h2>
-
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter Password"
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, password: e.target.value }))
-            }
-          />
-
-          <span
-            onClick={() => setShowPassword(!showPassword)}
-            style={{
-              position: "absolute",
-              right: "10px",
-              top: "35px",
-              cursor: "pointer",
-            }}
-          >
-            {showPassword ? "🙈" : "👁️"}
-          </span>
-        </div>
-
-        {/* 🔥 CONFIRM PASSWORD */}
-        <div id="form1" style={{ position: "relative" }}>
-          <h2>Confirm Password</h2>
-
-          <input
-            type={showConfirm ? "text" : "password"}
-            placeholder="Confirm Password"
-            onChange={(e) =>
-              setForm((prev) => ({
-                ...prev,
-                confirmPassword: e.target.value,
-              }))
-            }
-          />
-
-          <span
-            onClick={() => setShowConfirm(!showConfirm)}
-            style={{
-              position: "absolute",
-              right: "10px",
-              top: "35px",
-              cursor: "pointer",
-            }}
-          >
-            {showConfirm ? "🙈" : "👁️"}
-          </span>
-        </div>
-
-        <div id="submit">
-          <button type="submit">Submit</button>
-        </div>
+        {!codeSent ? <div id="submit"><button type="button" disabled={loading} onClick={sendCode}>{loading ? "Sending..." : "Send reset code"}</button></div> : <>
+          <div id="form1"><h2>Reset code</h2><input type="text" inputMode="numeric" maxLength="6" placeholder="Enter 6-digit code" value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} required /></div>
+          <div id="form1"><h2>New Password</h2><input type="password" placeholder="Minimum 6 characters" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="new-password" required /></div>
+          <div id="form1"><h2>Confirm Password</h2><input type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" required /></div>
+          <div id="submit"><button type="submit" disabled={loading}>{loading ? "Updating..." : "Reset password"}</button></div>
+        </>}
+        {message && <p role="status">{message}</p>}
       </form>
     </div>
   );

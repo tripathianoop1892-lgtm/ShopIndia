@@ -216,6 +216,52 @@ export const forgotPassword = async (req, res) => {
  // =======================
 // 🔍 SEARCH MEDICAL SHOPS
 // =======================
+export const requestPasswordReset = async (req, res) => {
+  try {
+    const email = req.body.email?.trim().toLowerCase();
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) return res.status(400).json({ success: false, message: "Enter a valid email address." });
+
+    const user = await User.findOne({ email });
+    // Keep account existence private while still sending a code for valid users.
+    if (user) {
+      const code = String(crypto.randomInt(100000, 1000000));
+      await OtpVerification.deleteMany({ contact: email, channel: "email", purpose: "password-reset" });
+      await OtpVerification.create({ contact: email, channel: "email", purpose: "password-reset", codeHash: crypto.createHash("sha256").update(code).digest("hex"), expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
+      await sendOtp({ channel: "email", contact: email, code });
+    }
+    return res.json({ success: true, message: "If an account exists for this email, a reset code has been sent." });
+  } catch (error) {
+    console.error("PASSWORD RESET REQUEST ERROR:", error);
+    return res.status(503).json({ success: false, message: "Unable to send a reset code right now." });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const email = req.body.email?.trim().toLowerCase();
+    const { otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) return res.status(400).json({ success: false, message: "Email, reset code, and new password are required." });
+    if (newPassword.length < 6) return res.status(400).json({ success: false, message: "Password must be at least 6 characters." });
+
+    const verification = await OtpVerification.findOne({ contact: email, channel: "email", purpose: "password-reset" }).sort({ createdAt: -1 });
+    const expectedHash = crypto.createHash("sha256").update(String(otp)).digest("hex");
+    if (!verification || verification.expiresAt < new Date() || verification.attempts >= 5 || verification.codeHash !== expectedHash) {
+      if (verification) { verification.attempts += 1; await verification.save(); }
+      return res.status(400).json({ success: false, message: "Invalid or expired reset code." });
+    }
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ success: false, message: "Invalid or expired reset code." });
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+    await OtpVerification.deleteMany({ contact: email, channel: "email", purpose: "password-reset" });
+    return res.json({ success: true, message: "Password updated successfully." });
+  } catch (error) {
+    console.error("PASSWORD RESET ERROR:", error);
+    return res.status(500).json({ success: false, message: "Unable to reset password." });
+  }
+};
+
 export const searchShops = async (req, res) => {
   try {
     const search = req.query.search?.trim();
