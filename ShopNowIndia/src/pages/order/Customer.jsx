@@ -152,6 +152,11 @@ const CustomerOrders = () => {
                       <span className={`badge-status ${["paid", "approved", "delivered"].includes(o.status?.toLowerCase()) ? "settled" : o.status?.toLowerCase() === "pending" ? "pending" : "cancelled"}`}>
                         {o.status}
                       </span>
+                      {o.status === "Rejected" && o.rejectionReason && (
+                        <p style={{ margin: "8px 0 0", color: "#b91c1c", fontSize: "12px", textAlign: "left" }}>
+                          Rejection reason: {o.rejectionReason}
+                        </p>
+                      )}
                     </td>
                     <td style={{ padding: "16px 20px" }}><button type="button" onClick={() => setInvoiceOrder(o)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}><FaReceipt /> Invoice</button></td>
                     <td className="text-right table-bold-amount credit-color" style={{ padding: "16px 20px", textAlign: "right", fontWeight: 700, fontSize: "15px", color: "#16a34a" }}>

@@ -743,17 +743,29 @@
 
   flex-direction: column;
 
-  gap: 9px;
+  gap: 12px;
+
+  width: 100%;
 }
 
 .help-faq-item {
-  border: 1px solid #e4e8ed;
+  border: 1px solid #dfe7e2;
 
-  border-radius: 11px;
+  border-radius: 14px;
 
   overflow: hidden;
 
   background: #ffffff;
+
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.025);
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.help-faq-item:has(.help-faq-answer) {
+  border-color: #a7d8b1;
+
+  box-shadow: 0 7px 18px rgba(8, 127, 35, 0.08);
 }
 
 .help-faq-question {
@@ -763,7 +775,9 @@
 
   background: #ffffff;
 
-  padding: 15px;
+  min-height: 58px;
+
+  padding: 15px 16px;
 
   display: flex;
 
@@ -779,13 +793,23 @@
 
   color: #253044;
 
-  font-size: 13px;
+  font-size: 14px;
 
   font-weight: 600;
 }
 
 .help-faq-question:hover {
-  background: #fafcfb;
+  background: #f5fbf6;
+}
+
+.help-faq-question:focus-visible {
+  outline: 3px solid rgba(8, 127, 35, 0.24);
+
+  outline-offset: -3px;
+}
+
+.help-faq-question span:first-child {
+  line-height: 1.45;
 }
 
 .help-faq-question span:last-child {
@@ -806,21 +830,42 @@
 
   justify-content: center;
 
-  font-size: 18px;
+  font-size: 20px;
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.help-faq-item:has(.help-faq-answer) .help-faq-question span:last-child {
+  background: #087f23;
+
+  color: #ffffff;
+
+  transform: rotate(180deg);
 }
 
 .help-faq-answer {
-  padding: 0 15px 15px;
+  padding: 14px 16px 17px;
 
   border-top: 1px solid #edf0f2;
 
-  padding-top: 12px;
+  background: #fbfefb;
 
-  color: #687386;
+  color: #52615a;
 
-  font-size: 13px;
+  font-size: 14px;
 
   line-height: 1.65;
+
+  animation: help-faq-reveal 0.18s ease-out;
+}
+
+@keyframes help-faq-reveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================
@@ -885,6 +930,26 @@
     margin: 15px auto;
 
     gap: 15px;
+  }
+
+  .help-faq-list {
+    gap: 10px;
+  }
+
+  .help-faq-question {
+    min-height: 56px;
+
+    padding: 13px 14px;
+
+    font-size: 13px;
+
+    gap: 11px;
+  }
+
+  .help-faq-answer {
+    padding: 12px 14px 15px;
+
+    font-size: 13px;
   }
 
   .help-welcome-card {

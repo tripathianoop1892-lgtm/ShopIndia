@@ -984,7 +984,8 @@ if (
           currentOrder.orderType ===
             "B2B" &&
           status === "Approved" &&
-          (currentOrder.status === "Pending" || currentOrder.status === "Paid")
+          currentOrder.status ===
+            "Pending"
         ) {
           const shopkeeperUser =
             await User.findById(
