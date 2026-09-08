@@ -69,6 +69,24 @@ export const forgotPassword = async (email, password) => {
   return res.json();
 };
 
+export const requestPasswordReset = async (email) => {
+  const res = await fetch(`${BASE_URL}/auth/forgot-password/request`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  return res.json();
+};
+
+export const resetPassword = async ({ email, otp, newPassword }) => {
+  const res = await fetch(`${BASE_URL}/auth/forgot-password/reset`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp, newPassword }),
+  });
+  return res.json();
+};
+
 export const getAccountSettings = async () => (await fetch(`${BASE_URL}/auth/settings`, { headers: getHeaders() })).json();
 export const updateAccountSettings = async (data) => (await fetch(`${BASE_URL}/auth/settings`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) })).json();
 export const updateProfile = async (data) => (await fetch(`${BASE_URL}/auth/profile`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) })).json();
