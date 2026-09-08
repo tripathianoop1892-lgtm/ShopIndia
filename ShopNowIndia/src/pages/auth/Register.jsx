@@ -103,6 +103,11 @@ const Register = () => {
       ========================== */}
 
       <div className="left-panel">
+        
+        <img
+          src="/omsanjeevani.png"
+          alt="Register"
+        />
 
         <h1>
           Welcome to
@@ -113,11 +118,6 @@ const Register = () => {
         <p>
           India's Smart Medicine Supply Platform
         </p>
-
-        <img
-          src="/images/register.png"
-          alt="Register"
-        />
 
         <div className="features">
           <p>✔ Easy Registration</p>
