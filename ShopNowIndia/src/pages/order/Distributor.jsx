@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import { getOrders } from "../../services/api";
 import { shortId, statusColor } from "../../utils/helpers";
-import { useNavigate } from "react-router-dom";
+import Invoice from "../../components/Invoice/Invoice";
 
 const Distributor = () => {
   const [orders, setOrders] = useState([]);
-  const navigate = useNavigate();
+  const [invoiceOrder, setInvoiceOrder] = useState(null);
 
   /* Retained only as historical reference for the removed seller approval flow.
   async function fetchOrders() {
@@ -51,7 +51,7 @@ const Distributor = () => {
             <th>Medicines Requested</th>
             <th>Total Amount</th>
             <th>Status</th>
-            <th>Payment</th>
+            <th>Invoice</th>
           </tr>
         </thead>
 
@@ -77,7 +77,7 @@ const Distributor = () => {
                   {item.status}
                 </td>
 
-                  <td><button onClick={() => navigate(`/distributor/payments/${item._id}`)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>View Details</button></td>
+                  <td><button type="button" onClick={() => setInvoiceOrder(item)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>Invoice</button></td>
               </tr>
             ))
           ) : (
@@ -87,6 +87,7 @@ const Distributor = () => {
           )}
         </tbody>
       </table>
+      {invoiceOrder && <Invoice order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />}
     </div>
   );
 };

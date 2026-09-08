@@ -68,6 +68,12 @@
   color: #16a34a;
 }
 
+.sk-mrp-text {
+  color: #475569;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .sk-stock-text {
   font-weight: 500;
 }

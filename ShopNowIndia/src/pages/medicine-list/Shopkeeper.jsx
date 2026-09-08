@@ -106,6 +106,7 @@ const ShopkeeperMedicineList = () => {
                 <th>Type</th>
                 <th>Current Stock</th> 
                 <th>Wholesale Paid</th> 
+                <th>MRP</th>
                 <th>Retail Price</th> 
                 <th>Expiry Status</th> 
                 <th style={{ textAlign: "center" }}>Actions</th>
@@ -114,7 +115,7 @@ const ShopkeeperMedicineList = () => {
             <tbody>
               {retailStock.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="sk-empty-text">
+                  <td colSpan="9" className="sk-empty-text">
                     No inventory active. Place supply bulk requests to populate stock automatically.
                   </td>
                 </tr>
@@ -134,6 +135,7 @@ const ShopkeeperMedicineList = () => {
                         </span>
                       </td>
                       <td>₹{m.wholesalePrice || 0}</td>
+                      <td className="sk-mrp-text">₹{Number(m.mrp || 0).toLocaleString("en-IN")}</td>
                       <td className="sk-price-text">₹{m.retailPrice || m.price}</td>
                       <td>
                         <span className={`sk-status-pill ${isExpired ? "expired" : "valid"}`}>
