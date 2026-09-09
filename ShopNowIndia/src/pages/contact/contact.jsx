@@ -41,7 +41,7 @@ const Contact = () => {
               Connect with OmSanjeevani Healthcare and take your medicine business digital. Our teams are available to stabilize your distribution pipelines.
             </p>
             </div>
-            <img src="contactpic.png" alt="" />
+            <img src="contactpic.png" alt="OmSanjeevani customer support" className="contact-hero-illustration" />
           </div>
         </section>
 

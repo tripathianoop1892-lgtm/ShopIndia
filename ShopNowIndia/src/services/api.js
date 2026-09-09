@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/$/, "");
+export const API_BASE_URL = BASE_URL;
 
 // 🔥 COMMON HEADERS (AUTO TOKEN - FIXED)
 const getHeaders = () => {
@@ -13,6 +14,15 @@ const getHeaders = () => {
   }
 
   return headers;
+};
+
+// Admin endpoints currently return a mix of raw arrays and `{ data: [] }` payloads.
+// Keep view components resilient while the API evolves.
+export const asList = (response, keys = []) => {
+  if (Array.isArray(response)) return response;
+  if (Array.isArray(response?.data)) return response.data;
+  for (const key of keys) if (Array.isArray(response?.[key])) return response[key];
+  return [];
 };
 
 // =======================

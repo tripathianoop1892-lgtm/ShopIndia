@@ -5,6 +5,9 @@ import "./ShopkeeperProfile.css";
 const ShopkeeperProfile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({ fullName: "", mobile: "", email: "", shopName: "", address: "" });
   // =========================
   // LOAD USER DATA
   // =========================
@@ -15,7 +18,15 @@ const ShopkeeperProfile = () => {
         const userData = localStorage.getItem("user");
 
         if (userData) {
-          setUser(JSON.parse(userData));
+          const storedUser = JSON.parse(userData);
+          setUser(storedUser);
+          setFormData({
+            fullName: storedUser.fullName || storedUser.name || "",
+            mobile: storedUser.mobile || storedUser.phone || "",
+            email: storedUser.email || "",
+            shopName: storedUser.shopName || storedUser.shop?.name || "",
+            address: storedUser.address || storedUser.shop?.address || "",
+          });
         }
       } catch (error) {
         console.error("Profile Load Error:", error);
@@ -66,27 +77,36 @@ const ShopkeeperProfile = () => {
   // EDIT PROFILE
   // =========================
 
-  const handleEditProfile = async () => {
-    const fullName = window.prompt("Full name", user?.name || "");
-    if (fullName === null) return;
-    const mobile = window.prompt("Mobile number", user?.mobile || user?.phone || "");
-    if (mobile === null) return;
-    const email = window.prompt("Email address", user?.email || "");
-    if (email === null) return;
-    const shopNameValue = window.prompt("Shop name", user?.shopName || "");
-    if (shopNameValue === null) return;
-    const addressValue = window.prompt("Shop address", user?.address || "");
-    if (addressValue === null) return;
+  const handleEditProfile = () => setEditMode(true);
+
+  const handleSaveProfile = async (event) => {
+    event.preventDefault();
+    if (!formData.fullName.trim() || !formData.mobile.trim() || !formData.email.trim()) {
+      alert("Please complete your name, mobile number, and email address.");
+      return;
+    }
+    setSaving(true);
     try {
-      const response = await updateProfile({ fullName, mobile, email, shopName: shopNameValue, address: addressValue });
+      const response = await updateProfile({
+        fullName: formData.fullName.trim(), mobile: formData.mobile.trim(), email: formData.email.trim(),
+        shopName: formData.shopName.trim(), address: formData.address.trim(),
+      });
       if (!response.success) throw new Error(response.message || "Unable to update profile.");
-      const updatedUser = { ...(user || {}), ...response.user, phone: response.user.mobile };
+      const updatedUser = { ...(user || {}), ...response.user, fullName: response.user.name, phone: response.user.mobile };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
+      setEditMode(false);
       alert("Profile updated successfully.");
     } catch (error) {
       alert(error.message || "Unable to update profile.");
+    } finally {
+      setSaving(false);
     }
+  };
+
+  const handleCancelEdit = () => {
+    setFormData({ fullName: user?.fullName || user?.name || "", mobile: user?.mobile || user?.phone || "", email: user?.email || "", shopName: user?.shopName || user?.shop?.name || "", address: user?.address || user?.shop?.address || "" });
+    setEditMode(false);
   };
 
   return (
@@ -315,6 +335,25 @@ const ShopkeeperProfile = () => {
         </div>
 
       </div>
+
+      {editMode && (
+        <div className="shopkeeper-edit-overlay" role="dialog" aria-modal="true" aria-labelledby="shopkeeper-edit-title">
+          <form className="shopkeeper-edit-modal" onSubmit={handleSaveProfile}>
+            <div className="shopkeeper-edit-modal-header">
+              <div><p>Edit profile</p><h2 id="shopkeeper-edit-title">Update your details</h2></div>
+              <button type="button" className="shopkeeper-edit-close" onClick={handleCancelEdit} aria-label="Close edit profile">×</button>
+            </div>
+            <div className="shopkeeper-edit-fields">
+              <label>Full name<input type="text" value={formData.fullName} onChange={(event) => setFormData({ ...formData, fullName: event.target.value })} required /></label>
+              <label>Mobile number<input type="tel" value={formData.mobile} onChange={(event) => setFormData({ ...formData, mobile: event.target.value })} required /></label>
+              <label>Email address<input type="email" value={formData.email} onChange={(event) => setFormData({ ...formData, email: event.target.value })} required /></label>
+              <label>Shop name<input type="text" value={formData.shopName} onChange={(event) => setFormData({ ...formData, shopName: event.target.value })} /></label>
+              <label className="shopkeeper-edit-address">Shop address<textarea rows="4" value={formData.address} onChange={(event) => setFormData({ ...formData, address: event.target.value })} /></label>
+            </div>
+            <div className="shopkeeper-edit-actions"><button type="button" onClick={handleCancelEdit} disabled={saving}>Cancel</button><button type="submit" disabled={saving}>{saving ? "Saving..." : "Save changes"}</button></div>
+          </form>
+        </div>
+      )}
 
     </div>
   );

@@ -30,6 +30,9 @@
   align-items: center;
 }
 
+.features-hero-content > div { min-width: 0; flex: 1; }
+.features-hero-illustration { width: min(42vw, 460px); max-height: 330px; object-fit: contain; flex: 0 1 460px; }
+
 .features-badge-pill {
   display: inline-block;
   background-color: #dbeafe;
@@ -173,4 +176,7 @@
   .feature-matrix-card {
     padding: 32px 24px;
   }
+  .features-hero-content { flex-direction: column; gap: 24px; margin: 0; }
+  .features-hero-illustration { width: min(100%, 320px); max-height: 240px; }
+  .features-container { grid-template-columns: 1fr; gap: 16px; }
 }

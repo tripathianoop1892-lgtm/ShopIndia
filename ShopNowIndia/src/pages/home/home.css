@@ -605,12 +605,18 @@ body {
 }
 
 .persona-card-item {
-  background: #cbd5e1;
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
   padding: 30px;
   flex: 1;
   min-width: 280px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
 }
+
+.persona-card-item:nth-child(1) { border-top: 4px solid #059669; }
+.persona-card-item:nth-child(2) { border-top: 4px solid #2563eb; }
+.persona-card-item:nth-child(3) { border-top: 4px solid #7c3aed; }
 
 .persona-title-row {
   display: flex;
@@ -626,7 +632,7 @@ body {
 
 .persona-card-item h3 { font-size: 18px; font-weight: 700; color: var(--brand-primary-dark); }
 .persona-card-item ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.persona-card-item ul li { font-size: 14px; font-weight: 600; color: #1e293b; }
+.persona-card-item ul li { font-size: 14px; font-weight: 600; color: #1e293b; line-height: 1.45; }
 
 /* ==========================================================================
    CORPORATE PROFILE LEDGER CARDS (FOUNDER SECTIONS)
@@ -713,18 +719,87 @@ body {
 }
 
 @media (max-width: 600px) {
+  .omsanjeevani-hero-viewport {
+    min-height: auto;
+    padding: 48px 20px 44px;
+    gap: 0;
+  }
+
+  .brand-header-flex { margin-bottom: 22px; }
+  .brand-title-text h2 { font-size: 25px; }
+  .brand-sub-tag { font-size: 11px; letter-spacing: 0.24em; }
+  .banner-main-title { font-size: clamp(29px, 9vw, 38px); line-height: 1.18; margin-bottom: 16px; }
+  .banner-sub-lead { font-size: 16px; margin-bottom: 28px; }
+  .banner-sub-lead br { display: none; }
+
+  .banner-action-gateway-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .gateway-btn { justify-content: center; width: 100%; min-height: 48px; padding: 12px 16px; }
+
   .telemetry-stats-bar {
     margin-top: 20px;
     padding: 0 16px;
+    gap: 12px;
   }
+
+  .metric-glass-card { padding: 18px; gap: 14px; }
+  .metric-card-icon { font-size: 38px !important; padding: 8px; }
+  .metric-meta h4 { font-size: 22px; }
   
   .informational-home-section {
-    padding: 60px 16px;
+    padding: 52px 20px;
   }
+
+  .section-meta-header { margin-bottom: 28px; }
+  .section-meta-header h2 { font-size: 26px; }
+  .advantages-structured-grid,
+  .technical-features-grid { grid-template-columns: 1fr; gap: 14px; }
+  .advantage-feature-box { padding: 20px; gap: 13px; }
+  .feature-matrix-card { padding: 24px 20px; }
+  .pipeline-node-card,
+  .persona-card-item { min-width: 0; width: 100%; }
+  .pipeline-node-card { padding: 26px 20px; }
+  .pipeline-arrow-connector { margin: -2px 0; }
+  .supply-chain-personas h2 { font-size: 26px; margin-bottom: 26px; }
+  .supply-chain-personas {
+    padding: 44px 16px;
+  }
+  .supply-chain-personas h2 {
+    font-size: clamp(24px, 7vw, 28px);
+    line-height: 1.2;
+    text-align: center;
+    margin: 0 auto 24px;
+    max-width: 320px;
+  }
+  .persona-flex-container { flex-direction: column; gap: 14px; }
+  .persona-card-item {
+    padding: 20px;
+    border-radius: 14px;
+  }
+  .persona-title-row {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .persona-title-row img { height: 32px; }
+  .persona-inline-icon { font-size: 32px !important; }
+  .persona-card-item h3 { font-size: 17px; }
+  .persona-card-item ul { gap: 10px; }
+  .persona-card-item ul li { font-size: 13px; line-height: 1.5; }
   
   .corporate-founder-card {
+    height: auto;
+    min-height: 0;
+    padding: 26px 20px;
+    gap: 16px;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
+
+  .founder-meta-details h2 { font-size: 20px; }
 }

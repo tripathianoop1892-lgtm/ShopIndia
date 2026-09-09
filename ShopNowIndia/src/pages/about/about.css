@@ -31,6 +31,9 @@
   gap: 10vw;
 }
 
+.about-hero-inner > div { min-width: 0; flex: 1; }
+.about-hero-illustration { width: min(42vw, 500px); max-height: 360px; object-fit: contain; flex: 0 1 500px; }
+
 .about-badge-pill {
   display: inline-block;
   background-color: #dbeafe;
@@ -223,6 +226,9 @@
   gap: 70px;
 }
 
+.service-txt-pane > div { min-width: 0; flex: 1; }
+.service-illustration { width: min(35vw, 400px); max-height: 280px; object-fit: contain; flex: 0 1 400px; }
+
 .service-txt-pane ul {
   list-style: none;
   display: flex;
@@ -359,4 +365,8 @@
   .about-informational-section { padding: 50px 16px; }
   .service-segment-row { padding: 24px; }
   .segment-title-icon-row { margin-bottom: 14px; padding-bottom: 10px; }
+  .about-hero-inner { flex-direction: column; gap: 24px; }
+  .about-hero-illustration { width: min(100%, 320px); max-height: 240px; }
+  .service-txt-pane { flex-direction: column; gap: 28px; }
+  .service-illustration { width: min(100%, 300px); max-height: 220px; margin: 0 auto; }
 }

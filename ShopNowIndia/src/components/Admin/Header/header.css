@@ -87,6 +87,11 @@
 
 @media(max-width:768px){
 
+.admin-header{
+    height:64px;
+    padding:0 16px;
+}
+
 .header-left h2{
     font-size:18px;
 }
@@ -99,4 +104,12 @@
     gap:18px;
 }
 
+}
+
+@media(max-width:420px){
+  .admin-header{ padding:0 12px; }
+  .menu-btn{ width:40px; height:40px; font-size:18px; }
+  .header-left{ gap:12px; }
+  .header-left h2{ font-size:16px; }
+  .notification{ width:38px; height:38px; font-size:19px; }
 }

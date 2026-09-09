@@ -32,7 +32,7 @@ const Terms = () => {
               Please review these Terms & Conditions carefully before interacting with the OmSanjeevani Healthcare Platform.
             </p>
             </div>
-            <img src="terms.png" alt="" />
+            <img src="terms.png" alt="Terms and conditions illustration" className="terms-hero-illustration" />
           </div>
         </section>
 

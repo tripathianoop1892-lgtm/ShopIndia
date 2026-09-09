@@ -1,7 +1,7 @@
 /* Container Shell Integration */
 .navbar-hub {
   width: 100%;
-  height: 14vh;
+  height: 88px;
   background: #ffffff;
   border-bottom: 4px solid #cbd5e1; /* Replaced extreme 10px purples with clean parameters */
   position: sticky;
@@ -28,7 +28,7 @@
 }
 
 .navbar-brand-logo img {
-  height: 13vh; /* Aligned proportions beautifully */
+  height: 76px;
   width: auto;
   object-fit: contain;
 }
@@ -57,6 +57,25 @@
   display: flex;
   gap: 12px;
   align-items: center;
+}
+
+.navbar-menu-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.navbar-menu-toggle span {
+  display: block;
+  height: 2px;
+  margin: 4px 0;
+  border-radius: 2px;
+  background: #1e293b;
 }
 
 .nav-btn-secondary {
@@ -101,37 +120,61 @@
   }
 
   .navbar-container-row {
-    flex-direction: column;
-    padding: 20px;
-    gap: 20px;
-    text-align: center;
+    min-height: 72px;
+    flex-wrap: wrap;
+    padding: 8px 20px;
+    gap: 12px;
   }
 
-  .navbar-menu-links {
-    gap: 24px;
+  .navbar-brand-logo img {
+    height: 56px;
+  }
+  .navbar-menu-toggle {
+    display: block;
+    margin-left: auto;
+  }
+  .navbar-menu-links,
+  .navbar-action-group {
+    display: none;
+    width: 100%;
+  }
+  .navbar-menu-links.is-open {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px;
+    order: 3;
+    padding: 8px 0;
+  }
+  .navbar-menu-links a {
+    display: block;
+    padding: 12px 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .navbar-menu-links a:hover { background: #f1f5f9; }
+  .navbar-action-group.is-open {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    order: 4;
   }
 }
 
 @media(max-width: 576px) {
-  .navbar-menu-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
+  .navbar-container-row {
+    padding: 7px 16px;
   }
 
-  .navbar-menu-links a {
-    font-size: 14px;
+  .navbar-brand-logo img {
+    height: 50px;
   }
 
   .navbar-action-group {
-    width: 100%;
-    flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
 
   .nav-btn-secondary,
   .nav-btn-primary {
     width: 100%;
-    padding: 12px;
+    padding: 11px 8px;
   }
 }

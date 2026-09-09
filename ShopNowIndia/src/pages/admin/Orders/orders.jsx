@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getAdminOrders } from "../../../services/api";
+import { asList, getAdminOrders } from "../../../services/api";
 import { exportRowsToExcel } from "../../../utils/export";
 import "./Orders.css";
 
@@ -8,7 +8,7 @@ const Orders = () => {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
 
-  useEffect(() => { getAdminOrders().then((data) => setOrders(Array.isArray(data) ? data : [])).catch(console.error); }, []);
+  useEffect(() => { getAdminOrders().then((data) => setOrders(asList(data, ["orders"]))).catch(console.error); }, []);
   const filteredOrders = useMemo(() => orders.filter((order) => {
     const matchesSearch = [order._id, order.customerName, order.shopkeeperName, order.orderType].filter(Boolean).some((value) => value.toLowerCase().includes(search.toLowerCase()));
     return matchesSearch && (status === "All" || order.status === status);

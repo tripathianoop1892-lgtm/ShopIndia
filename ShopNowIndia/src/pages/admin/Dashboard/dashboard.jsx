@@ -2,62 +2,48 @@ import "./Dashboard.css";
 import { useState, useEffect } from "react";
 
 import {
-  getCustomers,
-  getShopkeeper,
-  getDistributors,
+  asList,
+  getAdminOrders,
+  getDashboardReport,
   getMedicine,
 } from "../../../services/api";
 
 
 const Dashboard = () => {
-    const [stats, setStats] = useState({
+  const [stats, setStats] = useState({
     users: 0,
     shopkeepers: 0,
     distributors: 0,
     medicines: 0,
   });
+  const [orders, setOrders] = useState([]);
+  const [lowStockItems, setLowStockItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchAdminStats = async () => {
+      setLoading(true);
+      setError("");
       try {
-        const [
-          usersData,
-          shopkeepersData,
-          distributorsData,
-          medicinesData,
-        ] = await Promise.all([
-          getCustomers(),
-          getShopkeeper(),
-          getDistributors(),
-          getMedicine(),
+        const [reportResponse, ordersResponse, medicinesResponse] = await Promise.all([
+          getDashboardReport(), getAdminOrders(), getMedicine(),
         ]);
-
-        const getCount = (data, keys = []) => {
-          if (Array.isArray(data)) {
-            return data.length;
-          }
-
-          if (Array.isArray(data?.data)) {
-            return data.data.length;
-          }
-
-          for (const key of keys) {
-            if (Array.isArray(data?.[key])) {
-              return data[key].length;
-            }
-          }
-
-          return 0;
-        };
-
+        if (!reportResponse?.success) throw new Error(reportResponse?.message || "Unable to load dashboard data.");
+        const report = reportResponse.data || {};
         setStats({
-          users: getCount(usersData, ["users"]),
-          shopkeepers: getCount(shopkeepersData, ["shopkeepers"]),
-          distributors: getCount(distributorsData, ["distributors"]),
-          medicines: getCount(medicinesData, ["medicines"]),
+          users: Number(report.users?.customers || 0),
+          shopkeepers: Number(report.users?.shopkeepers || 0),
+          distributors: Number(report.users?.distributors || 0),
+          medicines: Number(report.medicines?.total || 0),
         });
+        setOrders(asList(ordersResponse, ["orders"]).slice(0, 5));
+        setLowStockItems(asList(medicinesResponse, ["medicines"]).filter((medicine) => Number(medicine.stock || 0) <= 10).slice(0, 5));
       } catch (error) {
         console.error("Admin Dashboard Stats Error:", error);
+        setError(error.message || "Unable to load dashboard data.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -71,6 +57,7 @@ const Dashboard = () => {
         <h1>Dashboard</h1>
         <p>Welcome Back, Admin 👋</p>
       </div>
+      {error && <p className="admin-data-error" role="alert">{error}</p>}
       <div className="dashboard-cards">
 
   <div className="admin-stat-card users-card">
@@ -113,7 +100,7 @@ const Dashboard = () => {
 
           <h2>Recent Orders</h2>
 
-          <table>
+          <div className="admin-dashboard-table-scroll"><table>
 
             <thead>
 
@@ -127,27 +114,13 @@ const Dashboard = () => {
 
             <tbody>
 
-              <tr>
-                <td>#1025</td>
-                <td>Anoop</td>
-                <td className="success">Delivered</td>
-              </tr>
-
-              <tr>
-                <td>#1026</td>
-                <td>Rahul</td>
-                <td className="pending">Pending</td>
-              </tr>
-
-              <tr>
-                <td>#1027</td>
-                <td>Priya</td>
-                <td className="cancel">Cancelled</td>
-              </tr>
+              {loading && <tr><td colSpan="3">Loading recent orders...</td></tr>}
+              {!loading && orders.map((order) => <tr key={order._id}><td>#{String(order._id).slice(-8)}</td><td>{order.customerName || order.shopkeeperName || "—"}</td><td className={String(order.status || "").toLowerCase()}>{order.status || "Pending"}</td></tr>)}
+              {!loading && !orders.length && <tr><td colSpan="3">No orders found.</td></tr>}
 
             </tbody>
 
-          </table>
+          </table></div>
 
         </div>
 
@@ -157,10 +130,9 @@ const Dashboard = () => {
 
           <ul>
 
-            <li>Paracetamol - 10 Left</li>
-            <li>Dolo 650 - 15 Left</li>
-            <li>Vitamin C - 20 Left</li>
-            <li>Insulin - 8 Left</li>
+            {loading && <li>Loading stock alerts...</li>}
+            {!loading && lowStockItems.map((medicine) => <li key={medicine._id}>{medicine.name} - {medicine.stock || 0} left</li>)}
+            {!loading && !lowStockItems.length && <li>No low-stock medicines.</li>}
 
           </ul>
 

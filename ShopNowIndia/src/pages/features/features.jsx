@@ -33,7 +33,7 @@ const Features = () => {
               local pharmacy owners, and consumer clients across India.
             </p>
             </div>
-            <img src="feature.png" alt="" />
+            <img src="feature.png" alt="OmSanjeevani platform features" className="features-hero-illustration" />
           </div>
         </div>
 

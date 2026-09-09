@@ -30,6 +30,9 @@
   align-items: center;
 }
 
+.terms-hero-inner > div { min-width: 0; flex: 1; }
+.terms-hero-illustration { width: min(34vw, 350px); max-height: 270px; object-fit: contain; flex: 0 1 350px; }
+
 .terms-badge-pill {
   display: inline-block;
   background-color: #dbeafe;
@@ -214,4 +217,6 @@
   .terms-main-content { padding: 40px 16px 80px; }
   .terms-card-item { flex-direction: column; padding: 24px; gap: 16px; }
   .contact-meta-lines p { display: flex; flex-direction: column; gap: 4px; }
+  .terms-hero-inner { flex-direction: column; gap: 24px; margin: 0; }
+  .terms-hero-illustration { width: min(100%, 280px); max-height: 210px; }
 }

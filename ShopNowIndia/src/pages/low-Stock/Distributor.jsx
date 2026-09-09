@@ -34,10 +34,11 @@ setMedicines(lowStockData);
   };
 
   return (
-    <div className="main-content">
+    <div className="low-stock-container">
       <h2>Low Stock Medicines</h2>
 
-      <table className="table">
+      <div className="low-stock-table-scroll" role="region" aria-label="Low stock medicines table" tabIndex="0">
+      <table className="low-stock-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -62,6 +63,7 @@ setMedicines(lowStockData);
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

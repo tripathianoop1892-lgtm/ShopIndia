@@ -21,9 +21,11 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = ({ isOpen, onNavigate }) => {
   return (
-    <div className={`sidebar ${isOpen ? "open" : "close"}`}>
+    <div className={`admin-sidebar ${isOpen ? "open" : "close"}`} onClick={(event) => {
+      if (event.target.closest("a")) onNavigate?.();
+    }}>
 
       <div className="logo">
         <h2>OMS</h2>

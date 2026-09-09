@@ -33,7 +33,7 @@ const Policy = () => {
               Your privacy is critical to us. This Privacy Policy explains how the OmSanjeevani platform collects, uses, and safely protects your personal information.
             </p>
             </div>
-            <img src="policy.png" alt="" />
+            <img src="policy.png" alt="Privacy and data protection illustration" className="privacy-hero-illustration" />
           </div>
         </section>
 

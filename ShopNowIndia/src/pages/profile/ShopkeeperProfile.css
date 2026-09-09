@@ -400,3 +400,61 @@
   }
 
 }
+
+/* Responsive edit form — replaces browser prompts so profile editing works on every device. */
+.shopkeeper-edit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(4px);
+}
+
+.shopkeeper-edit-modal {
+  width: min(100%, 680px);
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
+}
+
+.shopkeeper-edit-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.shopkeeper-edit-modal-header p { margin: 0 0 5px; color: #008c3a; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.shopkeeper-edit-modal-header h2 { margin: 0; color: #1e293b; font-size: 24px; }
+.shopkeeper-edit-close { width: 40px; height: 40px; flex: 0 0 auto; border: 0; border-radius: 10px; background: #f1f5f9; color: #334155; font-size: 26px; line-height: 1; cursor: pointer; }
+
+.shopkeeper-edit-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.shopkeeper-edit-fields label { display: grid; gap: 8px; min-width: 0; color: #334155; font-size: 14px; font-weight: 700; }
+.shopkeeper-edit-fields input, .shopkeeper-edit-fields textarea { width: 100%; min-width: 0; box-sizing: border-box; padding: 12px 13px; border: 1px solid #cbd5e1; border-radius: 8px; color: #1e293b; font: inherit; outline: none; resize: vertical; }
+.shopkeeper-edit-fields input:focus, .shopkeeper-edit-fields textarea:focus { border-color: #008c3a; box-shadow: 0 0 0 3px rgba(0,140,58,.12); }
+.shopkeeper-edit-address { grid-column: 1 / -1; }
+.shopkeeper-edit-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 26px; }
+.shopkeeper-edit-actions button { min-height: 46px; padding: 11px 18px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #334155; font: inherit; font-weight: 700; cursor: pointer; }
+.shopkeeper-edit-actions button[type="submit"] { border-color: #008c3a; background: #008c3a; color: #fff; }
+.shopkeeper-edit-actions button:disabled { opacity: .65; cursor: wait; }
+
+@media (max-width: 600px) {
+  .shopkeeper-edit-overlay { align-items: end; padding: 0; }
+  .shopkeeper-edit-modal { width: 100%; max-height: min(88dvh, 720px); padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); border-radius: 20px 20px 0 0; }
+  .shopkeeper-edit-modal-header { margin-bottom: 20px; }
+  .shopkeeper-edit-modal-header h2 { font-size: 21px; }
+  .shopkeeper-edit-fields { grid-template-columns: 1fr; gap: 15px; }
+  .shopkeeper-edit-address { grid-column: auto; }
+  .shopkeeper-edit-actions { display: grid; grid-template-columns: 1fr 1fr; margin-top: 22px; }
+  .shopkeeper-edit-actions button { width: 100%; padding-right: 10px; padding-left: 10px; }
+}

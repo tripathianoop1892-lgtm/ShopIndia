@@ -1,24 +1,24 @@
-.layout{
+.admin-layout{
     display:flex;
     min-height:100vh;
     background:#f4f6f9;
 }
 
-.main-content{
+.admin-main-content{
     flex:1;
     transition:.3s;
     width:100%;
 }
 
-.sidebar-open{
+.admin-sidebar-open{
     margin-left:260px;
 }
 
-.sidebar-close{
+.admin-sidebar-close{
     margin-left:80px;
 }
 
-.page-content{
+.admin-page-content{
     padding:25px;
 }
 
@@ -26,13 +26,14 @@
 
 @media(max-width:768px){
 
-.sidebar-open,
-.sidebar-close{
+.admin-sidebar-open,
+.admin-sidebar-close{
     margin-left:0;
 }
 
-.page-content{
-    padding:15px;
+.admin-page-content{
+    padding:16px;
+    min-width:0;
 }
 
 .admin-sidebar-backdrop { display: block; position: fixed; inset: 0; z-index: 900; border: 0; background: rgba(15, 23, 42, .45); }

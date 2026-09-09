@@ -1,4 +1,4 @@
-.layout {
+.distributor-layout {
   display: flex;
   min-height: 100vh;
   width: 100%;
@@ -14,7 +14,7 @@
   --brand: #2563eb;
 }
 
-.main-section {
+.distributor-main-section {
   margin-left: var(--sidebar-width);
   flex: 1;
   display: flex;
@@ -23,7 +23,7 @@
   width: 100%;
 }
 
-.content {
+.distributor-content {
   position: relative;
   padding: var(--content-padding);
   background: var(--bg);
@@ -33,7 +33,7 @@
   min-width: 0;
 }
 
-.content::before {
+.distributor-content::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -46,12 +46,12 @@
   z-index: 0;
 }
 
-.content > * {
+.distributor-content > * {
   position: relative;
   z-index: 1;
 }
 
-.menu-toggle {
+.distributor-menu-toggle {
   display: none;
   position: fixed;
   top: 18px;
@@ -66,7 +66,7 @@
   cursor: pointer;
 }
 
-.sidebar-backdrop {
+.distributor-sidebar-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.35);
@@ -96,27 +96,32 @@
 }
 
 @media (max-width: 900px) {
-  .main-section {
+  .distributor-main-section {
     margin-left: 0;
   }
 
-  .content {
+  .distributor-content {
     margin-left: 0;
-    padding: 14px 16px;
+    padding: 76px 16px 16px;
   }
 
-  .content::before {
+  .distributor-content::before {
     background-size: 180px;
     opacity: 0.06;
   }
 
-  .menu-toggle {
+  .distributor-menu-toggle {
     display: block;
   }
 }
 
+@media (max-width: 480px) {
+  .distributor-content { padding: 70px 12px 12px; }
+  .distributor-menu-toggle { top: 12px; left: 12px; width: 44px; height: 44px; padding: 0; }
+}
+
 /* Accessibility: visible focus states */
-.sidebar a:focus-visible,
+.distributor-sidebar a:focus-visible,
 .btn-primary:focus-visible,
 .logout-btn:focus-visible,
 button:focus-visible {

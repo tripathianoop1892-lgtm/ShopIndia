@@ -22,18 +22,20 @@ const Layout = () => {
   };
 
   return (
-    <div className="layout">
+    <div className="admin-layout">
 
-      <Sidebar isOpen={sidebarOpen} />
+      <Sidebar isOpen={sidebarOpen} onNavigate={() => {
+        if (window.innerWidth <= 768) setSidebarOpen(false);
+      }} />
 
       <div
-        className={`main-content ${
-          sidebarOpen ? "sidebar-open" : "sidebar-close"
+        className={`admin-main-content ${
+          sidebarOpen ? "admin-sidebar-open" : "admin-sidebar-close"
         }`}
       >
         <Header toggleSidebar={toggleSidebar} />
 
-        <div className="page-content">
+        <div className="admin-page-content">
           <Outlet />
         </div>
 

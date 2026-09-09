@@ -458,3 +458,68 @@
   from { opacity: 0.6; }
   to { opacity: 1; }
 }
+
+@media (max-width: 700px) {
+  .cart-modern-view-container {
+    min-height: auto;
+    padding: 18px 16px 32px;
+  }
+
+  .cart-dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+
+  .cart-dashboard-header h2 { font-size: 23px; }
+  .cart-dashboard-header p { font-size: 14px; line-height: 1.5; }
+  .global-basket-summary-badge { padding: 8px 12px; font-size: 13px; }
+  .groups-stack-layout { gap: 16px; }
+
+  .vendor-group-meta-header {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .vendor-title-wrapper { gap: 10px; min-width: 0; }
+  .vendor-icon-shield { width: 36px; height: 36px; font-size: 15px; flex-shrink: 0; }
+  .vendor-title-wrapper h3 { font-size: 14px; overflow-wrap: anywhere; }
+  .vendor-id-subtext { font-size: 11px; }
+  .group-row-count-pill { padding: 5px 8px; font-size: 11px; white-space: nowrap; }
+
+  .items-table-scroller { -webkit-overflow-scrolling: touch; }
+  .professional-cart-table { min-width: 650px; }
+  .professional-cart-table th { padding: 12px 14px; font-size: 11px; }
+  .professional-cart-table td { padding: 14px; }
+
+  .vendor-card-footer-summary {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px 16px;
+  }
+
+  .coupon-wrapper { min-width: 0; width: 100%; }
+  .coupon-input-row input { min-width: 0; }
+  .summary-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .summary-accumulated-box { min-width: 0; }
+  .discount-box { padding-left: 0; border-left: 0; }
+  .summary-label { font-size: 10px; line-height: 1.35; }
+  .summary-value-amount { font-size: 18px; overflow-wrap: anywhere; }
+  .pro-checkout-dispatch-btn { justify-content: center; width: 100%; min-height: 48px; }
+
+  .cart-loading-state, .cart-empty-wrapper { margin-top: 20px; padding: 54px 20px; }
+  .empty-graphic-box { font-size: 50px; }
+}
+
+@media (max-width: 380px) {
+  .cart-modern-view-container { padding-right: 12px; padding-left: 12px; }
+  .vendor-group-meta-header { padding: 14px 12px; }
+  .group-row-count-pill { display: none; }
+  .coupon-input-row { flex-direction: column; }
+  .coupon-apply-btn { min-height: 42px; }
+  .summary-stack { grid-template-columns: 1fr; }
+}

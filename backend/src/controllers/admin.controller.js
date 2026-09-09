@@ -133,8 +133,18 @@ export const updatePlatformSettings = async (req, res) => {
 
       export const getOrders = async(req, res) =>{
         try{
-            const orders = await Order.find({});
-            return res.json(orders);
+            const orders = await Order.find({})
+              .sort({ createdAt: -1 })
+              .populate("buyerId", "name email")
+              .populate("sellerId", "name email")
+              .lean();
+
+            const normalizedOrders = orders.map((order) => ({
+              ...order,
+              customerName: order.customerName || (order.orderType === "B2C" ? order.buyerId?.name : ""),
+              shopkeeperName: order.shopkeeperName || (order.orderType === "B2B" ? order.buyerId?.name : order.sellerId?.name) || "",
+            }));
+            return res.json(normalizedOrders);
         } catch(err){
             return res.status(500).json({message: "error featching orders"})
         }

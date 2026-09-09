@@ -8,3 +8,8 @@
 body {
   background: #f4f6f9;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+}

@@ -2,15 +2,16 @@
   padding: 18px 12px;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-h2 {
+.order-container h2 {
   margin-bottom: 20px;
 }
 
 /* Table */
-table {
+.order-container table {
   width: 100%;
   min-width: 800px; /* 🔥 right side cut fix */
   border-collapse: collapse;
@@ -18,14 +19,14 @@ table {
 }
 
 /* Table cells */
-th, td {
+.order-container th, .order-container td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
 }
 
 /* Header */
-th {
+.order-container th {
   background: #2c3e50;
   color: white;
 }
@@ -33,7 +34,7 @@ th {
 
 
 /* Buttons */
-button {
+.order-container button {
   padding: 6px 12px;
   border: none;
   cursor: pointer;
@@ -41,18 +42,24 @@ button {
 }
 
 /* Approve */
-button:first-child {
+.order-container td button:first-child {
   background: green;
   color: white;
 }
 
 /* Reject */
-button:last-child {
+.order-container td button:last-child {
   background: red;
   color: white;
 }
 
 /* Hover */
-button:hover {
+.order-container button:hover {
   opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .order-container { padding: 12px 0; }
+  .order-container table { font-size: 13px; }
+  .order-container th, .order-container td { padding: 9px 8px; }
 }

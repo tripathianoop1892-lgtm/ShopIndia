@@ -433,7 +433,7 @@
 /* ===== MEDIA BREAKPOINTS ===== */
 @media (max-width: 768px) {
   .customer-dashboard-container {
-    padding: 24px;
+    padding: 22px 16px;
   }
   .marketing-promo-banner {
     flex-direction: column;
@@ -444,4 +444,14 @@
   .promo-shop-btn {
     width: 100%;
   }
+}
+
+@media (max-width: 480px) {
+  .marketplace-hero-row { margin-bottom: 24px; gap: 16px; }
+  .hero-meta-details h2 { font-size: 23px; }
+  .connection-pill { font-size: 12px; padding: 6px 10px; }
+  .dashboard-stats-row { gap: 14px; margin-bottom: 24px; }
+  .stat-card { padding: 18px; }
+  .marketing-promo-banner { padding: 22px 18px; }
+  .card-core-body { padding: 18px; }
 }

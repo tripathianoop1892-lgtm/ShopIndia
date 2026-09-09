@@ -32,6 +32,9 @@
   gap: 15px;
 }
 
+.contact-hero-inner > div { min-width: 0; flex: 1; }
+.contact-hero-illustration { width: min(36vw, 390px); max-height: 300px; object-fit: contain; flex: 0 1 390px; }
+
 .contact-badge-pill {
   display: inline-block;
   background-color: #dbeafe;
@@ -357,4 +360,6 @@
   .contact-main-grid-container { padding: 40px 16px; }
   .contact-info-cards-column, .contact-secure-form-column { padding: 28px 20px; }
   .faq-interactive-section { padding: 20px 16px 80px; }
+  .contact-hero-inner { flex-direction: column; gap: 24px; margin: 0; }
+  .contact-hero-illustration { width: min(100%, 300px); max-height: 220px; }
 }

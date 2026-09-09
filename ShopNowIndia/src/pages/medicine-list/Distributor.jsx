@@ -164,6 +164,7 @@ const Distributor = () => {
       />
 
       {/* TABLE */}
+      <div className="medicine-table-scroll" role="region" aria-label="Medicine inventory table" tabIndex="0">
       <table>
 
         <thead>
@@ -424,6 +425,7 @@ const Distributor = () => {
         </tbody>
 
       </table>
+      </div>
 
     </div>
   );

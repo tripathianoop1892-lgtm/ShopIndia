@@ -271,6 +271,7 @@ const DistributorDashboard = () => {
               <h3>Low Stock Medicines</h3>
             </div>
 
+              <div className="dashboard-table-scroll" role="region" aria-label="Low stock medicines table" tabIndex="0">
               <table id="table1">
                 <thead>
                   <tr>
@@ -307,6 +308,7 @@ const DistributorDashboard = () => {
                     ))}
                 </tbody>
               </table>
+              </div>
           </div>
 
           {/* RECENT MEDICINES */}
@@ -316,6 +318,7 @@ const DistributorDashboard = () => {
               <h3>Recent Medicines</h3>
             </div>
 
+            <div className="dashboard-table-scroll" role="region" aria-label="Recent medicines table" tabIndex="0">
             <table>
 
               <thead>
@@ -373,6 +376,7 @@ const DistributorDashboard = () => {
               </tbody>
 
             </table>
+            </div>
 
           </div>
         </>
