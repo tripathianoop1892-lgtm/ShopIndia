@@ -28,16 +28,15 @@ const storage = multer.diskStorage({
 
 // Allowed File Types
 const fileFilter = (req, file, cb) => {
-  const allowedTypes =
-    /jpg|jpeg|png|pdf/;
+  const extension = path.extname(file.originalname).toLowerCase();
+  const allowedFileTypes = {
+    ".jpg": ["image/jpeg"],
+    ".jpeg": ["image/jpeg"],
+    ".png": ["image/png"],
+    ".pdf": ["application/pdf"],
+  };
 
-  const extName = allowedTypes.test(
-    path.extname(file.originalname).toLowerCase()
-  );
-
-  const mimeType = allowedTypes.test(file.mimetype);
-
-  if (extName && mimeType) {
+  if (allowedFileTypes[extension]?.includes(file.mimetype)) {
     return cb(null, true);
   }
 
@@ -57,5 +56,23 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024, // 5 MB
   },
 });
+
+export const uploadPrescriptionFile = (req, res, next) => {
+  upload.single("prescription")(req, res, (error) => {
+    if (!error) return next();
+
+    if (error instanceof multer.MulterError && error.code === "LIMIT_FILE_SIZE") {
+      return res.status(413).json({
+        success: false,
+        message: "Prescription file must be 5 MB or smaller.",
+      });
+    }
+
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Unable to upload prescription file.",
+    });
+  });
+};
 
 export default upload;

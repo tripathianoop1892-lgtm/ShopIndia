@@ -12,8 +12,8 @@ import {
   readPrescription,
 } from "../controllers/prescription.controller.js";
 
-import { checkAuth } from "../middlewares/auth.middleware.js";
-import upload from "../middlewares/prescription.middleware.js";
+import { checkAuth, checkRole } from "../middlewares/auth.middleware.js";
+import { uploadPrescriptionFile } from "../middlewares/prescription.middleware.js";
 
 const router = express.Router();
 
@@ -25,7 +25,8 @@ const router = express.Router();
 router.post(
   "/upload",
   checkAuth,
-  upload.single("prescription"),
+  checkRole("customer"),
+  uploadPrescriptionFile,
   uploadPrescription
 );
 

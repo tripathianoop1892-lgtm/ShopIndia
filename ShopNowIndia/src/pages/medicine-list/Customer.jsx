@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css"; // Uses the same styled sheet for layout consistency
+import "./Customer.css";
 import { MedicinesList, addToCart, getCart, getOrders } from "../../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../../features/cartSlice";
@@ -85,19 +86,20 @@ const CustomerMedicineList = () => {
   };
   if (loading) {
     return (
-      <div className="shopkeeper-container" style={{ padding: "20px" }}>
+      <div className="shopkeeper-container customer-medicines-page" style={{ padding: "20px" }}>
         <p><FaSpinner style={{ animation: "spin 1s linear infinite", marginRight: "8px" }} /> Syncing personalized medication ledger records...</p>
       </div>
     );
   }
   return (
-    <div className="shopkeeper-container" style={{ padding: "20px" }}>
+    <div className="shopkeeper-container customer-medicines-page" style={{ padding: "20px" }}>
       {/* UI TYPOGRAPHY AND SUBTITLE MATCHING IMAGE verbatim */}
       <h2>📦 My Medicines</h2>
       <p style={{ color: "#666" }}>These items are extracted exclusively from your active marketplace transaction history logs.</p>
 
-      <div style={{ marginTop: "20px", background: "white", padding: "20px", borderRadius: "10px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+      <div className="customer-medicines-table-card" style={{ marginTop: "20px", background: "white", padding: "20px", borderRadius: "10px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+        <div className="customer-medicines-table-scroll">
+        <table className="customer-medicines-table" style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
           <thead>
             {/* Exactly replicates the Header Style profile from image_8809ab.png */}
             <tr style={{ background: "#2c3e50", color: "white", height: "45px" }}>
@@ -112,7 +114,7 @@ const CustomerMedicineList = () => {
           <tbody>
             {purchasedMedicines.length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>
+                <td className="customer-medicines-empty" colSpan="6" style={{ padding: "20px", textAlign: "center", color: "#94a3b8" }}>
                   No personal medicine logs found. Place retail orders on your dashboard to populate.
                 </td>
               </tr>
@@ -122,14 +124,14 @@ const CustomerMedicineList = () => {
                 const quantityInCart = cartMatch ? cartMatch.quantity || cartMatch.qty : 0;
                 return (
                   <tr key={m._id} style={{ borderBottom: "1px solid #f1f5f9", height: "50px" }}>
-                    <td style={{ padding: "8px" }}>{m.image ? <img src={m.image} alt="" onError={(event) => { event.currentTarget.style.display = "none"; }} style={{ width: 42, height: 42, objectFit: "contain" }} /> : "—"}</td>
-                    <td style={{ padding: "12px", fontWeight: "600", color: "#2c3e50" }}>{m.name}</td>
-                    <td style={{ padding: "12px", color: "#4a5568" }}>{m.company}</td>
-                    <td style={{ padding: "12px", color: "#4a5568" }}>{m.type}</td>
-                    <td style={{ padding: "12px", color: "#16a34a", fontWeight: "bold" }}>
+                    <td data-label="Image" style={{ padding: "8px" }}>{m.image ? <img src={m.image} alt="" onError={(event) => { event.currentTarget.style.display = "none"; }} style={{ width: 42, height: 42, objectFit: "contain" }} /> : "—"}</td>
+                    <td data-label="Medicine" style={{ padding: "12px", fontWeight: "600", color: "#2c3e50" }}>{m.name}</td>
+                    <td data-label="Company" style={{ padding: "12px", color: "#4a5568" }}>{m.company}</td>
+                    <td data-label="Type" style={{ padding: "12px", color: "#4a5568" }}>{m.type}</td>
+                    <td data-label="Last purchase" style={{ padding: "12px", color: "#16a34a", fontWeight: "bold" }}>
                       ₹{Number(m.price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
-                    <td style={{ padding: "12px", textAlign: "center" }}>
+                    <td data-label="Action" style={{ padding: "12px", textAlign: "center" }}>
                       <button
                         onClick={() => handleAddToCart(m)}
                         style={{
@@ -156,6 +158,7 @@ const CustomerMedicineList = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

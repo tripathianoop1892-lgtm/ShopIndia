@@ -1,10 +1,10 @@
-.order-item {
+.customer-orders-page .order-item {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
 }
 
-.status {
+.customer-orders-page .status {
   display: inline-block;
   margin-top: 10px;
   padding: 5px 10px;
@@ -12,12 +12,169 @@
   background: #facc15;
 }
 
-.status.delivered {
+.customer-orders-page .status.delivered {
   background: #22c55e;
   color: white;
 }
 
-.status.pending {
+.customer-orders-page .status.pending {
   background: #f97316;
   color: white;
+}
+
+.customer-orders-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px !important;
+  overflow-x: hidden;
+}
+
+.customer-orders-page .ledger-table-overflow-box {
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.customer-orders-page .professional-ledger-table {
+  min-width: 900px;
+}
+
+.customer-review-modal-backdrop {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.customer-review-modal {
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+}
+
+.customer-review-modal input,
+.customer-review-modal textarea {
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .customer-orders-page {
+    padding: 24px 18px 36px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .customer-orders-page {
+    padding: 20px 14px 32px !important;
+  }
+
+  .customer-orders-page .earnings-dashboard-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 14px;
+    margin-bottom: 20px !important;
+    padding-bottom: 16px !important;
+  }
+
+  .customer-orders-page .earnings-dashboard-header h2 {
+    font-size: 22px !important;
+    line-height: 1.25;
+  }
+
+  .customer-orders-page .earnings-dashboard-header p {
+    font-size: 13px !important;
+    line-height: 1.5;
+  }
+
+  .customer-orders-page .history-ledger-section-block {
+    padding: 16px !important;
+  }
+
+  .customer-orders-page .title-row-flex {
+    align-items: flex-start !important;
+  }
+
+  .customer-orders-page .professional-ledger-table,
+  .customer-orders-page .professional-ledger-table tbody,
+  .customer-orders-page .professional-ledger-table tr,
+  .customer-orders-page .professional-ledger-table td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .customer-orders-page .professional-ledger-table {
+    min-width: 0;
+  }
+
+  .customer-orders-page .professional-ledger-table thead {
+    display: none;
+  }
+
+  .customer-orders-page .professional-ledger-table tbody {
+    display: grid;
+    gap: 14px;
+  }
+
+  .customer-orders-page .professional-ledger-table tbody tr {
+    overflow: hidden;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .customer-orders-page .professional-ledger-table td {
+    display: grid;
+    grid-template-columns: minmax(88px, 32%) minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px !important;
+    text-align: right !important;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .customer-orders-page .professional-ledger-table td::before {
+    content: attr(data-label);
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .customer-orders-page .professional-ledger-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .customer-orders-page .professional-ledger-table td > button,
+  .customer-orders-page .professional-ledger-table td > span {
+    justify-self: end;
+  }
+
+  .customer-review-modal-backdrop {
+    align-items: flex-end !important;
+    padding: 10px;
+  }
+
+  .customer-review-modal {
+    max-height: calc(100dvh - 20px);
+    padding: 22px 18px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .customer-orders-page {
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+  }
+
+  .customer-orders-page .history-ledger-section-block {
+    padding: 12px !important;
+  }
+
+  .customer-review-actions {
+    flex-direction: column-reverse;
+  }
+
+  .customer-review-actions button {
+    width: 100%;
+    min-height: 44px;
+  }
 }

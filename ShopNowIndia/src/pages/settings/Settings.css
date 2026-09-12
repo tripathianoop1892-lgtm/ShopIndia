@@ -303,6 +303,7 @@
     flex-direction: column;
     align-items: stretch;
     gap: 24px;
+    padding: 24px 18px 36px;
   }
   .pro-settings-sidebar-card {
     width: 100%;
@@ -319,6 +320,17 @@
 }
 
 @media (max-width: 640px) {
+  .pro-settings-wrapper {
+    gap: 16px;
+    padding: 18px 12px 30px;
+  }
+
+  .pro-settings-sidebar-card,
+  .view-panel-card {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
   .sidebar-tab-nav {
     flex-direction: column;
   }
@@ -332,5 +344,26 @@
   }
   .toggle-meta {
     max-width: 100%;
+  }
+
+  .panel-footer-actions {
+    margin-top: 24px;
+  }
+
+  .settings-save-btn {
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+  }
+}
+
+@media (max-width: 380px) {
+  .pro-settings-wrapper {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .settings-header-title {
+    align-items: flex-start;
   }
 }

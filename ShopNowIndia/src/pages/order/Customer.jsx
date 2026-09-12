@@ -64,7 +64,7 @@ const CustomerOrders = () => {
   }
 
   return (
-    <div className="bigdiv" style={{ padding: "20px" }}>
+    <div className="bigdiv customer-orders-page" style={{ padding: "20px" }}>
       <div className="earnings-dashboard-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "35px", borderBottom: "1px solid #e2e8f0", paddingBottom: "22px" }}>
         <div>
           <h2 style={{ fontSize: "26px", fontWeight: 700, color: "#1e293b", margin: "0 0 6px 0" }}>📦 My Shopping Orders Ledger</h2>
@@ -110,13 +110,13 @@ const CustomerOrders = () => {
               <tbody>
                 {orders.map((o) => (
                   <tr key={o._id} className="ledger-interactive-row" style={{ borderBottom: "1px solid #e2e8f0" }}>
-                    <td className="monospace-cell-id" style={{ padding: "16px 20px", fontFamily: "'SFMono-Regular', Consolas, monospace", fontWeight: 600, color: "#64748b", fontSize: "13px" }}>
+                    <td data-label="Transaction" className="monospace-cell-id" style={{ padding: "16px 20px", fontFamily: "'SFMono-Regular', Consolas, monospace", fontWeight: 600, color: "#64748b", fontSize: "13px" }}>
                       #{shortId(o._id)?.toUpperCase()}
                     </td>
-                    <td style={{ padding: "16px 20px", fontSize: "14px", color: "#0f172a", fontWeight: 600 }}>
+                    <td data-label="Pharmacy" style={{ padding: "16px 20px", fontSize: "14px", color: "#0f172a", fontWeight: 600 }}>
                       {o.sellerId?.name || "OmSanjeevani Local Pharmacy"}
                     </td>
-                    <td style={{ padding: "16px 20px", fontSize: "14px", color: "#4a5568" }}>
+                    <td data-label="Items" style={{ padding: "16px 20px", fontSize: "14px", color: "#4a5568" }}>
                       {o.items?.map((item, idx) => (
                         <div key={idx} style={{ fontSize: "13px", marginBottom: "8px" }}>
                           <FaBoxes style={{ marginRight: "6px", color: "#94a3b8", fontSize: "11px" }} />
@@ -145,10 +145,10 @@ const CustomerOrders = () => {
                         </div>
                       ))}
                     </td>
-                    <td style={{ padding: "16px 20px", fontSize: "14px", color: "#475569" }}>
+                    <td data-label="Date" style={{ padding: "16px 20px", fontSize: "14px", color: "#475569" }}>
                       {formatDate(o.createdAt)}
                     </td>
-                    <td style={{ padding: "16px 20px", textAlign: "center" }}>
+                    <td data-label="Status" style={{ padding: "16px 20px", textAlign: "center" }}>
                       <span className={`badge-status ${["paid", "approved", "delivered"].includes(o.status?.toLowerCase()) ? "settled" : o.status?.toLowerCase() === "pending" ? "pending" : "cancelled"}`}>
                         {o.status}
                       </span>
@@ -158,8 +158,8 @@ const CustomerOrders = () => {
                         </p>
                       )}
                     </td>
-                    <td style={{ padding: "16px 20px" }}><button type="button" onClick={() => setInvoiceOrder(o)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}><FaReceipt /> Invoice</button></td>
-                    <td className="text-right table-bold-amount credit-color" style={{ padding: "16px 20px", textAlign: "right", fontWeight: 700, fontSize: "15px", color: "#16a34a" }}>
+                    <td data-label="Invoice" style={{ padding: "16px 20px" }}><button type="button" onClick={() => setInvoiceOrder(o)} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}><FaReceipt /> Invoice</button></td>
+                    <td data-label="Total" className="text-right table-bold-amount credit-color" style={{ padding: "16px 20px", textAlign: "right", fontWeight: 700, fontSize: "15px", color: "#16a34a" }}>
                       ₹{Number(o.totalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
@@ -174,8 +174,8 @@ const CustomerOrders = () => {
 
       {/* --- REVIEW MODAL OVERLAY --- */}
       {reviewModal.isOpen && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999 }}>
-          <div style={{ background: "white", padding: "28px", borderRadius: "12px", width: "100%", maxWidth: "450px", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}>
+        <div className="customer-review-modal-backdrop" style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.6)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999 }}>
+          <div className="customer-review-modal" style={{ background: "white", padding: "28px", borderRadius: "12px", width: "100%", maxWidth: "450px", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}>
             <h3 style={{ marginTop: 0, color: "#0f172a", fontSize: "20px", fontWeight: "700" }}>Review Product</h3>
             <p style={{ color: "#64748b", fontSize: "14px", marginTop: "-10px", marginBottom: "20px" }}>{reviewModal.name}</p>
             
@@ -205,7 +205,7 @@ const CustomerOrders = () => {
                 />
               </label>
               
-              <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "12px" }}>
+              <div className="customer-review-actions" style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "12px" }}>
                 <button 
                   type="button" 
                   onClick={() => setReviewModal({isOpen: false, medicineId: null, name: ""})} 

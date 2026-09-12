@@ -34,6 +34,22 @@ const prescriptionSchema = new mongoose.Schema(
       default: "image",
     },
 
+    mimeType: {
+      type: String,
+      enum: ["image/jpeg", "image/png", "application/pdf"],
+      default: null,
+    },
+
+    extracted: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
+    },
+
+    readAt: {
+      type: Date,
+      default: null,
+    },
+
     // Prescription Status
     status: {
       type: String,

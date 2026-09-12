@@ -8,6 +8,8 @@
   padding: 32px 48px;
   font-family: 'Inter', -apple-system, sans-serif;
   color: #1e293b;
+  overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 /* ===== HERO NAVIGATION META HEADER ===== */
@@ -218,7 +220,7 @@
 /* ===== GRID MATRIX ===== */
 .medicine-marketplace-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 32px;
 }
 
@@ -289,6 +291,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .stock-status-dot {
@@ -443,15 +446,37 @@
   }
   .promo-shop-btn {
     width: 100%;
+    min-height: 46px;
   }
+
+  .search-wrapper-box { max-width: none; }
+  .medicine-marketplace-grid { gap: 20px; }
 }
 
 @media (max-width: 480px) {
-  .marketplace-hero-row { margin-bottom: 24px; gap: 16px; }
+  .customer-dashboard-container { padding: 18px 12px 32px; }
+  .marketplace-hero-row { align-items: stretch; margin-bottom: 24px; gap: 16px; }
+  .hero-meta-details { min-width: 0; }
   .hero-meta-details h2 { font-size: 23px; }
-  .connection-pill { font-size: 12px; padding: 6px 10px; }
+  .connection-pill { max-width: 100%; font-size: 12px; padding: 6px 10px; overflow-wrap: anywhere; }
   .dashboard-stats-row { gap: 14px; margin-bottom: 24px; }
   .stat-card { padding: 18px; }
   .marketing-promo-banner { padding: 22px 18px; }
   .card-core-body { padding: 18px; }
+  .dashboard-stats-row { grid-template-columns: minmax(0, 1fr); }
+  .medicine-marketplace-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .card-media-header { height: 150px; padding: 18px; }
+  .add-to-basket-btn-purple { width: calc(100% - 36px); margin-bottom: 18px; min-height: 46px; }
+  .promo-text-content h2 { font-size: 23px; }
+  .marketing-promo-banner { margin-bottom: 24px; }
+}
+
+@media (max-width: 360px) {
+  .customer-dashboard-container { padding-right: 10px; padding-left: 10px; }
+  .hero-meta-details h2 { font-size: 21px; }
+  .stat-card { padding: 16px; }
+  .stat-info h3 { font-size: 24px; }
+  .marketing-promo-banner { padding: 20px 16px; }
+  .spec-item { align-items: flex-start; gap: 12px; }
+  .spec-val-highlight { text-align: right; overflow-wrap: anywhere; }
 }

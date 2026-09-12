@@ -2,9 +2,10 @@ import { GoogleGenAI } from "@google/genai";
 import fs from "fs";
 import path from "path";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+const getAIClient = () =>
+  new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+  });
 
 const prescriptionSchema = {
   type: "object",
@@ -123,21 +124,25 @@ export const readPrescriptionWithAI = async ({
     throw new Error("Prescription file type is missing.");
   }
 
-  const uploadedFile = await ai.files.upload({
-    file: filePath,
-    config: {
-      mimeType,
-    },
-  });
+  const ai = getAIClient();
+  let uploadedFile;
 
-  const response = await ai.models.generateContent({
-   model: "gemini-3.6-flash",
-    contents: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: `
+  try {
+    uploadedFile = await ai.files.upload({
+      file: filePath,
+      config: {
+        mimeType,
+      },
+    });
+
+    const response = await ai.models.generateContent({
+      model: process.env.GEMINI_MODEL || "gemini-3.6-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `
 You are a prescription document reading assistant.
 
 Your ONLY job is to READ and EXTRACT information that is visibly present
@@ -170,36 +175,41 @@ Read the prescription carefully and extract:
 - Instructions
 
 This is an extraction task, NOT a medical advice task.
-            `,
-          },
-          {
-            fileData: {
-              fileUri: uploadedFile.uri,
-              mimeType: uploadedFile.mimeType,
+              `,
             },
-          },
-        ],
+            {
+              fileData: {
+                fileUri: uploadedFile.uri,
+                mimeType: uploadedFile.mimeType,
+              },
+            },
+          ],
+        },
+      ],
+
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: prescriptionSchema,
       },
-    ],
+    });
 
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: prescriptionSchema,
-    },
-  });
+    if (!response?.text) {
+      throw new Error("AI returned an empty response.");
+    }
 
-  if (!response?.text) {
-    throw new Error("AI returned an empty response.");
+    try {
+      return JSON.parse(response.text);
+    } catch (error) {
+      console.error("Gemini JSON parse error:", error);
+      throw new Error("AI returned an invalid prescription response.");
+    }
+  } finally {
+    if (uploadedFile?.name) {
+      try {
+        await ai.files.delete({ name: uploadedFile.name });
+      } catch (error) {
+        console.warn("Unable to delete temporary Gemini file:", error.message);
+      }
+    }
   }
-
-  let extracted;
-
-  try {
-    extracted = JSON.parse(response.text);
-  } catch (error) {
-    console.error("Gemini JSON parse error:", error);
-    throw new Error("AI returned an invalid prescription response.");
-  }
-
-  return extracted;
 };

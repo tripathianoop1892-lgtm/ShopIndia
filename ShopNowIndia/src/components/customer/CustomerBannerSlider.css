@@ -8,3 +8,9 @@
 .customer-banner-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: #cbd5e1; cursor: pointer; }
 .customer-banner-dots button.active { width: 24px; background: #2563eb; }
 @media (max-width: 768px) { .customer-banner-content { min-height: 150px; padding: 24px; } }
+@media (max-width: 480px) {
+  .customer-banner { margin-bottom: 24px; border-radius: 10px; }
+  .customer-banner-content { min-height: 140px; padding: 20px 18px; }
+  .customer-banner-content strong { font-size: 22px; line-height: 1.2; }
+  .customer-banner-content span { line-height: 1.45; }
+}

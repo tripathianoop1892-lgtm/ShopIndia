@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "./CustomerPrescription.css";
 import PrescriptionOrderCard from "./PrescriptionOrderCard/PrescriptionOrderCard";
+import { setCartItems } from "../../features/cartSlice";
 import {
+  addToCart,
   getCustomerPrescriptions,
   getPrescriptionFile,
   uploadPrescription,
@@ -11,6 +15,8 @@ import {
 } from "../../services/api";
 
 const CustomerPrescription = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [image, setImage] = useState(null);
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState(null);
@@ -24,6 +30,8 @@ const CustomerPrescription = () => {
   const [readPrescriptionCache, setReadPrescriptionCache] = useState({});
   const [selectedPrescriptionMedicines, setSelectedPrescriptionMedicines] = useState([]);
   const [prescriptionCheckoutMode, setPrescriptionCheckoutMode] = useState(false);
+  const [cartSubmitting, setCartSubmitting] = useState(false);
+  const readRequestId = useRef(0);
 
   const loadPrescriptions = async () => {
     try {
@@ -62,9 +70,9 @@ const CustomerPrescription = () => {
       return;
     }
 
-    // Maximum 10 MB
-    if (selectedFile.size > 10 * 1024 * 1024) {
-      alert("Prescription file must be less than 10 MB.");
+    // Keep this in sync with the backend Multer limit.
+    if (selectedFile.size > 5 * 1024 * 1024) {
+      alert("Prescription file must be 5 MB or smaller.");
       return;
     }
 
@@ -116,15 +124,10 @@ const CustomerPrescription = () => {
       const formData = new FormData();
 
       formData.append("prescription", file);
-      formData.append("customerId", user._id);
-      formData.append("customerName", user.name || "");
-      formData.append("shopId", user.shopId);
 
       const data = await uploadPrescription(formData);
 
       if (data.success) {
-        alert("Prescription uploaded successfully.");
-
         if (image) {
           URL.revokeObjectURL(image);
         }
@@ -134,6 +137,7 @@ const CustomerPrescription = () => {
         setFileName("");
 
         await loadPrescriptions();
+        await handleReadPrescription(data.prescription);
       } else {
         alert(data.message || "Unable to upload prescription.");
       }
@@ -205,9 +209,15 @@ const handleDeletePrescription = async (id) => {
 // READ PRESCRIPTION
 // =========================
 const handleReadPrescription = async (prescription) => {
+  const requestId = ++readRequestId.current;
+
   try {
     setReading(true);
-   const cached = readPrescriptionCache[prescription._id];
+    setPrescriptionOrder(null);
+    setSelectedPrescriptionMedicines([]);
+    setPrescriptionCheckoutMode(false);
+
+    const cached = readPrescriptionCache[prescription._id];
 
 const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
 
@@ -218,6 +228,11 @@ if (cached && Date.now() - cached.cachedAt < CACHE_DURATION) {
     readError: null,
   });
 
+  try {
+    await preparePrescriptionOrder(cached.extracted);
+  } catch (error) {
+    console.error("Prescription medicine matching error:", error);
+  }
   setReading(false);
   return;
 }
@@ -240,6 +255,8 @@ if (cached) {
     // Actual backend OCR / AI API
     const response = await readPrescriptionAPI(prescription._id);
 
+    if (requestId !== readRequestId.current) return;
+
     if (!response?.success) {
       throw new Error(
         response?.message || "Unable to read prescription."
@@ -256,11 +273,18 @@ setReadPrescriptionCache((prev) => ({
 }));
     setReadPrescription((prev) => ({
       ...prev,
-      extracted: response.extracted || response.data || null,
+      extracted: extractedData,
       readError: null,
     }));
+    try {
+      await preparePrescriptionOrder(extractedData);
+    } catch (error) {
+      console.error("Prescription medicine matching error:", error);
+    }
   } catch (error) {
     console.error("Read prescription error:", error);
+
+    if (requestId !== readRequestId.current) return;
 
     setReadPrescription((prev) => ({
       ...prev,
@@ -270,7 +294,9 @@ setReadPrescriptionCache((prev) => ({
         "Prescription could not be read. Please check the original prescription.",
     }));
   } finally {
-    setReading(false);
+    if (requestId === readRequestId.current) {
+      setReading(false);
+    }
   }
 };
 
@@ -278,20 +304,26 @@ setReadPrescriptionCache((prev) => ({
   // CLOSE READ MODAL
   // =========================
   const closeReadPrescription = () => {
+    readRequestId.current += 1;
     setReadPrescription(null);
+    setReading(false);
+    setPrescriptionOrder(null);
+    setSelectedPrescriptionMedicines([]);
+    setPrescriptionCheckoutMode(false);
+    setCartSubmitting(false);
   };
 
     // =========================
 // ORDER MEDICINES FROM PRESCRIPTION
 // =========================
-const handleOrderMedicines = async () => {
+const preparePrescriptionOrder = async (extracted) => {
   try {
-    const extractedMedicines =
-      readPrescription?.extracted?.medicines;
+    const extractedMedicines = extracted?.medicines;
 
     if (!extractedMedicines?.length) {
-      alert("Prescription में कोई medicine detect नहीं हुई.");
-      return;
+      setPrescriptionOrder([]);
+      setSelectedPrescriptionMedicines([]);
+      return [];
     }
 
     // Customer ke current shop ka medicine catalog
@@ -308,8 +340,9 @@ const customerMedicines = Array.isArray(catalog)
   : [];
 
       if (!customerMedicines.length) {
-      alert("Customer dashboard में कोई medicine उपलब्ध नहीं है.");
-      return;
+      setPrescriptionOrder([]);
+      setSelectedPrescriptionMedicines([]);
+      return [];
     }
 
     const orderMedicines = extractedMedicines.map(
@@ -368,7 +401,8 @@ const customerMedicines = Array.isArray(catalog)
             return (
               nameMatch &&
               strengthMatch &&
-              formMatch
+              formMatch &&
+              Number(medicine?.stock || 0) > 0
             );
           }
         );
@@ -397,18 +431,90 @@ const customerMedicines = Array.isArray(catalog)
     setSelectedPrescriptionMedicines(
       availableMedicineIds
     );
+
+    return orderMedicines;
   } catch (error) {
     console.error(
       "Order medicines error:",
       error
     );
 
+    setPrescriptionOrder([]);
+    setSelectedPrescriptionMedicines([]);
+    throw error;
+  }
+};
+
+const handleOrderMedicines = async () => {
+  try {
+    const orderMedicines = await preparePrescriptionOrder(
+      readPrescription?.extracted
+    );
+
+    if (!orderMedicines?.length) {
+      alert("No available shop medicines matched this prescription.");
+    }
+  } catch (error) {
     alert(
       error?.message ||
-        "Prescription medicines check नहीं हो सकीं."
+        "Prescription medicines could not be checked."
     );
   }
-};  
+};
+
+const handleAddPrescriptionToCart = async (selectedItems) => {
+  if (!selectedItems?.length || cartSubmitting) return;
+
+  try {
+    setCartSubmitting(true);
+    let latestCart = null;
+
+    for (const item of selectedItems) {
+      const medicine = item.matchedMedicine;
+      const sellerId = typeof medicine?.ownerId === "object"
+        ? medicine.ownerId?._id
+        : medicine?.ownerId;
+
+      if (!medicine?._id || !sellerId) {
+        throw new Error(`Seller details are missing for ${medicine?.name || "a medicine"}.`);
+      }
+
+      const response = await addToCart({
+        medicineId: medicine._id,
+        name: medicine.name,
+        company: medicine.company || "",
+        price: Number(
+          medicine.retailPrice || medicine.price || medicine.mrp || 0
+        ),
+        image: medicine.image || "",
+        quantity: item.quantity,
+        sellerId,
+        sellingUnit: medicine.sellingUnit || "Pack",
+        individualSaleAllowed: Boolean(medicine.individualSaleAllowed),
+        packSize: Number(medicine.packSize) || 1,
+      });
+
+      if (!response?.success) {
+        throw new Error(response?.message || `Unable to add ${medicine.name} to cart.`);
+      }
+
+      latestCart = response.cart || latestCart;
+    }
+
+    if (latestCart) {
+      dispatch(setCartItems(latestCart));
+    }
+
+    closeReadPrescription();
+    navigate("/customer/cart");
+  } catch (error) {
+    console.error("Add prescription medicines to cart error:", error);
+    alert(error?.message || "Unable to add prescription medicines to cart.");
+  } finally {
+    setCartSubmitting(false);
+  }
+};
+
 const togglePrescriptionMedicine = (medicineId) => {
   setSelectedPrescriptionMedicines((prev) =>
     prev.includes(medicineId)
@@ -812,17 +918,23 @@ const togglePrescriptionMedicine = (medicineId) => {
 <span>
   📅 Duration: {medicine.duration || "-"}
 </span>
+
+{medicine.instructions && (
+  <span>
+    📝 Instructions: {medicine.instructions}
+  </span>
+)}
                     </div>
 
                   )
                 )}
 
-                {readPrescription.extracted.instructions && (
+                {readPrescription.extracted.notes && (
                   <div className="read-instructions">
-                    <strong>📝 Instructions</strong>
+                    <strong>📝 Reading notes</strong>
 
                     <p>
-                      {readPrescription.extracted.instructions}
+                      {readPrescription.extracted.notes}
                     </p>
                   </div>
                 )}
@@ -847,18 +959,30 @@ const togglePrescriptionMedicine = (medicineId) => {
     onBackToMedicines={() => {
       setPrescriptionCheckoutMode(false);
     }}
-    onProceedToAddress={() => {
-      alert("Address step next.");
-    }}
+    onAddToCart={handleAddPrescriptionToCart}
+    cartSubmitting={cartSubmitting}
   />
 )}
+            {!reading &&
+              readPrescription.extracted &&
+              Array.isArray(prescriptionOrder) &&
+              prescriptionOrder.length === 0 && (
+                <div className="prescription-read-error">
+                  <h4>No exact stock matches found</h4>
+                  <p>
+                    Review the original prescription and contact the selected pharmacy.
+                    No medicine was added automatically.
+                  </p>
+                </div>
+              )}
             <div className="prescription-read-footer">
 
   <button
   type="button"
   onClick={handleOrderMedicines}
+  disabled={reading || !readPrescription.extracted || cartSubmitting}
 >
-  🛒 Order Medicines
+  🛒 Refresh Medicine Matches
 </button>
 
   <button

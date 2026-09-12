@@ -354,8 +354,7 @@ export const getPrescriptionFile = async (id) => fetch(`${BASE_URL}/prescription
 export const updatePrescriptionStatus = async (
   id,
   status,
-  remarks,
-  verifiedBy
+  remarks
 ) => {
   const res = await fetch(
     `${BASE_URL}/prescriptions/${id}/status`,
@@ -365,7 +364,6 @@ export const updatePrescriptionStatus = async (
       body: JSON.stringify({
         status,
         remarks,
-        verifiedBy,
       }),
     }
   );

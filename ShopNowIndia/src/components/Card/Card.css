@@ -490,10 +490,50 @@
   .vendor-id-subtext { font-size: 11px; }
   .group-row-count-pill { padding: 5px 8px; font-size: 11px; white-space: nowrap; }
 
-  .items-table-scroller { -webkit-overflow-scrolling: touch; }
+  .items-table-scroller { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .professional-cart-table { min-width: 650px; }
   .professional-cart-table th { padding: 12px 14px; font-size: 11px; }
   .professional-cart-table td { padding: 14px; }
+
+  .customer-layout .items-table-scroller { overflow: visible; }
+  .customer-layout .professional-cart-table,
+  .customer-layout .professional-cart-table tbody,
+  .customer-layout .professional-cart-table tr,
+  .customer-layout .professional-cart-table td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+  .customer-layout .professional-cart-table { min-width: 0; }
+  .customer-layout .professional-cart-table thead { display: none; }
+  .customer-layout .professional-cart-table tbody { display: grid; gap: 12px; padding: 12px; }
+  .customer-layout .professional-cart-table tbody tr {
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: #fff;
+  }
+  .customer-layout .professional-cart-table td {
+    display: grid;
+    grid-template-columns: minmax(82px, 32%) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 12px !important;
+    text-align: right !important;
+  }
+  .customer-layout .professional-cart-table td::before {
+    content: attr(data-label);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .customer-layout .professional-cart-table td > * { justify-self: end; }
+  .customer-layout .professional-cart-table .med-details-cell { min-width: 0; text-align: right; }
+  .customer-layout .professional-cart-table .med-primary-title,
+  .customer-layout .professional-cart-table .med-secondary-manufacturer { overflow-wrap: anywhere; }
 
   .vendor-card-footer-summary {
     align-items: stretch;
@@ -522,4 +562,6 @@
   .coupon-input-row { flex-direction: column; }
   .coupon-apply-btn { min-height: 42px; }
   .summary-stack { grid-template-columns: 1fr; }
+  .customer-layout .professional-cart-table tbody { padding: 10px; }
+  .customer-layout .professional-cart-table td { grid-template-columns: 76px minmax(0, 1fr); padding: 11px 10px !important; }
 }

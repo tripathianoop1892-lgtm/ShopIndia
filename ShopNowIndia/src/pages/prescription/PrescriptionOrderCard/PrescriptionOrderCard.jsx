@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import "./PrescriptionOrderCard.css";
 
 const PrescriptionOrderCard = ({
@@ -8,7 +8,8 @@ const PrescriptionOrderCard = ({
   onContinue,
   checkoutMode = false,
   onBackToMedicines,
-  onProceedToAddress,
+  onAddToCart,
+  cartSubmitting = false,
 }) => {
   const [quantities, setQuantities] = useState({});
 
@@ -33,7 +34,11 @@ const PrescriptionOrderCard = ({
   };
 
   const updateQuantity = (medicineId, value) => {
-    const quantity = Math.max(1, Number(value) || 1);
+    const medicine = selectedItems.find(
+      (item) => item.matchedMedicine?._id === medicineId
+    )?.matchedMedicine;
+    const maximum = Math.max(1, Number(medicine?.stock) || 1);
+    const quantity = Math.min(maximum, Math.max(1, Math.floor(Number(value) || 1)));
 
     setQuantities((prev) => ({
       ...prev,
@@ -41,17 +46,15 @@ const PrescriptionOrderCard = ({
     }));
   };
 
-  const totalAmount = useMemo(() => {
-    return selectedItems.reduce((total, item) => {
-      const medicine = item.matchedMedicine;
-      const medicineId = medicine?._id;
+  const totalAmount = selectedItems.reduce((total, item) => {
+    const medicine = item.matchedMedicine;
+    const medicineId = medicine?._id;
 
-      const price = getPrice(medicine);
-      const quantity = quantities[medicineId] || 1;
+    const price = getPrice(medicine);
+    const quantity = quantities[medicineId] || 1;
 
-      return total + price * quantity;
-    }, 0);
-  }, [selectedItems, quantities]);
+    return total + price * quantity;
+  }, 0);
 
   if (!prescriptionOrder.length) return null;
 
@@ -184,10 +187,17 @@ const PrescriptionOrderCard = ({
 
               <button
                 type="button"
-                onClick={onProceedToAddress}
-                disabled={!selectedItems.length}
+                onClick={() =>
+                  onAddToCart?.(
+                    selectedItems.map((item) => ({
+                      ...item,
+                      quantity: getQuantity(item.matchedMedicine?._id),
+                    }))
+                  )
+                }
+                disabled={!selectedItems.length || cartSubmitting}
               >
-                Proceed to Address →
+                {cartSubmitting ? "Adding to Cart..." : "Add to Cart & Checkout →"}
               </button>
             </div>
 

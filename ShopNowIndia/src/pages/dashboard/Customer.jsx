@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { MedicinesList, addToCart, getCart } from "../../services/api";
 import { setCartItems } from "../../features/cartSlice";
 import useAuth from "../../hooks/useAuth";
-import Header from "../../components/Header/Header";
 import CustomerBannerSlider from "../../components/customer/CustomerBannerSlider";
 import { 
   FaSearch, FaShoppingBasket, FaMedkit, FaBuilding, 
@@ -110,8 +109,6 @@ const Customer = () => {
 
   return (
     <div className="customer-dashboard-container">
-      <Header />
-
       {/* Account Meta Context Header Bar */}
       <div className="marketplace-hero-row">
         <div className="hero-meta-details">

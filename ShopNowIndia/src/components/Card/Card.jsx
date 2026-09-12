@@ -314,14 +314,14 @@ const Cart = () => {
 
                     return (
                       <tr key={itemId || index}>
-                        <td>
+                        <td data-label="Medicine">
                           <div className="med-details-cell">
                             <span className="med-primary-title">{item.name}</span>
                             <span className="med-secondary-manufacturer">{item.company || "Manufacturer N/A"}</span>
                           </div>
                         </td>
-                        <td className="text-center numerical-font">₹{(item.price || 0).toLocaleString('en-IN')}</td>
-                        <td className="text-center">
+                        <td data-label="Unit price" className="text-center numerical-font">₹{(item.price || 0).toLocaleString('en-IN')}</td>
+                        <td data-label="Quantity" className="text-center">
                           <div className="pro-quantity-controls-wrapper">
                             <button 
                               className="qty-adjust-btn minus"
@@ -344,10 +344,10 @@ const Cart = () => {
                             </button>
                           </div>
                         </td>
-                        <td className="text-right numerical-font bold-total">
+                        <td data-label="Line total" className="text-right numerical-font bold-total">
                           ₹{((item.price || 0) * (item.quantity || item.qty || 1)).toLocaleString('en-IN')}
                         </td>
-                        <td className="text-center">
+                        <td data-label="Action" className="text-center">
                           <button 
                             className="pro-action-delete-btn" 
                             onClick={() => removeItem(item.name)}
