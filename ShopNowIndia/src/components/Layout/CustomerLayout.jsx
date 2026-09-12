@@ -18,7 +18,7 @@ const CustomerLayout = () => {
   return (
     <div className="customer-layout">
       <CustomerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen(true)} aria-label="Open navigation menu">
+      <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen((open) => !open)} aria-label="Toggle navigation menu" aria-expanded={sidebarOpen}>
         <FaBars />
       </button>
       <div className="customer-main-content">

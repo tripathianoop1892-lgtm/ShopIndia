@@ -440,6 +440,10 @@
 }
 
 @media (max-width: 576px) {
+  .dashboard-container { padding: 16px; }
+  .dashboard-title { font-size: 23px; }
+  .dashboard-badge { width: 100%; text-align: center; }
+  .dashboard-header { align-items: stretch; gap: 12px; }
   .stat-card {
     flex: 100%;
   }

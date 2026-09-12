@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
+import { API_BASE_URL } from "../../services/api";
 
 const Earnings = () => {
   const [total, setTotal] = useState(0);
@@ -18,7 +19,7 @@ const Earnings = () => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       };
-      const res = await fetch("http://localhost:5000/api/earnings", { headers });
+      const res = await fetch(`${API_BASE_URL}/earnings`, { headers });
       const data = await res.json();
 
       console.log("Earnings Data:", data);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getAdminOrders } from "../../../services/api";
+import { asList, getAdminOrders } from "../../../services/api";
 import { exportRowsToExcel } from "../../../utils/export";
 import "./Payments.css";
 
@@ -9,7 +9,7 @@ const Payments = () => {
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
-  useEffect(() => { getAdminOrders().then((data) => setOrders(Array.isArray(data) ? data : [])).catch(console.error); }, []);
+  useEffect(() => { getAdminOrders().then((data) => setOrders(asList(data, ["orders"]))).catch(console.error); }, []);
   const payments = useMemo(() => orders.map((order) => ({ ...order, paymentStatus: paymentStatus(order) })).filter((order) => {
     const matchesSearch = [order._id, order.customerName, order.shopkeeperName].filter(Boolean).some((value) => value.toLowerCase().includes(search.toLowerCase()));
     return matchesSearch && (status === "All" || order.paymentStatus === status);

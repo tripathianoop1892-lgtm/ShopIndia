@@ -1,4 +1,4 @@
-.sidebar{
+.admin-sidebar{
     width:260px;
     height:100vh;
     background:#0f172a;
@@ -10,7 +10,7 @@
     overflow-y:auto;
 }
 
-.sidebar.close{
+.admin-sidebar.close{
     width:80px;
 }
 
@@ -27,16 +27,16 @@
     font-size:26px;
 }
 
-.sidebar ul{
+.admin-sidebar ul{
     list-style:none;
     padding:15px 0;
 }
 
-.sidebar ul li{
+.admin-sidebar ul li{
     margin:8px 12px;
 }
 
-.sidebar ul li a{
+.admin-sidebar ul li a{
     display:flex;
     align-items:center;
     gap:15px;
@@ -47,36 +47,36 @@
     transition:.3s;
 }
 
-.sidebar ul li a svg{
+.admin-sidebar ul li a svg{
     font-size:20px;
     min-width:22px;
 }
 
-.sidebar ul li a:hover{
+.admin-sidebar ul li a:hover{
     background:#2563eb;
     color:#fff;
 }
 
-.sidebar ul li a.active{
+.admin-sidebar ul li a.active{
     background:#2563eb;
     color:#fff;
 }
 
-.sidebar.close span{
+.admin-sidebar.close span{
     display:none;
 }
 
-.sidebar.close .logo h2{
+.admin-sidebar.close .logo h2{
     font-size:20px;
 }
 
 @media(max-width:768px){
 
-.sidebar{
+.admin-sidebar{
     left:-260px;
 }
 
-.sidebar.open{
+.admin-sidebar.open{
     left:0;
     z-index:9999;
 }

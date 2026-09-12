@@ -31,7 +31,7 @@ const About = () => {
               India's Smart Medicine Distribution Platform — Connecting healthcare channels through premium digital infrastructure.
             </p>
             </div>
-            <img src="about.png" alt="" style={{width:"500px"}}/>
+            <img src="about.png" alt="OmSanjeevani healthcare platform" className="about-hero-illustration" />
           </div>
         </section>
 
@@ -94,7 +94,7 @@ const About = () => {
                   <li>✔ Cloud-synced real-time expiration warning badges.</li>
                 </ul>
                 </div>
-                <img src="forShopkeeper.png" alt="" style={{width:"400px"}}/>
+                <img src="forShopkeeper.png" alt="Shopkeeper tools illustration" className="service-illustration" />
               </div>
             </div>
 
@@ -113,7 +113,7 @@ const About = () => {
                   <li>✔ Automated ledger tools designed to monitor stable wholesale business growth.</li>
                 </ul>
                 </div>
-                <img src="forDistributor.png" alt="" style={{width:"400px"}} />
+                <img src="forDistributor.png" alt="Distributor tools illustration" className="service-illustration" />
               </div>
             </div>
 
@@ -132,7 +132,7 @@ const About = () => {
                   <li>✔ Dependable delivery tracking logs ensuring safety parameters are met.</li>
                 </ul>
                 </div>
-                <img src="forcustomer.png" alt="" style={{width:"400px"}} />
+                <img src="forcustomer.png" alt="Customer tools illustration" className="service-illustration" />
               </div>
             </div>
           </div>

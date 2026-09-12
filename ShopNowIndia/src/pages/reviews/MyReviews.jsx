@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { getMyReviews } from "../../services/api";
 
 const MyReviews = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    // Note: Add this fetch call to your services/api.js 
-    // export const getMyReviews = async () => { return await fetch(...).json() }
     const fetchReviews = async () => {
-      const res = await fetch("http://localhost:5000/api/reviews/me", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      const data = await res.json();
-      if (data.success) setReviews(data.data);
+      try {
+        const data = await getMyReviews();
+        if (data.success) setReviews(data.data || []);
+      } catch (error) {
+        console.error("Unable to load reviews:", error);
+      }
     };
     fetchReviews();
   }, []);

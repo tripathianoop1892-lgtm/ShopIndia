@@ -8,12 +8,14 @@
 .table-container {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   border: 1px solid #e2e8f0;
-  overflow-x: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 
 .table-container table {
   width: 100%;
+  min-width: 720px;
   border-collapse: collapse;
 }
 

@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { getMedicine } from "../../../services/api";
+import { asList, getMedicine } from "../../../services/api";
 import "./Medicines.css";
 import { useEffect } from "react";
 
 
 const Medicines = () => {
       const [medicines, setMedicines] =useState([]);
+      const [search, setSearch] = useState("");
     
       useEffect(() => {
         const fetchMedicines = async ()=>{
         try{
           const response = await getMedicine();
-          setMedicines(response)
+          setMedicines(asList(response, ["medicines"]));
           console.log(response)
         }catch(err){
           console.error("Error featching medicines", err)
@@ -26,9 +27,11 @@ const Medicines = () => {
         <h2>Medicines</h2>
 
       <div className="search-box">
-        <input
-          type="text"
-          placeholder="Search Medicine..."
+          <input
+            type="text"
+            placeholder="Search Medicine..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
         />
       </div>
       </div>
@@ -50,9 +53,9 @@ const Medicines = () => {
 
           <tbody>
 
-            {medicines.map((medicine) => (
+            {medicines.filter((medicine) => [medicine.name, medicine.packType, medicine.company].filter(Boolean).some((value) => String(value).toLowerCase().includes(search.toLowerCase()))).map((medicine) => (
 
-              <tr key={medicine.id}>
+              <tr key={medicine._id}>
 
                 <td>{medicine._id}</td>
                 <td>{medicine.name}</td>

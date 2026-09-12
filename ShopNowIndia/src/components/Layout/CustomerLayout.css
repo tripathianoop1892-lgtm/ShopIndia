@@ -34,3 +34,7 @@
     display: block;
   }
 }
+
+@media (max-width: 480px) {
+  .customer-main-content { padding-top: 62px; }
+}

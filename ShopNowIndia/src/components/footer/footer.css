@@ -46,7 +46,7 @@
 /* Brand Logo Formatting */
 .logo-section {
   flex: 2.3;
-  margin-left: -10vw;
+  margin-left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,5 +139,15 @@
 
   .marketing-pill-img {
     width: 220px;
+    margin-top: 0;
   }
+}
+
+@media (max-width: 576px) {
+  .footer { padding-top: 32px; }
+  .footer-container { padding: 0 20px 28px; gap: 28px; }
+  .footer-section h3 { font-size: 14px; }
+  .footer-section p,
+  .footer-section ul li a,
+  .footer-bottom { font-size: 13px; }
 }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createManagedUser, deleteManagedUser, updateManagedUser } from "../../services/api";
+import { asList, createManagedUser, deleteManagedUser, updateManagedUser } from "../../services/api";
 import "./PartnerUsers.css";
 
 const emptyForm = { name: "", email: "", mobile: "", shopName: "", companyName: "", password: "" };
@@ -11,11 +11,20 @@ const PartnerUsers = ({ title, role, getUsers }) => {
   const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const loadUsers = useCallback(async () => {
-    const data = await getUsers();
-    setUsers(Array.isArray(data) ? data : []);
-  }, [getUsers]);
+    setLoading(true);
+    setError("");
+    try {
+      const data = await getUsers();
+      setUsers(asList(data, [role === "shopkeeper" ? "shopkeepers" : "distributors", "users"]));
+    } catch (requestError) {
+      setUsers([]);
+      setError(requestError.message || `Unable to load ${title.toLowerCase()}.`);
+    } finally { setLoading(false); }
+  }, [getUsers, role, title]);
 
   useEffect(() => { loadUsers(); }, [loadUsers]);
 
@@ -61,9 +70,11 @@ const PartnerUsers = ({ title, role, getUsers }) => {
     <section className="partner-users-page">
       <div className="page-header"><h2>{title}</h2></div>
       <div className="search-box"><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={`Search ${title.slice(0, -1)}...`} /></div>
+      {error && <p className="admin-data-error" role="alert">{error}</p>}
       <div className="table-container"><table><thead><tr><th>Name</th><th>{role === "shopkeeper" ? "Shop" : "Company"}</th><th>Mobile</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead><tbody>
         {filteredUsers.map((user) => <tr key={user._id}><td>{user.name}</td><td>{user.shopName || user.companyName || "—"}</td><td>{user.mobile || "—"}</td><td>{user.email}</td><td><span className={user.status === "Inactive" ? "pending" : "active"}>{user.status || "Active"}</span></td><td className="partner-actions"><button className="edit-btn" onClick={() => openEdit(user)}>Edit</button><button className="status-btn" onClick={() => toggleStatus(user)}>{user.status === "Inactive" ? "Activate" : "Deactivate"}</button><button className="delete-btn" onClick={() => remove(user)}>Delete</button></td></tr>)}
-        {!filteredUsers.length && <tr><td colSpan="6">No {title.toLowerCase()} found.</td></tr>}
+        {!loading && !filteredUsers.length && <tr><td colSpan="6">No {title.toLowerCase()} found.</td></tr>}
+        {loading && <tr><td colSpan="6">Loading {title.toLowerCase()}...</td></tr>}
       </tbody></table></div>
       {showForm && <div className="admin-modal-backdrop"><form className="admin-modal" onSubmit={submit}><h3>{editing ? `Edit ${title.slice(0, -1)}` : `Add ${title.slice(0, -1)}`}</h3><label>Name<input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label><label>Email<input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></label><label>Mobile<input value={form.mobile} onChange={(event) => setForm({ ...form, mobile: event.target.value })} /></label>{role === "shopkeeper" && <label>Shop name<input value={form.shopName} onChange={(event) => setForm({ ...form, shopName: event.target.value })} /></label>}{role === "distributor" && <label>Company name<input value={form.companyName} onChange={(event) => setForm({ ...form, companyName: event.target.value })} /></label>}{!editing && <label>Temporary password<input required minLength="6" type="password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /></label>}<div className="admin-modal-actions"><button type="button" onClick={() => setShowForm(false)}>Cancel</button><button className="add-btn" disabled={saving}>{saving ? "Saving..." : "Save"}</button></div></form></div>}
     </section>

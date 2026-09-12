@@ -4,7 +4,7 @@
   background: transparent;
   min-height: 100vh;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: visible;
   box-sizing: border-box;
 }
 
@@ -21,7 +21,7 @@
 }
 
 /* TABLE */
-table {
+.medicine-container table {
   width: 100%;
   border-collapse: collapse;
   background: white;
@@ -32,12 +32,12 @@ table {
 }
 
 /* HEADER */
-thead {
+.medicine-container thead {
   background: #23384d;
   color: white;
 }
 
-th {
+.medicine-container th {
   padding: 14px;
   text-align: center;
   font-weight: 600;
@@ -45,7 +45,7 @@ th {
 }
 
 /* BODY */
-td {
+.medicine-container td {
   padding: 14px;
   text-align: center;
   border-bottom: 1px solid #eee;
@@ -53,7 +53,7 @@ td {
 }
 
 /* HOVER */
-tr:hover {
+.medicine-container tr:hover {
   background: #f8fafc;
 }
 
@@ -74,7 +74,7 @@ tr:hover {
 }
 
 /* INPUT */
-td input {
+.medicine-container td input {
   width: 100%;
   min-width: 80px;
   padding: 8px;
@@ -85,7 +85,7 @@ td input {
   font-size: 14px;
 }
 
-td input:focus {
+.medicine-container td input:focus {
   border-color: #2563eb;
 }
 
@@ -131,7 +131,7 @@ td input:focus {
 }
 
 /* EMPTY */
-td[colspan] {
+.medicine-container td[colspan] {
   padding: 25px;
   font-weight: bold;
   color: #666;
@@ -146,7 +146,23 @@ td[colspan] {
     padding: 15px;
   }
 
-  table {
+  .medicine-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    border-radius: 10px;
+  }
+
+  .medicine-container table {
     min-width: 900px;
   }
+}
+
+@media (max-width: 600px) {
+  .medicine-container { padding: 12px 0; }
+  .medicine-container h2 { font-size: 22px; padding: 0 4px; }
+  .search-bar { width: 100%; margin-bottom: 14px; }
+  .medicine-container th, .medicine-container td { padding: 10px; font-size: 13px; }
 }

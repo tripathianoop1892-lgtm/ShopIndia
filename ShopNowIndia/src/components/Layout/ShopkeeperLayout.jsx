@@ -18,7 +18,7 @@ const ShopkeeperLayout = () => {
   return (
     <div className="shopkeeper-layout">
       <ShopkeeperSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen(true)} aria-label="Open navigation menu">
+      <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen((open) => !open)} aria-label="Toggle navigation menu" aria-expanded={sidebarOpen}>
         <FaBars />
       </button>
       <div className="shopkeeper-main-content">

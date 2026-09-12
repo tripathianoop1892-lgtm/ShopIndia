@@ -15,25 +15,26 @@ const DistributorLayout = () => {
   }
 
   return (
-    <div className={`layout ${sidebarOpen ? "sidebar-open" : ""}`}>
+    <div className="distributor-layout">
       <DistributorSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="main-section">
+      <div className="distributor-main-section">
         <button
           type="button"
-          className="menu-toggle"
-          onClick={() => setSidebarOpen(true)}
+          className="distributor-menu-toggle"
+          onClick={() => setSidebarOpen((open) => !open)}
           aria-label="Open sidebar"
+          aria-expanded={sidebarOpen}
         >
           <FaBars />
         </button>
 
-        <main className="content">
+        <main className="distributor-content">
           <Outlet />
         </main>
       </div>
 
-      {sidebarOpen && <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
+      {sidebarOpen && <button type="button" className="distributor-sidebar-backdrop" aria-label="Close sidebar" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
 };

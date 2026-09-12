@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Customer.css";
 import { useEffect } from "react";
-import { getCustomers } from "../../../services/api";
+import { asList, getCustomers } from "../../../services/api";
 
 
 const Customer = () => {
@@ -12,7 +12,7 @@ const Customer = () => {
     const fetchCustomers = async ()=>{
     try{
       const response = await getCustomers();
-      setCustomers(response)
+      setCustomers(asList(response, ["customers", "users"]));
       console.log(response)
     }catch(err){
       console.error("Error featching customers", err)
@@ -57,7 +57,7 @@ const Customer = () => {
 
           <tbody>
 
-            {customers.filter((customer) => [customer.name, customer.mobile, customer.email, customer.city].filter(Boolean).some((value) => value.toLowerCase().includes(search.toLowerCase()))).map((customer) => (
+            {customers.filter((customer) => [customer.name, customer.mobile, customer.email, customer.city].filter(Boolean).some((value) => String(value).toLowerCase().includes(search.toLowerCase()))).map((customer) => (
 
               <tr key={customer._id}>
 

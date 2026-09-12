@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HelpSupport.css";
+import { API_BASE_URL } from "../../services/api";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = API_BASE_URL;
 
 const HelpSupport = () => {
   const navigate = useNavigate();
