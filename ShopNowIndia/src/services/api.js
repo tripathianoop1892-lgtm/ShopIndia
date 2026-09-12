@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://10.236.102.77:5000/api";
 
 // 🔥 COMMON HEADERS (AUTO TOKEN - FIXED)
 const getHeaders = () => {
