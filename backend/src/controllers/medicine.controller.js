@@ -259,6 +259,20 @@ export const updateMedicine = async (req, res) => {
     // 🔍 DUPLICATE CHECK
     // =========================
 
+    if (req.body.name !== undefined && typeof req.body.name !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Medicine name must be text",
+      });
+    }
+
+    if (req.body.batch !== undefined && typeof req.body.batch !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Batch number must be text",
+      });
+    }
+
     const newName =
       req.body.name !== undefined
         ? req.body.name.trim()
@@ -268,6 +282,13 @@ export const updateMedicine = async (req, res) => {
       req.body.batch !== undefined
         ? req.body.batch.trim()
         : medicine.batch;
+
+    if (!newName) {
+      return res.status(400).json({
+        success: false,
+        message: "Medicine name is required",
+      });
+    }
 
     const duplicate = await Medicine.findOne({
       _id: { $ne: medicine._id },
@@ -288,14 +309,10 @@ export const updateMedicine = async (req, res) => {
     // 🛡️ ALLOWED FIELDS ONLY
     // =========================
 
-    const allowedFields = [
+    const commonFields = [
       "name",
       "batch",
       "mrp",
-      "price",
-      "offerPrice",
-      "wholesalePrice",
-      "retailPrice",
       "expiry",
       "mfd",
       "stock",
@@ -308,6 +325,10 @@ export const updateMedicine = async (req, res) => {
       "individualSaleAllowed",
       "image",
     ];
+
+    const allowedFields = user.role === "distributor"
+      ? [...commonFields, "price", "offerPrice", "wholesalePrice"]
+      : [...commonFields, "retailPrice"];
 
     const updateData = {};
 
@@ -375,22 +396,35 @@ export const updateMedicine = async (req, res) => {
         ? Number(updateData.offerPrice)
         : Number(medicine.offerPrice || 0);
 
-    if (finalMrp < 0) {
+    const finalRetailPrice =
+      updateData.retailPrice !== undefined
+        ? Number(updateData.retailPrice)
+        : Number(medicine.retailPrice || 0);
+
+    if (!Number.isFinite(finalMrp) || finalMrp < 0) {
       return res.status(400).json({
         success: false,
         message: "MRP cannot be negative",
       });
     }
 
-    if (finalPrice < 0 || finalOfferPrice < 0) {
+    if (
+      !Number.isFinite(finalPrice) ||
+      !Number.isFinite(finalOfferPrice) ||
+      !Number.isFinite(finalRetailPrice) ||
+      finalPrice < 0 ||
+      finalOfferPrice < 0 ||
+      finalRetailPrice < 0
+    ) {
       return res.status(400).json({
         success: false,
         message: "Price cannot be negative",
       });
     }
 
-    const sellingPrice =
-      finalOfferPrice > 0
+    const sellingPrice = user.role === "shopkeeper"
+      ? finalRetailPrice
+      : finalOfferPrice > 0
         ? finalOfferPrice
         : finalPrice;
 
@@ -407,11 +441,21 @@ export const updateMedicine = async (req, res) => {
 
     if (
       updateData.stock !== undefined &&
-      Number(updateData.stock) < 0
+      (!Number.isInteger(Number(updateData.stock)) || Number(updateData.stock) < 0)
     ) {
       return res.status(400).json({
         success: false,
-        message: "Stock cannot be negative",
+        message: "Stock must be a whole number of zero or greater",
+      });
+    }
+
+    if (
+      updateData.packSize !== undefined &&
+      (!Number.isInteger(Number(updateData.packSize)) || Number(updateData.packSize) < 1)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Pack size must be a whole number of at least 1",
       });
     }
 

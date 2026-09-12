@@ -26,6 +26,7 @@ const Navbar = () => {
           <li><Link to="/features" onClick={closeMenu}>Features</Link></li>
           <li><Link to="/about" onClick={closeMenu}>About Us</Link></li>
           <li><Link to="/contact" onClick={closeMenu}>Contact</Link></li>
+          <li><Link to="/policy" onClick={closeMenu}>Privacy Policy</Link></li>
         </ul>
 
         {/* Strategic Gateway Action Switches */}

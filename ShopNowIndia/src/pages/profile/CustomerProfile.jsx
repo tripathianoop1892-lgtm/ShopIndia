@@ -185,7 +185,6 @@ const handleMenuClick = (screen) => {
     CustomerPrescriptions: "/customer/prescription",
     Notifications: "/customer/notification",
     Support: "/customer/support",
-    PrivacyPolicy: "/customer/privacy-policy",
   };
 
   const route = routes[screen];
@@ -297,12 +296,6 @@ const handleLogout = () => {
       title: "Help & Support",
       icon: "❓",
       screen: "Support",
-    },
-    {
-      id: "6",
-      title: "Privacy Policy",
-      icon: "🛡️",
-      screen: "PrivacyPolicy",
     },
   ];
 

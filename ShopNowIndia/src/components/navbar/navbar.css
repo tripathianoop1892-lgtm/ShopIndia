@@ -37,7 +37,9 @@
 .navbar-menu-links {
   display: flex;
   list-style: none;
-  gap: 36px;
+  gap: clamp(18px, 2.3vw, 32px);
+  padding: 0;
+  margin: 0;
 }
 
 .navbar-menu-links a {

@@ -2,23 +2,51 @@ import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
 import { MedicinesList, updateMedicine } from "../../services/api";
 
+const toDateInputValue = (value) => {
+  if (!value) return "";
+  const text = String(value);
+  if (/^\d{4}-\d{2}-\d{2}/.test(text)) return text.slice(0, 10);
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+};
+
+const calculateDiscount = (mrp, retailPrice) => {
+  const mrpNumber = Number(mrp);
+  const retailNumber = Number(retailPrice);
+  if (mrpNumber <= 0 || !Number.isFinite(retailNumber)) return 0;
+  return Math.max(0, Math.min(100, Number((100 - (retailNumber / mrpNumber) * 100).toFixed(2))));
+};
+
 const ShopkeeperMedicineList = () => {
   const [retailStock, setRetailStock] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Modal Workspace States
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [editForm, setEditForm] = useState({
-    mrp: "",
-    discount: "",
-    retailPrice: "",
-    stock: ""
-  });
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [editForm, setEditForm] = useState({});
 
   useEffect(() => {
     fetchMyStock();
   }, []);
+
+  useEffect(() => {
+    if (!isEditModalOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape" && !saving) setIsEditModalOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isEditModalOpen, saving]);
 
   const fetchMyStock = async () => {
     try {
@@ -32,58 +60,128 @@ const ShopkeeperMedicineList = () => {
     }
   };
 
+  const closeModal = () => {
+    if (saving) return;
+    setIsEditModalOpen(false);
+    setEditingItem(null);
+    setFormError("");
+  };
+
   const handleOpenEdit = (item) => {
+    const retailPrice = Number(item.retailPrice ?? item.price ?? 0);
+
     setEditingItem(item);
     setEditForm({
-      mrp: item.mrp || 0,
-      discount: item.discount || 0,
-      retailPrice: item.retailPrice || item.price || 0,
-      stock: item.stock || 0
+      name: item.name ?? "",
+      company: item.company ?? "",
+      type: item.type ?? "",
+      strength: item.strength ?? "",
+      batch: item.batch ?? "",
+      stock: item.stock ?? 0,
+      packSize: item.packSize ?? 1,
+      packType: item.packType ?? "Strip",
+      sellingUnit: item.sellingUnit ?? "strip",
+      individualSaleAllowed: Boolean(item.individualSaleAllowed),
+      mfd: toDateInputValue(item.mfd),
+      expiry: toDateInputValue(item.expiry),
+      mrp: item.mrp ?? 0,
+      discount: calculateDiscount(item.mrp, retailPrice),
+      retailPrice,
+      image: item.image ?? "",
     });
+    setFormError("");
     setIsEditModalOpen(true);
   };
 
-  const handlePriceChange = (e) => {
-    const { name, value } = e.target;
-    const updatedForm = { ...editForm, [name]: value };
+  const handleInputChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    const nextValue = type === "checkbox" ? checked : value;
 
-    if (name === "mrp" || name === "discount") {
-      const mrpNum = Number(name === "mrp" ? value : editForm.mrp);
-      const discNum = Number(name === "discount" ? value : editForm.discount);
-      
-      if (!isNaN(mrpNum) && !isNaN(discNum) && discNum >= 0 && discNum <= 100) {
-        updatedForm.retailPrice = (mrpNum * (1 - discNum / 100)).toFixed(2);
+    setEditForm((current) => {
+      const updated = { ...current, [name]: nextValue };
+
+      if (name === "mrp" || name === "discount") {
+        const mrp = Number(name === "mrp" ? value : current.mrp);
+        const discount = Number(name === "discount" ? value : current.discount);
+        if (Number.isFinite(mrp) && Number.isFinite(discount) && discount >= 0 && discount <= 100) {
+          updated.retailPrice = Number((mrp * (1 - discount / 100)).toFixed(2));
+        }
       }
-    }
-    setEditForm(updatedForm);
+
+      if (name === "retailPrice") {
+        updated.discount = calculateDiscount(current.mrp, value);
+      }
+
+      return updated;
+    });
+    setFormError("");
   };
 
-  const handleUpdateSubmit = async (e) => {
-    e.preventDefault();
-    if (Number(editForm.retailPrice) > Number(editForm.mrp)) {
-      return alert("Retail Price cannot exceed maximum MRP boundary!");
+  const validateForm = () => {
+    if (!editForm.name?.trim()) return "Medicine name is required.";
+    if (!editForm.expiry) return "Expiry date is required.";
+    if (editForm.mfd && new Date(editForm.expiry) <= new Date(editForm.mfd)) {
+      return "Expiry date must be after the manufacturing date.";
+    }
+
+    const mrp = Number(editForm.mrp);
+    const retailPrice = Number(editForm.retailPrice);
+    const stock = Number(editForm.stock);
+    const packSize = Number(editForm.packSize);
+
+    if (!Number.isFinite(mrp) || mrp < 0) return "MRP must be zero or greater.";
+    if (!Number.isFinite(retailPrice) || retailPrice < 0) return "Retail price must be zero or greater.";
+    if (retailPrice > mrp) return "Retail price cannot exceed MRP.";
+    if (!Number.isInteger(stock) || stock < 0) return "Stock must be a whole number of zero or greater.";
+    if (!Number.isInteger(packSize) || packSize < 1) return "Pack size must be a whole number of at least 1.";
+
+    return "";
+  };
+
+  const handleUpdateSubmit = async (event) => {
+    event.preventDefault();
+    const validationError = validateForm();
+    if (validationError) {
+      setFormError(validationError);
+      return;
     }
 
     try {
+      setSaving(true);
+      setFormError("");
+
       const payload = {
+        name: editForm.name.trim(),
+        company: editForm.company.trim(),
+        type: editForm.type.trim(),
+        strength: editForm.strength.trim(),
+        batch: editForm.batch.trim(),
+        stock: Number(editForm.stock),
+        packSize: Number(editForm.packSize),
+        packType: editForm.packType.trim(),
+        sellingUnit: editForm.sellingUnit.trim(),
+        individualSaleAllowed: editForm.individualSaleAllowed,
+        mfd: editForm.mfd,
+        expiry: editForm.expiry,
         mrp: Number(editForm.mrp),
-        discount: Number(editForm.discount),
         retailPrice: Number(editForm.retailPrice),
-        price: Number(editForm.retailPrice), 
-        stock: Number(editForm.stock)
+        image: editForm.image.trim(),
       };
 
-      const res = await updateMedicine(editingItem._id, payload);
-      if (res && res.success) {
-        alert("Inventory Updated Successfully ✅");
-        setIsEditModalOpen(false);
-        fetchMyStock(); 
-      } else {
-        alert(res?.message || "Error saving changes ❌");
+      const response = await updateMedicine(editingItem._id, payload);
+      if (!response?.success) {
+        setFormError(response?.message || "Unable to save the medicine.");
+        return;
       }
+
+      setIsEditModalOpen(false);
+      setEditingItem(null);
+      await fetchMyStock();
     } catch (err) {
       console.error(err);
-      alert("Error sending updates ❌");
+      setFormError("Unable to send the update. Please try again.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -91,60 +189,68 @@ const ShopkeeperMedicineList = () => {
     <div className="sk-container">
       <div className="sk-header-block">
         <h2>📦 Local Shop Retail Inventory</h2>
-        <p>These items are visible to consumers searching under your unique Shop ID token.</p>
+        <p>Manage the medicines customers can buy from your shop.</p>
       </div>
 
       {loading ? (
-        <div className="sk-loading">Syncing retail data sheets...</div>
+        <div className="sk-loading">Syncing retail inventory...</div>
       ) : (
-        <div className="sk-table-card">
+        <div className="sk-table-card" role="region" aria-label="Retail medicine inventory" tabIndex="0">
           <table className="sk-table">
             <thead>
               <tr>
                 <th>Medicine Name</th>
                 <th>Company</th>
                 <th>Type</th>
-                <th>Current Stock</th> 
-                <th>Wholesale Paid</th> 
+                <th>Current Stock</th>
+                <th>Wholesale Paid</th>
                 <th>MRP</th>
-                <th>Retail Price</th> 
-                <th>Expiry Status</th> 
-                <th style={{ textAlign: "center" }}>Actions</th>
+                <th>Retail Price</th>
+                <th>Expiry Status</th>
+                <th className="sk-actions-heading">Actions</th>
               </tr>
             </thead>
             <tbody>
               {retailStock.length === 0 ? (
                 <tr>
                   <td colSpan="9" className="sk-empty-text">
-                    No inventory active. Place supply bulk requests to populate stock automatically.
+                    No inventory active. Place supply orders to populate your stock.
                   </td>
                 </tr>
               ) : (
-                retailStock.map(m => {
-                  const isLow = m.stock <= 20;
-                  const isExpired = new Date(m.expiry) < new Date();
-                  
+                retailStock.map((medicine) => {
+                  const isLow = Number(medicine.stock) <= 20;
+                  const expiryDate = medicine.expiry ? new Date(medicine.expiry) : null;
+                  const isExpired = expiryDate && expiryDate < new Date();
+
                   return (
-                    <tr key={m._id}>
-                      <td className="sk-med-name">{m.name}</td>
-                      <td>{m.company || "Generic"}</td> 
-                      <td><span className="sk-type-badge">{m.type}</span></td> 
+                    <tr key={medicine._id}>
+                      <td className="sk-med-name">
+                        {medicine.name}
+                        {medicine.strength && <span className="sk-med-meta">{medicine.strength}</span>}
+                      </td>
+                      <td>{medicine.company || "Generic"}</td>
+                      <td><span className="sk-type-badge">{medicine.type || "N/A"}</span></td>
                       <td>
                         <span className={`sk-stock-text ${isLow ? "text-danger" : ""}`}>
-                          {m.stock} {isLow && "(Low Stock)"}
+                          {medicine.stock ?? 0} {isLow && "(Low Stock)"}
                         </span>
                       </td>
-                      <td>₹{m.wholesalePrice || 0}</td>
-                      <td className="sk-mrp-text">₹{Number(m.mrp || 0).toLocaleString("en-IN")}</td>
-                      <td className="sk-price-text">₹{m.retailPrice || m.price}</td>
+                      <td>₹{Number(medicine.wholesalePrice || 0).toLocaleString("en-IN")}</td>
+                      <td className="sk-mrp-text">₹{Number(medicine.mrp || 0).toLocaleString("en-IN")}</td>
+                      <td className="sk-price-text">
+                        ₹{Number(medicine.retailPrice ?? medicine.price ?? 0).toLocaleString("en-IN")}
+                      </td>
                       <td>
-                        <span className={`sk-status-pill ${isExpired ? "expired" : "valid"}`}>
-                          {new Date(m.expiry).toLocaleDateString()} {isExpired ? "Expired" : "Active"}
-                        </span>
+                        {expiryDate ? (
+                          <span className={`sk-status-pill ${isExpired ? "expired" : "valid"}`}>
+                            {expiryDate.toLocaleDateString("en-IN")} {isExpired ? "Expired" : "Active"}
+                          </span>
+                        ) : "N/A"}
                       </td>
-                      <td style={{ textAlign: "center" }}>
-                        <button className="sk-action-btn" onClick={() => handleOpenEdit(m)}>
-                          Edit Pricing
+                      <td className="sk-actions-cell">
+                        <button type="button" className="sk-action-btn" onClick={() => handleOpenEdit(medicine)}>
+                          Edit medicine
                         </button>
                       </td>
                     </tr>
@@ -156,39 +262,112 @@ const ShopkeeperMedicineList = () => {
         </div>
       )}
 
-      {/* 🏙️ SIMPLIFIED EDIT MODAL */}
       {isEditModalOpen && (
-        <div className="sk-modal-backdrop" onClick={() => setIsEditModalOpen(false)}>
-          <div className="sk-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="sk-modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && closeModal()}>
+          <div className="sk-modal sk-modal-wide" role="dialog" aria-modal="true" aria-labelledby="sk-edit-title">
             <div className="sk-modal-header">
-              <h3>Edit Retail Product Matrix</h3>
-              <p>{editingItem?.name} ({editingItem?.strength || "N/A"})</p>
+              <div>
+                <h3 id="sk-edit-title">Edit medicine</h3>
+                <p>Update all customer-facing inventory details.</p>
+              </div>
+              <button type="button" className="sk-modal-close" onClick={closeModal} aria-label="Close edit form">×</button>
             </div>
-            
+
             <form onSubmit={handleUpdateSubmit}>
-              <div className="sk-field">
-                <label>Store MRP (₹)</label>
-                <input type="number" name="mrp" value={editForm.mrp} onChange={handlePriceChange} required min="0" />
-              </div>
+              <section className="sk-form-section">
+                <h4>Medicine details</h4>
+                <div className="sk-edit-grid">
+                  <div className="sk-field sk-span-2">
+                    <label htmlFor="sk-name">Medicine name</label>
+                    <input id="sk-name" name="name" value={editForm.name} onChange={handleInputChange} required />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-company">Company</label>
+                    <input id="sk-company" name="company" value={editForm.company} onChange={handleInputChange} />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-type">Medicine type</label>
+                    <input id="sk-type" name="type" value={editForm.type} onChange={handleInputChange} placeholder="Tablet, Syrup..." />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-strength">Strength</label>
+                    <input id="sk-strength" name="strength" value={editForm.strength} onChange={handleInputChange} placeholder="500 mg" />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-batch">Batch number</label>
+                    <input id="sk-batch" name="batch" value={editForm.batch} onChange={handleInputChange} />
+                  </div>
+                </div>
+              </section>
 
-              <div className="sk-field">
-                <label>Customer Discount (%)</label>
-                <input type="number" name="discount" value={editForm.discount} onChange={handlePriceChange} min="0" max="100" />
-              </div>
+              <section className="sk-form-section">
+                <h4>Stock and packaging</h4>
+                <div className="sk-edit-grid">
+                  <div className="sk-field">
+                    <label htmlFor="sk-stock">Stock count</label>
+                    <input id="sk-stock" type="number" name="stock" value={editForm.stock} onChange={handleInputChange} required min="0" step="1" />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-pack-size">Units per pack</label>
+                    <input id="sk-pack-size" type="number" name="packSize" value={editForm.packSize} onChange={handleInputChange} required min="1" step="1" />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-pack-type">Pack type</label>
+                    <input id="sk-pack-type" name="packType" value={editForm.packType} onChange={handleInputChange} placeholder="Strip, Bottle..." />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-selling-unit">Selling unit</label>
+                    <input id="sk-selling-unit" name="sellingUnit" value={editForm.sellingUnit} onChange={handleInputChange} placeholder="strip, tablet..." />
+                  </div>
+                  <label className="sk-checkbox-field sk-span-2">
+                    <input type="checkbox" name="individualSaleAllowed" checked={editForm.individualSaleAllowed} onChange={handleInputChange} />
+                    Allow this medicine to be sold as individual units
+                  </label>
+                </div>
+              </section>
 
-              <div className="sk-field">
-                <label>Final Retail Selling Price (₹)</label>
-                <input type="number" name="retailPrice" value={editForm.retailPrice} readOnly className="sk-input-readonly" />
-              </div>
+              <section className="sk-form-section">
+                <h4>Dates and retail pricing</h4>
+                <div className="sk-edit-grid">
+                  <div className="sk-field">
+                    <label htmlFor="sk-mfd">Manufacturing date</label>
+                    <input id="sk-mfd" type="date" name="mfd" value={editForm.mfd} onChange={handleInputChange} />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-expiry">Expiry date</label>
+                    <input id="sk-expiry" type="date" name="expiry" value={editForm.expiry} onChange={handleInputChange} required />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-mrp">MRP (₹)</label>
+                    <input id="sk-mrp" type="number" name="mrp" value={editForm.mrp} onChange={handleInputChange} required min="0" step="0.01" />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-discount">Customer discount (%)</label>
+                    <input id="sk-discount" type="number" name="discount" value={editForm.discount} onChange={handleInputChange} min="0" max="100" step="0.01" />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-retail-price">Retail selling price (₹)</label>
+                    <input id="sk-retail-price" type="number" name="retailPrice" value={editForm.retailPrice} onChange={handleInputChange} required min="0" step="0.01" />
+                  </div>
+                  <div className="sk-field">
+                    <label htmlFor="sk-wholesale-price">Wholesale price paid (₹)</label>
+                    <input id="sk-wholesale-price" value={editingItem?.wholesalePrice ?? 0} readOnly className="sk-input-readonly" />
+                    <small>Set by the distributor order and cannot be changed here.</small>
+                  </div>
+                  <div className="sk-field sk-span-2">
+                    <label htmlFor="sk-image">Medicine image URL</label>
+                    <input id="sk-image" name="image" value={editForm.image} onChange={handleInputChange} placeholder="https://example.com/medicine.jpg" />
+                  </div>
+                </div>
+              </section>
 
-              <div className="sk-field">
-                <label>Current Physical Stock Count</label>
-                <input type="number" name="stock" value={editForm.stock} onChange={handlePriceChange} required min="0" />
-              </div>
+              {formError && <div className="sk-form-error" role="alert">{formError}</div>}
 
               <div className="sk-modal-foot">
-                <button type="button" className="sk-btn-cancel" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
-                <button type="submit" className="sk-btn-save">Save Metrics</button>
+                <button type="button" className="sk-btn-cancel" onClick={closeModal} disabled={saving}>Cancel</button>
+                <button type="submit" className="sk-btn-save" disabled={saving}>
+                  {saving ? "Saving..." : "Save medicine"}
+                </button>
               </div>
             </form>
           </div>
