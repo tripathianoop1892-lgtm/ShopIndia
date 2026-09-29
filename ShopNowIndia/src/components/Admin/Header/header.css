@@ -45,19 +45,30 @@
     gap:30px;
 }
 
-.profile{
+.admin-profile-button{
+    min-width:44px;
+    height:44px;
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:10px;
+    border:0;
+    background:transparent;
     cursor:pointer;
 }
 
-.profile svg{
+.admin-profile-button:focus-visible{
+    outline:3px solid rgba(37,99,235,.3);
+    outline-offset:2px;
+    border-radius:10px;
+}
+
+.admin-profile-button svg{
     font-size:34px;
     color:#2563eb;
 }
 
-.profile span{
+.admin-profile-button span{
     font-size:16px;
     font-weight:600;
     color:#1e293b;
@@ -74,7 +85,7 @@
     font-size:18px;
 }
 
-.profile span{
+.admin-profile-button span{
     display:none;
 }
 
@@ -87,7 +98,11 @@
 @media(max-width:420px){
   .admin-header{ padding:0 12px; }
   .menu-btn{ width:40px; height:40px; font-size:18px; }
-  .header-left{ gap:12px; }
-  .header-left h2{ font-size:16px; }
-  .admin-header .portal-notification-button{ width:40px; height:40px; flex-basis:40px; font-size:18px; }
+  .header-left{ gap:8px; }
+  .header-left h2{ display:none; }
+  .header-right{ gap:7px; }
+  .admin-profile-button{ width:40px; height:40px; justify-content:center; }
+  .admin-profile-button svg{ font-size:30px; }
+  .admin-header .portal-notification-button,
+  .admin-header .portal-header-action{ width:40px; height:40px; flex-basis:40px; font-size:18px; }
 }

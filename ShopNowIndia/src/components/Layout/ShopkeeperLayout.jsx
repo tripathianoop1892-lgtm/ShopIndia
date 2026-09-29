@@ -44,6 +44,7 @@ const ShopkeeperLayout = () => {
         <PortalHeader
           portalName="Shopkeeper portal"
           notificationPath="/shopkeeper/notifications"
+          profilePath="/shopkeeper/profile"
           onMenuClick={() => setSidebarOpen((open) => !open)}
           menuOpen={sidebarOpen}
         />

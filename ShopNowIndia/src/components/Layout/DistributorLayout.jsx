@@ -44,6 +44,7 @@ const DistributorLayout = () => {
         <PortalHeader
           portalName="Distributor portal"
           notificationPath="/distributor/notifications"
+          profilePath="/distributor/profile"
           onMenuClick={() => setSidebarOpen((open) => !open)}
           menuOpen={sidebarOpen}
         />

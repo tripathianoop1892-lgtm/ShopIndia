@@ -1,8 +1,19 @@
 import "./header.css";
-import { FaBars, FaUserCircle } from "react-icons/fa";
+import { FaBars, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import NotificationButton from "../../Header/NotificationButton";
+import useAuth from "../../../hooks/useAuth";
 
 const Header = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
     <header className="admin-header">
 
@@ -18,10 +29,14 @@ const Header = ({ toggleSidebar }) => {
 
         <NotificationButton to="/admin/notifications" admin />
 
-        <div className="profile">
+        <button type="button" className="admin-profile-button" onClick={() => navigate("/admin/profile")} aria-label="Open profile" title="Profile">
           <FaUserCircle />
           <span>Admin</span>
-        </div>
+        </button>
+
+        <button type="button" className="portal-header-action portal-logout-button" onClick={handleLogout} aria-label="Log out" title="Log out">
+          <FaSignOutAlt aria-hidden="true" />
+        </button>
 
       </div>
 

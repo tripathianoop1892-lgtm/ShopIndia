@@ -61,6 +61,13 @@
   text-transform: uppercase;
 }
 
+.portal-topbar-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 9px;
+}
+
 @media (max-width: 900px) {
   .portal-topbar {
     position: fixed;
@@ -80,6 +87,7 @@
 
 @media (max-width: 480px) {
   .portal-topbar {
+    gap: 8px;
     padding-right: 12px;
     padding-left: 12px;
   }
@@ -93,6 +101,18 @@
   }
 
   .portal-topbar-logo {
-    width: min(108px, 34vw);
+    width: min(82px, 26vw);
+  }
+
+  .portal-topbar-actions {
+    gap: 6px;
+  }
+
+  .portal-topbar-menu,
+  .portal-topbar .portal-notification-button,
+  .portal-topbar .portal-header-action {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
   }
 }

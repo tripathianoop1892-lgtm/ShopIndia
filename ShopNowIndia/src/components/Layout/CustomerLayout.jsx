@@ -48,6 +48,7 @@ const CustomerLayout = () => {
         <PortalHeader
           portalName="Customer portal"
           notificationPath="/customer/notifications"
+          profilePath="/customer/profile"
           onMenuClick={() => setSidebarOpen((open) => !open)}
           menuOpen={sidebarOpen}
         />
