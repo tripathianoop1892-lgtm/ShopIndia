@@ -19,7 +19,7 @@ const CustomerSidebar = ({ isOpen, onClose }) => {
     ["/customer/prescription", "Prescriptions"],
     ["/customer/cart", "Cart"],
     ["/customer/orders", "Orders"],
-    ["/customer/notification", "Notifications"],
+    ["/customer/notifications", "Notifications"],
     ["/customer/profile", "Profile"],
     ["/customer/support", "Help & Support"],
     ["/customer/settings", "Settings"],

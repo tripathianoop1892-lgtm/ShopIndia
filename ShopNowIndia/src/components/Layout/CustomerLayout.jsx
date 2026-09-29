@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { FaBars } from "react-icons/fa";
 import CustomerSidebar from "../Sidebar/CustomerSidebar";
+import PortalHeader from "./PortalHeader";
 import useAuth from "../../hooks/useAuth";
 import "./CustomerLayout.css";
 
@@ -18,11 +18,11 @@ const CustomerLayout = () => {
     };
 
     document.addEventListener("keydown", closeOnEscape);
-    document.body.classList.add("customer-navigation-open");
+    document.body.classList.add("portal-navigation-open");
 
     return () => {
       document.removeEventListener("keydown", closeOnEscape);
-      document.body.classList.remove("customer-navigation-open");
+      document.body.classList.remove("portal-navigation-open");
     };
   }, [sidebarOpen]);
 
@@ -44,14 +44,13 @@ const CustomerLayout = () => {
   return (
     <div className="customer-layout">
       <CustomerSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <header className="customer-mobile-header">
-        <button type="button" className="portal-menu-toggle" onClick={() => setSidebarOpen((open) => !open)} aria-label="Toggle navigation menu" aria-expanded={sidebarOpen}>
-          <FaBars />
-        </button>
-        <img src="/omsanjeevani.png" alt="Om Sanjeevani" />
-        <span>Customer portal</span>
-      </header>
       <div className="customer-main-content">
+        <PortalHeader
+          portalName="Customer portal"
+          notificationPath="/customer/notifications"
+          onMenuClick={() => setSidebarOpen((open) => !open)}
+          menuOpen={sidebarOpen}
+        />
         <Outlet />
       </div>
       {sidebarOpen && <button type="button" className="portal-sidebar-backdrop" aria-label="Close navigation menu" onClick={() => setSidebarOpen(false)} />}

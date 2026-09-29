@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createAdminNotification, deleteAdminNotification, getAdminNotifications } from "../../../services/api";
-import "./Notifications.css";
+import "./notifications.css";
 import "../../../components/Admin/PartnerUsers.css";
 
 const Notifications = () => {

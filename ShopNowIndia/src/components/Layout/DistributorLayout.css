@@ -51,21 +51,6 @@
   z-index: 1;
 }
 
-.distributor-menu-toggle {
-  display: none;
-  position: fixed;
-  top: 18px;
-  left: 18px;
-  background: #1e1b4b;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 22px;
-  z-index: 1200;
-  cursor: pointer;
-}
-
 .distributor-sidebar-backdrop {
   position: fixed;
   inset: 0;
@@ -96,6 +81,10 @@
 }
 
 @media (max-width: 900px) {
+  body.portal-navigation-open {
+    overflow: hidden;
+  }
+
   .distributor-main-section {
     margin-left: 0;
   }
@@ -110,14 +99,10 @@
     opacity: 0.06;
   }
 
-  .distributor-menu-toggle {
-    display: block;
-  }
 }
 
 @media (max-width: 480px) {
   .distributor-content { padding: 70px 12px 12px; }
-  .distributor-menu-toggle { top: 12px; left: 12px; width: 44px; height: 44px; padding: 0; }
 }
 
 /* Accessibility: visible focus states */

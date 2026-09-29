@@ -26,6 +26,10 @@
 
 @media(max-width:768px){
 
+body.admin-navigation-open{
+    overflow:hidden;
+}
+
 .admin-sidebar-open,
 .admin-sidebar-close{
     margin-left:0;
@@ -36,6 +40,6 @@
     min-width:0;
 }
 
-.admin-sidebar-backdrop { display: block; position: fixed; inset: 0; z-index: 900; border: 0; background: rgba(15, 23, 42, .45); }
+.admin-sidebar-backdrop { display: block; position: fixed; inset: 0; z-index: 1000; border: 0; background: rgba(15, 23, 42, .45); }
 
 }

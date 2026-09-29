@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 import Header from "../Header/Header";
@@ -13,12 +13,35 @@ const Layout = () => {
   const { isAdmin } = useAuth();
   const token = localStorage.getItem("token");
 
+  useEffect(() => {
+    const mobileViewport = window.matchMedia("(max-width: 768px)");
+    const closeForMobile = (event) => {
+      if (event.matches) setSidebarOpen(false);
+    };
+
+    mobileViewport.addEventListener("change", closeForMobile);
+    return () => mobileViewport.removeEventListener("change", closeForMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!sidebarOpen || !window.matchMedia("(max-width: 768px)").matches) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setSidebarOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.classList.add("admin-navigation-open");
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.classList.remove("admin-navigation-open");
+    };
+  }, [sidebarOpen]);
+
   if (!token || !isAdmin) {
     return <Navigate to="/" replace />;
   }
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen((open) => !open);
   };
 
   return (

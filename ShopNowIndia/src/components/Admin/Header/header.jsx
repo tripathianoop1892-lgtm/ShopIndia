@@ -1,5 +1,6 @@
 import "./header.css";
-import { FaBars, FaBell, FaUserCircle } from "react-icons/fa";
+import { FaBars, FaUserCircle } from "react-icons/fa";
+import NotificationButton from "../../Header/NotificationButton";
 
 const Header = ({ toggleSidebar }) => {
   return (
@@ -15,10 +16,7 @@ const Header = ({ toggleSidebar }) => {
 
       <div className="header-right">
 
-        <div className="notification">
-          <FaBell />
-          <span className="badge">3</span>
-        </div>
+        <NotificationButton to="/admin/notifications" admin />
 
         <div className="profile">
           <FaUserCircle />

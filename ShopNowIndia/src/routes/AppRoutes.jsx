@@ -182,7 +182,8 @@ const router = createBrowserRouter([
       { index: true, element: <CustomerDashboard /> }, // Maps directly to: /customer
       { path: "medicines", element: <CustomerMedicineList /> }, // Maps directly to: /customer/medicines
       { path: "prescription", element: <CustomerPrescription /> },
-      { path: "notification", element: <CustomerNotification /> },
+      { path: "notifications", element: <CustomerNotification /> },
+      { path: "notification", element: <Navigate to="/customer/notifications" replace /> },
       { path: "orders", element: <CustomerOrder /> }, // Maps directly to: /customer/orders
       { path: "cart", element: <Cart />},
       { path: "profile", element: <CustomerProfile /> }, // Maps directly to: /customer/profile

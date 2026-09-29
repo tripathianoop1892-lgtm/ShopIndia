@@ -8,29 +8,13 @@
   box-sizing: border-box;
   min-height: 100vh;
   margin-left: 230px;
-  padding: 20px;
   width: calc(100% - 230px);
 }
 
 .shopkeeper-content {
   flex: 1;
   min-width: 0;
-}
-
-.portal-menu-toggle {
-  display: none;
-  position: fixed;
-  top: 14px;
-  left: 14px;
-  z-index: 1000;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 8px;
-  background: #1e293b;
-  color: #fff;
-  font-size: 19px;
-  cursor: pointer;
+  padding: 20px;
 }
 
 .portal-sidebar-backdrop {
@@ -43,10 +27,17 @@
 }
 
 @media (max-width: 900px) {
+  body.portal-navigation-open {
+    overflow: hidden;
+  }
+
   .shopkeeper-main-content {
     width: 100%;
     margin-left: 0;
-    padding: 72px 16px 16px;
+  }
+
+  .shopkeeper-content {
+    padding: calc(80px + env(safe-area-inset-top, 0px)) 16px 16px;
   }
 
   .shopkeeper-sidebar {
@@ -58,8 +49,14 @@
   }
 
   .shopkeeper-sidebar-close,
-  .portal-menu-toggle,
   .portal-sidebar-backdrop {
     display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .shopkeeper-content {
+    padding-right: 12px;
+    padding-left: 12px;
   }
 }
