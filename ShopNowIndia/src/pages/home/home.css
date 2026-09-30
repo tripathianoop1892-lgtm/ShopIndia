@@ -429,6 +429,14 @@ body {
   font-weight: 500;
 }
 
+.telemetry-status {
+  grid-column: 1 / -1;
+  margin: -10px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  text-align: center;
+}
+
 /* ==========================================================================
    INFORMATIONAL SUBSECTIONS ARCHITECTURE (STRUCTURAL BLOCKS)
    ========================================================================== */

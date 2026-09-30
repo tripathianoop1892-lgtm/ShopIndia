@@ -1,6 +1,11 @@
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/$/, "");
 export const API_BASE_URL = BASE_URL;
 
+export const getHomepageStats = async () => {
+  const res = await fetch(`${BASE_URL}/public/homepage-stats`);
+  return res.json();
+};
+
 // 🔥 COMMON HEADERS (AUTO TOKEN - FIXED)
 const getHeaders = () => {
   const token = localStorage.getItem("token");

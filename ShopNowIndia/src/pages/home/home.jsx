@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import LinkIcon from '@mui/icons-material/Link';
@@ -19,9 +19,34 @@ import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
 // Global shared components[cite: 1]
 import Footer from "../../components/footer/footer";
 import Navbar from "../../components/navbar/navbar";
+import { getHomepageStats } from "../../services/api";
+
+const formatMetric = (value) => {
+  const number = Number(value);
+  return Number.isFinite(number) ? number.toLocaleString("en-IN") : "—";
+};
 
 function Home() {
   const navigate = useNavigate();
+  const [stats, setStats] = useState(null);
+  const [statsUnavailable, setStatsUnavailable] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    getHomepageStats()
+      .then((response) => {
+        if (!response?.success) throw new Error(response?.message || "Unable to load statistics.");
+        if (active) setStats(response.data);
+      })
+      .catch(() => {
+        if (active) setStatsUnavailable(true);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="home-page-wrapper">
@@ -138,28 +163,33 @@ function Home() {
       </section>
 
       {/* Network Telemetry Metrics */}
-      <section className="telemetry-stats-bar">
+      <section
+        className="telemetry-stats-bar"
+        aria-label="Live platform statistics"
+        aria-busy={!stats && !statsUnavailable}
+      >
         <div className="metric-glass-card">
           <LinkIcon className="metric-card-icon" />
           <div className="metric-meta">
-            <h4>1,542+</h4>
-            <p>Total Active Medicines</p>
+            <h4>{formatMetric(stats?.activeMedicines)}</h4>
+            <p>Available Medicine Listings</p>
           </div>
         </div>
         <div className="metric-glass-card">
           <StorefrontIcon className="metric-card-icon" />
           <div className="metric-meta">
-            <h4>320+</h4>
-            <p>Verified Distributors</p>
+            <h4>{formatMetric(stats?.activeDistributors)}</h4>
+            <p>Active Distributors</p>
           </div>
         </div>
         <div className="metric-glass-card">
           <PeopleAltTwoToneIcon className="metric-card-icon" />
           <div className="metric-meta">
-            <h4>1,250+</h4>
-            <p>Registered Shopkeepers</p>
+            <h4>{formatMetric(stats?.activeShopkeepers)}</h4>
+            <p>Active Shopkeepers</p>
           </div>
         </div>
+        {statsUnavailable && <p className="telemetry-status">Live statistics are temporarily unavailable.</p>}
       </section>
 
       {/* Core Operational Benefits Section */}
