@@ -5,6 +5,7 @@ import {
   MedicinesList,
   deleteMedicine
 } from "../../services/api";
+import MedicineImageInput from "../../components/MedicineImageInput/MedicineImageInput";
 
 const Distributor = () => {
 
@@ -12,6 +13,7 @@ const Distributor = () => {
   const [medicines, setMedicines] = useState([]);
   const [editId, setEditId] = useState(null);
   const [selectedMedicines, setSelectedMedicines] = useState([]);
+  const [imageFiles, setImageFiles] = useState({});
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/immutability
@@ -93,9 +95,22 @@ const Distributor = () => {
         (m) => m._id === id
       );
 
-      await updateMedicine(id, med);
+      const response = await updateMedicine(id, {
+        ...med,
+        imageFile: imageFiles[id] || null,
+      });
+
+      if (!response?.success) {
+        alert(response?.message || "Unable to update medicine");
+        return;
+      }
 
       setEditId(null);
+      setImageFiles((current) => {
+        const next = { ...current };
+        delete next[id];
+        return next;
+      });
 
       fetchData();
 
@@ -172,6 +187,7 @@ const Distributor = () => {
           <tr>
 
             <th>Medicine</th>
+            <th>Image</th>
             <th>Type</th>
             <th>Price</th>
             <th>Stock</th>
@@ -204,6 +220,33 @@ const Distributor = () => {
 
                   {m.name}
 
+                </td>
+
+                <td>
+                  {editId === m._id ? (
+                    <MedicineImageInput
+                      idPrefix={`distributor-edit-image-${m._id}`}
+                      imageUrl={m.image || ""}
+                      imageFile={imageFiles[m._id] || null}
+                      onImageUrlChange={(image) => {
+                        setMedicines((current) => current.map((item) =>
+                          item._id === m._id ? { ...item, image } : item
+                        ));
+                      }}
+                      onImageFileChange={(file) => {
+                        setImageFiles((current) => ({ ...current, [m._id]: file }));
+                      }}
+                    />
+                  ) : m.image ? (
+                    <img
+                      src={m.image}
+                      alt={m.name}
+                      className="medicine-list-image"
+                      onError={(event) => { event.currentTarget.style.display = "none"; }}
+                    />
+                  ) : (
+                    "—"
+                  )}
                 </td>
 
                 {/* TYPE */}
@@ -414,7 +457,7 @@ const Distributor = () => {
 
             <tr>
 
-              <td colSpan="7">
+              <td colSpan="8">
                 No Medicines Found
               </td>
 

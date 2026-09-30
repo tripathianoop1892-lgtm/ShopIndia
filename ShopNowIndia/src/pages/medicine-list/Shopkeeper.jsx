@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
 import { MedicinesList, updateMedicine } from "../../services/api";
+import MedicineImageInput from "../../components/MedicineImageInput/MedicineImageInput";
 
 const toDateInputValue = (value) => {
   if (!value) return "";
@@ -26,6 +27,7 @@ const ShopkeeperMedicineList = () => {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
   const [editForm, setEditForm] = useState({});
+  const [editImageFile, setEditImageFile] = useState(null);
 
   useEffect(() => {
     fetchMyStock();
@@ -65,12 +67,14 @@ const ShopkeeperMedicineList = () => {
     setIsEditModalOpen(false);
     setEditingItem(null);
     setFormError("");
+    setEditImageFile(null);
   };
 
   const handleOpenEdit = (item) => {
     const retailPrice = Number(item.retailPrice ?? item.price ?? 0);
 
     setEditingItem(item);
+    setEditImageFile(null);
     setEditForm({
       name: item.name ?? "",
       company: item.company ?? "",
@@ -166,6 +170,7 @@ const ShopkeeperMedicineList = () => {
         mrp: Number(editForm.mrp),
         retailPrice: Number(editForm.retailPrice),
         image: editForm.image.trim(),
+        imageFile: editImageFile,
       };
 
       const response = await updateMedicine(editingItem._id, payload);
@@ -355,8 +360,13 @@ const ShopkeeperMedicineList = () => {
                     <small>Set by the distributor order and cannot be changed here.</small>
                   </div>
                   <div className="sk-field sk-span-2">
-                    <label htmlFor="sk-image">Medicine image URL</label>
-                    <input id="sk-image" name="image" value={editForm.image} onChange={handleInputChange} placeholder="https://example.com/medicine.jpg" />
+                    <MedicineImageInput
+                      idPrefix="shopkeeper-edit-image"
+                      imageUrl={editForm.image}
+                      imageFile={editImageFile}
+                      onImageUrlChange={(image) => setEditForm((current) => ({ ...current, image }))}
+                      onImageFileChange={setEditImageFile}
+                    />
                   </div>
                 </div>
               </section>

@@ -1,0 +1,75 @@
+.medicine-image-input {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.medicine-image-input > label {
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.medicine-image-input input[type="file"],
+.medicine-image-input input[type="url"] {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border: 1.5px solid #dbe3ec;
+  border-radius: 12px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+}
+
+.medicine-image-input input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #e0e7ff;
+  color: #1d4ed8;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.medicine-image-input small,
+.medicine-image-divider {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.medicine-image-divider {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.medicine-image-clear {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b91c1c;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.medicine-image-preview {
+  width: 96px;
+  height: 96px;
+  padding: 6px;
+  border: 1px solid #dbe3ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.medicine-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

@@ -166,3 +166,15 @@
   .search-bar { width: 100%; margin-bottom: 14px; }
   .medicine-container th, .medicine-container td { padding: 10px; font-size: 13px; }
 }
+.medicine-list-image {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.medicine-table-scroll .medicine-image-input {
+  min-width: 240px;
+}

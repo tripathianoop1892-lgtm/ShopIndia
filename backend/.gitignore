@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Runtime uploads (keep directories, not user files)
+uploads/medicines/*
+!uploads/medicines/.gitkeep

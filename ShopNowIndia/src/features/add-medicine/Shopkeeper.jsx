@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./Shopkeeper.css";
 import { addMedicine } from "../../services/api";
+import MedicineImageInput from "../../components/MedicineImageInput/MedicineImageInput";
 
 const AddMedicineShopkeeper = () => {
+  const [imageFile, setImageFile] = useState(null);
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -168,6 +170,7 @@ const AddMedicineShopkeeper = () => {
         // OTHER
         batch: form.batch.trim(),
         image: form.image.trim(),
+        imageFile,
 
         // DATES
         mfd: form.mfgDate,
@@ -180,7 +183,10 @@ const AddMedicineShopkeeper = () => {
 
 console.log("ADD MEDICINE RESPONSE:", res);
 
-// Agar API call successful hui hai
+if (!res?.success) {
+  return alert(res?.message || "Medicine Add Failed");
+}
+
 alert("Medicine Added Successfully");
 
 // RESET FORM
@@ -207,6 +213,7 @@ setForm({
   mfgDate: "",
   expDate: ""
 });
+setImageFile(null);
  } catch (error) {
   console.error("ADD MEDICINE ERROR:", error);
   alert(
@@ -332,18 +339,13 @@ setForm({
             </select>
           </div>
 
-          {/* IMAGE */}
-          <div className="form-group">
-            <label>Medicine Image URL</label>
-
-            <input
-              type="url"
-              name="image"
-              value={form.image}
-              onChange={handleChange}
-              placeholder="Paste image url"
-            />
-          </div>
+          <MedicineImageInput
+            idPrefix="shopkeeper-medicine-image"
+            imageUrl={form.image}
+            imageFile={imageFile}
+            onImageUrlChange={(image) => setForm((current) => ({ ...current, image }))}
+            onImageFileChange={setImageFile}
+          />
 
           {/* STRENGTH */}
           <div className="form-group">

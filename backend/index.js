@@ -27,6 +27,9 @@ import connectDB from "./src/config/db.js";
 
 const app = express();
 
+// Respect the original HTTPS protocol when deployed behind a reverse proxy.
+app.set("trust proxy", 1);
+
 // =======================
 // MIDDLEWARE
 // =======================

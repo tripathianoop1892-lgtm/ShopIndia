@@ -21,6 +21,33 @@ const getHeaders = () => {
   return headers;
 };
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+const medicineRequest = (data) => {
+  if (!data?.imageFile) {
+    return {
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    };
+  }
+
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key !== "imageFile" && value !== undefined && value !== null) {
+      formData.append(key, String(value));
+    }
+  });
+  formData.append("imageFile", data.imageFile);
+
+  return {
+    headers: getAuthHeaders(),
+    body: formData,
+  };
+};
+
 // Admin endpoints currently return a mix of raw arrays and `{ data: [] }` payloads.
 // Keep view components resilient while the API evolves.
 export const asList = (response, keys = []) => {
@@ -129,10 +156,10 @@ export const MedicinesList = async (paramsString = "") => {
 
 // 👉 ADD MEDICINE
 export const addMedicine = async (data) => {
+  const request = medicineRequest(data);
   const res = await fetch(`${BASE_URL}/medicines`, {
     method: "POST",
-    headers: getHeaders(),
-    body: JSON.stringify(data),
+    ...request,
   });
 
   return res.json();
@@ -150,10 +177,10 @@ export const deleteMedicine = async (id) => {
 
 // 👉 UPDATE MEDICINE
 export const updateMedicine = async (id, data) => {
+  const request = medicineRequest(data);
   const res = await fetch(`${BASE_URL}/medicines/${id}`, {
     method: "PUT",
-    headers: getHeaders(),
-    body: JSON.stringify(data),
+    ...request,
   });
 
   return res.json();

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./Distributor.css";
 import { addMedicine } from "../../services/api";
+import MedicineImageInput from "../../components/MedicineImageInput/MedicineImageInput";
 
 const AddMedicine = () => {
+  const [imageFile, setImageFile] = useState(null);
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -79,6 +81,7 @@ const AddMedicine = () => {
         stock: Number(form.stock),
         batch: form.batch,
         image: form.image,
+        imageFile,
         mfd: form.mfgDate,
         expiry: form.expDate,
       };
@@ -107,6 +110,7 @@ const AddMedicine = () => {
                     mfgDate: "",
                     expDate: "",
                 });
+           setImageFile(null);
       } else {
         alert(res?.message || "Error adding medicine ❌");
       }
@@ -194,10 +198,13 @@ const AddMedicine = () => {
             </select>
           </div>
 
-          <div className="form-group">
-            <label>Medicine Image URL</label>
-            <input type="url" name="image" value={form.image} onChange={handleChange} placeholder="Paste image url" />
-          </div>
+          <MedicineImageInput
+            idPrefix="distributor-medicine-image"
+            imageUrl={form.image}
+            imageFile={imageFile}
+            onImageUrlChange={(image) => setForm((current) => ({ ...current, image }))}
+            onImageFileChange={setImageFile}
+          />
 
           <div className="form-group">
             <label>Strength (e.g. 650mg)</label>

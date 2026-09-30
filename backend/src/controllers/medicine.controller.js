@@ -1,9 +1,15 @@
 import Medicine from "../models/medicine.js";
+import {
+  removeMedicineImage,
+  saveMedicineImage,
+} from "../services/medicine-image.service.js";
 
 // =======================
 // ➕ ADD MEDICINE
 // =======================
 export const addMedicine = async (req, res) => {
+  let uploadedImageUrl = "";
+
   try {
     const user = req.user;
     // 🔐 Only distributor and shopkeeper can add medicines
@@ -58,6 +64,8 @@ if (user.role !== "distributor" && user.role !== "shopkeeper") {
       return res.status(409).json({ success: false, message: "Medicine with same name and batch already exists" });
     }
 
+    uploadedImageUrl = await saveMedicineImage(req.file, req);
+
     const medicineData = {
       ...req.body,
       ownerId: user._id,
@@ -65,7 +73,8 @@ if (user.role !== "distributor" && user.role !== "shopkeeper") {
       name: name.trim(),
       batch: batch.trim(),
       mfd: mfd ? new Date(mfd) : null,
-      expiry: new Date(expiry)
+      expiry: new Date(expiry),
+      image: uploadedImageUrl || (typeof req.body.image === "string" ? req.body.image.trim() : ""),
     };
 
     // 🚀 STRICT PRICING DISPATCH TIERS
@@ -90,6 +99,11 @@ if (user.role !== "distributor" && user.role !== "shopkeeper") {
     });
 
   } catch (err) {
+    await removeMedicineImage(uploadedImageUrl);
+
+    if (err.statusCode) {
+      return res.status(err.statusCode).json({ success: false, message: err.message });
+    }
     if (err.code === 11000) {
       return res.status(409).json({ success: false, message: "Medicine with same name and batch already exists" });
     }
@@ -191,6 +205,7 @@ export const deleteMedicine = async (req, res) => {
     }
 
     await Medicine.findByIdAndDelete(req.params.id);
+    await removeMedicineImage(med.image);
 
     return res.json({
       success: true,
@@ -208,6 +223,8 @@ export const deleteMedicine = async (req, res) => {
 };
 
 export const updateMedicine = async (req, res) => {
+  let uploadedImageUrl = "";
+
   try {
     const user = req.user;
 
@@ -459,6 +476,14 @@ export const updateMedicine = async (req, res) => {
       });
     }
 
+    uploadedImageUrl = await saveMedicineImage(req.file, req);
+    if (uploadedImageUrl) {
+      updateData.image = uploadedImageUrl;
+    } else if (updateData.image !== undefined && typeof updateData.image === "string") {
+      updateData.image = updateData.image.trim();
+    }
+
+    const previousImage = medicine.image;
     const updated = await Medicine.findByIdAndUpdate(
       medicine._id,
       updateData,
@@ -468,6 +493,15 @@ export const updateMedicine = async (req, res) => {
       }
     );
 
+    if (uploadedImageUrl && previousImage !== uploadedImageUrl) {
+      await removeMedicineImage(previousImage);
+    } else if (
+      updateData.image !== undefined &&
+      updateData.image !== previousImage
+    ) {
+      await removeMedicineImage(previousImage);
+    }
+
     return res.json({
       success: true,
       message: "Updated successfully ✅",
@@ -475,7 +509,13 @@ export const updateMedicine = async (req, res) => {
     });
 
   } catch (err) {
+    await removeMedicineImage(uploadedImageUrl);
+
     console.error("UPDATE MEDICINE ERROR:", err);
+
+    if (err.statusCode) {
+      return res.status(err.statusCode).json({ success: false, message: err.message });
+    }
 
     return res.status(500).json({
       success: false,
