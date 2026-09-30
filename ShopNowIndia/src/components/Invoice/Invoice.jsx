@@ -79,6 +79,12 @@ const Invoice = ({ order, onClose }) => {
 
           <div className="invoice-items-wrap">
             <table className="invoice-items">
+              <colgroup>
+                <col className="invoice-item-column" />
+                <col className="invoice-quantity-column" />
+                <col className="invoice-price-column" />
+                <col className="invoice-total-column" />
+              </colgroup>
               <thead>
                 <tr><th>Item</th><th>Qty.</th><th>Unit price</th><th>Total</th></tr>
               </thead>
