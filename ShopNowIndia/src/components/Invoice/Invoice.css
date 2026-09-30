@@ -74,7 +74,14 @@
 .invoice-parties strong { overflow-wrap: anywhere; }
 .invoice-status { color: #047857; }
 .invoice-items-wrap { width: 100%; max-width: 100%; overflow-x: auto; }
-.invoice-modal .invoice-items { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.invoice-modal .invoice-items {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+  box-sizing: border-box;
+}
 .invoice-item-column { width: 46%; }
 .invoice-quantity-column { width: 12%; }
 .invoice-price-column,
@@ -104,7 +111,7 @@
   .invoice-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 14px; padding: 20px 0; }
   .invoice-parties > div:last-child { grid-column: 1 / -1; }
   .invoice-items-wrap { overflow-x: hidden; }
-  .invoice-modal .invoice-items { display: table; width: 100%; table-layout: fixed; font-size: 11px; }
+  .invoice-modal .invoice-items { display: table; width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed; font-size: 11px; }
   .invoice-modal .invoice-items col.invoice-item-column { width: 40%; }
   .invoice-modal .invoice-items col.invoice-quantity-column { width: 12%; }
   .invoice-modal .invoice-items col.invoice-price-column,
