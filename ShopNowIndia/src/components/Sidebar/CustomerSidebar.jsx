@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 import "./CustomerSidebar.css";
 
 const CustomerSidebar = ({ isOpen, onClose }) => {

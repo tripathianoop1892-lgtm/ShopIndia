@@ -1,7 +1,7 @@
 import { FaBars, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import NotificationButton from "../Header/NotificationButton";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 import "./PortalHeader.css";
 
 const PortalHeader = ({ portalName, notificationPath, profilePath, onMenuClick, menuOpen }) => {

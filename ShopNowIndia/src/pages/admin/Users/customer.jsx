@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Customer.css";
+import "./customer.css";
 import { useEffect } from "react";
 import { asList, getCustomers } from "../../../services/api";
 

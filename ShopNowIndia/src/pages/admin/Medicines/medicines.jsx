@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { asList, getMedicine } from "../../../services/api";
-import "./Medicines.css";
+import "./medicines.css";
 import { useEffect } from "react";
 
 

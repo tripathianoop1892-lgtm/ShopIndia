@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getReviews, updateReviewState, removeReview } from "../../../services/api";
-import "./Reviews.css";
+import "./reviews.css";
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);

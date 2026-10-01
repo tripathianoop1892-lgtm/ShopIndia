@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./distributor.css";
+import "./Distributor.css";
 import { MedicinesList } from "../../services/api";
 import { FaBell } from "react-icons/fa";
 

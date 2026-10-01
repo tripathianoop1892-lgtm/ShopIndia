@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createBanner, updateBanner } from "../../../services/api";
-import "./BannerForm.css";
+import "./bannerForm.css";
 
 const BannerForm = () => {
   const navigate = useNavigate();

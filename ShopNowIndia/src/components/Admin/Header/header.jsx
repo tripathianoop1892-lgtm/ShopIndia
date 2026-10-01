@@ -2,7 +2,7 @@ import "./header.css";
 import { FaBars, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import NotificationButton from "../../Header/NotificationButton";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../hooks/UseAuth";
 
 const Header = ({ toggleSidebar }) => {
   const navigate = useNavigate();

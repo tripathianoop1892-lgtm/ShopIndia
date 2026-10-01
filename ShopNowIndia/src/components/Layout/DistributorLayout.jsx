@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import DistributorSidebar from "../Sidebar/DistributorSidebar";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 import PortalHeader from "./PortalHeader";
 import "./DistributorLayout.css";
 

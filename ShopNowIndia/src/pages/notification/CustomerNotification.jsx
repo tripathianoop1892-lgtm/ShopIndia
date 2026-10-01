@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./CustomerNotification.css";
 import { getMyNotifications } from "../../services/api";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 
 const CustomerNotification = () => {
   const { user } = useAuth();

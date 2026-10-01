@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./Report.css";
+import "./report.css";
 import {
   getDashboardReport,
   getSalesReport,

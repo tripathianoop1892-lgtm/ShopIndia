@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAdminSettings, updateAdminSettings } from "../../../services/api";
-import "./Settings.css";
+import "./settings.css";
 
 const emptySettings = { websiteName: "", adminEmail: "", contactNumber: "", address: "", platformCommission: 0, deliveryCharge: 0, gst: 0 };
 

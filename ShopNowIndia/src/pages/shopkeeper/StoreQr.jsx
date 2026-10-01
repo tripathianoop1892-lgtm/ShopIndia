@@ -1,6 +1,6 @@
 import { QRCodeCanvas } from "qrcode.react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 import "./StoreQr.css";
 
 const StoreQr = () => {

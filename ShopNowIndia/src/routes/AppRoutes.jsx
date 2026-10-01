@@ -6,11 +6,11 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import Home from "../pages/home/home";
-import Contact from "../pages/contact/Contact";
-import About from "../pages/about/About";
-import Features from "../pages/features/Features";
-import Terms from "../pages/terms/Terms";
-import Policy from "../pages/policy/Policy";
+import Contact from "../pages/contact/contact";
+import About from "../pages/about/about";
+import Features from "../pages/features/features";
+import Terms from "../pages/terms/terms";
+import Policy from "../pages/policy/policy";
 
 // Profile Pages
 import CustomerProfile from "../pages/profile/CustomerProfile";

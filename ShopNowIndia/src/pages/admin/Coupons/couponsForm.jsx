@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createCoupon, updateCoupon } from "../../../services/api";
-import "./CouponsForm.css";
+import "./couponsForm.css";
 
 const initialCoupon = {
   code: "",

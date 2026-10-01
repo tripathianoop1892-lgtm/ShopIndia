@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import "./Login.css";
 import { loginUser } from "../../services/api";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });

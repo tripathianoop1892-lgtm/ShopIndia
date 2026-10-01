@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MedicinesList, addToCart, getCart } from "../../services/api";
 import { setCartItems } from "../../features/cartSlice";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 import CustomerBannerSlider from "../../components/customer/CustomerBannerSlider";
 import { 
   FaSearch, FaShoppingBasket, FaMedkit, FaBuilding, 

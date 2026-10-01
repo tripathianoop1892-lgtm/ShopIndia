@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteCoupon, getCoupons } from "../../../services/api";
-import "./Coupons.css";
+import "./coupons.css";
 
 const Coupons = () => {
   const nav = useNavigate();

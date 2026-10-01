@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/UseAuth";
 import { getAccountSettings, updateAccountSettings } from "../../services/api";
 import { 
   FaSlidersH, FaBell, FaShieldAlt, FaSave, 

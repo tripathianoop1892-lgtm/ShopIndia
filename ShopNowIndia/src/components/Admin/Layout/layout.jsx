@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-import Header from "../Header/Header";
-import Sidebar from "../Sidebar/Sidebar";
-import useAuth from "../../../hooks/useAuth";
+import Header from "../Header/header";
+import Sidebar from "../Sidebar/sidebar";
+import useAuth from "../../../hooks/UseAuth";
 
-import "./Layout.css";
+import "./layout.css";
 
 const Layout = () => {
 

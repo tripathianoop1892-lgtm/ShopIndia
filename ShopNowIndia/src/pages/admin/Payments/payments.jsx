@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { asList, getAdminOrders } from "../../../services/api";
 import { exportRowsToExcel } from "../../../utils/export";
-import "./Payments.css";
+import "./payments.css";
 
 const paymentStatus = (order) => order.paymentStatus === "Paid" ? "Success" : order.paymentStatus || "Pending";
 

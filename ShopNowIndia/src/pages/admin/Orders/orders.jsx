@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { asList, getAdminOrders } from "../../../services/api";
 import { exportRowsToExcel } from "../../../utils/export";
-import "./Orders.css";
+import "./orders.css";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);

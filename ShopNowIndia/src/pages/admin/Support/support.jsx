@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getSupportTickets, replySupportTicket, updateSupportTicketStatus } from "../../../services/api";
-import "./Support.css";
+import "./support.css";
 import "../../../components/Admin/PartnerUsers.css";
 
 const Support = () => {

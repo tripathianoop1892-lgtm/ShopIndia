@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { getCategorySummary } from "../../../services/api";
-import "./Categories.css";
+import "./categories.css";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
