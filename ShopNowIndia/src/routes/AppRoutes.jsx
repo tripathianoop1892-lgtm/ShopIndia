@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
-import Home from "../pages/home/Home";
+import Home from "../pages/home/home";
 import Contact from "../pages/contact/Contact";
 import About from "../pages/about/About";
 import Features from "../pages/features/Features";
