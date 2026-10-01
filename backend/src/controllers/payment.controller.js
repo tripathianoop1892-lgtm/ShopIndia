@@ -20,14 +20,15 @@ export const createRazorpayOrder = async (req, res) => {
     return res.status(500).json({ success: false, message: "Unable to start payment." });
   }
 };
-
 export const verifyRazorpayPayment = async (req, res) => {
   try {
     const { intentId, razorpay_order_id: razorpayOrderId, razorpay_payment_id: razorpayPaymentId, razorpay_signature: signature } = req.body;
     const intent = await PaymentIntent.findOne({ _id: intentId, userId: req.user._id, razorpayOrderId });
     if (!intent || intent.status !== "created") return res.status(400).json({ success: false, message: "Invalid or already-used payment request." });
     const expected = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(`${intent.razorpayOrderId}|${razorpayPaymentId}`).digest("hex");
-    if (!signature || !crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))) return res.status(400).json({ success: false, message: "Payment signature verification failed." });
+    const expectedBuffer = Buffer.from(expected);
+    const signatureBuffer = Buffer.from(signature || "");
+    if (signatureBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(expectedBuffer, signatureBuffer)) return res.status(400).json({ success: false, message: "Payment signature verification failed." });
     intent.status = "paid";
     intent.razorpayPaymentId = razorpayPaymentId;
     await intent.save();
@@ -129,28 +130,4 @@ if (!intent) {
     refundStatus: intent.refundStatus,
     refundedAt: intent.refundedAt,
   };
-};
-
-
-export const refundRazorpayPayment = async (req, res) => {
-  try {
-    const { paymentReference } = req.body;
-
-    const result = await refundPayment(paymentReference);
-
-    return res.json({
-      success: true,
-      message: result.alreadyRefunded
-        ? "Payment was already refunded."
-        : "Payment refunded successfully.",
-      data: result,
-    });
-  } catch (error) {
-    console.error("RAZORPAY REFUND ERROR:", error);
-
-    return res.status(400).json({
-      success: false,
-      message: error.message || "Unable to process refund.",
-    });
-  }
 };

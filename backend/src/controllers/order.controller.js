@@ -13,6 +13,8 @@ import PlatformSettings from "../models/platformSettings.js";
 // 🛒 CREATE ORDER
 // =======================
 export const createOrder = async (req, res) => {
+  let payment = null;
+
   try {
     const user = req.user;
 
@@ -326,12 +328,12 @@ export const createOrder = async (req, res) => {
 
       if (
         orderSubtotal <
-        Number(coupon.miniorder || 0)
+        Number(coupon.minOrder || 0)
       ) {
         return res.status(400).json({
           success: false,
           message: `Minimum order amount is ₹${Number(
-            coupon.miniorder || 0
+            coupon.minOrder || 0
           )}`,
         });
       }
@@ -406,17 +408,19 @@ export const createOrder = async (req, res) => {
     // 10. PAYMENT VERIFICATION
     // ==========================================
 
-    const payment =
-      await PaymentIntent.findOne({
+    payment =
+      await PaymentIntent.findOneAndUpdate({
         _id: paymentReference,
         userId: user._id,
         status: "paid",
+        amount: Math.round(finalAmount * 100),
+      }, {
+        $set: { status: "processing" },
+      }, {
+        new: true,
       });
 
-    if (
-      !payment ||
-      payment.amount !== Math.round(finalAmount * 100)
-    ) {
+    if (!payment) {
       return res.status(402).json({
         success: false,
         message:
@@ -459,6 +463,9 @@ export const createOrder = async (req, res) => {
             }
           );
         }
+
+        payment.status = "paid";
+        await payment.save();
 
         return res.status(409).json({
           success: false,
@@ -557,6 +564,9 @@ export const createOrder = async (req, res) => {
         );
       }
 
+      payment.status = "paid";
+      await payment.save();
+
       throw orderError;
     }
 
@@ -643,6 +653,15 @@ export const createOrder = async (req, res) => {
       },
     });
   } catch (err) {
+    if (payment?.status === "processing") {
+      try {
+        payment.status = "paid";
+        await payment.save();
+      } catch (releaseError) {
+        console.error("PAYMENT RELEASE ERROR:", releaseError);
+      }
+    }
+
     console.error(
       "ORDER CREATION ERROR:",
       err

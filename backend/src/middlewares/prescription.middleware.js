@@ -1,9 +1,11 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { randomUUID } from "crypto";
+import { prescriptionUploadDirectory } from "../config/paths.js";
 
 // Create uploads/prescriptions folder automatically
-const uploadPath = "uploads/prescriptions";
+const uploadPath = prescriptionUploadDirectory;
 
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
@@ -16,13 +18,7 @@ const storage = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
-    const uniqueName =
-      Date.now() + "-" + Math.round(Math.random() * 1e9);
-
-    cb(
-      null,
-      uniqueName + path.extname(file.originalname)
-    );
+    cb(null, randomUUID() + path.extname(file.originalname).toLowerCase());
   },
 });
 

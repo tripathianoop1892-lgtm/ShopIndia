@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import { MedicinesList } from "../../services/api"; // ✅ API
-import * as XLSX from "xlsx";
+import { exportRowsToExcel } from "../../utils/export";
 const DistributorExpiring = () => {
   const [medicines, setMedicines] = useState([]);
 
@@ -61,20 +61,7 @@ const exportToExcel = () => {
     "Stock": med.stock || 0,
   }));
 
-  const worksheet = XLSX.utils.json_to_sheet(excelData);
-
-  const workbook = XLSX.utils.book_new();
-
-  XLSX.utils.book_append_sheet(
-    workbook,
-    worksheet,
-    "Expiring Medicines"
-  );
-
-  XLSX.writeFile(
-    workbook,
-    "Expiring_Medicines_180_Days.xlsx"
-  );
+  exportRowsToExcel("Expiring_Medicines_180_Days", excelData);
 };
   return (
     <div className="main-content">

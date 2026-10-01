@@ -5,7 +5,7 @@ const paymentIntentSchema = new mongoose.Schema({
   razorpayOrderId: { type: String, required: true, unique: true },
   amount: { type: Number, required: true, min: 1 },
   currency: { type: String, default: "INR" },
-  status: { type: String, enum: ["created", "paid", "consumed"], default: "created" },
+  status: { type: String, enum: ["created", "paid", "processing", "consumed"], default: "created" },
   razorpayPaymentId: { type: String, default: "" },
   refundStatus: {
   type: String,

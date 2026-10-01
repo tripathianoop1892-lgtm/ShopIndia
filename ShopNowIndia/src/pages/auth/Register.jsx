@@ -53,6 +53,10 @@ const Register = () => {
 
   const handleRegister = async () => {
     // 🔐 Password check
+    if (form.password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
     if (form.password !== form.confirmPassword) {
       alert("Password not match");
       return;

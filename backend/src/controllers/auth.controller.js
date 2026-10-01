@@ -6,6 +6,9 @@ import crypto from "crypto";
 import OtpVerification from "../models/otpVerification.js";
 import { normaliseMobile, sendOtp } from "../services/otp.service.js";
 
+const MINIMUM_PASSWORD_LENGTH = 8;
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // 🔐 TOKEN GENERATE (UPDATED: Binds dynamic shopId sessions for customer roles)
 const generateToken = (user, sessionShopId = null) => {
   return jwt.sign(
@@ -62,11 +65,12 @@ export const registerUser = async (req, res) => {
    } = req.body;
 
     if (!name?.trim() || !password || !["customer", "shopkeeper", "distributor"].includes(role) || !email?.trim() || !mobile?.trim()) return res.status(400).json({ success: false, message: "Name, email, mobile number, password, and role are required." });
+    if (password.length < MINIMUM_PASSWORD_LENGTH) return res.status(400).json({ success: false, message: `Password must be at least ${MINIMUM_PASSWORD_LENGTH} characters.` });
     if (!["email", "mobile"].includes(verificationChannel) || !otp) return res.status(400).json({ success: false, message: "Verify your selected email or mobile number with OTP." });
     const normalEmail = email.trim().toLowerCase();
     const normalMobile = normaliseMobile(mobile);
     const contact = verificationChannel === "email" ? normalEmail : normalMobile;
-    const verification = await OtpVerification.findOne({ contact, channel: verificationChannel }).sort({ createdAt: -1 });
+    const verification = await OtpVerification.findOne({ contact, channel: verificationChannel, purpose: "registration" }).sort({ createdAt: -1 });
     const expectedHash = crypto.createHash("sha256").update(String(otp)).digest("hex");
     if (!verification || verification.expiresAt < new Date() || verification.attempts >= 5 || !crypto.timingSafeEqual(Buffer.from(verification.codeHash), Buffer.from(expectedHash))) {
       if (verification) { verification.attempts += 1; await verification.save(); }
@@ -123,22 +127,26 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email?.trim() || typeof password !== "string") {
+      return res.status(401).json({ success: false, message: "Invalid email/mobile number or password." });
+    }
+
     const identifier = email?.trim();
     const user = await User.findOne({ $or: [{ email: identifier?.toLowerCase() }, { mobile: normaliseMobile(identifier || "") }] });
     // ❌ USER NOT FOUND
     if (!user) {
-      return res.json({
+      return res.status(401).json({
         success: false,
-        message: "Invalid Email ❌",
+        message: "Invalid email/mobile number or password.",
       });
     }
 
     // 🔐 PASSWORD CHECK
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.json({
+      return res.status(401).json({
         success: false,
-        message: "Wrong Password ❌",
+        message: "Invalid email/mobile number or password.",
       });
     }
 
@@ -176,44 +184,6 @@ export const loginUser = async (req, res) => {
 };
 
 // =======================
-// FORGOT PASSWORD
-// =======================
-export const forgotPassword = async (req, res) => {
-  try {
-    const { email, newPassword } = req.body;
-
-    if (!email || !newPassword) {
-      return res.json({
-        success: false,
-        message: "Email & New Password required ❌",
-      });
-    }
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.json({
-        success: false,
-        message: "User not found ❌",
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
-
-    return res.json({
-      success: true,
-      message: "Password updated successfully ✅",
-    });
-  } catch (err) {
-    console.log("FORGOT ERROR:", err);
-    return res.status(500).json({
-      success: false,
-      message: "Server error ❌",
-    });
-  }
-};
- // =======================
 // 🔍 SEARCH MEDICAL SHOPS
 // =======================
 export const requestPasswordReset = async (req, res) => {
@@ -241,7 +211,7 @@ export const resetPassword = async (req, res) => {
     const email = req.body.email?.trim().toLowerCase();
     const { otp, newPassword } = req.body;
     if (!email || !otp || !newPassword) return res.status(400).json({ success: false, message: "Email, reset code, and new password are required." });
-    if (newPassword.length < 6) return res.status(400).json({ success: false, message: "Password must be at least 6 characters." });
+    if (newPassword.length < MINIMUM_PASSWORD_LENGTH) return res.status(400).json({ success: false, message: `Password must be at least ${MINIMUM_PASSWORD_LENGTH} characters.` });
 
     const verification = await OtpVerification.findOne({ contact: email, channel: "email", purpose: "password-reset" }).sort({ createdAt: -1 });
     const expectedHash = crypto.createHash("sha256").update(String(otp)).digest("hex");
@@ -274,37 +244,37 @@ export const searchShops = async (req, res) => {
       });
     }
 
+    if (search.length > 80) {
+      return res.status(400).json({ success: false, message: "Search text is too long." });
+    }
+
+    const safeSearch = escapeRegex(search);
+
     // Shopkeeper ko Shop Name / Mobile / Email se search karo
     const shops = await User.find({
       role: "shopkeeper",
       $or: [
         {
           shopName: {
-            $regex: search,
+            $regex: safeSearch,
             $options: "i",
           },
         },
         {
-          mobile: {
-            $regex: search,
-            $options: "i",
-          },
-        },
-        {
-          email: {
-            $regex: search,
+          name: {
+            $regex: safeSearch,
             $options: "i",
           },
         },
         {
           shopId: {
-            $regex: search,
+            $regex: safeSearch,
             $options: "i",
           },
         },
       ],
     })
-      .select("_id name shopName mobile email shopId")
+      .select("_id name shopName shopId")
       .limit(10);
 
     return res.json({
@@ -356,12 +326,12 @@ export const updateProfile = async (req, res) => {
       user.name = fullName.trim();
     }
 
-    if (mobile !== undefined) {
-      user.mobile = mobile.trim();
+    if (mobile !== undefined && normaliseMobile(mobile) !== user.mobile) {
+      return res.status(400).json({ success: false, message: "Mobile number changes require verification." });
     }
 
-    if (email !== undefined) {
-      user.email = email.trim().toLowerCase();
+    if (email !== undefined && email.trim().toLowerCase() !== user.email) {
+      return res.status(400).json({ success: false, message: "Email address changes require verification." });
     }
 
     if (shopName !== undefined) {
@@ -412,7 +382,7 @@ export const getAccountSettings = async (req, res) => {
 export const updateAccountSettings = async (req, res) => {
   try {
     if (req.body.newPassword) {
-      if (!req.body.currentPassword || req.body.newPassword.length < 6 || req.body.newPassword !== req.body.confirmPassword) return res.status(400).json({ success: false, message: "Enter the current password and matching new password of at least 6 characters." });
+      if (!req.body.currentPassword || req.body.newPassword.length < MINIMUM_PASSWORD_LENGTH || req.body.newPassword !== req.body.confirmPassword) return res.status(400).json({ success: false, message: `Enter the current password and matching new password of at least ${MINIMUM_PASSWORD_LENGTH} characters.` });
       const account = await User.findById(req.user._id);
       if (!await bcrypt.compare(req.body.currentPassword, account.password)) return res.status(400).json({ success: false, message: "Current password is incorrect." });
       account.password = await bcrypt.hash(req.body.newPassword, 10);

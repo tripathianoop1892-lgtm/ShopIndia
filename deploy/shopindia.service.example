@@ -1,0 +1,28 @@
+[Unit]
+Description=ShopIndia API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=shopindia
+Group=www-data
+WorkingDirectory=/opt/shopindia/backend
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/shopindia/backend.env
+ExecStart=/usr/bin/node index.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+KillSignal=SIGTERM
+UMask=0027
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/shopindia/backend/uploads
+
+[Install]
+WantedBy=multi-user.target
+

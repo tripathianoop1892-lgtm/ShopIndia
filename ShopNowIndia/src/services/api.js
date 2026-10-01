@@ -1,4 +1,4 @@
-const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/$/, "");
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
 export const API_BASE_URL = BASE_URL;
 
 export const getHomepageStats = async () => {
@@ -95,21 +95,6 @@ export const requestRegistrationOtp = async (data) => {
 // =======================
 // 🔑 FORGOT PASSWORD
 // =======================
-
-export const forgotPassword = async (email, password) => {
-  const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      newPassword: password,
-    }),
-  });
-
-  return res.json();
-};
 
 export const requestPasswordReset = async (email) => {
   const res = await fetch(`${BASE_URL}/auth/forgot-password/request`, {

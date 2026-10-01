@@ -4,9 +4,10 @@ import { notifyUser } from "../services/notification.service.js";
 import { readPrescriptionWithAI } from "../services/prescription-ai.service.js";
 import fs from "fs";
 import path from "path";
+import { prescriptionUploadDirectory } from "../config/paths.js";
 
 const prescriptionFilePath = (filename) =>
-  path.resolve("uploads", "prescriptions", filename);
+  path.join(prescriptionUploadDirectory, path.basename(filename));
 
 const removeUploadedFile = async (file) => {
   if (!file?.filename) return;

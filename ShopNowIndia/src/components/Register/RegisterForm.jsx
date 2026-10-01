@@ -64,7 +64,8 @@ const RegisterForm = ({ form, handleChange, requestOtp, sendingOtp }) => {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder="Password"
+            minLength="8"
+            placeholder="Password (minimum 8 characters)"
             value={form.password}
             onChange={handleChange}
           />
@@ -85,6 +86,7 @@ const RegisterForm = ({ form, handleChange, requestOtp, sendingOtp }) => {
           <input
             type={showConfirm ? "text" : "password"}
             name="confirmPassword"
+            minLength="8"
             placeholder="Confirm Password"
             value={form.confirmPassword}
             onChange={handleChange}

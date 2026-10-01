@@ -240,7 +240,8 @@ const Settings = () => {
                   type="password" 
                   value={securityForm.newPassword}
                   onChange={(e) => setSecurityForm({...securityForm, newPassword: e.target.value})}
-                  placeholder="Minimum 6 characters"
+                  minLength="8"
+                  placeholder="Minimum 8 characters"
                   required
                 />
               </div>

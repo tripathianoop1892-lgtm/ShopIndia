@@ -30,6 +30,7 @@ function ForgotPassword() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!otp || !password || !confirmPassword) return setMessage("Enter the reset code and your new password.");
+    if (password.length < 8) return setMessage("Password must be at least 8 characters.");
     if (password !== confirmPassword) return setMessage("Passwords do not match.");
     setLoading(true);
     try {
@@ -54,7 +55,7 @@ function ForgotPassword() {
         </div>
         {!codeSent ? <div id="submit"><button type="button" disabled={loading} onClick={sendCode}>{loading ? "Sending..." : "Send reset code"}</button></div> : <>
           <div id="form1"><h2>Reset code</h2><input type="text" inputMode="numeric" maxLength="6" placeholder="Enter 6-digit code" value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} required /></div>
-          <div id="form1"><h2>New Password</h2><input type="password" placeholder="Minimum 6 characters" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="new-password" required /></div>
+          <div id="form1"><h2>New Password</h2><input type="password" minLength="8" placeholder="Minimum 8 characters" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="new-password" required /></div>
           <div id="form1"><h2>Confirm Password</h2><input type="password" placeholder="Re-enter password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" required /></div>
           <div id="submit"><button type="submit" disabled={loading}>{loading ? "Updating..." : "Reset password"}</button></div>
         </>}

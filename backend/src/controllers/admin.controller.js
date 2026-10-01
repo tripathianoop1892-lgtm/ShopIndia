@@ -38,6 +38,9 @@ export const createManagedUser = async (req, res) => {
     if (!name?.trim() || !email?.trim() || !password || !["shopkeeper", "distributor"].includes(role)) {
       return res.status(400).json({ success: false, message: "Name, email, password, and a partner role are required." });
     }
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, message: "Password must be at least 8 characters." });
+    }
 
     const exists = await user.findOne({ email: email.trim().toLowerCase() });
     if (exists) return res.status(409).json({ success: false, message: "A user with this email already exists." });

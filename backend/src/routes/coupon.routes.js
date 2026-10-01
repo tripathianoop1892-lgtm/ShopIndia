@@ -11,7 +11,7 @@ import { checkAuth, checkRole } from "../middlewares/auth.middleware.js";
 
  const router = express.Router();
 
- router.post("/validte", checkAuth, validateCoupon);
+ router.post("/validate", checkAuth, validateCoupon);
  router.get("/", checkAuth, checkRole("admin"), getCoupons);
  router.post("/", checkAuth, checkRole("admin"),createCoupon);
  router.put("/:id", checkAuth, checkRole("admin"), updateCoupon);

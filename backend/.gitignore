@@ -26,3 +26,5 @@ dist-ssr
 # Runtime uploads (keep directories, not user files)
 uploads/medicines/*
 !uploads/medicines/.gitkeep
+uploads/prescriptions/*
+!uploads/prescriptions/.gitkeep

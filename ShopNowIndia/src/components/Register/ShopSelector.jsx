@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ShopSelector.css";
 
-import { FaStore, FaSearch, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { FaStore, FaSearch } from "react-icons/fa";
 
 import { searchShops } from "../../services/api";
 
@@ -73,7 +73,7 @@ const ShopSelector = ({ form, setForm }) => {
       </h3>
 
       <p className="shop-selector-subtitle">
-        Search by Shop Name / Mobile / Email
+        Search by shop name or shop ID
       </p>
 
       <div className="shop-search-box">
@@ -116,16 +116,6 @@ const ShopSelector = ({ form, setForm }) => {
                   <FaStore />
                   {shop.shopName}
                 </h4>
-
-                <p>
-                  <FaPhoneAlt />
-                  {shop.mobile || "Mobile not available"}
-                </p>
-
-                <p>
-                  <FaEnvelope />
-                  {shop.email || "Email not available"}
-                </p>
 
                 <span className="shop-id">
                   Shop ID: {shop.shopId}
