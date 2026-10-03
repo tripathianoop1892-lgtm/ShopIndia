@@ -1,9 +1,31 @@
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
 export const API_BASE_URL = BASE_URL;
 
+const readApiResponse = async (response) => {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!contentType.toLowerCase().includes("application/json")) {
+    return {
+      success: false,
+      message: response.status >= 500
+        ? "The service is temporarily unavailable. Please try again shortly."
+        : "The server returned an unexpected response. Please try again.",
+    };
+  }
+
+  try {
+    return await response.json();
+  } catch {
+    return {
+      success: false,
+      message: "The server response could not be read. Please try again.",
+    };
+  }
+};
+
 export const getHomepageStats = async () => {
   const res = await fetch(`${BASE_URL}/public/homepage-stats`);
-  return res.json();
+  return readApiResponse(res);
 };
 
 // 🔥 COMMON HEADERS (AUTO TOKEN - FIXED)
@@ -71,7 +93,7 @@ export const loginUser = async (form) => {
     body: JSON.stringify(form),
   });
 
-  return res.json();
+  return readApiResponse(res);
 };
 
 // 👉 REGISTER
@@ -84,12 +106,12 @@ export const registerUser = async (form) => {
     body: JSON.stringify(form),
   });
 
-  return res.json();
+  return readApiResponse(res);
 };
 
 export const requestRegistrationOtp = async (data) => {
   const res = await fetch(`${BASE_URL}/auth/register/request-otp`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-  return res.json();
+  return readApiResponse(res);
 };
 
 // =======================
@@ -102,7 +124,7 @@ export const requestPasswordReset = async (email) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   });
-  return res.json();
+  return readApiResponse(res);
 };
 
 export const resetPassword = async ({ email, otp, newPassword }) => {
@@ -111,7 +133,7 @@ export const resetPassword = async ({ email, otp, newPassword }) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, otp, newPassword }),
   });
-  return res.json();
+  return readApiResponse(res);
 };
 
 export const getAccountSettings = async () => (await fetch(`${BASE_URL}/auth/settings`, { headers: getHeaders() })).json();
