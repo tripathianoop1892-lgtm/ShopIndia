@@ -137,6 +137,24 @@
   color: #666;
 }
 
+/* The edit row is wider than the portal content area. Keep scrolling on the
+   table wrapper so the layout/sidebar cannot clip the remaining columns. */
+.medicine-table-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  border-radius: 10px;
+  overscroll-behavior-x: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+
+.medicine-table-scroll table {
+  min-width: 1100px;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
 
@@ -147,17 +165,12 @@
   }
 
   .medicine-table-scroll {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    /* Keep horizontal table scrolling without blocking normal page scrolling. */
-    touch-action: pan-x pan-y;
-    border-radius: 10px;
+    /* Leave enough room for touch users to grab the horizontal scrollbar. */
+    padding-bottom: 4px;
   }
 
   .medicine-container table {
-    min-width: 900px;
+    min-width: 1100px;
   }
 }
 

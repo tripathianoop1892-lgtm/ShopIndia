@@ -7,6 +7,16 @@ import {
 } from "../../services/api";
 import MedicineImageInput from "../../components/MedicineImageInput/MedicineImageInput";
 
+const toDateInputValue = (value) => {
+  if (!value) return "";
+
+  const text = String(value);
+  if (/^\d{4}-\d{2}-\d{2}/.test(text)) return text.slice(0, 10);
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+};
+
 const Distributor = () => {
 
   const [search, setSearch] = useState("");
@@ -341,11 +351,7 @@ const Distributor = () => {
 
     <input
       type="date"
-      value={
-        m.mfd
-          ? m.mfd.slice(0, 10)
-          : ""
-      }
+      value={toDateInputValue(m.mfd)}
       onChange={(e) =>
         handleChange(
           e,
@@ -373,11 +379,7 @@ const Distributor = () => {
 
                     <input
                       type="date"
-                      value={
-                       m.expiry
-  ? m.expiry.slice(0, 10)
-  : ""
-                      }
+                      value={toDateInputValue(m.expiry)}
                       onChange={(e) =>
                         handleChange(
                           e,
