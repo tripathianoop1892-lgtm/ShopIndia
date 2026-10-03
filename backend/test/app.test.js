@@ -4,6 +4,7 @@ import request from "supertest";
 
 import { app } from "../index.js";
 import { validateEnvironment } from "../src/config/env.js";
+import Coupon from "../src/models/coupons.js";
 
 test("liveness endpoint responds without a database connection", async () => {
   const response = await request(app).get("/api/health/live");
@@ -24,6 +25,17 @@ test("coupon validation route is correctly spelled and protected", async () => {
     .post("/api/admin/coupons/validate")
     .send({ code: "TEST", amount: 100 });
   assert.equal(response.status, 401);
+});
+
+test("customer coupon discovery endpoint is protected", async () => {
+  const response = await request(app).get("/api/coupons");
+  assert.equal(response.status, 401);
+});
+
+test("coupon schema uses the fields enforced by checkout", () => {
+  assert.ok(Coupon.schema.path("minOrder"));
+  assert.ok(Coupon.schema.path("maxUsagePerUser"));
+  assert.ok(Coupon.schema.path("expiryDate"));
 });
 
 test("the former public refund endpoint is not exposed", async () => {
@@ -60,4 +72,3 @@ test("production environment validation rejects weak configuration", () => {
     else process.env[key] = value;
   }
 });
-

@@ -208,12 +208,19 @@ export const getOrders = async (viewFilter = "") => {
 
 // 👉 Validate Coupon 
 export const validateCoupon = async (code, amount ) => {
-  const res = await fetch(`${BASE_URL}/admin/coupons/validate`, { 
+  const res = await fetch(`${BASE_URL}/coupons/validate`, {
     method: "POST",
     headers: getHeaders(), 
     body: JSON.stringify({code, amount}),
   });
-  return res.json();
+  return readApiResponse(res);
+};
+
+export const getAvailableCoupons = async () => {
+  const res = await fetch(`${BASE_URL}/coupons`, {
+    headers: getHeaders(),
+  });
+  return readApiResponse(res);
 };
 
 // 👉 PLACE / CREATE ORDER

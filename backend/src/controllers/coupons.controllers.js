@@ -15,6 +15,14 @@ const normalizeStatus = (status) => {
     : "active";
 };
 
+const normalizeExpiryDate = (value) => {
+  const date = new Date(value);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))) {
+    date.setUTCHours(23, 59, 59, 999);
+  }
+  return date;
+};
+
 // ==========================================
 // Get Display Status
 // ==========================================
@@ -32,6 +40,69 @@ export const getDisplayStatus = (coupon) => {
   }
 
   return "Active";
+};
+
+// ==========================================
+// Get Coupons Available To The Current User
+// ==========================================
+
+export const getAvailableCoupons = async (req, res) => {
+  try {
+    const subtotal = Number(req.query.amount || 0);
+    if (!Number.isFinite(subtotal) || subtotal < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Order amount must be zero or greater.",
+      });
+    }
+
+    const now = new Date();
+    const coupons = await Coupon.find({ status: "active" })
+      .sort({ discountValue: -1, createdAt: -1 })
+      .lean();
+
+    const couponIds = coupons.map((coupon) => coupon._id);
+    const usageRecords = couponIds.length > 0
+      ? await CouponUsage.find({
+        couponId: { $in: couponIds },
+        userId: req.user._id,
+      }).select("couponId").lean()
+      : [];
+
+    const usageByCoupon = usageRecords.reduce((counts, usage) => {
+      const key = String(usage.couponId);
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {});
+
+    const data = coupons
+      .filter((coupon) => {
+        if (!coupon.expiryDate || new Date(coupon.expiryDate) < now) return false;
+        if (coupon.maxTotalUsage && coupon.usedCount >= coupon.maxTotalUsage) return false;
+        return (usageByCoupon[String(coupon._id)] || 0) < Number(coupon.maxUsagePerUser || 1);
+      })
+      .map((coupon) => {
+        const minOrder = Number(coupon.minOrder || 0);
+        return {
+          id: coupon._id,
+          code: coupon.code,
+          discountType: coupon.discountType,
+          discountValue: Number(coupon.discountValue),
+          minOrder,
+          expiryDate: coupon.expiryDate,
+          eligible: subtotal >= minOrder,
+          remainingAmount: Number(Math.max(minOrder - subtotal, 0).toFixed(2)),
+        };
+      });
+
+    return res.json({ success: true, data });
+  } catch (error) {
+    console.error("GET AVAILABLE COUPONS ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to load available coupons.",
+    });
+  }
 };
 
 // ==========================================
@@ -371,7 +442,7 @@ export const createCoupon = async (
           Number(minOrder || 0),
 
         expiryDate:
-          new Date(expiryDate),
+          normalizeExpiryDate(expiryDate),
 
         status:
           normalizeStatus(status),
@@ -499,7 +570,7 @@ export const updateCoupon = async (
 
     if (expiryDate) {
       coupon.expiryDate =
-        new Date(expiryDate);
+        normalizeExpiryDate(expiryDate);
     }
 
     if (status) {

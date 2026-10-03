@@ -22,6 +22,7 @@ import reviewRoutes from "./src/routes/review.routes.js";
 import notificationRoutes from "./src/routes/notification.routes.js";
 import paymentRoutes from "./src/routes/payment.routes.js";
 import publicRoutes from "./src/routes/public.routes.js";
+import publicCouponRoutes from "./src/routes/public-coupon.routes.js";
 import connectDB from "./src/config/db.js";
 import {
   getAllowedOrigins,
@@ -122,6 +123,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/coupons", publicCouponRoutes);
 app.use("/api/earnings", earningsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/coupons", couponRoutes);

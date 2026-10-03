@@ -4,7 +4,7 @@ const couponUsageSchema = new mongoose.Schema(
   {
     couponId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Coupon",
+      ref: "coupons",
       required: true,
     },
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "../../features/cartSlice";
-import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon, createRazorpayOrder, verifyRazorpayPayment, getCheckoutSettings } from "../../services/api";
+import { getCart, removeCartItem, placeOrder, addToCart, validateCoupon, createRazorpayOrder, verifyRazorpayPayment, getCheckoutSettings, getAvailableCoupons } from "../../services/api";
 import { FaTrashAlt, FaStore, FaReceipt, FaShoppingBag, FaSpinner, FaCheckCircle, FaExclamationCircle, FaPlus, FaMinus } from "react-icons/fa";
 import "./Card.css";
 
@@ -17,6 +17,8 @@ const Cart = () => {
   const [couponInputs, setCouponInputs] = useState({});
   const [couponStatuses, setCouponStatuses] = useState({});
   const [couponLoading, setCouponLoading] = useState(null);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [availableCouponsLoading, setAvailableCouponsLoading] = useState(true);
   const [checkoutSettings, setCheckoutSettings] = useState({ platformCommission: 0, deliveryCharge: 0, gst: 0 });
 
   const showNotification = useCallback((text, type) => {
@@ -47,6 +49,15 @@ const Cart = () => {
       if (response.success) setCheckoutSettings((current) => ({ ...current, ...response.data }));
     }).catch(() => showNotification("Unable to load platform charges.", "error"));
   }, [showNotification]);
+
+  useEffect(() => {
+    getAvailableCoupons()
+      .then((response) => {
+        setAvailableCoupons(response.success && Array.isArray(response.data) ? response.data : []);
+      })
+      .catch(() => setAvailableCoupons([]))
+      .finally(() => setAvailableCouponsLoading(false));
+  }, []);
 
   // 🏢 MULTI-DISTRIBUTOR GROUPING MATRIX
   const groupedOrders = useMemo(() => {
@@ -118,8 +129,8 @@ const Cart = () => {
     }
   };
 
-  const handleApplyCoupon = async (group) => {
-    const code = (couponInputs[group.sellerId] || "").trim();
+  const handleApplyCoupon = async (group, selectedCode = "") => {
+    const code = (selectedCode || couponInputs[group.sellerId] || "").trim().toUpperCase();
 
     if (!code) {
       setCouponStatuses((prev) => ({
@@ -131,6 +142,7 @@ const Cart = () => {
 
     try {
       setCouponLoading(group.sellerId);
+      setCouponInputs((current) => ({ ...current, [group.sellerId]: code }));
       const res = await validateCoupon(code, group.totalAmount);
 
       if (res.success) {
@@ -230,7 +242,7 @@ const Cart = () => {
         showNotification(res.message || "Failed to create order request pipeline.", "error");
       }
     } catch (err) {
-      showNotification("Exception triggered during checkouts.", "error");
+      showNotification(err.message || "Unable to complete checkout.", "error");
       console.error("Exception triggered during order execution:", err);
     } finally {
       setActionLoading(null);
@@ -391,6 +403,56 @@ const Cart = () => {
                     {couponStatuses[group.sellerId].message}
                   </p>
                 )}
+
+                <details className="available-coupons-panel">
+                  <summary>
+                    {availableCouponsLoading
+                      ? "Checking available coupons..."
+                      : `${availableCoupons.length} available coupon${availableCoupons.length === 1 ? "" : "s"}`}
+                  </summary>
+
+                  <div className="available-coupons-list">
+                    {!availableCouponsLoading && availableCoupons.length === 0 && (
+                      <p className="coupon-empty-state">No coupons are available for this account right now.</p>
+                    )}
+
+                    {availableCoupons.map((coupon) => {
+                      const minOrder = Number(coupon.minOrder || 0);
+                      const remainingAmount = Math.max(minOrder - group.totalAmount, 0);
+                      const eligible = remainingAmount === 0;
+                      const applied = couponStatuses[group.sellerId]?.applied && couponStatuses[group.sellerId]?.code === coupon.code;
+                      const discountLabel = coupon.discountType === "Fixed"
+                        ? `₹${Number(coupon.discountValue).toLocaleString("en-IN")} off`
+                        : `${Number(coupon.discountValue)}% off`;
+
+                      return (
+                        <article className={`available-coupon-card ${eligible ? "eligible" : "locked"}`} key={coupon.id || coupon.code}>
+                          <div className="available-coupon-copy">
+                            <div className="available-coupon-heading">
+                              <strong>{coupon.code}</strong>
+                              <span>{discountLabel}</span>
+                            </div>
+                            <p>
+                              {eligible
+                                ? minOrder > 0 ? `Valid on orders of ₹${minOrder.toLocaleString("en-IN")} or more.` : "No minimum order required."
+                                : `Add ₹${remainingAmount.toLocaleString("en-IN")} more to unlock.`}
+                            </p>
+                            {coupon.expiryDate && (
+                              <small>Expires {new Date(coupon.expiryDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</small>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleApplyCoupon(group, coupon.code)}
+                            disabled={!eligible || couponLoading === group.sellerId || applied}
+                          >
+                            {applied ? "Applied" : eligible ? "Apply" : "Locked"}
+                          </button>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </details>
               </div>
 
               <div className="summary-stack">
@@ -411,8 +473,12 @@ const Cart = () => {
                   </div>
                 )}
                 <div className="summary-accumulated-box">
-                  <span className="summary-label">Final Subtotal</span>
-                  <span className="summary-value-amount">₹{(group.totalAmount + (group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100) + checkoutSettings.deliveryCharge).toLocaleString('en-IN')}</span>
+                  <span className="summary-label">Final payable</span>
+                  <span className="summary-value-amount">₹{(
+                    (couponStatuses[group.sellerId]?.applied ? couponStatuses[group.sellerId].finalAmount : group.totalAmount)
+                    + (group.totalAmount * (Number(checkoutSettings.platformCommission || 0) + Number(checkoutSettings.gst || 0)) / 100)
+                    + (user?.role === "customer" ? Number(checkoutSettings.deliveryCharge || 0) : 0)
+                  ).toLocaleString('en-IN')}</span>
                 </div>
               </div>
               
