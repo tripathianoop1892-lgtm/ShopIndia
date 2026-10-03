@@ -39,13 +39,13 @@ export const requestRegistrationOtp = async (req, res) => {
     const exists = await User.findOne(channel === "email" ? { email: contact } : { mobile: contact });
     if (exists) return res.status(409).json({ success: false, message: `This ${channel} is already registered.` });
     const code = String(crypto.randomInt(100000, 1000000));
-    await OtpVerification.deleteMany({ contact, channel });
-    await OtpVerification.create({ contact, channel, codeHash: crypto.createHash("sha256").update(code).digest("hex"), expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
-    await sendOtp({ channel, contact, code });
+    await OtpVerification.deleteMany({ contact, channel, purpose: "registration" });
+    await OtpVerification.create({ contact, channel, purpose: "registration", codeHash: crypto.createHash("sha256").update(code).digest("hex"), expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
+    await sendOtp({ channel, contact, code, purpose: "registration" });
     return res.json({ success: true, message: `OTP sent to your ${channel}.` });
   } catch (error) {
     console.error("OTP REQUEST ERROR:", error);
-    return res.status(503).json({ success: false, message: error.message || "Unable to send OTP." });
+    return res.status(503).json({ success: false, message: "Unable to send OTP right now." });
   }
 };
 
@@ -197,7 +197,7 @@ export const requestPasswordReset = async (req, res) => {
       const code = String(crypto.randomInt(100000, 1000000));
       await OtpVerification.deleteMany({ contact: email, channel: "email", purpose: "password-reset" });
       await OtpVerification.create({ contact: email, channel: "email", purpose: "password-reset", codeHash: crypto.createHash("sha256").update(code).digest("hex"), expiresAt: new Date(Date.now() + 10 * 60 * 1000) });
-      await sendOtp({ channel: "email", contact: email, code });
+      await sendOtp({ channel: "email", contact: email, code, purpose: "password-reset" });
     }
     return res.json({ success: true, message: "If an account exists for this email, a reset code has been sent." });
   } catch (error) {
