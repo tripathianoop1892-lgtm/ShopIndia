@@ -39,7 +39,7 @@ const Contact = () => {
             <span className="contact-badge-pill">Support Center</span>
             <h1>Contact Us</h1>
             <p className="contact-hero-lead">
-              Connect with OmSanjeevani Healthcare and take your medicine business digital. Our teams are available to stabilize your distribution pipelines.
+              Contact OmSanjeevani for account, order, payment, and marketplace support.
             </p>
             </div>
             <img src="contactpic.png" alt="OmSanjeevani customer support" className="contact-hero-illustration" />
@@ -110,7 +110,7 @@ const Contact = () => {
             {/* Right Side: Secure Communication Form Sheet */}
             <div className="contact-secure-form-column">
               <h2>Send Message</h2>
-              <p className="column-subtitle">Submit your query straight to our marketplace compliance administrators.</p>
+              <p className="column-subtitle">Send your query to the OmSanjeevani support contact.</p>
               
               <form onSubmit={submit}>
                 <div className="form-input-group">
@@ -161,7 +161,7 @@ const Contact = () => {
         <section className="faq-interactive-section">
           <div className="faq-section-header">
             <h2>Frequently Asked Questions</h2>
-            <p>Common quick-reference answers regarding the OmSanjeevani Healthcare infrastructure.</p>
+            <p>Quick-reference answers about the OmSanjeevani platform.</p>
           </div>
           
           <div className="faq-toggles-wrapper">
@@ -182,14 +182,14 @@ const Contact = () => {
             <details>
               <summary>Is Inventory Management available?</summary>
               <p>
-                Yes, our system architecture contains real-time Inventory Tracking, automated Short-Stock safeguards, and predictive Expiry Alert notifications.
+                The seller dashboards include inventory counts, low-stock views, and expiry-date alerts based on the listing data entered by each seller.
               </p>
             </details>
 
             <details>
               <summary>Can customers search for medicines?</summary>
               <p>
-                Yes, retail consumers can look up neighborhood drug store catalogs to verify medicine availability and prices instantly.
+                Customers linked to a participating pharmacy can view that pharmacy's current catalogue. Availability and prices are supplied by the seller and may change.
               </p>
             </details>
 
@@ -203,7 +203,7 @@ const Contact = () => {
             <details>
               <summary>Will OmSanjeevani be available across India?</summary>
               <p>
-                Our core developmental goal is to build a unified, digital, transparent, and highly efficient medicine supply distribution network across all states in India.
+                OmSanjeevani is currently operated from Delhi. Service availability depends on participating sellers and is not represented as nationwide coverage.
               </p>
             </details>
           </div>

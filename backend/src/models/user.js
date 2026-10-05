@@ -61,14 +61,22 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    warehouseAddress: { type: String, trim: true, default: "" },
+    city: { type: String, trim: true, default: "" },
+    district: { type: String, trim: true, default: "" },
+    state: { type: String, trim: true, default: "" },
+    pincode: { type: String, trim: true, default: "" },
     // New parameters for Wholesaler B2B analytics
     rating: {
       type: Number,
-      default: 4.0, 
+      default: 0,
+      min: 0,
+      max: 5,
     },
     reviewsCount: {
       type: Number,
-      default: 1,
+      default: 0,
+      min: 0,
     },
     settings: {
       emailAlerts: { type: Boolean, default: true },

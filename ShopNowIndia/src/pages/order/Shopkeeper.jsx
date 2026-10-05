@@ -343,7 +343,7 @@ const ShopkeeperOrder = () => {
                       ? o.sellerId?.name ||
                         o.company ||
                         "Distributor Entity"
-                      : o.customerName || "Consumer"}
+                      : o.customerName || o.buyerId?.name || "Customer name unavailable"}
 
                     {/* Review Distributor */}
                     {activeTab === "b2b-procure" &&

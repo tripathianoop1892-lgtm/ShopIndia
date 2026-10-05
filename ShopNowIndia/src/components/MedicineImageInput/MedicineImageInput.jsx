@@ -83,7 +83,7 @@ const MedicineImageInput = ({
         type="url"
         value={imageUrl}
         onChange={(event) => onImageUrlChange(event.target.value)}
-        placeholder="https://example.com/medicine.jpg"
+        placeholder="Paste an HTTPS image URL"
       />
 
       {previewUrl && failedPreviewUrl !== previewUrl && (

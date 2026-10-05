@@ -63,19 +63,21 @@ const Cart = () => {
   const groupedOrders = useMemo(() => {
     const groups = {};
     cartList.forEach((item) => {
-      const vendorId = item.sellerId || item.ownerId || "General-Wholesale";
-      const vendorName = item.company || `Distributor Node (${String(vendorId).substring(0, 6)})`;
+      const vendorId = item.sellerId || item.ownerId;
+      const groupKey = vendorId || `missing-seller-${item._id || item.medicineId}`;
+      const vendorName = item.sellerName?.trim() || "Seller details unavailable";
 
-      if (!groups[vendorId]) {
-        groups[vendorId] = {
-          sellerId: vendorId,
+      if (!groups[groupKey]) {
+        groups[groupKey] = {
+          groupKey,
+          sellerId: vendorId || "",
           sellerName: vendorName,
           items: [],
           totalAmount: 0,
         };
       }
-      groups[vendorId].items.push(item);
-      groups[vendorId].totalAmount += (item.price || 0) * (item.quantity || item.qty || 1);
+      groups[groupKey].items.push(item);
+      groups[groupKey].totalAmount += (item.price || 0) * (item.quantity || item.qty || 1);
     });
     return Object.values(groups);
   }, [cartList]);
@@ -176,6 +178,10 @@ const Cart = () => {
   };
 
   const handleCheckoutGroup = async (group) => {
+    if (!group.sellerId) {
+      showNotification("This cart group has no valid seller. Remove it and add the medicine again from the current catalogue.", "error");
+      return;
+    }
     try {
       setActionLoading(group.sellerId);
       const couponState = couponStatuses[group.sellerId] || {};
@@ -293,7 +299,7 @@ const Cart = () => {
       {/* RENDER DISTRIBUTOR ORDER GROUPS */}
       <div className="groups-stack-layout">
         {groupedOrders.map((group) => (
-          <div key={group.sellerId} className="professional-vendor-card-block">
+          <div key={group.groupKey} className="professional-vendor-card-block">
             
             <div className="vendor-group-meta-header">
               <div className="vendor-title-wrapper">
@@ -302,7 +308,7 @@ const Cart = () => {
                 </div>
                 <div>
                   <h3>{group.sellerName}</h3>
-                  <span className="vendor-id-subtext">Vendor ID: {group.sellerId}</span>
+                  <span className="vendor-id-subtext">Vendor ID: {group.sellerId || "Unavailable"}</span>
                 </div>
               </div>
               <span className="group-row-count-pill">{group.items.length} unique medications</span>
@@ -484,8 +490,8 @@ const Cart = () => {
               
               <button 
                 className="pro-checkout-dispatch-btn"
-                disabled={actionLoading !== null}
                 onClick={() => handleCheckoutGroup(group)}
+                disabled={!group.sellerId || actionLoading !== null}
               >
                 {actionLoading === group.sellerId ? (
                   <>

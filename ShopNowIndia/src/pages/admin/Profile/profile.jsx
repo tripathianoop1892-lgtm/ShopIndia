@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { updateProfile } from "../../../services/api";
+import { getProfile, updateProfile } from "../../../services/api";
 import "./profile.css";
 
 const AdminProfile = () => {
@@ -10,7 +10,7 @@ const AdminProfile = () => {
     fullName: "",
     email: "",
     mobile: "",
-    role: "Super Admin",
+    role: "admin",
     address: "",
   });
 
@@ -18,7 +18,7 @@ const AdminProfile = () => {
     fullName: "",
     email: "",
     mobile: "",
-    role: "Super Admin",
+    role: "admin",
     address: "",
   });
 
@@ -30,20 +30,17 @@ const AdminProfile = () => {
     loadAdminProfile();
   }, []);
 
-  const loadAdminProfile = () => {
+  const loadAdminProfile = async () => {
     try {
-      const storedUser =
-        localStorage.getItem("user") ||
-        localStorage.getItem("userData");
-
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-
+      const response = await getProfile();
+      if (!response.success) throw new Error(response.message || "Unable to load profile.");
+      const user = response.user;
+      localStorage.setItem("user", JSON.stringify(user));
         const loadedProfile = {
           fullName:
             user.fullName ||
             user.name ||
-            "Admin",
+            "",
 
           email:
             user.email ||
@@ -56,7 +53,7 @@ const AdminProfile = () => {
 
           role:
             user.role ||
-            "Super Admin",
+            "admin",
 
           address:
             user.address ||
@@ -65,18 +62,6 @@ const AdminProfile = () => {
 
         setProfile(loadedProfile);
         setOriginalProfile(loadedProfile);
-      } else {
-        const defaultProfile = {
-          fullName: "Admin",
-          email: "",
-          mobile: "",
-          role: "Super Admin",
-          address: "",
-        };
-
-        setProfile(defaultProfile);
-        setOriginalProfile(defaultProfile);
-      }
     } catch (error) {
       console.error(
         "Admin Profile Load Error:",
@@ -215,7 +200,7 @@ const AdminProfile = () => {
           <div className="admin-profile-image">
             {profile.fullName
               ?.charAt(0)
-              ?.toUpperCase() || "A"}
+              ?.toUpperCase() || "?"}
           </div>
 
 

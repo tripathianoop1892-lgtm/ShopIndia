@@ -29,8 +29,8 @@ const Features = () => {
               Our Core <span className="gradient-brand-text">Platform Features</span>
             </h1>
             <p className="features-hero-lead">
-              A secure, high-scannability digital ecosystem for healthcare distributors, 
-              local pharmacy owners, and consumer clients across India.
+              Digital inventory and ordering tools for participating distributors,
+              pharmacy owners, and customers.
             </p>
             </div>
             <img src="feature.png" alt="OmSanjeevani platform features" className="features-hero-illustration" />
@@ -47,7 +47,7 @@ const Features = () => {
               </div>
               <h3>Inventory Management</h3>
               <p>
-                Track clinical batches and manage multi-tier product stock easily in real-time.
+                Record batches and manage product quantities from seller dashboards.
               </p>
             </div>
 
@@ -57,7 +57,7 @@ const Features = () => {
               </div>
               <h3>Expiry Alert Framework</h3>
               <p>
-                Receive proactive automated cloud notifications for medicines nearing their expiry boundaries.
+                View date-based warnings for medicines approaching their recorded expiry dates.
               </p>
             </div>
 
@@ -77,7 +77,7 @@ const Features = () => {
               </div>
               <h3>Shopkeeper Workspace</h3>
               <p>
-                Query wholesale distributor ledgers directly, place orders, and monitor retail counter shelves instantly.
+                Browse participating distributor listings, place orders, and manage retail stock records.
               </p>
             </div>
 
@@ -97,7 +97,7 @@ const Features = () => {
               </div>
               <h3>Secure Data Safeguards</h3>
               <p>
-                Encrypted multi-tenant login structures protecting operational transactions, business directories, and health logs.
+                Authenticated account access for operational transactions and business records.
               </p>
             </div>
 

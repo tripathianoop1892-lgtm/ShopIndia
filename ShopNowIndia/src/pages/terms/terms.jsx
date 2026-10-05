@@ -31,7 +31,7 @@ const Terms = () => {
             <span className="terms-badge-pill">Legal Framework</span>
             <h1>Terms & Conditions</h1>
             <p className="terms-hero-lead">
-              Please review these Terms & Conditions carefully before interacting with the OmSanjeevani Healthcare Platform.
+              Please review these Terms & Conditions carefully before using the OmSanjeevani platform.
             </p>
             <p className="terms-updated">Last updated {businessDetails.policyUpdatedAt}</p>
             </div>
@@ -90,7 +90,7 @@ const Terms = () => {
               <div className="terms-card-body">
                 <h2>4. Orders & Payments</h2>
                 <ul>
-                  <li>✔ Dispatched procurement requests are strictly subject to real-time wholesale product availability logs.</li>
+                  <li>✔ Procurement requests are subject to the seller's current recorded availability.</li>
                   <li>✔ Listed catalog prices may be calibrated without prior notification boundaries.</li>
                   <li>✔ Financial subtotal line payments must clear successfully before order status confirmation.</li>
                   <li>✔ Cancellations, returns, and refunds follow our published <Link to="/refunds">Cancellation, Return & Refund Policy</Link>, including the stated eligibility rules and timelines.</li>

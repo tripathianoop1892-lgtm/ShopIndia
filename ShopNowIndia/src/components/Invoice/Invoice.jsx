@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { FaPrint, FaTimes } from "react-icons/fa";
 import "./Invoice.css";
+import { businessDetails } from "../../config/businessDetails";
 
 const currency = (value) =>
   `\u20B9${Number(value || 0).toLocaleString("en-IN", {
@@ -40,9 +41,9 @@ const Invoice = ({ order, onClose }) => {
 
   const items = Array.isArray(order.items) ? order.items : [];
   const total = Number(order.finalAmount ?? order.totalAmount ?? 0);
-  const invoiceNumber = `INV-${String(order._id || "ORDER").slice(-8).toUpperCase()}`;
-  const customer = order.customerName || order.buyerId?.name || (order.orderType === "B2B" ? "Retail Pharmacy" : "Customer");
-  const seller = order.shopkeeperName || order.sellerId?.name || (order.orderType === "B2B" ? "Distributor" : "ShopNowIndia Pharmacy");
+  const invoiceNumber = order._id ? `INV-${String(order._id).slice(-8).toUpperCase()}` : "Invoice number unavailable";
+  const customer = order.customerName || order.buyerId?.shopName || order.buyerId?.name || "Buyer name unavailable";
+  const seller = order.shopkeeperName || order.sellerId?.shopName || order.sellerId?.companyName || order.sellerId?.name || "Seller name unavailable";
 
   return createPortal(
     <div className="invoice-modal" role="dialog" aria-modal="true" aria-labelledby="invoice-title">
@@ -62,7 +63,7 @@ const Invoice = ({ order, onClose }) => {
         <div className="invoice-content">
           <div className="invoice-heading">
             <div>
-              <h2 id="invoice-title" className="invoice-brand">ShopNowIndia</h2>
+              <h2 id="invoice-title" className="invoice-brand">{businessDetails.brandName}</h2>
               <p>Tax invoice</p>
             </div>
             <div className="invoice-meta">
@@ -91,7 +92,7 @@ const Invoice = ({ order, onClose }) => {
               <tbody>
                 {items.map((item, index) => (
                   <tr key={item._id || index}>
-                    <td data-label="Item">{item.name || "Medicine"}</td>
+                    <td data-label="Item">{item.name || "Item name unavailable"}</td>
                     <td data-label="Quantity">{item.quantity}</td>
                     <td data-label="Unit price">{currency(item.price)}</td>
                     <td data-label="Total">{currency(Number(item.price) * Number(item.quantity))}</td>
@@ -116,7 +117,7 @@ const Invoice = ({ order, onClose }) => {
             Payment method: {order.paymentMethod || "Not available"}
             {order.paymentId ? ` | Reference: ${order.paymentId}` : ""}
             <br />
-            Thank you for choosing ShopNowIndia.
+            Thank you for choosing {businessDetails.brandName}.
           </footer>
         </div>
       </article>

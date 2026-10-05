@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { updateProfile } from "../../services/api";
+import { getProfile, updateProfile } from "../../services/api";
 import "./CustomerProfile.css";
 
 const CustomerProfile = () => {
@@ -24,12 +24,12 @@ const CustomerProfile = () => {
     loadCustomer();
   }, []);
 
-  const loadCustomer = () => {
+  const loadCustomer = async () => {
     try {
-      const userData = localStorage.getItem("user");
-
-      if (userData) {
-        const user = JSON.parse(userData);
+        const response = await getProfile();
+        if (!response.success) throw new Error(response.message || "Unable to load profile.");
+        const user = response.user;
+        localStorage.setItem("user", JSON.stringify(user));
 
         setCustomer(user);
 
@@ -37,16 +37,12 @@ const CustomerProfile = () => {
           fullName: user.fullName || user.name || "",
           mobile: user.mobile || user.phone || "",
           email: user.email || "",
-          shopName:
-            user.shopName ||
-            user.shop?.name ||
-            "",
+          shopName: user.linkedShopName || "",
           address:
             user.address ||
             user.shop?.address ||
             "",
         });
-      }
     } catch (error) {
       console.error(
         "Customer Profile Load Error:",
@@ -99,10 +95,7 @@ const CustomerProfile = () => {
           customer.email ||
           "",
 
-        shopName:
-          customer.shopName ||
-          customer.shop?.name ||
-          "",
+        shopName: customer.linkedShopName || "",
 
         address:
           customer.address ||
@@ -139,7 +132,7 @@ const CustomerProfile = () => {
     try {
       const response = await updateProfile({
         fullName: formData.fullName.trim(), mobile: formData.mobile.trim(),
-        email: formData.email.trim(), shopName: formData.shopName.trim(), address: formData.address.trim(),
+        email: formData.email.trim(), address: formData.address.trim(),
       });
       if (!response.success) throw new Error(response.message || "Unable to update profile.");
       const updatedUser = { ...(customer || {}), ...response.user, fullName: response.user.name, phone: response.user.mobile };
@@ -237,25 +230,24 @@ const handleLogout = () => {
   const fullName =
     customer?.fullName ||
     customer?.name ||
-    "Customer Name";
+    "Name not provided";
 
   const mobile =
     customer?.mobile ||
     customer?.phone ||
-    "+91 XXXXXXXXXX";
+    "Mobile number not provided";
 
   const email =
     customer?.email ||
-    "customer@email.com";
+    "Email not provided";
 
   const shopName =
-    customer?.shopName ||
-    customer?.shop?.name ||
-    "Medical Store";
+    customer?.linkedShopName ||
+    "Linked pharmacy not provided";
 
   const shopId =
     customer?.shopId ||
-    "OS100245";
+    "Not assigned";
 
   const address =
     customer?.address ||
@@ -399,7 +391,7 @@ const handleLogout = () => {
           <div className="customer-edit-card">
 
             <h2>
-              Shop Details
+              Account Details
             </h2>
 
             {/* SHOP NAME */}
@@ -407,15 +399,15 @@ const handleLogout = () => {
             <div className="customer-input-group">
 
               <label>
-                Shop Name
+                Linked Pharmacy
               </label>
 
               <input
                 type="text"
                 name="shopName"
                 value={formData.shopName}
-                onChange={handleChange}
-                placeholder="Enter shop name"
+                readOnly
+                placeholder="No pharmacy linked"
               />
 
             </div>
@@ -526,7 +518,7 @@ const handleLogout = () => {
         <div className="customer-profile-section">
 
           <h2>
-            Shop Details
+            Linked Pharmacy
           </h2>
 
           <div className="customer-shop-details">
@@ -534,7 +526,7 @@ const handleLogout = () => {
             <div className="customer-detail-row">
 
               <span className="customer-detail-label">
-                Shop Name
+                Pharmacy Name
               </span>
 
               <span className="customer-detail-value">

@@ -4,6 +4,30 @@ import Medicine from "../models/medicine.js";
 import User from "../models/user.js";
 import mongoose from "mongoose";
 
+const recalculateReviewSummary = async (targetId, targetModel) => {
+  const stats = await Review.aggregate([
+    {
+      $match: {
+        targetId: new mongoose.Types.ObjectId(targetId),
+        targetModel,
+        status: "Approved",
+      },
+    },
+    {
+      $group: {
+        _id: "$targetId",
+        avgRating: { $avg: "$rating" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const rating = stats.length ? Number(stats[0].avgRating.toFixed(1)) : 0;
+  const reviewsCount = stats.length ? stats[0].count : 0;
+  const Target = targetModel === "Medicine" ? Medicine : User;
+  await Target.findByIdAndUpdate(targetId, { rating, reviewsCount });
+};
+
 // Get all reviews for the Admin Panel
 export const getAdminReviews = async (req, res) => {
   try {
@@ -32,6 +56,7 @@ export const updateReviewStatus = async (req, res) => {
     );
     
     if (!review) return res.status(404).json({ success: false, message: "Review not found" });
+    await recalculateReviewSummary(review.targetId, review.targetModel);
     return res.json({ success: true, message: `Review ${status}`, data: review });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Status update failed" });
@@ -41,7 +66,9 @@ export const updateReviewStatus = async (req, res) => {
 // Delete a review
 export const deleteReview = async (req, res) => {
   try {
-    await Review.findByIdAndDelete(req.params.id);
+    const review = await Review.findByIdAndDelete(req.params.id);
+    if (!review) return res.status(404).json({ success: false, message: "Review not found" });
+    await recalculateReviewSummary(review.targetId, review.targetModel);
     return res.json({ success: true, message: "Review deleted successfully" });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Deletion failed" });
@@ -75,29 +102,7 @@ export const submitReview = async (req, res) => {
       reviewText: reviewText.trim(),
     });
 
-    // Real-time Aggregation: Recalculate the target's total average rating
-    const stats = await Review.aggregate([
-      { $match: { targetId: new mongoose.Types.ObjectId(targetId) } },
-      {
-        $group: {
-          _id: "$targetId",
-          avgRating: { $avg: "$rating" },
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-
-    const avgRating = stats[0].avgRating.toFixed(1);
-    const count = stats[0].count;
-
-    // Distribute the new metrics back to the parent entity
-    if (targetModel === "Medicine") {
-      await Medicine.findByIdAndUpdate(targetId, { rating: avgRating, reviewsCount: count });
-    } else if (targetModel === "User") {
-      await User.findByIdAndUpdate(targetId, { rating: avgRating, reviewsCount: count });
-    }
-
-    return res.status(201).json({ success: true, message: "Review posted successfully!" });
+    return res.status(201).json({ success: true, message: "Review submitted for moderation." });
   } catch (error) {
     console.error("REVIEW SUBMIT ERROR:", error);
     return res.status(500).json({ success: false, message: "Failed to submit review." });

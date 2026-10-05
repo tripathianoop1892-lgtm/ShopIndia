@@ -67,6 +67,7 @@ const Customer = () => {
         image: med.image || "",
         quantity: 1,
         sellerId,
+        sellerName: med.ownerId?.shopName || med.ownerId?.name || "",
       };
 
       const res = await addToCart(payload);
@@ -114,7 +115,7 @@ const Customer = () => {
         <div className="hero-meta-details">
           <h2>Pharmacy Marketplace</h2>
           <p className="connection-pill">
-            <FaBuilding className="pill-icon" /> SHOP ID: <strong>{user?.shopId || "Unassigned Node"}</strong>
+            <FaBuilding className="pill-icon" /> SHOP ID: <strong>{user?.shopId || "Not assigned"}</strong>
           </p>
         </div>
 
@@ -230,7 +231,7 @@ const Customer = () => {
                         <h3 className="med-title-text" title={med.name}>{med.name}</h3>
                         <span className={`stock-status-dot ${isOutOfStock ? 'out' : 'active'}`} title={isOutOfStock ? "Out of Stock" : "In Stock"} />
                       </div>
-                      <p className="med-manufacturer-text">{med.company || "Generic Manufacturer"}</p>
+                      <p className="med-manufacturer-text">{med.company || "Manufacturer not provided"}</p>
 
                       {/* New Medicine Average Rating Block*/}
                       <div style={{display:"flex",alignItems:"center", gap: "6px", marginBottom:"16px", fontSize: "12px", fontWeight:"600", color: "#647448b"}}>
@@ -246,12 +247,12 @@ const Customer = () => {
                         <div className="spec-item">
                           <span className="spec-lbl">Packaging</span>
                           <span className="spec-val-highlight">
-                            {med.packSize || 10} Units / {med.packType || "Strip"}
+                            {med.packSize ? `${med.packSize} units${med.packType ? ` / ${med.packType}` : ""}` : "Not provided"}
                           </span>
                         </div>
                         <div className="spec-item">
                           <span className="spec-lbl">Classification</span>
-                          <span className="spec-val-highlight">{med.type || "Tablet"}</span>
+                          <span className="spec-val-highlight">{med.type || "Not provided"}</span>
                         </div>
                       </div>
 

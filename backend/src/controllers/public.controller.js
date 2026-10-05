@@ -50,13 +50,13 @@ export const getPublicCatalog = async (req, res) => {
       ],
     })
       .select("name company type strength packSize packType image mrp price retailPrice sellingUnit ownerId")
-      .populate({ path: "ownerId", select: "shopName status", match: { status: "Active" } })
+      .populate({ path: "ownerId", select: "name shopName status", match: { status: "Active" } })
       .sort({ name: 1 })
       .limit(100)
       .lean();
 
     const catalog = medicines
-      .filter((medicine) => medicine.ownerId)
+      .filter((medicine) => medicine.ownerId && (medicine.ownerId.shopName?.trim() || medicine.ownerId.name?.trim()))
       .map((medicine) => ({
         id: medicine._id,
         name: medicine.name,
@@ -70,7 +70,7 @@ export const getPublicCatalog = async (req, res) => {
         mrp: Number(medicine.mrp || 0),
         price: Number(medicine.retailPrice || medicine.price || medicine.mrp || 0),
         currency: "INR",
-        sellerName: medicine.ownerId.shopName || "Participating pharmacy",
+        sellerName: medicine.ownerId.shopName?.trim() || medicine.ownerId.name.trim(),
       }));
 
     res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");

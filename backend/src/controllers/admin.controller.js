@@ -138,8 +138,8 @@ export const updatePlatformSettings = async (req, res) => {
         try{
             const orders = await Order.find({})
               .sort({ createdAt: -1 })
-              .populate("buyerId", "name email")
-              .populate("sellerId", "name email")
+              .populate("buyerId", "name email shopName companyName")
+              .populate("sellerId", "name email shopName companyName")
               .lean();
 
             const normalizedOrders = orders.map((order) => ({

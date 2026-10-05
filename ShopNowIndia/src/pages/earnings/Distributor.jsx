@@ -124,7 +124,7 @@ const Earnings = () => {
                       <tr key={order._id} className="table-row">
                         <td className="row-number">{index + 1}</td>
                         <td className="shopkeeper-name">
-                          {order.shopkeeperName || "Retail Pharmacy"}
+                          {order.shopkeeperName || order.buyerId?.shopName || order.buyerId?.name || "Shopkeeper name unavailable"}
                         </td>
                         <td className="items-count">
                           <span className="badge">{order.items?.length || 0} items</span>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { updateProfile } from "../../services/api";
+import { getProfile, updateProfile } from "../../services/api";
 import "./ShopkeeperProfile.css";
 
 const ShopkeeperProfile = () => {
@@ -13,12 +13,12 @@ const ShopkeeperProfile = () => {
   // =========================
 
   useEffect(() => {
-    const loadUser = () => {
+    const loadUser = async () => {
       try {
-        const userData = localStorage.getItem("user");
-
-        if (userData) {
-          const storedUser = JSON.parse(userData);
+        const response = await getProfile();
+        if (!response.success) throw new Error(response.message || "Unable to load profile.");
+          const storedUser = response.user;
+          localStorage.setItem("user", JSON.stringify(storedUser));
           setUser(storedUser);
           setFormData({
             fullName: storedUser.fullName || storedUser.name || "",
@@ -27,7 +27,6 @@ const ShopkeeperProfile = () => {
             shopName: storedUser.shopName || storedUser.shop?.name || "",
             address: storedUser.address || storedUser.shop?.address || "",
           });
-        }
       } catch (error) {
         console.error("Profile Load Error:", error);
       } finally {
@@ -55,14 +54,14 @@ const ShopkeeperProfile = () => {
   // USER DATA
   // =========================
 
-  const userName = user?.name || "Shopkeeper";
+  const userName = user?.name || "Name not provided";
   const email = user?.email || "Not available";
-  const phone = user?.phone || "Not available";
+  const phone = user?.mobile || user?.phone || "Not available";
 
   const shopName =
     user?.shopName ||
     user?.shop?.name ||
-    "Shop Name";
+    "Shop name not provided";
 
   const shopId =
     user?.shopId ||

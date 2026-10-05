@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HelpSupport.css";
 import { API_BASE_URL } from "../../services/api";
+import { businessDetails } from "../../config/businessDetails";
 
 const BASE_URL = API_BASE_URL;
 
@@ -384,7 +385,7 @@ const HelpSupport = () => {
 
             <p>
               Need help? Create a support ticket
-              and our team will assist you.
+              and the support contact will respond.
             </p>
 
           </div>
@@ -404,7 +405,7 @@ const HelpSupport = () => {
             </h2>
 
             <p>
-              Contact our support team directly.
+              Contact the OmSanjeevani support address directly.
             </p>
 
           </div>
@@ -412,7 +413,7 @@ const HelpSupport = () => {
           <div className="help-contact-grid">
 
             <a
-              href="tel:+916204872422"
+              href={`tel:${businessDetails.supportPhone.replace(/\s/g, "")}`}
               className="help-contact-card"
             >
 
@@ -427,7 +428,7 @@ const HelpSupport = () => {
                 </h3>
 
                 <p>
-                  +91 6204872422
+                  {businessDetails.supportPhone}
                 </p>
 
               </div>
@@ -435,7 +436,7 @@ const HelpSupport = () => {
             </a>
 
             <a
-              href="mailto:support@omsanjeevni.com"
+              href={`mailto:${businessDetails.supportEmail}`}
               className="help-contact-card"
             >
 
@@ -450,7 +451,7 @@ const HelpSupport = () => {
                 </h3>
 
                 <p>
-                  support@omsanjeevni.com
+                  {businessDetails.supportEmail}
                 </p>
 
               </div>
@@ -519,7 +520,7 @@ const HelpSupport = () => {
             </h2>
 
             <p>
-              Explain your problem and our team
+              Explain your problem and the support contact
               will help you.
             </p>
 

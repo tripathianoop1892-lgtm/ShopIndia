@@ -203,14 +203,14 @@ function Home() {
             <RecyclingIcon className="advantage-icon green-icon" />
             <div className="advantage-txt">
               <h4>Reduce Waste</h4>
-              <p>Minimize medicine waste throughout the logistics lifecycle with predictive stock tracking.</p>
+              <p>Use recorded stock quantities and expiry dates to identify items that need attention.</p>
             </div>
           </div>
           <div className="advantage-feature-box">
             <EventRepeatIcon className="advantage-icon orange-icon" />
             <div className="advantage-txt">
               <h4>Expiry Tracking</h4>
-              <p>Receive live inventory warnings before batch expiration windows degrade.</p>
+              <p>View date-based warnings before recorded batch expiry dates.</p>
             </div>
           </div>
           <div className="advantage-feature-box">
@@ -240,7 +240,7 @@ function Home() {
           <div className="pipeline-node-card">
             <img src="./building.png" alt="Warehouse Node" className="node-graphic" />
             <h3>Distributor</h3>
-            <p>Adds medicine records and updates real-time wholesale supply stock balances.</p>
+            <p>Adds medicine records and updates wholesale stock quantities.</p>
           </div>
           <div className="pipeline-arrow-connector">→</div>
           <div className="pipeline-node-card">
@@ -252,7 +252,7 @@ function Home() {
           <div className="pipeline-node-card">
             <PeopleAltTwoToneIcon className="node-icon orange-node" />
             <h3>Customer</h3>
-            <p>Locates nearby pharmacies to purchase required stock lines with confidence.</p>
+            <p>Views the catalogue of the participating pharmacy linked to the customer account.</p>
           </div>
         </div>
       </section>
@@ -267,7 +267,7 @@ function Home() {
           <div className="feature-matrix-card">
             <InventoryIcon className="matrix-icon green" />
             <h3>Inventory Management</h3>
-            <p>Manage and track all medical batches across digital network channels in real-time.</p>
+            <p>Manage batch and quantity records from the account dashboard.</p>
           </div>
           <div className="feature-matrix-card">
             <ReportGmailerrorredIcon className="matrix-icon red" />
@@ -334,7 +334,7 @@ function Home() {
             </div>
             <ul>
               <li>✔ Search Local Neighborhood Drug Catalogs</li>
-              <li>✔ Instantly Verify Medicine Availability</li>
+              <li>✔ View Seller-Provided Medicine Availability</li>
               <li>✔ Dispatch Order Requests Fast and Safely</li>
               <li>✔ Secure Vital Prescriptions On Time</li>
             </ul>
@@ -353,7 +353,7 @@ function Home() {
             OmSanjeevani is a digital health logistics ecosystem connecting 
             participating wholesale vendors, pharmacy owners, and consumer clients under a unified, transparent database framework.
             Our architecture simplifies medical procurement tracking, stabilizes safety bounds around batch expiries, 
-            and streamlines retail supply operations across India.
+            and supports order workflows between participating sellers and customers.
           </p>
            </div>
         </div>
@@ -364,8 +364,8 @@ function Home() {
             <h2>Anoop Kumar Tripathi</h2>
             <p>
               Anoop Kumar Tripathi engineered the core architecture of OmSanjeevani to modernize 
-              pharmaceutical inventory networks, make distribution pipelines completely transparent, 
-              and introduce high efficiency to regional healthcare marketplaces.
+              pharmaceutical inventory records, clarify order workflows,
+              and improve access to operational information for participating users.
             </p>
           </div>
         </div>

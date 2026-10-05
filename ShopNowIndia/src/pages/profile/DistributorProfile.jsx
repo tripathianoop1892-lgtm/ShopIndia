@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { updateProfile } from "../../services/api";
+import { getProfile, updateProfile } from "../../services/api";
 import "./DistributorProfile.css";
 
 const DistributorProfile = () => {
@@ -29,14 +29,12 @@ const DistributorProfile = () => {
     loadProfile();
   }, []);
 
-  const loadProfile = () => {
+  const loadProfile = async () => {
     try {
-      const storedUser =
-        localStorage.getItem("user") ||
-        localStorage.getItem("userData");
-
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
+        const response = await getProfile();
+        if (!response.success) throw new Error(response.message || "Unable to load profile.");
+        const user = response.user;
+        localStorage.setItem("user", JSON.stringify(user));
 
         setDistributor(user);
 
@@ -52,7 +50,6 @@ const DistributorProfile = () => {
           state: user?.state || "",
           pincode: user?.pincode || "",
         });
-      }
     } catch (error) {
       console.error("Distributor Profile Load Error:", error);
     } finally {
@@ -140,6 +137,8 @@ const DistributorProfile = () => {
       const response = await updateProfile({
         fullName: form.name.trim(), email: form.email.trim(), mobile: form.mobile.trim(),
         companyName: form.companyName.trim(), address: form.address.trim(),
+        warehouseAddress: form.warehouseAddress.trim(), city: form.city.trim(),
+        district: form.district.trim(), state: form.state.trim(), pincode: form.pincode.trim(),
       });
       if (!response.success) throw new Error(response.message || "Unable to update profile.");
       const updatedUser = { ...(distributor || {}), ...response.user, phone: response.user.mobile, companyName: form.companyName.trim(), warehouseAddress: form.warehouseAddress.trim(), city: form.city.trim(), district: form.district.trim(), state: form.state.trim(), pincode: form.pincode.trim() };

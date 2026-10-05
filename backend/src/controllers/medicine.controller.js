@@ -143,7 +143,7 @@ export const getMedicines = async (req, res) => {
     }
 
     const meds = await Medicine.find(query)
-      .populate("ownerId", "name email") 
+      .populate("ownerId", "name email shopName companyName status")
       .sort({ name: 1 });
       
     return res.json(meds);

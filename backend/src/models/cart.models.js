@@ -45,12 +45,17 @@ individualSaleAllowed: {
 
 packSize: {
   type: Number,
-  default: 1,
+  default: null,
 },
         // 🚚 CRITICAL FIX: Track the item seller/distributor node to separate B2B routing
         sellerId: {
           type: String,
           required: true,
+        },
+        sellerName: {
+          type: String,
+          default: "",
+          trim: true,
         },
       },
     ],

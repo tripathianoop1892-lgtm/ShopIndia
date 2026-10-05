@@ -74,7 +74,7 @@ const About = () => {
               <h3>Our Mission</h3>
               <p>
                 To accelerate medical supply chain delivery paths, introduce transparent auditing parameters, 
-                and stabilize critical asset distribution for healthcare operators across India.
+                and improve medicine inventory workflows for participating regional sellers.
               </p>
               </div>
             </div>
@@ -109,9 +109,9 @@ const About = () => {
                 </div>
                 <ul>
                   <li>✔ Place bulk order requests with participating distribution businesses.</li>
-                  <li>✔ Modernized local inventory auditing panels with live telemetry updates.</li>
-                  <li>✔ Automatic triggers indicating immediate short-stock safety thresholds.</li>
-                  <li>✔ Cloud-synced real-time expiration warning badges.</li>
+                  <li>✔ Inventory panels based on each seller's saved catalogue records.</li>
+                  <li>✔ Low-stock indicators calculated from recorded quantities.</li>
+                  <li>✔ Expiry warnings calculated from recorded batch dates.</li>
                 </ul>
                 </div>
                 <img src="forShopkeeper.png" alt="Shopkeeper tools illustration" className="service-illustration" />
@@ -146,10 +146,10 @@ const About = () => {
                   <h3>For Customers</h3>
                 </div>
                 <ul>
-                  <li>✔ Instant localized search indexing for neighborhood prescription availability.</li>
+                  <li>✔ Catalogue search for the participating pharmacy linked to the customer account.</li>
                   <li>✔ Transparent pricing guidelines relative to standard maximum retail rules.</li>
-                  <li>✔ Direct storefront order routing with zero manual connection gaps.</li>
-                  <li>✔ Dependable delivery tracking logs ensuring safety parameters are met.</li>
+                  <li>✔ Digital order requests routed to the selected participating seller.</li>
+                  <li>✔ Order-status history based on seller and payment updates.</li>
                 </ul>
                 </div>
                 <img src="forcustomer.png" alt="Customer tools illustration" className="service-illustration" />
@@ -162,10 +162,10 @@ const About = () => {
         <section className="about-informational-section">
           <div className="section-title-block">
             <h2>Why Choose Us</h2>
-            <p>Architectural highlights ensuring seamless clinical coordination.</p>
+            <p>Practical tools available in the current platform.</p>
           </div>
           <div className="why-choose-features-grid">
-            <div className="feature-pill-box"><span>📊</span> Real-Time Inventory Tracking</div>
+            <div className="feature-pill-box"><span>📊</span> Database-Backed Inventory Records</div>
             <div className="feature-pill-box"><span>⚠️</span> Automated Expiry Warnings</div>
             <div className="feature-pill-box"><span>📋</span> Comprehensive Order Controls</div>
             <div className="feature-pill-box"><span>🏢</span> Specialized Distributor Views</div>

@@ -18,6 +18,7 @@ export const addToCart = async (req, res) => {
   sellingUnit,
   individualSaleAllowed,
   packSize,
+  sellerName,
 } = req.body;
 
     // Resolve seller ID dynamically regardless of whether frontend passes it as sellerId or ownerId
@@ -40,6 +41,9 @@ export const addToCart = async (req, res) => {
 
     if (itemIndex > -1) {
       userCart.items[itemIndex].quantity += (Number(quantity) || 1);
+      if (typeof sellerName === "string" && sellerName.trim()) {
+        userCart.items[itemIndex].sellerName = sellerName.trim();
+      }
     } else {
       userCart.items.push({
         medicineId,
@@ -50,8 +54,9 @@ export const addToCart = async (req, res) => {
         quantity: Number(quantity) || 1,
         sellingUnit: sellingUnit || "Pack",
         individualSaleAllowed: Boolean(individualSaleAllowed),
-        packSize: Number(packSize) || 1,
+        packSize: Number(packSize) > 0 ? Number(packSize) : null,
         sellerId: resolvedSellerId,
+        sellerName: typeof sellerName === "string" ? sellerName.trim() : "",
       });
     }
 

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import { MedicinesList } from "../../services/api";
 import { FaBell } from "react-icons/fa";
+import useAuth from "../../hooks/UseAuth";
 
 const DistributorDashboard = () => {
+  const { user } = useAuth();
 
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -97,7 +99,7 @@ const DistributorDashboard = () => {
         <div>
           <h1>Distributor Dashboard</h1>
           <p>
-            Welcome back • Anoop Medical Store
+            Welcome back{user?.companyName || user?.name ? ` • ${user.companyName || user.name}` : ""}
           </p>
         </div>
 

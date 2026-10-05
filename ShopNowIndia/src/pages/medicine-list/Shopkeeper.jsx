@@ -234,7 +234,7 @@ const ShopkeeperMedicineList = () => {
                         {medicine.name}
                         {medicine.strength && <span className="sk-med-meta">{medicine.strength}</span>}
                       </td>
-                      <td>{medicine.company || "Generic"}</td>
+                      <td>{medicine.company || "Not provided"}</td>
                       <td><span className="sk-type-badge">{medicine.type || "N/A"}</span></td>
                       <td>
                         <span className={`sk-stock-text ${isLow ? "text-danger" : ""}`}>

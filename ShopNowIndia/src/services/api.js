@@ -145,6 +145,7 @@ export const resetPassword = async ({ email, otp, newPassword }) => {
 export const getAccountSettings = async () => (await fetch(`${BASE_URL}/auth/settings`, { headers: getHeaders() })).json();
 export const updateAccountSettings = async (data) => (await fetch(`${BASE_URL}/auth/settings`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) })).json();
 export const updateProfile = async (data) => (await fetch(`${BASE_URL}/auth/profile`, { method: "PUT", headers: getHeaders(), body: JSON.stringify(data) })).json();
+export const getProfile = async () => (await fetch(`${BASE_URL}/auth/profile`, { headers: getHeaders() })).json();
 export const getCheckoutSettings = async () => (await fetch(`${BASE_URL}/admin/platform-settings`)).json();
 
 // =======================

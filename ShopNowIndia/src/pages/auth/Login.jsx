@@ -49,7 +49,7 @@ const Login = () => {
           <h2>Sign in to OmSanjeevani</h2>
           <p className="login-card-subtitle">Enter your details to continue to your portal.</p>
 
-          <label className="login-field"><span>Email address</span><div><FaEnvelope /><input type="email" placeholder="you@example.com" autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></div></label>
+          <label className="login-field"><span>Email address</span><div><FaEnvelope /><input type="email" placeholder="Enter your registered email" autoComplete="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} /></div></label>
           <label className="login-field"><span>Password</span><div><FaLock /><input type={showPassword ? "text" : "password"} placeholder="Enter your password" autoComplete="current-password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} /><button type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? <FaEyeSlash /> : <FaEye />}</button></div></label>
 
           <button className="login-btn" disabled={loading}>{loading ? "Signing in..." : "Sign In"}</button>

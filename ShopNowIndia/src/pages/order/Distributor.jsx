@@ -62,7 +62,7 @@ const Distributor = () => {
             orders.map((item) => (
               <tr key={item._id}>
                 <td>#{shortId(item._id)}</td>
-                <td>{item.shopkeeperName || "Retail Pharmacy"}</td>
+                <td>{item.shopkeeperName || item.buyerId?.shopName || item.buyerId?.name || "Shopkeeper name unavailable"}</td>
                 
                 {/* Dynamically handle multi-item nested lines arrays */}
                 <td style={{ textAlign: "left", paddingLeft: "20px" }}>

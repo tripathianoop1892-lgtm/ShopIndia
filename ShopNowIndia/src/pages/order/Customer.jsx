@@ -114,7 +114,7 @@ const CustomerOrders = () => {
                       #{shortId(o._id)?.toUpperCase()}
                     </td>
                     <td data-label="Pharmacy" style={{ padding: "16px 20px", fontSize: "14px", color: "#0f172a", fontWeight: 600 }}>
-                      {o.sellerId?.name || "OmSanjeevani Local Pharmacy"}
+                      {o.sellerId?.shopName || o.sellerId?.name || "Seller name unavailable"}
                     </td>
                     <td data-label="Items" style={{ padding: "16px 20px", fontSize: "14px", color: "#4a5568" }}>
                       {o.items?.map((item, idx) => (

@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./Shopkeeper.css";
-import { MedicinesList, getOrders, addToCart } from "../../services/api";
-import { shortId } from "../../utils/helpers";
+import { MedicinesList, getDistributorsList, getOrders, addToCart } from "../../services/api";
 import { FaSearch, FaMedkit, FaBoxes, FaRupeeSign, FaStore, FaChevronRight } from "react-icons/fa";
 
 const Shopkeeper = () => {
   const [medicines, setMedicines] = useState([]);
+  const [distributors, setDistributors] = useState([]);
   const [orders, setOrders] = useState([]);
   const [selectedDistributor, setSelectedDistributor] = useState(null);
   const [search, setSearch] = useState("");
@@ -16,11 +16,17 @@ const Shopkeeper = () => {
     try {
       setLoading(true);
       // 🚀 CRITICAL FIX: Pass "b2b-purchases" to get wholesale expenses instead of retail customer sales
-      const [medData, orderData] = await Promise.all([
-        MedicinesList(), 
-        getOrders("b2b-purchases") 
+      const [medData, distributorData, orderData] = await Promise.all([
+        MedicinesList(),
+        getDistributorsList(),
+        getOrders("b2b-purchases"),
       ]);
       setMedicines(Array.isArray(medData) ? medData : []);
+      setDistributors(Array.isArray(distributorData) ? distributorData.map((item) => ({
+        ...item,
+        id: String(item._id),
+        name: item.companyName?.trim() || item.name,
+      })) : []);
       setOrders(Array.isArray(orderData) ? orderData : []);
     } catch (err) {
       console.error("Error fetching B2B procurement dashboard metrics:", err);
@@ -32,34 +38,6 @@ const Shopkeeper = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  // 🏢 1. EXTRACT UNIQUE DISTRIBUTORS STRICTLY FILTERED BY ROLE
-  const distributors = useMemo(() => {
-    const distributorMap = new Map();
-
-    medicines.forEach((m) => {
-      const rawOwnerId = m.ownerId && typeof m.ownerId === "object" ? m.ownerId._id : m.ownerId;
-
-      if (rawOwnerId && m.ownerRole === "distributor") {
-        if (!distributorMap.has(rawOwnerId)) {
-          const resolvedName = 
-            (m.ownerId && typeof m.ownerId === "object" && m.ownerId.name) ||
-            m.ownerName || 
-            m.distributorName || 
-            m.owner?.name || 
-            `Distributor Wholesaler (${shortId(rawOwnerId)})`;
-
-          distributorMap.set(rawOwnerId, {
-            id: rawOwnerId,
-            role: m.ownerRole,
-            name: resolvedName
-          });
-        }
-      }
-    });
-
-    return Array.from(distributorMap.values());
-  }, [medicines]);
 
   // 🔍 2. FILTER DISTRIBUTORS BY SEARCH INPUT
   const filteredDistributors = useMemo(() => {
@@ -74,7 +52,7 @@ const Shopkeeper = () => {
     
     return medicines.filter((m) => {
       const rawOwnerId = m.ownerId && typeof m.ownerId === "object" ? m.ownerId._id : m.ownerId;
-      const matchesDistributor = rawOwnerId === selectedDistributor.id && m.ownerRole === "distributor";
+      const matchesDistributor = String(rawOwnerId) === selectedDistributor.id && m.ownerRole === "distributor";
       const matchesSearch = !query || m.name?.toLowerCase().includes(query);
       return matchesDistributor && matchesSearch;
     });
@@ -83,6 +61,11 @@ const Shopkeeper = () => {
   const buyMedicine = async (med) => {
     try {
       const rawOwnerId = med.ownerId && typeof med.ownerId === "object" ? med.ownerId._id : med.ownerId;
+
+      if (!rawOwnerId || !med.expiry) {
+        alert("This listing is missing seller or expiry details. Ask the distributor to correct it before ordering.");
+        return;
+      }
 
       const res = await addToCart({
         medicineId: med._id,
@@ -96,7 +79,8 @@ const Shopkeeper = () => {
         image: med.image,
         strength: med.strength,
         packSize: med.packSize,
-        expiry: med.expiry || "2027-12-31"
+        expiry: med.expiry,
+        sellerName: selectedDistributor?.name || med.ownerId?.companyName || med.ownerId?.name || "",
       });
 
       if (res.success || res._id || res.message === undefined) {
@@ -218,7 +202,7 @@ const Shopkeeper = () => {
                       Active {dist.role}
                     </span>
                     <span style={{ color: "#f59e0b", fontSize: "11px", fontWeight: "bold" }}>
-                      ★ {dist.rating || "New"} ({dist.reviewsCount || 0})
+                      {dist.reviewsCount > 0 ? `★ ${dist.rating} (${dist.reviewsCount})` : "No reviews yet"}
                     </span>
                   </div>
                   </div>
@@ -267,8 +251,8 @@ const Shopkeeper = () => {
                         <h4 title={m.name}>{m.name}</h4>
                         <p style={{ fontSize: "11px", color: "#64748b", margin: "0 0 6px 0" }}>Mfg: {m.company || "N/A"}</p>
                         <div className="medicine-tags">
-                          <span>{m.strength || "500mg"}</span>
-                          <span>{m.packSize || 10} Tabs</span>
+                          <span>{m.strength || "Strength not provided"}</span>
+                          <span>{m.packSize ? `${m.packSize} ${m.packType || "units"}` : "Pack size not provided"}</span>
                         </div>
 
                         <div className="price-box">

@@ -33,8 +33,9 @@ const CustomerMedicineList = () => {
                   _id: item.medicineId,
                   name: item.name,
                   price: item.price,
-                  company: item.company || "Generic",
-                  type: item.type || "Tablet", // Preserves drug specifications[cite: 1, 2]
+                  company: item.company || "",
+                  type: item.type || "",
+                  ownerId: order.sellerId || "",
                   image: item.image || ""
                 });
               }
@@ -63,6 +64,10 @@ const CustomerMedicineList = () => {
     try {
       const sellerId = typeof med.ownerId === "object" ? med.ownerId?._id : med.ownerId;
       const finalCustomerPrice = Number(med.price || 0);
+      if (!sellerId) {
+        alert("The original seller is no longer available for this item. Please use the current catalogue to order it again.");
+        return;
+      }
       const payload = {
         medicineId: med._id,
         name: med.name,
@@ -70,7 +75,7 @@ const CustomerMedicineList = () => {
         price: finalCustomerPrice,
         image: med.image || "",
         quantity: 1,
-        sellerId: sellerId || "Retail-Store",
+        sellerId,
       };
 
       const res = await addToCart(payload);
@@ -126,8 +131,8 @@ const CustomerMedicineList = () => {
                   <tr key={m._id} style={{ borderBottom: "1px solid #f1f5f9", height: "50px" }}>
                     <td data-label="Image" style={{ padding: "8px" }}>{m.image ? <img src={m.image} alt="" onError={(event) => { event.currentTarget.style.display = "none"; }} style={{ width: 42, height: 42, objectFit: "contain" }} /> : "—"}</td>
                     <td data-label="Medicine" style={{ padding: "12px", fontWeight: "600", color: "#2c3e50" }}>{m.name}</td>
-                    <td data-label="Company" style={{ padding: "12px", color: "#4a5568" }}>{m.company}</td>
-                    <td data-label="Type" style={{ padding: "12px", color: "#4a5568" }}>{m.type}</td>
+                    <td data-label="Company" style={{ padding: "12px", color: "#4a5568" }}>{m.company || "Not provided"}</td>
+                    <td data-label="Type" style={{ padding: "12px", color: "#4a5568" }}>{m.type || "Not provided"}</td>
                     <td data-label="Last purchase" style={{ padding: "12px", color: "#16a34a", fontWeight: "bold" }}>
                       ₹{Number(m.price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </td>

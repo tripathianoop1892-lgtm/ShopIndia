@@ -150,6 +150,10 @@ export const loginUser = async (req, res) => {
       });
     }
 
+    const linkedShop = user.role === "customer" && user.selectedShopId
+      ? await User.findOne({ role: "shopkeeper", shopId: user.selectedShopId }).select("shopName name").lean()
+      : null;
+
     // 🔥 CUSTOMER DYNAMIC CHECK
    
 
@@ -166,7 +170,17 @@ export const loginUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        mobile: user.mobile,
         role: user.role,
+        shopName: user.shopName,
+        companyName: user.companyName,
+        address: user.address,
+        warehouseAddress: user.warehouseAddress,
+        city: user.city,
+        district: user.district,
+        state: user.state,
+        pincode: user.pincode,
+        linkedShopName: linkedShop?.shopName || linkedShop?.name || "",
         // Override returned object so frontend state hooks capture the active session storefront pathing
         shopId:
   user.role === "customer"
@@ -180,6 +194,26 @@ export const loginUser = async (req, res) => {
       success: false,
       message: "Server error ❌",
     });
+  }
+};
+
+export const getProfile = async (req, res) => {
+  try {
+    const profile = await User.findById(req.user._id).select("-password -settings").lean();
+    if (!profile) return res.status(404).json({ success: false, message: "User not found." });
+    const linkedShop = profile.role === "customer" && profile.selectedShopId
+      ? await User.findOne({ role: "shopkeeper", shopId: profile.selectedShopId }).select("shopName name").lean()
+      : null;
+    return res.json({
+      success: true,
+      user: {
+        ...profile,
+        shopId: profile.role === "customer" ? profile.selectedShopId : profile.shopId,
+        linkedShopName: linkedShop?.shopName || linkedShop?.name || "",
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Unable to load profile." });
   }
 };
 
@@ -302,6 +336,11 @@ export const updateProfile = async (req, res) => {
       shopName,
       companyName,
       address,
+      warehouseAddress,
+      city,
+      district,
+      state,
+      pincode,
     } = req.body;
 
     const userId = req.user?._id;
@@ -346,6 +385,10 @@ export const updateProfile = async (req, res) => {
       user.address = address.trim();
     }
 
+    for (const [field, value] of Object.entries({ warehouseAddress, city, district, state, pincode })) {
+      if (value !== undefined) user[field] = value.trim();
+    }
+
     await user.save();
 
     return res.json({
@@ -359,6 +402,11 @@ export const updateProfile = async (req, res) => {
         shopName: user.shopName,
         companyName: user.companyName,
         address: user.address,
+        warehouseAddress: user.warehouseAddress,
+        city: user.city,
+        district: user.district,
+        state: user.state,
+        pincode: user.pincode,
         role: user.role,
         shopId: user.shopId,
       },

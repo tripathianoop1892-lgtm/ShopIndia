@@ -85,7 +85,7 @@ const Policy = () => {
               <div className="privacy-card-body">
                 <h2>3. Data Protection</h2>
                 <p>
-                  OmSanjeevani employs robust electronic safeguards to insulate data from unauthorized interception. Your active sessions, authorization headers, and personal records are encrypted to maintain safety boundaries across local pharmacy and distributor nodes.
+                  OmSanjeevani uses authenticated access controls, password hashing, restricted authorization checks, and HTTPS in production to reduce unauthorized access. No online system can guarantee absolute security.
                 </p>
               </div>
             </div>
@@ -166,7 +166,7 @@ const Policy = () => {
               </div>
               <div className="privacy-card-body">
                 <h2>9. Data Privacy Contact Branch</h2>
-                <p>For official inquiries regarding information tracking controls, coordinate with our support team:</p>
+                <p>For official inquiries regarding information controls, use the support contact below:</p>
                 <div className="policy-contact-lines">
                   <p><strong>Business Owner:</strong> {businessDetails.ownerName}</p>
                   <p><strong>Trading Name:</strong> {businessDetails.brandName}</p>

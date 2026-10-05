@@ -5,6 +5,8 @@ import request from "supertest";
 import { app } from "../index.js";
 import { validateEnvironment } from "../src/config/env.js";
 import Coupon from "../src/models/coupons.js";
+import User from "../src/models/user.js";
+import Medicine from "../src/models/medicine.js";
 
 test("liveness endpoint responds without a database connection", async () => {
   const response = await request(app).get("/api/health/live");
@@ -36,6 +38,15 @@ test("coupon schema uses the fields enforced by checkout", () => {
   assert.ok(Coupon.schema.path("minOrder"));
   assert.ok(Coupon.schema.path("maxUsagePerUser"));
   assert.ok(Coupon.schema.path("expiryDate"));
+});
+
+test("new records do not receive fabricated ratings or package details", () => {
+  const account = new User({ name: "Schema check", password: "not-a-real-password" });
+  const medicine = new Medicine({ name: "Schema check", ownerId: "507f1f77bcf86cd799439011", ownerRole: "shopkeeper", expiry: new Date("2030-01-01") });
+  assert.equal(account.rating, 0);
+  assert.equal(account.reviewsCount, 0);
+  assert.equal(medicine.packSize, null);
+  assert.equal(medicine.packType, "");
 });
 
 test("the former public refund endpoint is not exposed", async () => {

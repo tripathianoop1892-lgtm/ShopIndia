@@ -9,6 +9,7 @@ import {
   requestRegistrationOtp,
   getAccountSettings,
   updateAccountSettings,
+  getProfile,
 } from "../controllers/auth.controller.js";
 import { checkAuth } from "../middlewares/auth.middleware.js";
 const router = express.Router();
@@ -19,6 +20,7 @@ router.post("/login", loginUser);
 router.post("/forgot-password/request", requestPasswordReset);
 router.post("/forgot-password/reset", resetPassword);
 router.get("/shops", searchShops);
+router.get("/profile", checkAuth, getProfile);
 router.put("/profile", checkAuth, updateProfile);
 router.get("/settings", checkAuth, getAccountSettings);
 router.put("/settings", checkAuth, updateAccountSettings);

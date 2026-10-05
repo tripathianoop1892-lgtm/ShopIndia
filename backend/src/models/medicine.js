@@ -21,11 +21,11 @@ const medicineSchema = new mongoose.Schema(
     },
     packSize: {
       type: Number,
-      default: 10,
+      default: null,
     },
     packType: {
       type: String,
-      default: "Strip",
+      default: "",
     },
 // New quantity / selling rules
     sellingUnit: {

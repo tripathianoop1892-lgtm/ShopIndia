@@ -49,13 +49,13 @@ const ShopkeeperEarnings = () => {
       ...b2cSales.map(o => ({ 
         ...o, 
         type: "INFLOW", 
-        entityName: o.customerName || "Walk-In Customer" 
+        entityName: o.customerName || o.buyerId?.name || "Customer name unavailable"
       })),
       ...b2bPurchases.map(o => ({ 
         ...o, 
         type: "OUTFLOW", 
         // 🛡️ CRITICAL FIX: Extract the distributor's real populated company profile name
-        entityName: o.sellerId?.name || o.company || "Wholesale Distributor" 
+        entityName: o.sellerId?.companyName || o.sellerId?.name || "Distributor name unavailable"
       }))
     ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
