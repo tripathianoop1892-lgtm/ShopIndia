@@ -13,6 +13,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LaunchIcon from '@mui/icons-material/Launch';
 import UpdateIcon from '@mui/icons-material/Update';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+import { businessDetails } from "../../config/businessDetails";
 
 const Policy = () => {
   return (
@@ -32,6 +33,7 @@ const Policy = () => {
             <p className="privacy-hero-lead">
               Your privacy is critical to us. This Privacy Policy explains how the OmSanjeevani platform collects, uses, and safely protects your personal information.
             </p>
+            <p className="privacy-policy-updated">Last updated {businessDetails.policyUpdatedAt}</p>
             </div>
             <img src="policy.png" alt="Privacy and data protection illustration" className="privacy-hero-illustration" />
           </div>
@@ -50,7 +52,7 @@ const Policy = () => {
                 <p>We may securely collect the following information strings when you interact with our platform parameters:</p>
                 <ul>
                   <li>✔ Full Registration Name or Enterprise Authorized Entity Name</li>
-                  <li>✔ Corporate and Personal Communication Email Address</li>
+                  <li>✔ Business and Personal Communication Email Address</li>
                   <li>✔ Verified Mobile Number for OTP and Dispatch Pipelines</li>
                   <li>✔ Detailed Business Information (e.g., Authorized Pharmacy Shop ID or Wholesale License)</li>
                   <li>✔ Order Details including medicine line count, totals, and transactional history log arrays</li>
@@ -96,9 +98,9 @@ const Policy = () => {
                 <h2>4. Sharing of Information</h2>
                 <p>Your platform metrics are communicated strictly under necessary operation scenarios:</p>
                 <ul>
-                  <li>✔ **With Logistics Operators:** Shared with verified distributors and shopkeepers solely to process medicine order rows.</li>
-                  <li>✔ **With Service Providers:** Relayed securely to trusted network infrastructure hosts.</li>
-                  <li>✔ **Under Statutory Demands:** Shared exclusively when dictated by law enforcement or drug compliance boards.</li>
+                  <li>✔ <strong>With order participants:</strong> Shared with the relevant distributor, pharmacy, customer, and delivery provider to process an order.</li>
+                  <li>✔ <strong>With service providers:</strong> Shared with contracted hosting, messaging, payment, analytics, and support providers where necessary.</li>
+                  <li>✔ <strong>Under statutory demands:</strong> Shared when required by law, courts, regulators, or authorised public authorities.</li>
                 </ul>
                 <p className="privacy-strict-print">
                   We enforce a strict boundary rule: OmSanjeevani never sells, rents, or leases user registration metrics to third-party marketing brokers.
@@ -124,7 +126,7 @@ const Policy = () => {
               </div>
               <div className="privacy-card-body">
                 <h2>6. User Rights & Data Control</h2>
-                <p>As an authorized platform node entity, you hold complete autonomy over your records:</p>
+                <p>Subject to applicable law and record-retention requirements, users may exercise the following rights:</p>
                 <ul>
                   <li>✔ Update or recalibrate your account profile parameters at any time.</li>
                   <li>✔ Request fast corrections of mismatched data or incorrect business detail sheets.</li>
@@ -166,10 +168,13 @@ const Policy = () => {
                 <h2>9. Data Privacy Contact Branch</h2>
                 <p>For official inquiries regarding information tracking controls, coordinate with our support team:</p>
                 <div className="policy-contact-lines">
-                  <p><strong>Ecosystem Hub:</strong> OmSanjeevani Healthcare</p>
-                  <p><strong>Compliance Email:</strong> admin@omsanjeevani.com</p>
-                  <p><strong>Support Hotline:</strong> +91 6204872422</p>
-                  <p><strong>Central Office Node:</strong> Delhi, India</p>
+                  <p><strong>Business Owner:</strong> {businessDetails.ownerName}</p>
+                  <p><strong>Trading Name:</strong> {businessDetails.brandName}</p>
+                  <p><strong>Business Type:</strong> {businessDetails.businessType}</p>
+                  <p><strong>Privacy Email:</strong> {businessDetails.grievanceEmail}</p>
+                  <p><strong>Support Hotline:</strong> {businessDetails.supportPhone}</p>
+                  <p><strong>Business Address:</strong> {businessDetails.businessAddress}</p>
+                  <p><strong>Responsible Contact:</strong> {businessDetails.grievanceOfficer}, {businessDetails.grievanceDesignation}</p>
                 </div>
               </div>
             </div>

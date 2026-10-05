@@ -11,6 +11,9 @@ import About from "../pages/about/about";
 import Features from "../pages/features/features";
 import Terms from "../pages/terms/terms";
 import Policy from "../pages/policy/policy";
+import Refunds from "../pages/refunds/refunds";
+import Shipping from "../pages/shipping/shipping";
+import Catalog from "../pages/catalog/catalog";
 
 // Profile Pages
 import CustomerProfile from "../pages/profile/CustomerProfile";
@@ -88,6 +91,9 @@ const router = createBrowserRouter([
   {path:"/contact", element:<Contact/>},
   {path:"/terms", element:<Terms/>},
   {path:"/policy", element:<Policy/>},
+  {path:"/refunds", element:<Refunds/>},
+  {path:"/shipping", element:<Shipping/>},
+  {path:"/catalog", element:<Catalog/>},
   {path:"/about", element:<About/>},
   {path:"/features", element:<Features/>},
   { path: "/login", element: <Login/> },

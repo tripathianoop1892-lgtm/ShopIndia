@@ -28,6 +28,12 @@ export const getHomepageStats = async () => {
   return readApiResponse(res);
 };
 
+export const getPublicCatalog = async (search = "") => {
+  const query = search.trim() ? `?q=${encodeURIComponent(search.trim())}` : "";
+  const res = await fetch(`${BASE_URL}/public/catalog${query}`);
+  return readApiResponse(res);
+};
+
 // 🔥 COMMON HEADERS (AUTO TOKEN - FIXED)
 const getHeaders = () => {
   const token = localStorage.getItem("token");

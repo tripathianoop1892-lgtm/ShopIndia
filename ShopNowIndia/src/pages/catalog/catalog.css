@@ -1,0 +1,23 @@
+.public-catalog { min-height: 100vh; background: #f8fafc; }
+.catalog-hero { padding: 62px max(5vw, 24px); text-align: center; background: linear-gradient(135deg, #eff6ff, #f0fdf4); }
+.catalog-hero > span { color: #047857; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.catalog-hero h1 { margin: 10px 0; color: #0f2d63; font-size: clamp(34px, 5vw, 52px); }
+.catalog-hero p { max-width: 780px; margin: 0 auto 26px; color: #526174; line-height: 1.65; }
+.catalog-hero input { width: min(680px, 100%); padding: 14px 18px; border: 1px solid #b8c6d8; border-radius: 10px; background: #fff; font: inherit; }
+.catalog-body { max-width: 1200px; margin: 0 auto; padding: 48px max(4vw, 20px) 80px; }
+.catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+.catalog-card { overflow: hidden; border: 1px solid #dbe5ef; border-radius: 14px; background: #fff; box-shadow: 0 8px 24px rgba(15,45,99,.05); }
+.catalog-card img { width: 100%; height: 180px; object-fit: contain; background: #f8fafc; }
+.catalog-card-body { padding: 22px; }
+.catalog-company { margin: 0 0 5px; color: #64748b; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+.catalog-card h2 { margin: 0 0 9px; color: #0f2d63; font-size: 20px; }
+.catalog-card p { color: #64748b; font-size: 14px; line-height: 1.5; }
+.catalog-seller { margin-top: 15px; }
+.catalog-price-row { display: flex; align-items: baseline; gap: 12px; margin-top: 15px; }
+.catalog-price-row strong { color: #047857; font-size: 22px; }
+.catalog-price-row span { color: #94a3b8; font-size: 13px; text-decoration: line-through; }
+.catalog-message { padding: 26px; text-align: center; color: #475569; }
+.catalog-message.error { color: #b91c1c; }
+.catalog-notice { margin-top: 34px; padding: 20px; border: 1px solid #bfdbfe; border-radius: 12px; background: #eff6ff; color: #334155; line-height: 1.7; }
+.catalog-notice a { color: #075985; font-weight: 700; }
+

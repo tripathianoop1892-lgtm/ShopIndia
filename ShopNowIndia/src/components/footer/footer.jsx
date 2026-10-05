@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./footer.css";
+import { businessDetails } from "../../config/businessDetails";
 
 const Footer = () => {
   return (
@@ -21,6 +22,7 @@ const Footer = () => {
             <li><Link to="/">Home</Link></li>
             <li><Link to="/features">Features</Link></li>
             <li><Link to="/about">About Us</Link></li>
+            <li><Link to="/catalog">Public Catalogue</Link></li>
             <li><Link to="/contact">Contact Us</Link></li>
           </ul>
         </div>
@@ -32,15 +34,19 @@ const Footer = () => {
             <li><Link to="/contact">Help & FAQ</Link></li>
             <li><Link to="/policy">Privacy Policy</Link></li>
             <li><Link to="/terms">Terms & Conditions</Link></li>
+            <li><Link to="/refunds">Cancellation & Refunds</Link></li>
+            <li><Link to="/shipping">Shipping & Delivery</Link></li>
           </ul>
         </div>
 
         {/* Corporate Address Column */}
         <div className="footer-section contact-info-section">
           <h3>Contact Us</h3>
-          <p className="contact-detail"><strong>Mob:</strong> +91 6204872422</p>
-          <p className="contact-detail"><strong>Email:</strong> admin@omsanjeevani.com</p>
-          <p className="contact-detail">Delhi, India</p>
+          <p className="contact-detail"><strong>{businessDetails.brandName}</strong></p>
+          <p className="contact-detail">Operated by {businessDetails.ownerName}</p>
+          <p className="contact-detail"><strong>Mob:</strong> {businessDetails.supportPhone}</p>
+          <p className="contact-detail"><strong>Email:</strong> {businessDetails.supportEmail}</p>
+          <p className="contact-detail">{businessDetails.businessAddress}</p>
         </div>
 
         {/* Marketing Asset Column */}
@@ -56,7 +62,7 @@ const Footer = () => {
 
       {/* Copyright Strip */}
       <div className="footer-bottom">
-        &copy; 2026 OmSanjeevani Hub. All Rights Reserved.
+        &copy; 2026 {businessDetails.brandName}. All Rights Reserved.
       </div>
     </footer>
   );

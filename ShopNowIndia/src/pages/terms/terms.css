@@ -62,6 +62,9 @@
   font-weight: 500;
 }
 
+.terms-updated { margin-top: 10px; color: #64748b; font-size: 13px; font-weight: 700; }
+.terms-card-body a { color: #075985; font-weight: 700; }
+
 /* Backlighting Aura Circles */
 .terms-bg-orb {
   position: absolute;

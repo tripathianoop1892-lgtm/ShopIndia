@@ -138,7 +138,7 @@ function Home() {
           <div className="floating-node-shield customer-node">
             <span className="node-pill-label cust">CUSTOMER</span>
             <div className="node-bullet-list">
-              <p>🛡 Genuine Medicines</p>
+              <p>🛡 Pharmacy Listings</p>
               <p>📈 Better Availability</p>
               <p>₹ Affordable Prices</p>
               <p>💜 Health & Care</p>
@@ -351,7 +351,7 @@ function Home() {
           
           <p>
             OmSanjeevani is a digital health logistics ecosystem connecting 
-            authorized wholesale vendors, pharmacy owners, and consumer clients under a unified, transparent database framework. 
+            participating wholesale vendors, pharmacy owners, and consumer clients under a unified, transparent database framework.
             Our architecture simplifies medical procurement tracking, stabilizes safety bounds around batch expiries, 
             and streamlines retail supply operations across India.
           </p>

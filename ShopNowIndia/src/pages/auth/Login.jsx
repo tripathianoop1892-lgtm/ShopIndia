@@ -37,9 +37,9 @@ const Login = () => {
           <img src="/omsanjeevani.png" alt="Om Sanjeevani" className="login-brand-logo" />
           <p className="login-eyebrow">Welcome back</p>
           <h1>Your pharmacy network,<br /><span>always connected.</span></h1>
-          <p className="login-brand-description">Sign in to manage medicines, orders, payments, and care from one trusted platform.</p>
+          <p className="login-brand-description">Sign in to manage medicines, orders, payments, and account activity.</p>
           <img src="/medicine.png" alt="Medicines and healthcare" className="login-hero-image" />
-          <div className="login-features"><span>Verified medicines</span><span>Secure accounts</span><span>Connected delivery</span></div>
+          <div className="login-features"><span>Medicine listings</span><span>Secure accounts</span><span>Connected delivery</span></div>
         </div>
       </section>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./about.css";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
@@ -11,8 +11,28 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import ShieldIcon from '@mui/icons-material/Shield';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import { useNavigate } from "react-router-dom";
+import { getHomepageStats } from "../../services/api";
+
+const formatMetric = (value) => {
+  const number = Number(value);
+  return Number.isFinite(number) ? number.toLocaleString("en-IN") : "—";
+};
 
 const About = () => {
+  const navigate = useNavigate();
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    getHomepageStats()
+      .then((response) => {
+        if (active && response?.success) setStats(response.data);
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -25,7 +45,7 @@ const About = () => {
           
           <div className="about-hero-inner">
             <div>
-            <span className="about-badge-pill">Corporate Profile</span>
+            <span className="about-badge-pill">Business Profile</span>
             <h1>About OmSanjeevani</h1>
             <p className="about-hero-lead">
               India's Smart Medicine Distribution Platform — Connecting healthcare channels through premium digital infrastructure.
@@ -63,8 +83,8 @@ const About = () => {
               <div>
               <h3>Our Vision</h3>
               <p>
-                To stand as the nation's most trusted medical supply framework by engineering scalable, 
-                high-scannability web applications driven by compliance technology.
+                To build a transparent medicine supply framework with scalable software, clearer inventory records,
+                and compliance-aware operating tools.
               </p>
               </div>
             </div>
@@ -88,7 +108,7 @@ const About = () => {
                   <h3>For Shopkeepers</h3>
                 </div>
                 <ul>
-                  <li>✔ Directly order bulk stock volumes from verified distribution hubs.</li>
+                  <li>✔ Place bulk order requests with participating distribution businesses.</li>
                   <li>✔ Modernized local inventory auditing panels with live telemetry updates.</li>
                   <li>✔ Automatic triggers indicating immediate short-stock safety thresholds.</li>
                   <li>✔ Cloud-synced real-time expiration warning badges.</li>
@@ -152,7 +172,7 @@ const About = () => {
             <div className="feature-pill-box"><span>🏪</span> Scoped Shopkeeper Workspaces</div>
             <div className="feature-pill-box"><span>🔒</span> Encrypted Multi-Tenant Safety</div>
             <div className="feature-pill-box"><span>⚡</span> High-Scannability Layouts</div>
-            <div className="feature-pill-box"><span>🛠</span> 24/7 Dedicated Support Lines</div>
+            <div className="feature-pill-box"><span>🛠</span> Published Support & Grievance Process</div>
           </div>
         </section>
 
@@ -160,23 +180,23 @@ const About = () => {
         <section className="about-informational-section light-bg-panel network-stats-bar">
           <div className="network-stat-card">
             <BarChartIcon className="stat-card-icon-mui" />
-            <h2>1,000+</h2>
+            <h2>{formatMetric(stats?.activeMedicines)}</h2>
             <p>Active Medicines Indexed</p>
           </div>
           <div className="network-stat-card">
             <StorefrontIcon className="stat-card-icon-mui blue" />
-            <h2>500+</h2>
-            <p>Retail Pharmacies Integrated</p>
+            <h2>{formatMetric(stats?.activeShopkeepers)}</h2>
+            <p>Active Shopkeeper Accounts</p>
           </div>
           <div className="network-stat-card">
             <LocalShippingIcon className="stat-card-icon-mui green" />
-            <h2>100+</h2>
-            <p>Wholesale Firms Verified</p>
+            <h2>{formatMetric(stats?.activeDistributors)}</h2>
+            <p>Active Distributor Accounts</p>
           </div>
           <div className="network-stat-card">
             <HelpCenterIcon className="stat-card-icon-mui purple" />
-            <h2>24/7</h2>
-            <p>Live Monitoring Architecture</p>
+            <h2>Mon–Sat</h2>
+            <p>Published Customer Support Hours</p>
           </div>
         </section>
 
@@ -184,7 +204,7 @@ const About = () => {
         <section className="about-cta-banner">
           <h2>Join OmSanjeevani Today</h2>
           <p>Transform your operational supply channels with our smart, cloud-persisted healthcare network.</p>
-          <button className="cta-action-btn">Get Started Now</button>
+          <button className="cta-action-btn" onClick={() => navigate('/register')}>Get Started Now</button>
         </section>
 
       </div>

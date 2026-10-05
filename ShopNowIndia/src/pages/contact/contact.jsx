@@ -10,6 +10,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SendIcon from '@mui/icons-material/Send';
 import { createPublicSupportTicket } from "../../services/api";
+import { businessDetails } from "../../config/businessDetails";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
@@ -52,15 +53,26 @@ const Contact = () => {
             {/* Left Side: Structured Contact Cards Information */}
             <div className="contact-info-cards-column">
               <h2>Get In Touch</h2>
-              <p className="column-subtitle">Reach out through our authorized communication metrics channels.</p>
+              <p className="column-subtitle">Use the contact details below for customer support, legal notices, and grievances.</p>
 
               <div className="info-glass-card">
                 <div className="info-icon-wrapper blue">
                   <LocationOnIcon className="mui-contact-icon" />
                 </div>
                 <div className="info-txt-meta">
-                  <h3>Official Corporate Address</h3>
-                  <p>Delhi, India</p>
+                  <h3>Business Owner & Trading Name</h3>
+                  <p>{businessDetails.ownerName}, trading as {businessDetails.brandName}</p>
+                  <p className="fine-time">{businessDetails.businessType}</p>
+                </div>
+              </div>
+
+              <div className="info-glass-card">
+                <div className="info-icon-wrapper blue">
+                  <LocationOnIcon className="mui-contact-icon" />
+                </div>
+                <div className="info-txt-meta">
+                  <h3>Business Correspondence Address</h3>
+                  <p>{businessDetails.businessAddress}</p>
                 </div>
               </div>
 
@@ -70,7 +82,7 @@ const Contact = () => {
                 </div>
                 <div className="info-txt-meta">
                   <h3>Direct Support Line</h3>
-                  <p>+91 6204872422</p>
+                  <p>{businessDetails.supportPhone}</p>
                 </div>
               </div>
 
@@ -79,8 +91,8 @@ const Contact = () => {
                   <EmailIcon className="mui-contact-icon" />
                 </div>
                 <div className="info-txt-meta">
-                  <h3>Corporate Contact Email</h3>
-                  <p>support@omsanjeevani.com</p>
+                  <h3>Support Email</h3>
+                  <p>{businessDetails.supportEmail}</p>
                 </div>
               </div>
 
@@ -90,8 +102,7 @@ const Contact = () => {
                 </div>
                 <div className="info-txt-meta">
                   <h3>Active Working Hours</h3>
-                  <p>Monday - Saturday</p>
-                  <p className="fine-time">09:00 AM - 06:00 PM (IST)</p>
+                  <p>{businessDetails.businessHours}</p>
                 </div>
               </div>
             </div>
@@ -132,6 +143,20 @@ const Contact = () => {
           </div>
         </div>
 
+        <section className="grievance-section" id="grievance">
+          <div>
+            <span>Grievance redressal</span>
+            <h2>{businessDetails.grievanceOfficer}</h2>
+            <p><strong>{businessDetails.grievanceDesignation}</strong></p>
+            <p>Email: <a href={`mailto:${businessDetails.grievanceEmail}`}>{businessDetails.grievanceEmail}</a></p>
+            <p>Phone: <a href={`tel:${businessDetails.supportPhone.replace(/\s/g, "")}`}>{businessDetails.supportPhone}</a></p>
+          </div>
+          <div>
+            <h3>Complaint timeline</h3>
+            <p>We acknowledge customer complaints within 48 hours and aim to resolve them within 30 days. Include your order number, registered contact details, and a concise description of the issue.</p>
+          </div>
+        </section>
+
         {/* Dynamic FAQ Details Toggles Section */}
         <section className="faq-interactive-section">
           <div className="faq-section-header">
@@ -150,7 +175,7 @@ const Contact = () => {
             <details>
               <summary>Can a Shopkeeper order directly from a Distributor?</summary>
               <p>
-                Yes, verified Shopkeepers can review live distributor inventory catalogs and place bulk B2B orders directly through their workspace panel.
+                Participating Shopkeepers can review distributor inventory catalogues and place B2B order requests through their workspace panel. Each seller remains responsible for maintaining all licences required for its activity.
               </p>
             </details>
 
@@ -171,7 +196,7 @@ const Contact = () => {
             <details>
               <summary>Who can use OmSanjeevani?</summary>
               <p>
-                Authorized medical distribution agencies, licensed retail pharmacy shopkeepers, medical store owners, and retail clients can leverage our secure modules.
+                Pharmaceutical distributors, retail pharmacy operators, and customers may use the relevant modules. Registration does not itself certify a business or replace any statutory licence.
               </p>
             </details>
 

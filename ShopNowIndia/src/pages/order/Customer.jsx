@@ -71,7 +71,7 @@ const CustomerOrders = () => {
           <p style={{ color: "#64748b", margin: 0, fontSize: "15px" }}>Real-time statement auditing transactions intersecting retail customer fulfillment rows.</p>
         </div>
         <div className="realtime-status-pill" style={{ display: "flex", alignItems: "center", gap: "8px", background: "#ffffff", border: "1px solid #e2e8f0", padding: "8px 16px", borderRadius: "9999px", fontSize: "13px", fontWeight: 600, color: "#475569" }}>
-          <span className="pulse-dot" style={{ width: "8px", height: "8px", backgroundColor: "#10b981", borderRadius: "50%" }}></span> Verified Node
+          <span className="pulse-dot" style={{ width: "8px", height: "8px", backgroundColor: "#10b981", borderRadius: "50%" }}></span> Seller Account
         </div>
       </div>
 

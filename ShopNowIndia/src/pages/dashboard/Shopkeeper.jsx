@@ -134,7 +134,7 @@ const Shopkeeper = () => {
       <div className="dashboard-header">
         <div>
           <h2 className="dashboard-title">🏪 Shopkeeper Dashboard</h2>
-          <p className="dashboard-subtitle">Select a verified distributor node to source supply inventory items</p>
+          <p className="dashboard-subtitle">Select an active distributor account to review supply inventory</p>
         </div>
         <div className="dashboard-badge">
           📦 {orders.length} History Orders
@@ -161,7 +161,7 @@ const Shopkeeper = () => {
 
         <div className="stat-card orange">
           <div className="stat-card-header">
-            <p>Verified Distributors</p>
+            <p>Active Distributors</p>
             <FaStore className="card-icon" />
           </div>
           <h3>{distributors.length} Firms</h3>
@@ -195,7 +195,7 @@ const Shopkeeper = () => {
           </div>
 
           {filteredDistributors.length === 0 ? (
-            <p className="empty-text">No verified distributors found matching query.</p>
+            <p className="empty-text">No active distributors found matching the query.</p>
           ) : (
             <div className="distributor-list-group">
               {filteredDistributors.map((dist) => (
@@ -215,7 +215,7 @@ const Shopkeeper = () => {
                     {/* NEW: Distributor Average Rating Block */}
                   <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
                     <span style={{ textTransform: 'uppercase', fontSize: '10px', color: '#10b981', fontWeight: 'bold' }}>
-                      Verified {dist.role}
+                      Active {dist.role}
                     </span>
                     <span style={{ color: "#f59e0b", fontSize: "11px", fontWeight: "bold" }}>
                       ★ {dist.rating || "New"} ({dist.reviewsCount || 0})
@@ -295,7 +295,7 @@ const Shopkeeper = () => {
             <div className="fallback-selection-state">
               <div className="prompt-illustration">📦</div>
               <h4>No Distributor Selected</h4>
-              <p>Please select an authorized distribution agency from the left index panel to inspect itemized pricing arrays.</p>
+              <p>Please select a participating distribution business from the list to inspect itemised pricing.</p>
             </div>
           )}
         </div>

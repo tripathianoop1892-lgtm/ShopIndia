@@ -125,9 +125,9 @@ const Register = () => {
 
         <div className="features">
           <p>✔ Easy Registration</p>
-          <p>✔ Verified Medicines</p>
+          <p>✔ Listed Medicines</p>
           <p>✔ Fast Delivery</p>
-          <p>✔ Trusted Shopkeepers</p>
+          <p>✔ Connected Shopkeepers</p>
           <p>✔ Direct Distributor Network</p>
         </div>
 
