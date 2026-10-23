@@ -4,6 +4,8 @@ import "./footer.css";
 import { businessDetails } from "../../config/businessDetails";
 
 const Footer = () => {
+  const telephoneLink = businessDetails.supportPhone.replace(/[^\d+]/g, "");
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -44,8 +46,8 @@ const Footer = () => {
           <h3>Contact Us</h3>
           <p className="contact-detail"><strong>{businessDetails.brandName}</strong></p>
           <p className="contact-detail">Operated by {businessDetails.ownerName}</p>
-          <p className="contact-detail"><strong>Mob:</strong> {businessDetails.supportPhone}</p>
-          <p className="contact-detail"><strong>Email:</strong> {businessDetails.supportEmail}</p>
+          <p className="contact-detail"><strong>Mob:</strong> <a href={`tel:${telephoneLink}`}>{businessDetails.supportPhone}</a></p>
+          <p className="contact-detail"><strong>Email:</strong> <a href={`mailto:${businessDetails.supportEmail}`}>{businessDetails.supportEmail}</a></p>
           <p className="contact-detail">{businessDetails.businessAddress}</p>
         </div>
 

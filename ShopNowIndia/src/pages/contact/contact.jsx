@@ -15,14 +15,26 @@ import { businessDetails } from "../../config/businessDetails";
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
   const [status, setStatus] = useState("");
+  const [statusType, setStatusType] = useState("success");
+  const [submitting, setSubmitting] = useState(false);
+  const telephoneLink = businessDetails.supportPhone.replace(/[^\d+]/g, "");
   const submit = async (event) => {
     event.preventDefault();
+    setSubmitting(true);
+    setStatus("");
     try {
       const response = await createPublicSupportTicket(form);
       if (!response.success) throw new Error(response.message);
-      setStatus("Your message has been sent.");
+      const ticketReference = response.data?._id?.slice(-6)?.toUpperCase();
+      setStatusType("success");
+      setStatus(`Your message is now in our Support Center${ticketReference ? ` as ticket #${ticketReference}` : ""}. Our team will review it during business hours.`);
       setForm({ name: "", email: "", mobile: "", message: "" });
-    } catch (error) { setStatus(error.message || "Unable to send your message."); }
+    } catch (error) {
+      setStatusType("error");
+      setStatus(error.message || "Unable to send your message.");
+    } finally {
+      setSubmitting(false);
+    }
   };
   return (
     <>
@@ -82,7 +94,7 @@ const Contact = () => {
                 </div>
                 <div className="info-txt-meta">
                   <h3>Direct Support Line</h3>
-                  <p>{businessDetails.supportPhone}</p>
+                  <p><a className="contact-action-link" href={`tel:${telephoneLink}`}>{businessDetails.supportPhone}</a></p>
                 </div>
               </div>
 
@@ -92,7 +104,7 @@ const Contact = () => {
                 </div>
                 <div className="info-txt-meta">
                   <h3>Support Email</h3>
-                  <p>{businessDetails.supportEmail}</p>
+                  <p><a className="contact-action-link" href={`mailto:${businessDetails.supportEmail}`}>{businessDetails.supportEmail}</a></p>
                 </div>
               </div>
 
@@ -133,10 +145,10 @@ const Contact = () => {
                   <textarea rows="5" placeholder="Write Your Message Here..." value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} required></textarea>
                 </div>
 
-                <button type="submit" className="form-submit-dispatch-btn">
-                  <SendIcon className="submit-btn-icon" /> Send Message
+                <button type="submit" className="form-submit-dispatch-btn" disabled={submitting}>
+                  <SendIcon className="submit-btn-icon" /> {submitting ? "Sending..." : "Send Message"}
                 </button>
-                {status && <p>{status}</p>}
+                {status && <p className={`contact-form-status ${statusType}`} role="status">{status}</p>}
               </form>
             </div>
 

@@ -93,6 +93,18 @@
   font-size: 14px;
 }
 
+.contact-info-section .contact-detail a {
+  color: #cbd5e1;
+  text-decoration: underline;
+  text-decoration-color: rgba(203, 213, 225, 0.45);
+  text-underline-offset: 3px;
+}
+
+.contact-info-section .contact-detail a:hover,
+.contact-info-section .contact-detail a:focus-visible {
+  color: #00d4ff;
+}
+
 /* Illustration Image Containment */
 .footer-image-box {
   display: flex;
