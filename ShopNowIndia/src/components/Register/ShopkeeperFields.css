@@ -30,6 +30,7 @@
 }
 
 .shop-grid input,
+.shop-grid select,
 .shop-grid textarea {
   width: 100%;
   padding: 15px 18px 15px 45px;
@@ -46,6 +47,7 @@
 }
 
 .shop-grid input:focus,
+.shop-grid select:focus,
 .shop-grid textarea:focus {
   border-color: #0a8f3d;
   box-shadow: 0 0 8px rgba(10,143,61,.2);

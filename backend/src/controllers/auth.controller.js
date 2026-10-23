@@ -58,6 +58,7 @@ export const registerUser = async (req, res) => {
   name,
   mobile,
    shopName,
+   industryType,
    companyName,
    shopId,
    verificationChannel,
@@ -65,6 +66,7 @@ export const registerUser = async (req, res) => {
    } = req.body;
 
     if (!name?.trim() || !password || !["customer", "shopkeeper", "distributor"].includes(role) || !email?.trim() || !mobile?.trim()) return res.status(400).json({ success: false, message: "Name, email, mobile number, password, and role are required." });
+    if (role === "shopkeeper" && !["Chemist", "Hospital", "Doctors"].includes(industryType)) return res.status(400).json({ success: false, message: "Select a valid industry type." });
     if (password.length < MINIMUM_PASSWORD_LENGTH) return res.status(400).json({ success: false, message: `Password must be at least ${MINIMUM_PASSWORD_LENGTH} characters.` });
     if (!["email", "mobile"].includes(verificationChannel) || !otp) return res.status(400).json({ success: false, message: "Verify your selected email or mobile number with OTP." });
     const normalEmail = email.trim().toLowerCase();
@@ -100,6 +102,7 @@ export const registerUser = async (req, res) => {
   name,
   mobile: normalMobile,
   shopName: role === "shopkeeper" ? shopName || "" : "",
+  industryType: role === "shopkeeper" ? industryType : null,
   companyName: role === "distributor" ? companyName || "" : "",
   shopId: newShopId,
   selectedShopId: role === "customer" ? shopId || null : null,
@@ -173,6 +176,7 @@ export const loginUser = async (req, res) => {
         mobile: user.mobile,
         role: user.role,
         shopName: user.shopName,
+        industryType: user.industryType,
         companyName: user.companyName,
         address: user.address,
         warehouseAddress: user.warehouseAddress,
@@ -334,6 +338,7 @@ export const updateProfile = async (req, res) => {
       mobile,
       email,
       shopName,
+      industryType,
       companyName,
       address,
       warehouseAddress,
@@ -377,6 +382,13 @@ export const updateProfile = async (req, res) => {
       user.shopName = shopName.trim();
     }
 
+    if (industryType !== undefined && user.role === "shopkeeper") {
+      if (!["Chemist", "Hospital", "Doctors"].includes(industryType)) {
+        return res.status(400).json({ success: false, message: "Select a valid industry type." });
+      }
+      user.industryType = industryType;
+    }
+
     if (companyName !== undefined) {
       user.companyName = companyName.trim();
     }
@@ -400,6 +412,7 @@ export const updateProfile = async (req, res) => {
         mobile: user.mobile,
         email: user.email,
         shopName: user.shopName,
+        industryType: user.industryType,
         companyName: user.companyName,
         address: user.address,
         warehouseAddress: user.warehouseAddress,

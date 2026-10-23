@@ -43,6 +43,7 @@ export default function RegisterScreen({ navigation }) {
 
     shopId: "",
     shopName: "",
+    industryType: "Chemist",
 
     gstNumber: "",
     drugLicense: "",

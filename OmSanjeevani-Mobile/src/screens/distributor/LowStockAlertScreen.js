@@ -15,7 +15,7 @@ import styles from "./LowStockAlertScreenStyles";
 
 import { MedicinesList } from "../../services/api";
 
-export default function LowStockAlertScreen({ navigation }) {
+export default function LowStockAlertScreen({ navigation, route }) {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -26,7 +26,10 @@ export default function LowStockAlertScreen({ navigation }) {
 
   const fetchLowStockMedicines = async () => {
     try {
-      const res = await MedicinesList();
+      const query = route?.name?.startsWith("Shopkeeper")
+        ? "?source=my-retail-stock"
+        : "";
+      const res = await MedicinesList(query);
 
       console.log("LOW STOCK API RESPONSE:", res);
 

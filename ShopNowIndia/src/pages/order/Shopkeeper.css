@@ -210,3 +210,43 @@ button:focus-visible {
   opacity: 0.6;
   cursor: not-allowed;
 }
+.order-export-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.order-export-controls label {
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.order-export-controls select,
+.order-export-controls button {
+  min-height: 40px;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.order-export-controls select {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  padding: 0 12px;
+}
+
+.order-export-controls button {
+  border: 0;
+  background: #166534;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0 18px;
+}
+
+.order-export-controls button:hover {
+  background: #14532d;
+}

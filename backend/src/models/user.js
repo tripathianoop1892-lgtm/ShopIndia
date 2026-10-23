@@ -51,6 +51,11 @@ const userSchema = new mongoose.Schema(
   trim: true,
   default: "",
 },
+    industryType: {
+      type: String,
+      enum: ["Chemist", "Hospital", "Doctors"],
+      default: null,
+    },
     companyName: {
       type: String,
       trim: true,

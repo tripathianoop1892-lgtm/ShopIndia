@@ -33,6 +33,8 @@ import ShopkeeperOrder from "../pages/order/Shopkeeper";
 import ShopkeeperEarnings from "../pages/earnings/Shopkeeper";
 import AddMedicineShopkeeper from "../features/add-medicine/Shopkeeper";
 import StoreQr from "../pages/shopkeeper/StoreQr";
+import ShopkeeperLowStock from "../pages/low-Stock/Shopkeeper";
+import ShopkeeperExpiry from "../pages/expiring/Shopkeeper";
 
 // Distributor Segment Pages
 import DistributorDashboard from "../pages/dashboard/Distributor";
@@ -145,6 +147,8 @@ const router = createBrowserRouter([
       { path: "add-medicine", element: <AddMedicineShopkeeper /> }, // Maps directly to: /shopkeeper/add-medicine
       { path: "orders", element: <ShopkeeperOrder /> }, // Maps directly to: /shopkeeper/orders
       { path: "earnings", element: <ShopkeeperEarnings /> }, // Maps directly to: /shopkeeper/earnings
+      { path: "low-stock", element: <ShopkeeperLowStock /> },
+      { path: "expiring", element: <ShopkeeperExpiry /> },
       { path: "qr", element: <StoreQr /> },
       { path: "notifications", element: <CustomerNotification /> },
       { path: "payments/:orderId", element: <OrderPaymentDetail /> },

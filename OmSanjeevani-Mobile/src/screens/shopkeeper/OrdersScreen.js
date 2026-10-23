@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Modal,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
 
 import styles from "./OrdersScreenStyles";
 
@@ -32,6 +35,9 @@ export default function OrdersScreen({
     useState(true);
 
   const [actionLoading, setActionLoading] =
+    useState(false);
+
+  const [exportModalVisible, setExportModalVisible] =
     useState(false);
 
   // ==========================================
@@ -208,6 +214,74 @@ export default function OrdersScreen({
         year: "numeric",
       }
     );
+  };
+
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const exportOrdersToPdf = async (scope) => {
+    const selectedOrders = scope === "all"
+      ? orders
+      : orders.filter(
+          (order) => order.status?.toLowerCase() === scope
+        );
+
+    setExportModalVisible(false);
+
+    if (selectedOrders.length === 0) {
+      Alert.alert("Nothing to export", "No orders match the selected option.");
+      return;
+    }
+
+    const rows = selectedOrders.map((order, index) => {
+      const party = activeTab === "b2b-procure"
+        ? order.sellerId?.name || order.company || "Distributor Entity"
+        : order.customerName || order.buyerId?.name || "Customer";
+      const items = (order.items || [])
+        .map((item) => `${item.name || "Medicine"} (x${item.quantity || 0})`)
+        .join(", ");
+      const total = Number(order.finalAmount ?? order.totalAmount ?? order.price ?? 0)
+        .toLocaleString("en-IN");
+
+      return `<tr><td>${index + 1}</td><td>#${escapeHtml(order._id)}</td><td>${escapeHtml(party)}</td><td>${escapeHtml(items || "No items")}</td><td>₹${escapeHtml(total)}</td><td>${escapeHtml(order.status || "Unknown")}</td><td>${escapeHtml(formatDate(order.createdAt))}</td></tr>`;
+    }).join("");
+
+    const title = activeTab === "b2b-procure"
+      ? "Wholesaler Supply Orders"
+      : "Customer Retail Orders";
+    const scopeLabel = scope === "all"
+      ? "All statuses"
+      : `${scope.charAt(0).toUpperCase()}${scope.slice(1)} orders`;
+    const html = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0" /><style>
+      @page { size: A4 landscape; margin: 12mm; }
+      body { font-family: Arial, sans-serif; color: #172033; }
+      h1 { color: #166534; margin-bottom: 4px; }
+      p { color: #64748b; }
+      table { width: 100%; border-collapse: collapse; font-size: 10px; }
+      th { background: #166534; color: white; padding: 8px; text-align: left; }
+      td { border: 1px solid #dbe3ea; padding: 7px; vertical-align: top; }
+    </style></head><body><h1>Om Sanjeevani — ${escapeHtml(title)}</h1><p>${escapeHtml(scopeLabel)} · ${selectedOrders.length} order${selectedOrders.length === 1 ? "" : "s"}</p><table><thead><tr><th>S.No</th><th>Order ID</th><th>${activeTab === "b2b-procure" ? "Distributor" : "Customer"}</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+
+    try {
+      const { uri } = await Print.printToFileAsync({ html });
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, {
+          mimeType: "application/pdf",
+          dialogTitle: `${title} PDF`,
+          UTI: ".pdf",
+        });
+      } else {
+        await Print.printAsync({ html });
+      }
+    } catch (error) {
+      console.error("Order PDF export error:", error);
+      Alert.alert("Export failed", "The order PDF could not be created.");
+    }
   };
 
   // ==========================================
@@ -764,6 +838,14 @@ export default function OrdersScreen({
         </TouchableOpacity>
       </View>
 
+      <TouchableOpacity
+        style={styles.exportButton}
+        onPress={() => setExportModalVisible(true)}
+      >
+        <Ionicons name="document-text-outline" size={19} color="#FFFFFF" />
+        <Text style={styles.exportButtonText}>Export PDF</Text>
+      </TouchableOpacity>
+
       {/* =====================================
           Orders
       ====================================== */}
@@ -813,6 +895,46 @@ export default function OrdersScreen({
           }
         />
       )}
+
+      <Modal
+        visible={exportModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setExportModalVisible(false)}
+      >
+        <View style={styles.exportModalOverlay}>
+          <View style={styles.exportModalCard}>
+            <Text style={styles.exportModalTitle}>Choose PDF export</Text>
+            <Text style={styles.exportModalSubtitle}>
+              Export orders from the currently selected tab.
+            </Text>
+            {[
+              ["all", "All orders"],
+              ["pending", "Pending orders"],
+              ["paid", "Paid orders"],
+              ["approved", "Approved orders"],
+              ["delivered", "Delivered orders"],
+              ["rejected", "Rejected orders"],
+              ["cancelled", "Cancelled orders"],
+            ].map(([scope, label]) => (
+              <TouchableOpacity
+                key={scope}
+                style={styles.exportOption}
+                onPress={() => exportOrdersToPdf(scope)}
+              >
+                <Text style={styles.exportOptionText}>{label}</Text>
+                <Ionicons name="chevron-forward" size={18} color="#2E7D32" />
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.exportCancelButton}
+              onPress={() => setExportModalVisible(false)}
+            >
+              <Text style={styles.exportCancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

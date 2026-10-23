@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import CustomInput from "../inputs/CustomInput";
 import styles from "./ShopkeeperFieldsStyles";
@@ -21,6 +21,26 @@ export default function ShopkeeperFields({
         value={form.shopName}
         onChangeText={(text) => handleChange("shopName", text)}
       />
+
+      <Text style={styles.label}>Industry Type</Text>
+      <View style={styles.industryOptions}>
+        {["Chemist", "Hospital", "Doctors"].map((option) => {
+          const selected = form.industryType === option;
+          return (
+            <TouchableOpacity
+              key={option}
+              accessibilityRole="radio"
+              accessibilityState={{ selected }}
+              style={[styles.industryOption, selected && styles.industryOptionSelected]}
+              onPress={() => handleChange("industryType", option)}
+            >
+              <Text style={[styles.industryOptionText, selected && styles.industryOptionTextSelected]}>
+                {option}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
 
       <CustomInput
         label="GST Number"

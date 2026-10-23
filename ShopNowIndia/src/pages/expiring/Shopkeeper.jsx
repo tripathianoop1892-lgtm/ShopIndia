@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
+import "../low-Stock/Shopkeeper.css";
 import { MedicinesList } from "../../services/api";
 
 const ShopkeeperExpiry = () => {
@@ -21,16 +22,26 @@ const ShopkeeperExpiry = () => {
 
   async function fetchData() {
     try {
-      const res = await MedicinesList();
+      const res = await MedicinesList("?source=my-retail-stock");
 
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
       // 🔥 FILTER: sirf next 30 days
-      const expiring = res.filter((med) => {
+      const medicineList = Array.isArray(res?.medicines)
+        ? res.medicines
+        : Array.isArray(res)
+        ? res
+        : [];
+
+      const expiring = medicineList.filter((med) => {
+        if (!med.expiry) return false;
         const expDate = new Date(med.expiry);
+        if (Number.isNaN(expDate.getTime())) return false;
+        expDate.setHours(0, 0, 0, 0);
         const diff = (expDate - today) / (1000 * 60 * 60 * 24);
-        return diff < 30;
-      });
+        return diff >= 0 && diff <= 180;
+      }).sort((a, b) => new Date(a.expiry) - new Date(b.expiry));
 
       setMedicines(expiring);
     } catch (err) {
@@ -41,12 +52,14 @@ const ShopkeeperExpiry = () => {
   const today = new Date();
 
   return (
-    <div className="main-content">
+    <div className="main-content shopkeeper-alert-page">
       <h2>Expiry Alert</h2>
+      <p>Medicines expiring within the next 180 days.</p>
 
       <table className="table">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Medicine</th>
             <th>Expiry Date</th>
           </tr>
@@ -54,7 +67,7 @@ const ShopkeeperExpiry = () => {
 
         <tbody>
           {medicines.length > 0 ? (
-            medicines.map((item) => {
+            medicines.map((item, index) => {
               const expDate = new Date(item.expiry);
               const diff =
                 (expDate - today) / (1000 * 60 * 60 * 24);
@@ -65,6 +78,7 @@ const ShopkeeperExpiry = () => {
 
               return (
                 <tr key={item._id}>
+                  <td>{index + 1}</td>
                   <td>{item.name}</td>
                   <td className={className}>
                     {formatDate(item.expiry)}
@@ -74,7 +88,7 @@ const ShopkeeperExpiry = () => {
             })
           ) : (
             <tr>
-              <td colSpan="2">No Expiring Medicines</td>
+              <td colSpan="3">No Expiring Medicines</td>
             </tr>
           )}
         </tbody>

@@ -17,7 +17,7 @@ import styles from "./ExpiryAlertScreenStyles";
 
 import { MedicinesList } from "../../services/api";
 
-export default function ExpiryAlertScreen({ navigation }) {
+export default function ExpiryAlertScreen({ navigation, route }) {
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -71,7 +71,10 @@ export default function ExpiryAlertScreen({ navigation }) {
 
   const fetchExpiryMedicines = async () => {
     try {
-      const res = await MedicinesList();
+      const query = route?.name?.startsWith("Shopkeeper")
+        ? "?source=my-retail-stock"
+        : "";
+      const res = await MedicinesList(query);
 
       console.log(
         "EXPIRY API RESPONSE:",

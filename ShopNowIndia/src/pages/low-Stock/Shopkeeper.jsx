@@ -12,10 +12,17 @@ const ShopkeeperLowStock = () => {
 
   async function fetchData() {
     try {
-      const res = await MedicinesList();
+      const res = await MedicinesList("?source=my-retail-stock");
 
-      // 🔥 LOW STOCK FILTER (< 10)
-      const lowStockData = res.filter((med) => med.stock < 10);
+      const medicineList = Array.isArray(res?.medicines)
+        ? res.medicines
+        : Array.isArray(res)
+        ? res
+        : [];
+
+      const lowStockData = medicineList.filter(
+        (med) => Number(med.stock || 0) < 50
+      );
 
       setMedicines(lowStockData);
     } catch (err) {
@@ -24,12 +31,13 @@ const ShopkeeperLowStock = () => {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-content shopkeeper-alert-page">
       <h2>Low Stock Medicines</h2>
 
       <table className="table">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Medicine</th>
             <th>Stock</th>
           </tr>
@@ -37,15 +45,16 @@ const ShopkeeperLowStock = () => {
 
         <tbody>
           {medicines.length > 0 ? (
-            medicines.map((med) => (
+            medicines.map((med, index) => (
               <tr key={med._id}>
+                <td>{index + 1}</td>
                 <td>{med.name}</td>
                 <td className="low">{med.stock}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="2">No Low Stock Medicines</td>
+              <td colSpan="3">No Low Stock Medicines</td>
             </tr>
           )}
         </tbody>

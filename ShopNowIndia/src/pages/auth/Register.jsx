@@ -37,6 +37,7 @@ const Register = () => {
     shopId: sharedShopId,
 
     shopName: "",
+    industryType: "Chemist",
     gstNumber: "",
     drugLicense: "",
 

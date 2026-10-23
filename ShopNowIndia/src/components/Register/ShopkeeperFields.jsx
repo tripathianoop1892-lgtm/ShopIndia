@@ -28,6 +28,20 @@ const ShopkeeperFields = ({ form, handleChange }) => {
         </div>
 
         <div className="input-box">
+          <FaStore className="icon" />
+          <select
+            name="industryType"
+            aria-label="Industry Type"
+            value={form.industryType}
+            onChange={handleChange}
+          >
+            <option value="Chemist">Chemist</option>
+            <option value="Hospital">Hospital</option>
+            <option value="Doctors">Doctors</option>
+          </select>
+        </div>
+
+        <div className="input-box">
           <FaIdCard className="icon" />
           <input
             type="text"

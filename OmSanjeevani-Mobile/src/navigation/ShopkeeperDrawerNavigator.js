@@ -33,6 +33,8 @@ import ProfileScreen from "../screens/shopkeeper/ProfileScreen";
 import EditProfileScreen from "../screens/shopkeeper/EditProfileScreen";
 import SettingsScreen from "../screens/shopkeeper/SettingsScreen";
 import NotificationScreen from "../screens/shopkeeper/NotificationScreen";
+import LowStockAlertScreen from "../screens/shopkeeper/LowStockAlertScreen";
+import ExpiryAlertScreen from "../screens/shopkeeper/ExpiryAlertScreen";
 // ==========================================
 // DRAWER
 // ==========================================
@@ -199,6 +201,18 @@ function CustomDrawerContent(props) {
           screen="ShopkeeperEarnings"
         />
 
+        <MenuItem
+          icon="alert-circle-outline"
+          label="Low Stock Alert"
+          screen="ShopkeeperLowStockAlert"
+        />
+
+        <MenuItem
+          icon="calendar-outline"
+          label="Expiry Alert"
+          screen="ShopkeeperExpiryAlert"
+        />
+
         {/* Profile */}
 
         <MenuItem
@@ -215,12 +229,6 @@ function CustomDrawerContent(props) {
           screen="ShopkeeperSettings"
         />
        
-       <MenuItem
-  icon="settings-outline"
-  label="Settings"
-  screen="ShopkeeperSettings"
-/>
-
 </View>
       
        
@@ -339,6 +347,16 @@ export default function ShopkeeperDrawerNavigator() {
       <Drawer.Screen
         name="ShopkeeperEarnings"
         component={EarningsScreen}
+      />
+
+      <Drawer.Screen
+        name="ShopkeeperLowStockAlert"
+        component={LowStockAlertScreen}
+      />
+
+      <Drawer.Screen
+        name="ShopkeeperExpiryAlert"
+        component={ExpiryAlertScreen}
       />
 
       {/* ==================================

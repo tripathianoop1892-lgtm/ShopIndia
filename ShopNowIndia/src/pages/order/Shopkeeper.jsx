@@ -19,6 +19,7 @@ const ShopkeeperOrder = () => {
 
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("b2c-retail");
+  const [exportScope, setExportScope] = useState("all");
 
   // --- Order Action State ---
   const [actionLoading, setActionLoading] = useState(false);
@@ -202,12 +203,107 @@ const ShopkeeperOrder = () => {
     setCustomRejectionReason("");
   };
 
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const exportOrdersToPdf = () => {
+    const selectedOrders = exportScope === "all"
+      ? orders
+      : orders.filter(
+          (order) => order.status?.toLowerCase() === exportScope
+        );
+
+    if (selectedOrders.length === 0) {
+      alert("No orders match the selected export option.");
+      return;
+    }
+
+    const orderRows = selectedOrders
+      .map((order, index) => {
+        const itemSummary = (order.items || [])
+          .map((item) => `${item.name || "Medicine"} (x${item.quantity || 0})`)
+          .join(", ");
+        const party = activeTab === "b2b-procure"
+          ? order.sellerId?.name || order.company || "Distributor Entity"
+          : order.customerName || order.buyerId?.name || "Customer name unavailable";
+
+        return `<tr>
+          <td>${index + 1}</td>
+          <td>#${escapeHtml(shortId(order._id))}</td>
+          <td>${escapeHtml(party)}</td>
+          <td>${escapeHtml(itemSummary || "No items")}</td>
+          <td>₹${escapeHtml(Number(order.finalAmount ?? order.totalAmount ?? order.price ?? 0).toLocaleString("en-IN"))}</td>
+          <td>${escapeHtml(order.status || "Unknown")}</td>
+          <td>${escapeHtml(formatDate(order.createdAt))}</td>
+        </tr>`;
+      })
+      .join("");
+
+    const reportTitle = activeTab === "b2b-procure"
+      ? "Wholesaler Supply Orders"
+      : "Customer Retail Orders";
+    const scopeLabel = exportScope === "all"
+      ? "All statuses"
+      : `${exportScope.charAt(0).toUpperCase()}${exportScope.slice(1)} orders`;
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+      alert("Please allow pop-ups to export the PDF.");
+      return;
+    }
+
+    printWindow.document.write(`<!doctype html>
+      <html><head><title>${escapeHtml(reportTitle)} - ${escapeHtml(scopeLabel)}</title>
+      <style>
+        @page { size: A4 landscape; margin: 12mm; }
+        body { font-family: Arial, sans-serif; color: #172033; margin: 0; }
+        h1 { color: #166534; margin: 0 0 4px; }
+        p { color: #64748b; margin: 0 0 18px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { background: #166534; color: white; padding: 8px; text-align: left; }
+        td { border: 1px solid #dbe3ea; padding: 7px; vertical-align: top; }
+        tr:nth-child(even) { background: #f8fafc; }
+      </style></head><body>
+      <h1>Om Sanjeevani — ${escapeHtml(reportTitle)}</h1>
+      <p>${escapeHtml(scopeLabel)} · ${selectedOrders.length} order${selectedOrders.length === 1 ? "" : "s"} · Generated ${escapeHtml(new Date().toLocaleString("en-IN"))}</p>
+      <table><thead><tr><th>S.No</th><th>Order ID</th><th>${activeTab === "b2b-procure" ? "Distributor" : "Customer"}</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody>${orderRows}</tbody></table>
+      <script>window.addEventListener("load", () => { window.print(); });</script>
+      </body></html>`);
+    printWindow.document.close();
+  };
+
   // =========================================================
   // RENDER
   // =========================================================
   return (
     <div className="bigdiv" style={{ padding: "20px" }}>
       <h2>📋 Order Management Ledger</h2>
+
+      <div className="order-export-controls">
+        <label htmlFor="order-export-scope">PDF export option</label>
+        <select
+          id="order-export-scope"
+          value={exportScope}
+          onChange={(event) => setExportScope(event.target.value)}
+        >
+          <option value="all">All orders in current tab</option>
+          <option value="pending">Pending orders</option>
+          <option value="paid">Paid orders</option>
+          <option value="approved">Approved orders</option>
+          <option value="delivered">Delivered orders</option>
+          <option value="rejected">Rejected orders</option>
+          <option value="cancelled">Cancelled orders</option>
+        </select>
+        <button type="button" onClick={exportOrdersToPdf}>
+          Export PDF
+        </button>
+      </div>
 
       {/* =====================================================
           TABS

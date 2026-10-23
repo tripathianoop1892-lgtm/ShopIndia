@@ -41,6 +41,84 @@ const styles = StyleSheet.create({
     backgroundColor: "#2E7D32",
   },
 
+  exportButton: {
+    alignSelf: "flex-end",
+    minHeight: 42,
+    marginTop: 10,
+    marginRight: 15,
+    marginBottom: 2,
+    paddingHorizontal: 16,
+    borderRadius: 9,
+    backgroundColor: "#166534",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 7,
+  },
+
+  exportButtonText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "700",
+  },
+
+  exportModalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(15, 23, 42, 0.55)",
+    justifyContent: "center",
+    padding: 24,
+  },
+
+  exportModalCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 20,
+  },
+
+  exportModalTitle: {
+    color: "#1F2937",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+
+  exportModalSubtitle: {
+    color: "#64748B",
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 5,
+    marginBottom: 14,
+  },
+
+  exportOption: {
+    minHeight: 44,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+
+  exportOptionText: {
+    color: "#334155",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+
+  exportCancelButton: {
+    minHeight: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 12,
+    borderRadius: 9,
+    backgroundColor: "#F1F5F9",
+  },
+
+  exportCancelText: {
+    color: "#475569",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+
   tabText: {
     fontSize: 13,
     fontWeight: "600",

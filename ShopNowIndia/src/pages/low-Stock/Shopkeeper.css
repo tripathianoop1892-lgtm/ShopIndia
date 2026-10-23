@@ -1,9 +1,12 @@
 /* Main Content */
 .main-content {
-  margin-left: 220px;
   padding: 20px;
   background: #f5f7fb;
   min-height: 100vh;
+}
+
+.shopkeeper-alert-page {
+  overflow-x: auto;
 }
 
 /* Heading */
