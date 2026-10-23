@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildOtpEmail } from "../src/services/email-template.service.js";
+import { buildOtpEmail, buildSupportEnquiryEmail } from "../src/services/email-template.service.js";
 
 test("builds a branded registration verification email", () => {
   const email = buildOtpEmail({ code: "123456", purpose: "registration" });
@@ -33,4 +33,21 @@ test("rejects unsupported purposes and malformed OTP codes", () => {
     () => buildOtpEmail({ code: "<script>", purpose: "registration" }),
     /six digits/,
   );
+});
+
+test("builds a safe website enquiry email", () => {
+  const email = buildSupportEnquiryEmail({
+    ticketId: "68ff00abc123",
+    name: "Asha <script>alert(1)</script>",
+    email: "asha@example.com",
+    mobile: "+91 98765 43210",
+    message: "Please call me about <b>my order</b>.",
+  });
+
+  assert.match(email.subject, /Website enquiry #68ff00abc123/);
+  assert.match(email.text, /asha@example\.com/);
+  assert.match(email.text, /\+91 98765 43210/);
+  assert.match(email.html, /Asha &lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+  assert.match(email.html, /&lt;b&gt;my order&lt;\/b&gt;/);
+  assert.doesNotMatch(email.html, /<script>alert\(1\)<\/script>/);
 });

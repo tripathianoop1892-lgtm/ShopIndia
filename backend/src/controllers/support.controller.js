@@ -1,4 +1,5 @@
 import Support from "../models/Support.js";
+import { sendSupportEnquiry } from "../services/support-email.service.js";
 
 // ==========================================
 // CREATE SUPPORT TICKET
@@ -60,7 +61,22 @@ export const createPublicSupportTicket = async (req, res) => {
   try {
     const { name, email, mobile = "", message } = req.body;
     if (!name?.trim() || !email?.trim() || !message?.trim()) return res.status(400).json({ success: false, message: "Name, email, and message are required." });
-    const ticket = await Support.create({ userId: null, name: name.trim(), role: "guest", subject: "Website contact request", message: `${message.trim()}\n\nEmail: ${email.trim()}${mobile.trim() ? `\nPhone: ${mobile.trim()}` : ""}`, status: "Pending" });
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return res.status(400).json({ success: false, message: "Please enter a valid email address." });
+
+    const enquiry = {
+      name: name.trim(),
+      email: email.trim(),
+      mobile: mobile.trim(),
+      message: message.trim(),
+    };
+    const ticket = await Support.create({ userId: null, name: enquiry.name, role: "guest", subject: "Website contact request", message: `${enquiry.message}\n\nEmail: ${enquiry.email}${enquiry.mobile ? `\nPhone: ${enquiry.mobile}` : ""}`, status: "Pending" });
+
+    try {
+      await sendSupportEnquiry({ ticketId: ticket._id, ...enquiry });
+    } catch (emailError) {
+      console.error("PUBLIC SUPPORT EMAIL ERROR:", emailError);
+    }
+
     return res.status(201).json({ success: true, data: ticket, message: "Your support request has been sent." });
   } catch (error) {
     console.error("PUBLIC SUPPORT ERROR:", error);

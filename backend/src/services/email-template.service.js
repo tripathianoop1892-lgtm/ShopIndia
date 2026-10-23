@@ -100,3 +100,54 @@ export const buildOtpEmail = ({ code, purpose }) => {
   return { subject: copy.subject, text, html };
 };
 
+export const buildSupportEnquiryEmail = ({ ticketId, name, email, mobile = "", message }) => {
+  const reference = String(ticketId);
+  const senderName = String(name).trim();
+  const senderEmail = String(email).trim();
+  const senderMobile = String(mobile).trim();
+  const enquiry = String(message).trim();
+  const subject = `Website enquiry #${reference}`;
+  const phoneLine = senderMobile ? `Phone: ${senderMobile}\n` : "";
+  const text = `A new website enquiry has been received.\n\nTicket: #${reference}\nName: ${senderName}\nEmail: ${senderEmail}\n${phoneLine}\nMessage:\n${enquiry}\n\nOpen Support Center: ${SITE_URL}/admin/support`;
+
+  const html = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${escapeHtml(subject)}</title>
+  </head>
+  <body style="margin:0;padding:0;background:#f2f6f5;color:#17342f;font-family:Arial,Helvetica,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:#f2f6f5;">
+      <tr>
+        <td align="center" style="padding:32px 16px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:640px;background:#ffffff;border:1px solid #dce8e5;border-radius:18px;overflow:hidden;">
+            <tr>
+              <td style="padding:26px 32px;background:#0f766e;color:#ffffff;">
+                <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;">Website enquiry</p>
+                <h1 style="margin:0;font-size:25px;line-height:1.3;">New Contact Us message</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:30px 32px;">
+                <p style="margin:0 0 22px;color:#536b66;font-size:14px;line-height:1.6;">Ticket reference: <strong style="color:#17342f;">#${escapeHtml(reference)}</strong></p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;border-collapse:collapse;">
+                  <tr><td style="padding:9px 12px;background:#f8fbfa;border-bottom:1px solid #e4eeeb;font-weight:700;width:90px;">Name</td><td style="padding:9px 12px;border-bottom:1px solid #e4eeeb;">${escapeHtml(senderName)}</td></tr>
+                  <tr><td style="padding:9px 12px;background:#f8fbfa;border-bottom:1px solid #e4eeeb;font-weight:700;">Email</td><td style="padding:9px 12px;border-bottom:1px solid #e4eeeb;"><a href="mailto:${escapeHtml(senderEmail)}" style="color:#0f766e;">${escapeHtml(senderEmail)}</a></td></tr>
+                  ${senderMobile ? `<tr><td style="padding:9px 12px;background:#f8fbfa;border-bottom:1px solid #e4eeeb;font-weight:700;">Phone</td><td style="padding:9px 12px;border-bottom:1px solid #e4eeeb;">${escapeHtml(senderMobile)}</td></tr>` : ""}
+                </table>
+                <h2 style="margin:26px 0 10px;font-size:16px;">Message</h2>
+                <div style="padding:16px;border-left:4px solid #0f766e;background:#eef8f6;color:#314c47;font-size:15px;line-height:1.65;white-space:pre-wrap;">${escapeHtml(enquiry)}</div>
+                <p style="margin:24px 0 0;color:#536b66;font-size:13px;line-height:1.6;">Reply to this email to respond directly to ${escapeHtml(senderName)}.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+
+  return { subject, text, html };
+};
+
