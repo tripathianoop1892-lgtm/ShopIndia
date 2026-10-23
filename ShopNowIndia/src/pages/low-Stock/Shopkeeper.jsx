@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
 import { MedicinesList } from "../../services/api"; // ✅ API
+import { exportRowsToExcel, exportRowsToPdf } from "../../utils/export";
 
 const ShopkeeperLowStock = () => {
   const [medicines, setMedicines] = useState([]);
@@ -30,9 +31,31 @@ const ShopkeeperLowStock = () => {
     }
   };
 
+  const exportRows = () => medicines.map((med, index) => ({
+    "S.No": index + 1,
+    "Medicine Name": med.name || "Medicine",
+    "Medicine Type": med.type || "Medicine",
+    "Stock Left": Number(med.stock || 0),
+  }));
+
+  const exportPdf = () => {
+    if (!exportRowsToPdf("Shopkeeper Low Stock Report", exportRows(), "Medicines with fewer than 50 units in retail stock")) {
+      alert(medicines.length ? "Please allow pop-ups to export the PDF." : "No low stock medicines available to export.");
+    }
+  };
+
+  const exportExcel = () => {
+    if (!medicines.length) return alert("No low stock medicines available to export.");
+    exportRowsToExcel("Shopkeeper_Low_Stock", exportRows());
+  };
+
   return (
     <div className="main-content shopkeeper-alert-page">
       <h2>Low Stock Medicines</h2>
+      <div className="alert-export-actions">
+        <button type="button" onClick={exportPdf}>Export PDF</button>
+        <button type="button" onClick={exportExcel}>Export Excel</button>
+      </div>
 
       <table className="table">
         <thead>

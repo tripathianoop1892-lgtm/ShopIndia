@@ -6,9 +6,13 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity,
+  Alert,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
 
 import AppHeader from "../../components/headers/AppHeader";
 import styles from "./LowStockAlertScreenStyles";
@@ -70,6 +74,54 @@ export default function LowStockAlertScreen({ navigation, route }) {
     setRefreshing(true);
     fetchLowStockMedicines();
   }, []);
+
+  const escapeHtml = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const exportToPDF = async () => {
+    if (!medicines.length) {
+      Alert.alert("Nothing to export", "No low stock medicines are available.");
+      return;
+    }
+
+    const rows = medicines.map((med, index) => `<tr>
+      <td>${index + 1}</td>
+      <td>${escapeHtml(med.name || "Medicine")}</td>
+      <td>${escapeHtml(med.type || "Medicine")}</td>
+      <td>${Number(med.stock || 0)}</td>
+    </tr>`).join("");
+    const ownerLabel = route?.name?.startsWith("Shopkeeper") ? "Shopkeeper" : "Distributor";
+    const html = `<html><head><meta name="viewport" content="width=device-width, initial-scale=1.0" /><style>
+      @page { size: A4; margin: 14mm; }
+      body { font-family: Arial, sans-serif; color: #172033; }
+      h1 { color: #166534; margin-bottom: 4px; }
+      p { color: #64748b; }
+      table { width: 100%; border-collapse: collapse; font-size: 11px; }
+      th { background: #166534; color: #fff; padding: 8px; text-align: left; }
+      td { border: 1px solid #dbe3ea; padding: 7px; }
+    </style></head><body><h1>${ownerLabel} Low Stock Report</h1><p>Medicines with fewer than 50 units in stock</p><table><thead><tr><th>S.No</th><th>Medicine</th><th>Type</th><th>Stock Left</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+
+    try {
+      const { uri } = await Print.printToFileAsync({ html });
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, {
+          mimeType: "application/pdf",
+          dialogTitle: `${ownerLabel} Low Stock Report`,
+          UTI: ".pdf",
+        });
+      } else {
+        await Print.printAsync({ html });
+      }
+    } catch (error) {
+      console.error("LOW STOCK PDF EXPORT ERROR:", error);
+      Alert.alert("Export failed", "The low stock PDF could not be created.");
+    }
+  };
 
   // ==========================================
   // MEDICINE CARD
@@ -192,6 +244,10 @@ export default function LowStockAlertScreen({ navigation, route }) {
                   {medicines.length !== 1 ? "s" : ""} need
                   attention
                 </Text>
+                <TouchableOpacity style={styles.exportButton} onPress={exportToPDF}>
+                  <Ionicons name="document-text-outline" size={20} color="#FFFFFF" />
+                  <Text style={styles.exportButtonText}>Export PDF</Text>
+                </TouchableOpacity>
               </View>
             </View>
           ) : null

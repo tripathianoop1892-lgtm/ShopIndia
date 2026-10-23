@@ -1,6 +1,23 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  exportButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "flex-start",
+    backgroundColor: "#2E7D32",
+    marginTop: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+  exportButtonText: {
+    marginLeft: 8,
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
   // ==========================================
   // MAIN CONTAINER
   // ==========================================

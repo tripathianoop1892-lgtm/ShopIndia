@@ -54,3 +54,14 @@ th, td {
 .export-btn:hover {
   background: #15803d;
 }
+
+.alert-export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.alert-export-actions .export-btn {
+  margin-bottom: 0;
+}

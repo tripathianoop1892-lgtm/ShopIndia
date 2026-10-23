@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Shopkeeper.css";
 import "../low-Stock/Shopkeeper.css";
 import { MedicinesList } from "../../services/api";
+import { exportRowsToExcel, exportRowsToPdf } from "../../utils/export";
 
 const ShopkeeperExpiry = () => {
   const [medicines, setMedicines] = useState([]);
@@ -51,10 +52,32 @@ const ShopkeeperExpiry = () => {
 
   const today = new Date();
 
+  const exportRows = () => medicines.map((med, index) => ({
+    "S.No": index + 1,
+    "Medicine Name": med.name || "Medicine",
+    "Expiry Date": formatDate(med.expiry),
+    "Stock": Number(med.stock || 0),
+  }));
+
+  const exportPdf = () => {
+    if (!exportRowsToPdf("Shopkeeper Expiry Alert Report", exportRows(), "Medicines expiring within the next 180 days")) {
+      alert(medicines.length ? "Please allow pop-ups to export the PDF." : "No expiring medicines available to export.");
+    }
+  };
+
+  const exportExcel = () => {
+    if (!medicines.length) return alert("No expiring medicines available to export.");
+    exportRowsToExcel("Shopkeeper_Expiry_Alert", exportRows());
+  };
+
   return (
     <div className="main-content shopkeeper-alert-page">
       <h2>Expiry Alert</h2>
       <p>Medicines expiring within the next 180 days.</p>
+      <div className="alert-export-actions">
+        <button type="button" onClick={exportPdf}>Export PDF</button>
+        <button type="button" onClick={exportExcel}>Export Excel</button>
+      </div>
 
       <table className="table">
         <thead>

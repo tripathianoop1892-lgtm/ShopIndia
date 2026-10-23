@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Distributor.css";
 import { MedicinesList } from "../../services/api"; // ✅ API
-import { exportRowsToExcel } from "../../utils/export";
+import { exportRowsToExcel, exportRowsToPdf } from "../../utils/export";
 const DistributorExpiring = () => {
   const [medicines, setMedicines] = useState([]);
 
@@ -63,17 +63,27 @@ const exportToExcel = () => {
 
   exportRowsToExcel("Expiring_Medicines_180_Days", excelData);
 };
+
+const exportToPdf = () => {
+  const pdfData = medicines.map((med, index) => ({
+    "S.No": index + 1,
+    "Medicine Name": med.name || "Medicine",
+    "Expiry Date": formatDate(med.expiry),
+    "Stock": Number(med.stock || 0),
+  }));
+  if (!exportRowsToPdf("Distributor Expiry Alert Report", pdfData, "Medicines expiring within the next 180 days")) {
+    alert(medicines.length ? "Please allow pop-ups to export the PDF." : "No expiring medicines available to export.");
+  }
+};
   return (
     <div className="main-content">
       <h2>Expiring Soon</h2>
       
        {/* 👇 EXPORT BUTTON यहीं ADD करना है */}
-  <button
-    onClick={exportToExcel}
-    className="export-btn"
-  >
-    Export to Excel
-  </button>
+  <div className="alert-export-actions">
+    <button type="button" onClick={exportToPdf} className="export-btn">Export PDF</button>
+    <button type="button" onClick={exportToExcel} className="export-btn">Export Excel</button>
+  </div>
 
   
       <table className="table">
