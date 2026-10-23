@@ -145,6 +145,17 @@ export const registerUser = async ({
   );
 };
 
+export const getAccountDeactivationCheck = async () => {
+  return await apiRequest("/auth/deactivation-check", { method: "GET" });
+};
+
+export const deactivateAccount = async () => {
+  return await apiRequest("/auth/deactivate", {
+    method: "POST",
+    body: { confirmation: "DEACTIVATE" },
+  });
+};
+
 // ==========================================
 // LOGIN USER
 // POST /api/auth/login
@@ -642,6 +653,8 @@ export const replySupportTicket = async (
 
 export default {
   registerUser,
+  getAccountDeactivationCheck,
+  deactivateAccount,
   loginUser,
   forgotPassword,
   searchShops,

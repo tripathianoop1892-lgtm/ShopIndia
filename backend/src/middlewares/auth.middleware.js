@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
+import User from "../models/user.js";
 
 // =======================
 // 🔐 VERIFY TOKEN
 // =======================
-export const checkAuth = (req, res, next) => {
+export const checkAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -29,6 +30,14 @@ export const checkAuth = (req, res, next) => {
 
     // 🔐 Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const activeUser = await User.exists({ _id: decoded._id, status: "Active" });
+    if (!activeUser) {
+      return res.status(401).json({
+        success: false,
+        message: "Account is inactive or no longer available.",
+      });
+    }
 
     // 🔥 Attach user data
     req.user = decoded;

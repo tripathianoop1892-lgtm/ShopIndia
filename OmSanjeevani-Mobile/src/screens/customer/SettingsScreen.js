@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import styles from "./SettingsScreenStyles";
+import { startAccountDeactivation } from "../../utils/accountDeactivation";
 
 // ==========================================
 // STORAGE KEY
@@ -447,6 +448,23 @@ export default function SettingsScreen({ navigation }) {
               size={22}
               color="#999999"
             />
+          </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          <TouchableOpacity
+            style={styles.actionRow}
+            activeOpacity={0.7}
+            onPress={() => startAccountDeactivation(navigation)}
+          >
+            <View style={[styles.iconContainer, styles.dangerIcon]}>
+              <Ionicons name="person-remove-outline" size={22} color="#D32F2F" />
+            </View>
+            <View style={styles.settingInfo}>
+              <Text style={[styles.settingTitle, styles.dangerText]}>Deactivate Account</Text>
+              <Text style={styles.settingSubtitle}>Checks pending work before deactivation</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color="#D32F2F" />
           </TouchableOpacity>
         </View>
 

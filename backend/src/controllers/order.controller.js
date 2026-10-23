@@ -60,10 +60,10 @@ export const createOrder = async (req, res) => {
 
     const seller = await User.findById(sellerId);
 
-    if (!seller) {
+    if (!seller || seller.status !== "Active") {
       return res.status(404).json({
         success: false,
-        message: "Seller not found ❌",
+        message: "Seller is unavailable ❌",
       });
     }
 

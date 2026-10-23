@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/UseAuth";
-import { getAccountSettings, updateAccountSettings } from "../../services/api";
+import { deactivateAccount, getAccountDeactivationCheck, getAccountSettings, updateAccountSettings } from "../../services/api";
 import { 
   FaSlidersH, FaBell, FaShieldAlt, FaSave, 
-  FaStore, FaPercentage, FaExclamationTriangle, FaCheckCircle
+  FaPercentage, FaExclamationTriangle, FaCheckCircle, FaUserSlash
 } from "react-icons/fa";
 import "./Settings.css";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
-  const { user, isShopkeeper, isDistributor } = useAuth();
+  const { user, logout, isShopkeeper, isDistributor } = useAuth();
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("preferences");
   const [saveStatus, setSaveStatus] = useState(false);
+  const [deactivationLoading, setDeactivationLoading] = useState(false);
+  const [deactivationMessage, setDeactivationMessage] = useState("");
 
   // Form State Configurations
   const [prefForm, setPrefForm] = useState({
@@ -47,6 +51,36 @@ const Settings = () => {
     setSaveStatus(true);
     setSecurityForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     setTimeout(() => setSaveStatus(false), 3000);
+  };
+
+  const handleDeactivateAccount = async () => {
+    try {
+      setDeactivationLoading(true);
+      setDeactivationMessage("");
+      const check = await getAccountDeactivationCheck();
+      if (!check.success || !check.canDeactivate) {
+        setDeactivationMessage(check.message || "Your account has pending work and cannot be deactivated yet.");
+        return;
+      }
+
+      const confirmed = window.confirm(
+        "Deactivate your account? You will be signed out immediately and must contact support to reactivate it."
+      );
+      if (!confirmed) return;
+
+      const response = await deactivateAccount();
+      if (!response.success) {
+        setDeactivationMessage(response.message || "Unable to deactivate your account.");
+        return;
+      }
+      logout();
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error(error);
+      setDeactivationMessage("Unable to check account activity right now.");
+    } finally {
+      setDeactivationLoading(false);
+    }
   };
 
   if (!user) {
@@ -94,6 +128,13 @@ const Settings = () => {
             onClick={() => setActiveSection("security")}
           >
             <FaShieldAlt /> Password & Access
+          </button>
+
+          <button
+            className={`tab-anchor-btn danger-tab ${activeSection === "account" ? "active" : ""}`}
+            onClick={() => setActiveSection("account")}
+          >
+            <FaUserSlash /> Account Status
           </button>
         </nav>
       </aside>
@@ -262,6 +303,27 @@ const Settings = () => {
               <button type="submit" className="settings-save-btn"><FaSave /> Update Access Credentials</button>
             </div>
           </form>
+        )}
+
+        {activeSection === "account" && (
+          <section className="view-panel-card danger-zone animation-fade-in">
+            <div className="panel-header">
+              <h3>Deactivate Account</h3>
+              <p>Before deactivation, Om Sanjeevani checks active orders, unfinished prescriptions, pending refunds, and open support tickets.</p>
+            </div>
+            {deactivationMessage && (
+              <div className="deactivation-blocker"><FaExclamationTriangle /> <span>{deactivationMessage}</span></div>
+            )}
+            <p className="danger-zone-copy">Deactivation signs you out and blocks all future access. Your records are retained for order, payment, and compliance history.</p>
+            <button
+              type="button"
+              className="deactivate-account-btn"
+              disabled={deactivationLoading}
+              onClick={handleDeactivateAccount}
+            >
+              <FaUserSlash /> {deactivationLoading ? "Checking pending work..." : "Check and Deactivate Account"}
+            </button>
+          </section>
         )}
       </main>
     </div>

@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  dangerIcon: {
+    backgroundColor: "#FFF1F2",
+  },
+  dangerText: {
+    color: "#D32F2F",
+  },
   // ==========================================
   // MAIN CONTAINER
   // ==========================================

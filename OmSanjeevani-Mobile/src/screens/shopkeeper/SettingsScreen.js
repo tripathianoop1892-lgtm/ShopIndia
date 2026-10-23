@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./SettingsScreenStyles";
+import { startAccountDeactivation } from "../../utils/accountDeactivation";
 
 
 // ==========================================
@@ -92,6 +93,7 @@ export default function SettingsScreen({
     title,
     subtitle,
     onPress,
+    destructive = false,
   }) => {
     return (
       <TouchableOpacity
@@ -104,13 +106,13 @@ export default function SettingsScreen({
           <Ionicons
             name={icon}
             size={23}
-            color="#008C3A"
+            color={destructive ? "#D32F2F" : "#008C3A"}
           />
         </View>
 
         <View style={styles.settingInfo}>
 
-          <Text style={styles.settingTitle}>
+          <Text style={[styles.settingTitle, destructive && styles.dangerText]}>
             {title}
           </Text>
 
@@ -236,6 +238,16 @@ export default function SettingsScreen({
                 "ShopkeeperEditProfile"
               );
             }}
+          />
+
+          <View style={styles.divider} />
+
+          <ActionRow
+            icon="person-remove-outline"
+            title="Deactivate Account"
+            subtitle="Checks pending work before deactivation"
+            destructive
+            onPress={() => startAccountDeactivation(navigation)}
           />
 
           <View style={styles.divider} />

@@ -249,6 +249,15 @@
   background: #0f172a;
 }
 
+.danger-tab { color: #b91c1c; }
+.danger-tab.active { color: #b91c1c; border-left-color: #dc2626; background: #fef2f2; }
+.danger-zone { border-color: #fecaca; }
+.danger-zone-copy { color: #64748b; font-size: 13px; line-height: 1.6; }
+.deactivation-blocker { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; margin-bottom: 18px; border: 1px solid #fed7aa; border-radius: 10px; background: #fff7ed; color: #9a3412; font-size: 13px; line-height: 1.5; }
+.deactivate-account-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; border: 0; border-radius: 8px; background: #dc2626; color: #fff; cursor: pointer; font-size: 14px; font-weight: 700; padding: 12px 20px; }
+.deactivate-account-btn:hover { background: #b91c1c; }
+.deactivate-account-btn:disabled { cursor: wait; opacity: .65; }
+
 /* TOAST TOAST ALERT NOTIFICATIONS */
 .notification-toast-banner {
   display: flex;

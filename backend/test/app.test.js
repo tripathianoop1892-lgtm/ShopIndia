@@ -34,6 +34,15 @@ test("customer coupon discovery endpoint is protected", async () => {
   assert.equal(response.status, 401);
 });
 
+test("account deactivation check and action are protected", async () => {
+  const checkResponse = await request(app).get("/api/auth/deactivation-check");
+  const deactivateResponse = await request(app)
+    .post("/api/auth/deactivate")
+    .send({ confirmation: "DEACTIVATE" });
+  assert.equal(checkResponse.status, 401);
+  assert.equal(deactivateResponse.status, 401);
+});
+
 test("coupon schema uses the fields enforced by checkout", () => {
   assert.ok(Coupon.schema.path("minOrder"));
   assert.ok(Coupon.schema.path("maxUsagePerUser"));

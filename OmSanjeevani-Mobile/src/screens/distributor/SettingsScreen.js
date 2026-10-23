@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import styles from "./SettingsScreenStyles";
 import AppHeader from "../../components/headers/AppHeader";
+import { startAccountDeactivation } from "../../utils/accountDeactivation";
 
 export default function SettingsScreen({ navigation }) {
   const handleComingSoon = (title) => {
@@ -99,6 +100,21 @@ export default function SettingsScreen({ navigation }) {
               size={22}
               color="#999999"
             />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.settingRow}
+            activeOpacity={0.7}
+            onPress={() => startAccountDeactivation(navigation)}
+          >
+            <View style={[styles.iconContainer, styles.dangerIcon]}>
+              <Ionicons name="person-remove-outline" size={21} color="#D32F2F" />
+            </View>
+            <View style={styles.settingContent}>
+              <Text style={[styles.settingTitle, styles.dangerText]}>Deactivate Account</Text>
+              <Text style={styles.settingSubtitle}>Checks pending work before deactivation</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={22} color="#D32F2F" />
           </TouchableOpacity>
 
           <TouchableOpacity

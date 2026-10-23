@@ -134,6 +134,10 @@ const styles = StyleSheet.create({
     color: "#222222",
   },
 
+  dangerText: {
+    color: "#D32F2F",
+  },
+
 
   settingSubtitle: {
     fontSize: 12,

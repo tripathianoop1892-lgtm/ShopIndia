@@ -10,6 +10,8 @@ import {
   getAccountSettings,
   updateAccountSettings,
   getProfile,
+  getAccountDeactivationCheck,
+  deactivateAccount,
 } from "../controllers/auth.controller.js";
 import { checkAuth } from "../middlewares/auth.middleware.js";
 const router = express.Router();
@@ -24,4 +26,6 @@ router.get("/profile", checkAuth, getProfile);
 router.put("/profile", checkAuth, updateProfile);
 router.get("/settings", checkAuth, getAccountSettings);
 router.put("/settings", checkAuth, updateAccountSettings);
+router.get("/deactivation-check", checkAuth, getAccountDeactivationCheck);
+router.post("/deactivate", checkAuth, deactivateAccount);
 export default router;

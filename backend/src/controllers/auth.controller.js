@@ -5,9 +5,41 @@ import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import OtpVerification from "../models/otpVerification.js";
 import { normaliseMobile, sendOtp } from "../services/otp.service.js";
+import Order from "../models/Order.js";
+import Prescription from "../models/prescription.js";
+import Support from "../models/Support.js";
 
 const MINIMUM_PASSWORD_LENGTH = 8;
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const getDeactivationBlockers = async (user) => {
+  const activeOrderFilter = {
+    $or: [{ buyerId: user._id }, { sellerId: user._id }],
+    $and: [{
+      $or: [
+        { status: { $in: ["Pending", "Paid", "Approved"] } },
+        { refundStatus: "pending" },
+      ],
+    }],
+  };
+  const prescriptionFilter = user.role === "customer"
+    ? { customerId: user._id, isDeleted: false, status: { $in: ["Pending", "Verified"] } }
+    : user.role === "shopkeeper" && user.shopId
+    ? { shopId: user.shopId, isDeleted: false, status: { $in: ["Pending", "Verified"] } }
+    : null;
+
+  const [orders, prescriptions, supportTickets] = await Promise.all([
+    Order.countDocuments(activeOrderFilter),
+    prescriptionFilter ? Prescription.countDocuments(prescriptionFilter) : 0,
+    Support.countDocuments({ userId: user._id, status: { $in: ["Pending", "In Progress"] } }),
+  ]);
+
+  return [
+    orders ? { type: "orders", count: orders, label: `${orders} active order${orders === 1 ? "" : "s"}` } : null,
+    prescriptions ? { type: "prescriptions", count: prescriptions, label: `${prescriptions} unfinished prescription${prescriptions === 1 ? "" : "s"}` } : null,
+    supportTickets ? { type: "support", count: supportTickets, label: `${supportTickets} open support ticket${supportTickets === 1 ? "" : "s"}` } : null,
+  ].filter(Boolean);
+};
 
 // 🔐 TOKEN GENERATE (UPDATED: Binds dynamic shopId sessions for customer roles)
 const generateToken = (user, sessionShopId = null) => {
@@ -141,6 +173,13 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Invalid email/mobile number or password.",
+      });
+    }
+
+    if (user.status !== "Active") {
+      return res.status(403).json({
+        success: false,
+        message: "This account is deactivated. Contact support to reactivate it.",
       });
     }
 
@@ -291,6 +330,7 @@ export const searchShops = async (req, res) => {
     // Shopkeeper ko Shop Name / Mobile / Email se search karo
     const shops = await User.find({
       role: "shopkeeper",
+      status: "Active",
       $or: [
         {
           shopName: {
@@ -455,5 +495,55 @@ export const updateAccountSettings = async (req, res) => {
     return res.json({ success: true, data: user.settings });
   } catch {
     return res.status(500).json({ success: false, message: "Unable to save settings." });
+  }
+};
+
+export const getAccountDeactivationCheck = async (req, res) => {
+  try {
+    const account = await User.findById(req.user._id).select("role shopId status");
+    if (!account) return res.status(404).json({ success: false, message: "User not found." });
+    if (account.role === "admin") return res.status(403).json({ success: false, message: "Administrator accounts cannot be self-deactivated." });
+
+    const blockers = await getDeactivationBlockers(account);
+    return res.json({
+      success: true,
+      canDeactivate: blockers.length === 0,
+      blockers,
+      message: blockers.length
+        ? `Complete or resolve ${blockers.map((item) => item.label).join(", ")} before deactivating your account.`
+        : "No pending work was found. Your account can be deactivated.",
+    });
+  } catch (error) {
+    console.error("DEACTIVATION CHECK ERROR:", error);
+    return res.status(500).json({ success: false, message: "Unable to check account activity." });
+  }
+};
+
+export const deactivateAccount = async (req, res) => {
+  try {
+    if (req.body.confirmation !== "DEACTIVATE") {
+      return res.status(400).json({ success: false, message: "Account deactivation was not confirmed." });
+    }
+
+    const account = await User.findById(req.user._id).select("role shopId status");
+    if (!account) return res.status(404).json({ success: false, message: "User not found." });
+    if (account.role === "admin") return res.status(403).json({ success: false, message: "Administrator accounts cannot be self-deactivated." });
+
+    const blockers = await getDeactivationBlockers(account);
+    if (blockers.length) {
+      return res.status(409).json({
+        success: false,
+        canDeactivate: false,
+        blockers,
+        message: `Complete or resolve ${blockers.map((item) => item.label).join(", ")} before deactivating your account.`,
+      });
+    }
+
+    account.status = "Inactive";
+    await account.save();
+    return res.json({ success: true, message: "Your account has been deactivated successfully." });
+  } catch (error) {
+    console.error("ACCOUNT DEACTIVATION ERROR:", error);
+    return res.status(500).json({ success: false, message: "Unable to deactivate the account." });
   }
 };
